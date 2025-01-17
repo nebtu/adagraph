@@ -12,7 +12,8 @@ adagraph_design(
 )
 }
 \arguments{
-\item{correlation}{Correlation matrix describing the structure of the correlations between the different hypotheses, use NA for uncorrelated}
+\item{correlation}{Correlation matrix describing the structure of the correlations
+between the different hypotheses, use NA for uncorrelated}
 
 \item{weights}{List of weights, measuring how important each hypothesis is}
 
@@ -32,4 +33,5 @@ design <- adagraph_design(
  alpha=0.05,
  test_m=rbind(c(0, 1),
               c(1, 0)))
+design
 }

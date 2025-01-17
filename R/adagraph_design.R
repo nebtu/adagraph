@@ -1,16 +1,19 @@
 
 new_adagraph_design <- function(
     correlation=matrix(),
-    weigths=double(),
+    weights=double(),
     alpha=double(),
     k=int(),
     hypMatrix=matrix(),
     weightsMatrix=matrix(),
-    closedMatrix=matrix()
+    closedMatrix=matrix(),
+    ...,
+    class = character()
 ) {
+    print(weights)
     design <- list(
         correlation=correlation,
-        weigths=weights,
+        weights=weights,
         alpha=alpha,
         hypMatrix=hypMatrix,
         weightsMatrix=weightsMatrix,
@@ -19,18 +22,19 @@ new_adagraph_design <- function(
     structure(
         design,
         k = k,
-        class = "adagraph_design"
+        class = c(class, "adagraph_design")
     )
 }
 
 #' Make a new (generic) trial design
 #'
-#' @param correlation Correlation matrix describing the structure of the correlations between the different hypotheses, use NA for uncorrelated
+#' @param correlation Correlation matrix describing the structure of the correlations
+#'                    between the different hypotheses, use NA for uncorrelated
 #' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #'
 #' @return An object of class adagraph_design
-#' @import gMCPLite
+#' @importClassesFrom gMCPLite graphMCP
 #' @export
 #'
 #' @examples
@@ -48,6 +52,7 @@ adagraph_design <- function(
     alpha=double(),
     test_m=matrix()
 ) {
+    #simple validations
     if (dim(correlation)[1] == dim(correlation)[2]) {
         k <- dim(correlation)[1]
     } else {
@@ -59,8 +64,10 @@ adagraph_design <- function(
     } else if ((dim(test_m)[1] != dim(test_m)[2]) | (dim(test_m)[1] != k)) {
        stop("test_m needs to be a quadratic matrix with dimension same as the number of hypotheses")
     }
+
+    #generate weights for all sub-hypotheses
     graph <- new("graphMCP", m=test_m, weights=weights) 
-    temp <- generateWeights(graph)
+    temp <- gMCPLite::generateWeights(graph)
     hypMatrix <- temp[,1:k]
     weightsMatrix <- temp[,(k+1):(2*k)]
     closedMatrix=matrix(NA,nrow=2^(k-1),ncol=k)
@@ -68,9 +75,10 @@ adagraph_design <- function(
         # Fill the result matrix with row indices
         closedMatrix[,i]=which(hypMatrix[,i]==1)
     }
+
     new_adagraph_design(
         correlation = correlation,
-        weigths = weights,
+        weights = weights,
         alpha = alpha,
         k = k,
         hypMatrix = hypMatrix,
