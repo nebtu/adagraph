@@ -39,18 +39,38 @@ validate_adagraph_design_params <- function(
     correlation=matrix(),
     weights=double(),
     alpha=double(),
-    test_m=matrix()
+    test_m=matrix(),
+    call=caller_env()
 ) {
-    if (!is.matrix(correlation) | dim(correlation)[1] != dim(correlation)[2]) {
-        stop("correlation has to be a quadratic matrix")
+    if (!is.matrix(correlation)) {
+        cli::cli_abort("correlation has to be a matrix.",
+                        class = "invalid_argument_correlation")
+    } else if (dim(correlation)[1] != dim(correlation)[2]) {
+        cli::cli_abort("correlation has to be a quadratic matrix.",
+                       "x" = "correlation has dimenstion {dim(correlation)[1]} x {dim(correlation)[2]}.",
+                       class = "invalid_argument_correlation")
     } 
     k <- dim(correlation)[1]
     if (length(weights) != k) {
-        stop("Need exactly one weight per hypothesis")
-    } else if (!is.numeric(alpha) | alpha<0 | alpha>1) {
-        stop("alpha has to be numeric between 0 and 1")
-    } else if (!is.matrix(test_m) | ((dim(test_m)[1] != dim(test_m)[2]) | (dim(test_m)[1] != k))) {
-       stop("test_m needs to be a quadratic matrix with dimension same as the number of hypotheses")
+        cli::cli_abort("Need exactly one weight per hypothesis.",
+                        "i" = "There are {k} hypotheses.",
+                        "x" = "You suppplied {lenght(weights) weights}.",
+                        class="invalid_argument_weights")
+    } else if (!is.numeric(alpha)) {
+        cli::cli_abort("alpha has to be numeric.",
+                       "x" = "alpha is {typeof(alpha)}.",
+                       class = "invalid_argument_alpha")
+    } else if (alpha<0 | alpha>1) {
+        cli::cli_abort("alpha has to be between 0 and 1",
+                       class = "invalid_argument_alpha")
+    } else if (!is.matrix(test_m)) {
+        cli::cli_abort("test_m has to be a matrix.",
+                        class = "invalid_argument_test_m")
+    } else if (dim(test_m)[1] != dim(test_m)[2] | dim(test_m)[1] != k) {
+        cli::cli_abort("test_m has to be a quadratic matrix with lenght/height equal to number of hypotheses.",
+                       "i" = "There are {k} Hypotheses",
+                       "x" = "test_m has dimenstion {dim(correlation)[1]} x {dim(correlation)[2]}.",
+                       class = "invalid_argument_test_m")
     }
 }
 
