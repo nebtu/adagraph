@@ -5,10 +5,12 @@ Authors@R:
     person("Benjamin", "Fallmann", , "benjamin.fallmann@meduniwien.ac.at", role = c("aut", "cre"))
 Description: 
     Functions and objects to design a two-stage adaptive trial using a graph-based closed-testing sequence,
-    while controlling the FWER using the p-value combination method
+    while controlling the FWER using the p-value combination method.
 Imports:
     cli,
-    gMCPLite
+    gMCPLite,
+    methods,
+    rlang
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

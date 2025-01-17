@@ -9,22 +9,22 @@ new_adagraph_design <- function(
 ) {
     k <- dim(correlation)[1]
     #generate weights for all sub-hypotheses
-    graph <- new("graphMCP", m=test_m, weights=weights) 
+    graph <- methods::new("graphMCP", m=test_m, weights=weights) 
     temp <- gMCPLite::generateWeights(graph)
-    hypMatrix <- temp[,1:k]
-    weightsMatrix <- temp[,(k+1):(2*k)]
+    hyp_matrix <- temp[,1:k]
+    weights_matrix <- temp[,(k+1):(2*k)]
     closedMatrix=matrix(NA,nrow=2^(k-1),ncol=k)
     for (i in 1:k) {
         # Fill the result matrix with row indices
-        closedMatrix[,i]=which(hypMatrix[,i]==1)
+        closedMatrix[,i]=which(hyp_matrix[,i]==1)
     }
 
     design <- list(
         correlation=correlation,
         weights=weights,
         alpha=alpha,
-        hypMatrix=hypMatrix,
-        weightsMatrix=weightsMatrix,
+        hyp_matrix=hyp_matrix,
+        weights_matrix=weights_matrix,
         closedMatrix=closedMatrix,
         test_m=test_m
     )
@@ -40,7 +40,7 @@ validate_adagraph_design_params <- function(
     weights=double(),
     alpha=double(),
     test_m=matrix(),
-    call=caller_env()
+    call=rlang::caller_env()
 ) {
     if (!is.matrix(correlation)) {
         cli::cli_abort("correlation has to be a matrix.",
@@ -72,6 +72,7 @@ validate_adagraph_design_params <- function(
                        "x" = "test_m has dimenstion {dim(correlation)[1]} x {dim(correlation)[2]}.",
                        class = "invalid_argument_test_m")
     }
+    #TODO: test that weights sum to 1 (or less than one?)
 }
 
 #' Make a new (generic) trial design
@@ -80,6 +81,7 @@ validate_adagraph_design_params <- function(
 #'                    between the different hypotheses, use NA for uncorrelated
 #' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
+#' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #'
 #' @return An object of class adagraph_design
 #' @importClassesFrom gMCPLite graphMCP

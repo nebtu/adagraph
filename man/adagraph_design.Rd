@@ -18,6 +18,8 @@ between the different hypotheses, use NA for uncorrelated}
 \item{weights}{List of weights, measuring how important each hypothesis is}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
+
+\item{test_m}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
 }
 \value{
 An object of class adagraph_design
