@@ -2,7 +2,18 @@ Package: adagraph
 Title: Design Adaptive Trials with a Graph-Based Closed Testing Procedure
 Version: 0.0.0.9000
 Authors@R: 
-    person("Benjamin", "Fallmann", , "benjamin.fallmann@meduniwien.ac.at", role = c("aut", "cre"))
+    c(
+        person(
+            "Benjamin", "Fallmann",
+            email = "benjamin.fallmann@meduniwien.ac.at",
+            role = c("aut", "cre")
+        ),
+        person(
+            "Martin", "Posch",
+            email = "martin.posch@meduniwien.ac.at",
+            comment = c(ORCID = "0000-0001-8499-8573"),
+            role = "aut")
+        )
 Description: 
     Functions and objects to design a two-stage adaptive trial using a graph-based closed-testing sequence,
     while controlling the FWER using the p-value combination method.
@@ -10,6 +21,8 @@ Imports:
     cli,
     gMCPLite,
     methods,
+    mvtnorm,
+    parallel,
     rlang
 License: GPL (>= 3)
 Encoding: UTF-8

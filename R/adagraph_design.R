@@ -13,10 +13,10 @@ new_adagraph_design <- function(
     temp <- gMCPLite::generateWeights(graph)
     hyp_matrix <- temp[,1:k]
     weights_matrix <- temp[,(k+1):(2*k)]
-    closedMatrix=matrix(NA,nrow=2^(k-1),ncol=k)
+    closed_matrix=matrix(NA,nrow=2^(k-1),ncol=k)
     for (i in 1:k) {
         # Fill the result matrix with row indices
-        closedMatrix[,i]=which(hyp_matrix[,i]==1)
+        closed_matrix[,i]=which(hyp_matrix[,i]==1)
     }
 
     design <- list(
@@ -25,7 +25,7 @@ new_adagraph_design <- function(
         alpha=alpha,
         hyp_matrix=hyp_matrix,
         weights_matrix=weights_matrix,
-        closedMatrix=closedMatrix,
+        closed_matrix=closed_matrix,
         test_m=test_m
     )
     structure(
@@ -62,6 +62,7 @@ validate_adagraph_design_params <- function(
                        class = "invalid_argument_alpha")
     } else if (alpha<0 | alpha>1) {
         cli::cli_abort("alpha has to be between 0 and 1",
+                        "x" = "alpha is {alpha}.",
                        class = "invalid_argument_alpha")
     } else if (!is.matrix(test_m)) {
         cli::cli_abort("test_m has to be a matrix.",

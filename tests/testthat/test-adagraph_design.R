@@ -16,7 +16,7 @@ test_that("Simple design works", {
   expect_equal(design$alpha, alpha)
   expect_equal(unname(design$hyp_matrix), rbind(c(0,1), c(1,0), c(1,1)))
   expect_equal(unname(design$weights_matrix), rbind(c(0,1), c(1,0), c(2/3, 1/3)))
-  expect_equal(design$closedMatrix, rbind(c(2,1), c(3,3)))
+  expect_equal(design$closed_matrix, rbind(c(2,1), c(3,3)))
 })
 
 test_that("Correct validation of adagraph_design", {
