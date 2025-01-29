@@ -103,7 +103,6 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
         c((alpha[2] - alpha[1])*0.999, alpha[2] / max(pos_weights)),
         tol = getOption("adagraph.precision")
     )$root
-    print(cJ2)
 
     return(list(
         bounds_1 = cJ1 * weights,
