@@ -1,4 +1,5 @@
 
+#' @importClassesFrom gMCPLite graphMCP
 new_adagraph_design <- function(
     correlation=matrix(),
     weights=double(),
@@ -85,7 +86,6 @@ validate_adagraph_design_params <- function(
 #' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #'
 #' @return An object of class adagraph_design
-#' @importClassesFrom gMCPLite graphMCP
 #' @export
 #'
 #' @examples

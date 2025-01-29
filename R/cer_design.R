@@ -20,6 +20,7 @@ new_cer_design <- function(
     )
     design$alpha_spending_f <- alpha_spending_f
     design$seq_bonf <- seq_bonf
+    design$prep_t <- prep_t
     k <- attr(design, "k")
 
     prep_alpha_1 <- alpha_spending_f(alpha, prep_t)
