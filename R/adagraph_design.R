@@ -10,10 +10,15 @@ new_adagraph_design <- function(
 ) {
     k <- dim(correlation)[1]
     #generate weights for all sub-hypotheses
-    graph <- methods::new("graphMCP", m=test_m, weights=weights) 
-    temp <- gMCPLite::generateWeights(graph)
-    hyp_matrix <- temp[,1:k]
-    weights_matrix <- temp[,(k+1):(2*k)]
+    #graph <- methods::new("graphMCP", m=test_m, weights=weights) 
+    if (k==1) {
+        hyp_matrix <- cbind(1)
+        weights_matrix <- cbind(weights)
+    } else {
+        temp <- gMCPLite::generateWeights(test_m, weights)
+        hyp_matrix <- temp[,1:k]
+        weights_matrix <- temp[,(k+1):(2*k)]
+    }
     closed_matrix=matrix(NA,nrow=2^(k-1),ncol=k)
     for (i in 1:k) {
         # Fill the result matrix with row indices
