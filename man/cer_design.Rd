@@ -32,7 +32,7 @@ between the different hypotheses, use NA for uncorrelated}
 
 \item{seq_bonf}{to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1}
 
-\item{parallelize}{set TRUE to use parrallization, for now only available on unix systems}
+\item{parallelize}{set TRUE to use parallization, for now only available on unix systems}
 }
 \value{
 An object of class cer_design

@@ -1,7 +1,7 @@
 #' Internal function for cer_design
 #' 
 #' For documentation on how to generate cer_designs, see [cer_design].
-#' The parameters for this fucntion are the same as in [cer_design], whith the exeption of 
+#' The parameters for this fucntion are the same as in [cer_design], with the exeption of 
 #' @param class character, makes it possible to add subbclasses
 #'
 #' @return An object of class c("cer_design", "adagraph_design"), whith the following elements: 
@@ -17,21 +17,19 @@
 #'  * test_m: transition matrix of the graph, as given
 #'  * alpha_spending_f: alpha spending function, as given
 #'  * seq_bonf: as given
-#'  * prep_t: as given
+#'  * t: as given
 #'  * bounds_1: matrix of same format as hyp_matrix, where each row gives the bounds for rejection of the intersection hypothesis at the first stage
 #'  * bounds_2: same as bounds_1, but for rejection at the second stage according to the preplanned design
 #'  * cJ1: values used for calulation of bounds_1, bounds_1 := cJ1 * weights (with rowwise multiplication)
 #'  * cJ2: as cJ1, but for bounds_2
 #'  
-#'@examples
-#'code
 new_cer_design <- function(
     correlation=matrix(),
     weights=double(),
     alpha=double(),
     test_m=matrix(),
     alpha_spending_f=function() {},
-    prep_t=double(),
+    t=double(),
     seq_bonf=TRUE,
     parallelize=FALSE,
     ...,
@@ -46,15 +44,15 @@ new_cer_design <- function(
     )
     design$alpha_spending_f <- alpha_spending_f
     design$seq_bonf <- seq_bonf
-    design$prep_t <- prep_t
+    design$t <- t
     k <- attr(design, "k")
 
-    prep_alpha_1 <- alpha_spending_f(alpha, prep_t)
+    prep_alpha_1 <- alpha_spending_f(alpha, t)
     get_bounds <- function(index) {
         #this function takes the index instead of directly the weights because 
         # parallel only provides mclapply, and no equivalent of apply
         weight_list = design$weights_matrix[index,]
-        cer_prep_bounds(correlation, weight_list, c(prep_alpha_1, alpha), prep_t)
+        cer_prep_bounds(correlation, weight_list, c(prep_alpha_1, alpha), t)
     }
     if (parallelize == TRUE) {
         boundslist <- parallel::mclapply(1:(2^k - 1), get_bounds)
@@ -75,7 +73,7 @@ validate_cer_design_params <- function(
     alpha = alpha,
     test_m = test_m,
     alpha_spending_f = alpha_spending_f,
-    prep_t = prep_t,
+    t = t,
     seq_bonf = seq_bonf,
     parallelize = parallelize,
     call = rlang::caller_env()
@@ -87,14 +85,14 @@ validate_cer_design_params <- function(
         test_m = test_m,
         call = call
     )
-    if (!is.numeric(prep_t)) {
-        cli::cli_abort("prep_t has to be numeric.",
-                       "x" = "prep_t is {typeof(prep_t)}.",
-                       class = "invalid_argument_prep_t")
-    } else if (prep_t < 0 | prep_t > 1) {
-        cli::cli_abort("prep_t has to be between 0 and 1",
-                       "x" = "prep_t is {prep_t}.",
-                       class = "invalid_argument_prep_t")
+    if (!is.numeric(t)) {
+        cli::cli_abort("t has to be numeric.",
+                       "x" = "t is {typeof(t)}.",
+                       class = "invalid_argument_t")
+    } else if (t < 0 | t > 1) {
+        cli::cli_abort("t has to be between 0 and 1",
+                       "x" = "t is {t}.",
+                       class = "invalid_argument_t")
     } else if (!is.logical(seq_bonf)) {
         cli::cli_abort("seq_bonf has to be a boolean.",
                        "x" = "seq_bonf is {typeof(seq_bonf)}.",
@@ -118,7 +116,7 @@ validate_cer_design_params <- function(
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #' @param alpha_spending_f alpha spending function, taking parameters alpha (for overall spent alpha) and t (information fraction at interim test)
-#' @param prep_t numeric between 0 and 1 specifing the planned time fraction for the interim test
+#' @param t numeric between 0 and 1 specifing the planned time fraction for the interim test
 #' @param seq_bonf to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1
 #' @param parallelize set TRUE to use parallization, for now only available on unix systems
 #'
@@ -135,7 +133,7 @@ validate_cer_design_params <- function(
 #'  test_m=rbind(c(0, 1),
 #'               c(1, 0)),
 #'  alpha_spending_f=as,
-#'  prep_t=0.5)
+#'  t=0.5)
 #' 
 #' design
 cer_design <- function(
@@ -144,7 +142,7 @@ cer_design <- function(
     alpha=double(),
     test_m=matrix(),
     alpha_spending_f=function() {},
-    prep_t=double(),
+    t=double(),
     seq_bonf=TRUE,
     parallelize=FALSE
 ) {
@@ -155,7 +153,7 @@ cer_design <- function(
         alpha = alpha,
         test_m = test_m,
         alpha_spending_f = alpha_spending_f,
-        prep_t = prep_t,
+        t = t,
         seq_bonf = seq_bonf,
         parallelize = parallelize
     )
@@ -166,7 +164,7 @@ cer_design <- function(
         alpha = alpha,
         test_m = test_m,
         alpha_spending_f = alpha_spending_f,
-        prep_t = prep_t,
+        t = t,
         seq_bonf = seq_bonf,
         parallelize = parallelize
     )

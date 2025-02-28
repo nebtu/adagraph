@@ -12,11 +12,12 @@ Authors@R:
             "Martin", "Posch",
             email = "martin.posch@meduniwien.ac.at",
             comment = c(ORCID = "0000-0001-8499-8573"),
-            role = "aut")
+            role = "aut"
         )
+    )
 Description: 
     Functions and objects to design a two-stage adaptive trial using a graph-based closed-testing sequence,
-    while controlling the FWER using the p-value combination method.
+    while controlling the FWER using the conditional error rate method.
 Imports:
     cli,
     gMCPLite,

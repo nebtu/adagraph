@@ -1,5 +1,4 @@
 
-#' @importClassesFrom gMCPLite graphMCP
 new_adagraph_design <- function(
     correlation=matrix(),
     weights=double(),
@@ -9,12 +8,31 @@ new_adagraph_design <- function(
     class = character()
 ) {
     k <- dim(correlation)[1]
-    #generate weights for all sub-hypotheses
-    #graph <- methods::new("graphMCP", m=test_m, weights=weights) 
+
+    int_hyp <- get_intersection_hypotheses(weights, test_m)
+
+    design <- list(
+        correlation=correlation,
+        weights=weights,
+        alpha=alpha,
+        hyp_matrix=int_hyp$hyp_matrix,
+        weights_matrix=int_hyp$weights_matrix,
+        closed_matrix=int_hyp$closed_matrix,
+        test_m=test_m
+    )
+    structure(
+        design,
+        k = k,
+        class = c(class, "adagraph_design")
+    )
+}
+
+get_intersection_hypotheses <- function(weights, test_m) {
     if (k==1) {
         hyp_matrix <- cbind(1)
         weights_matrix <- cbind(weights)
     } else {
+        #generate weights for all sub-hypotheses
         temp <- gMCPLite::generateWeights(test_m, weights)
         hyp_matrix <- temp[,1:k]
         weights_matrix <- temp[,(k+1):(2*k)]
@@ -24,22 +42,13 @@ new_adagraph_design <- function(
         # Fill the result matrix with row indices
         closed_matrix[,i]=which(hyp_matrix[,i]==1)
     }
-
-    design <- list(
-        correlation=correlation,
-        weights=weights,
-        alpha=alpha,
-        hyp_matrix=hyp_matrix,
-        weights_matrix=weights_matrix,
-        closed_matrix=closed_matrix,
-        test_m=test_m
-    )
-    structure(
-        design,
-        k = k,
-        class = c(class, "adagraph_design")
+    list(
+        hyp_matrix = hyp_matrix,
+        weights_matrix = weights_matrix,
+        closed_matrix = closed_matrix
     )
 }
+
 
 validate_adagraph_design_params <- function(
     correlation=matrix(),
