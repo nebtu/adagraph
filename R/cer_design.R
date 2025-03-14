@@ -1,8 +1,10 @@
 #' Internal function for cer_design
 #' 
 #' For documentation on how to generate cer_designs, see [cer_design].
-#' The parameters for this fucntion are the same as in [cer_design], with the exeption of 
+#' The parameters for this fucntion are the same as in [cer_design], with the exception of 
+#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf,parallelize Same as for [cer_design]
 #' @param class character, makes it possible to add subbclasses
+#' @param ... additional parameters, not used
 #'
 #' @return An object of class c("cer_design", "adagraph_design"), whith the following elements: 
 #'  * correlation: correlation matrix of the hypotheses, as given

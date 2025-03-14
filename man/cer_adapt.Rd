@@ -2,23 +2,43 @@
 % Please edit documentation in R/cer_adapt.R
 \name{cer_adapt}
 \alias{cer_adapt}
-\title{Adapt the trial design after teh interim test}
+\title{Adapt the trial design after the interim test}
 \usage{
 cer_adapt(design, weights = NA, test_m = NA, t = NA)
 }
 \arguments{
 \item{design}{A cer_design object}
 
-\item{weights}{New weight matrix.
-Note that the dimensions should be the same as in the prespecified design.
-For dropping hypotheses, set the according weights to 0 or use \link{cer_drop_hypotheses}.}
+\item{weights}{New weights vector
+Note that the lenght should be the same as in the prespecified design
+For dropping hypotheses, set the according weights to 0 or use \link{cer_drop_hypotheses}}
+
+\item{test_m}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses}
+
+\item{t}{new list of information fractions (or single information fraction) at which the interim test was conducted}
 }
 \value{
 An object of class cer_design, with the adaptions applied.
 }
 \description{
-Adapt the trial design after teh interim test
+Adapt the trial design after the interim test
 }
 \examples{
-code
+as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
+design <- cer_design(
+ correlation=rbind(H1=c(1, NA),
+                   H2=c(NA, 1)),
+ weights=c(2/3, 1/3),
+ alpha=0.05,
+ test_m=rbind(c(0, 1),
+              c(1, 0)),
+ alpha_spending_f=as,
+ t=0.5)
+
+#note that it is not necessary to do an interim test before,
+#but that an interim test will only be done with the prespecified parameters
+design <- cer_interim_test(design, c(0.1, 0.02))
+
+design <- cer_adapt(design, weights = c(1/3, 2/3))
+design
 }

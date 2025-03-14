@@ -11,7 +11,7 @@ new_cer_design(
   test_m = matrix(),
   alpha_spending_f = function() {
  },
-  prep_t = double(),
+  t = double(),
   seq_bonf = TRUE,
   parallelize = FALSE,
   ...,
@@ -19,6 +19,10 @@ new_cer_design(
 )
 }
 \arguments{
+\item{correlation, weights, alpha, test_m, alpha_spending_f, t, seq_bonf, parallelize}{Same as for \link{cer_design}}
+
+\item{...}{additional parameters, not used}
+
 \item{class}{character, makes it possible to add subbclasses}
 }
 \value{
@@ -36,7 +40,7 @@ intersection hypotheses need to be tested to reject the given hypothesis
 \item test_m: transition matrix of the graph, as given
 \item alpha_spending_f: alpha spending function, as given
 \item seq_bonf: as given
-\item prep_t: as given
+\item t: as given
 \item bounds_1: matrix of same format as hyp_matrix, where each row gives the bounds for rejection of the intersection hypothesis at the first stage
 \item bounds_2: same as bounds_1, but for rejection at the second stage according to the preplanned design
 \item cJ1: values used for calulation of bounds_1, bounds_1 := cJ1 * weights (with rowwise multiplication)
@@ -45,5 +49,5 @@ intersection hypotheses need to be tested to reject the given hypothesis
 }
 \description{
 For documentation on how to generate cer_designs, see \link{cer_design}.
-The parameters for this fucntion are the same as in \link{cer_design}, with the exeption of
+The parameters for this fucntion are the same as in \link{cer_design}, with the exception of
 }

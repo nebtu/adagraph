@@ -28,6 +28,7 @@ new_adagraph_design <- function(
 }
 
 get_intersection_hypotheses <- function(weights, test_m) {
+    k <- length(weights)
     if (k==1) {
         hyp_matrix <- cbind(1)
         weights_matrix <- cbind(weights)

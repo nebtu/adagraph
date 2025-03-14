@@ -3,6 +3,6 @@
 export(adagraph_design)
 export(cer_adapt)
 export(cer_design)
+export(cer_drop_hypotheses)
 export(cer_interim_test)
 export(cer_prep_bounds)
-importClassesFrom(gMCPLite,graphMCP)

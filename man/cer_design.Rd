@@ -11,7 +11,7 @@ cer_design(
   test_m = matrix(),
   alpha_spending_f = function() {
  },
-  prep_t = double(),
+  t = double(),
   seq_bonf = TRUE,
   parallelize = FALSE
 )
@@ -28,7 +28,7 @@ between the different hypotheses, use NA for uncorrelated}
 
 \item{alpha_spending_f}{alpha spending function, taking parameters alpha (for overall spent alpha) and t (information fraction at interim test)}
 
-\item{prep_t}{numeric between 0 and 1 specifing the planned time fraction for the interim test}
+\item{t}{numeric between 0 and 1 specifing the planned time fraction for the interim test}
 
 \item{seq_bonf}{to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1}
 
@@ -52,7 +52,7 @@ design <- cer_design(
  test_m=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending_f=as,
- prep_t=0.5)
+ t=0.5)
 
 design
 }

@@ -11,7 +11,7 @@ cer_interim_test(design, p_values, t = NA)
 
 \item{p_values}{A list of p-values for the hypotheses}
 
-\item{t}{The time fraction for the interim test, defaults to the prep_t of the design}
+\item{t}{The time fraction for the interim test, defaults to the t of the design}
 }
 \value{
 a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses
@@ -29,7 +29,7 @@ design <- cer_design(
  test_m=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending_f=as,
- prep_t=0.5)
+ t=0.5)
 
 design <- cer_interim_test(design, c(0.001, 0.02))
 design$rej

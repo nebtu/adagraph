@@ -1,9 +1,10 @@
 #' Adapt the trial design after the interim test
 #' 
 #' @param design A cer_design object
-#' @param weights New weights matrix.
-#'  Note that the dimensions should be the same as in the prespecified design
+#' @param weights New weights vector
+#'  Note that the lenght should be the same as in the prespecified design
 #'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses]
+#' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses
 #' @param t new list of information fractions (or single information fraction) at which the interim test was conducted
 #'
 #' @return An object of class cer_design, with the adaptions applied.
@@ -33,23 +34,23 @@ cer_adapt <- function(
     test_m = NA,
     t = NA
 ) {
-    if (!is.na(weights)) {
+    if (any(!is.na(weights))) {
         design$ad_weights <- weights
-    } else if (!is.null(design$ad_weights)) {
+    } else if (all(is.null(design$ad_weights))) {
         design$ad_weights <- design$weights
     } 
-    if (!is.na(test_m)) {
+    if (any(!is.na(test_m))) {
         design$ad_test_m <- test_m
-    } else if (!is.null(design$ad_test_m)) {
+    } else if (is.null(design$ad_test_m)) {
         design$ad_test_m <- design$test_m
     }
-    if (!is.na(t)) {
+    if (any(!is.na(t))) {
         design$ad_t <- t
-    } else if (!is.null(design$ad_t)) {
+    } else if (is.null(design$ad_t)) {
         design$ad_t <- design$t
     }
 
-    if (!is.na(weights) or !is.na(test_m)) {
+    if (any(!is.na(weights)) || any(!is.na(test_m))) {
         int_hyp <- get_intersection_hypotheses(design$ad_weights, design$ad_test_m)
         design$ad_weights_matrix <- int_hyp$weights_matrix
     } else if (is.null(design$ad_weights_matrix)) {
@@ -67,9 +68,9 @@ cer_adapt <- function(
 #' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
 #'
 #' @return design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
-#'@export
+#' @export
 #'
-#'@examples
+#' @examples
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
 #' design <- cer_design(
 #'  correlation=rbind(H1=c(1, NA),
@@ -89,8 +90,35 @@ cer_drop_hypotheses <- function(
     design,
     hypotheses
 ) {
-   hyp <- as.integer(!hypotheses)
-   intersection_hyp <- which(asplit(design$hyp_matrix, 1) == hyp)
-   weights <- design$weights_matrix[intersection_hyp]
-   cer_adapt(design, weights = weights)
+   hypotheses <- ifelse(hypotheses, 0, 1)
+   hyp_index <- which(sapply(asplit(design$hyp_matrix, 1), function(x) all(x == hypotheses)))
+   #intersection_hyp <- which(rowSums(design$hyp_matrix[,hyp, drop=FALSE]) == 0)
+   if (!is.null(design$ad_weights_matrix)) {
+    weights <- design$ad_weights_matrix[hyp_index, ]
+   } else {
+    weights <- design$weights_matrix[hyp_index, ]
+   }
+
+   if (any(!is.na(design$ad_test_m))) {
+    test_m <- design$ad_test_m
+   } else {
+    test_m <- design$test_m
+   }
+
+   for (hyp in which(hypotheses == 0)) {
+    for (i in 1:dim(test_m)[1]) {
+        if (test_m[hyp, i] == 1 && test_m[i, hyp] == 1) {
+            # no transfer of weight is possible, if it is only transfered to the now obselete hypothesis
+            test_m[i, ] <- 0
+        } else {
+            feedback_loop <- test_m[i, hyp] * test_m[hyp, i]
+                # ^ amount of weight that "gets stuck", i.e. would get transfered back to the deleted hypothesis
+            test_m[i, ] <- (test_m[i, ] + test_m[i, hyp] * test_m[hyp,]) / (1 - feedback_loop)
+        }
+    }
+    test_m[hyp, ] <- 0
+    test_m[ , hyp] <- 0
+    diag(test_m) <- 0
+   }
+   cer_adapt(design, weights = weights, test_m = test_m)
 }

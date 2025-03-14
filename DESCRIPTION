@@ -21,7 +21,6 @@ Description:
 Imports:
     cli,
     gMCPLite,
-    methods,
     mvtnorm,
     parallel,
     rlang

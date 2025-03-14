@@ -39,6 +39,15 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
     k <- dim(correlation)[1]
     I <- which(weights > 0)
 
+    if (length(I) == 0) {
+        return(list(
+          bounds_1 = 0 * weights,
+          bounds_2 = 0 * weights,
+          cJ1 = 0,
+          cJ2 = 0 
+        ))
+    }
+
     pos_weights <- weights[I]
     correlation <- correlation[I,I, drop=FALSE]
 
