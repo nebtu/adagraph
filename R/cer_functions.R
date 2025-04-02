@@ -133,6 +133,10 @@ get_cer <- function(
     pos_weights <- weights[I]
     correlation <- correlation[I,I, drop=FALSE]
     p_values <- p_values[I]
+    if(length(t) == 1) {
+        t <- rep(t, length(weights))
+    }
+    t <- t[I]
 
     conn <- gMCPLite:::conn.comp(correlation)
 
@@ -146,13 +150,14 @@ get_cer <- function(
     comp_cer <- function(conn_indices) {
         comp_weights <- pos_weights[conn_indices]
         comp_p_values <- p_values[conn_indices]
+        comp_t <- t[conn_indices]
         if (length(conn_indices) == 1) {
-            cer <- 1 - stats::pnorm((stats::qnorm(1 - min(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(t)) / sqrt(1 - t)) 
+            cer <- 1 - stats::pnorm((stats::qnorm(1 - min(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) / sqrt(1 - comp_t)) 
         } else {
             comp_corr <- correlation[conn_indices, conn_indices]
             cer <- 1 - mvtnorm::pmvnorm(
                 lower = -Inf,
-                upper = (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(t)) / sqrt(1 - t),
+                upper = (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) / sqrt(1 - comp_t),
                 corr = comp_corr,
                 algorithm = algorithm
             )[1]

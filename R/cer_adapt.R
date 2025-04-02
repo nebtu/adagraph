@@ -5,7 +5,8 @@
 #'  Note that the lenght should be the same as in the prespecified design
 #'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses]
 #' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses
-#' @param t new list of information fractions (or single information fraction) at which the interim test was conducted
+#' @param t adapted information fraction at which the first stage test occured.
+#'  Note that this can now be a vector with a different value for different hypotheses or a single value
 #'
 #' @return An object of class cer_design, with the adaptions applied.
 #' @export
@@ -63,6 +64,7 @@ cer_adapt <- function(
 #' Adapt a cer design by dropping hypotheses
 #'
 #' The weights of the dropped hypotheses are set to 0 and distributed according to the prespecified graph.
+#' However, the time fraction is not adapted, this needs to be done manually if desired.
 #' 
 #' @param design cer_design object
 #' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
@@ -203,6 +205,7 @@ cer_alt_drop_hypotheses <- function(
 cer_adapt_bounds <- function(design) {
     to_test <- ((rowSums(design$ad_weights_matrix) > 0) & 
         (rowSums(design$ad_weights_matrix[, design$rej, drop=FALSE]) == 0))
+    print(to_test)
     
     get_ad_cJ2 <- function(index) {
         if (sum(design$ad_weights_matrix[index, ] > 0) <= design$cer_vec[index]) {
