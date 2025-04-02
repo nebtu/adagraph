@@ -172,3 +172,66 @@ cer_alt_drop_hypotheses <- function(
     design
 }
 
+#' Adjust bounds after changing some design parameters
+#' 
+#' This function calculates the new bounds for the p-values for the final test.
+#' It should be run once after finishing all adaptions after the interim test.
+#'
+#' @param design A cer_design object
+#'
+#' @return A cer_design object, with the new bounds calculated
+#' @export
+#'
+#' @examples
+#' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
+#' design <- cer_design(
+#'  correlation=rbind(H1=c(1, NA),
+#'                    H2=c(NA, 1)),
+#'  weights=c(2/3, 1/3),
+#'  alpha=0.05,
+#'  test_m=rbind(c(0, 1),
+#'               c(1, 0)),
+#'  alpha_spending_f=as,
+#'  t=0.5)
+#' 
+#' design <- cer_interim_test(design, c(0.1, 0.02))
+#' 
+#' design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+#' design <- cer_adapt_bounds(design)
+#' 
+#' design
+cer_adapt_bounds <- function(design) {
+    to_test <- ((rowSums(design$ad_weights_matrix) > 0) & 
+        (rowSums(design$ad_weights_matrix[, design$rej, drop=FALSE]) == 0))
+    
+    get_ad_cJ2 <- function(index) {
+        if (sum(design$ad_weights_matrix[index, ] > 0) <= design$cer_vec[index]) {
+            return(Inf)
+        } else {
+           return(stats::uniroot(
+                function(ad_cJ2) {
+                    get_cer(
+                        p_values = design$p_values_interim,
+                        weights = design$ad_weights_matrix[index, ],
+                        cJ2 = ad_cJ2,
+                        correlation = design$correlation,
+                        t = design$ad_t
+                    ) - design$cer_vec[index]
+                },
+                    c(0, 1 / max(design$ad_weights_matrix[index, ])),
+                    tol = getOption("adagraph.precision")
+           )$root)
+        }
+    }
+    
+    ad_cJ2 <- numeric(dim(design$ad_weights_matrix)[1])
+    if (design$parallelize) {
+        ad_cJ2[to_test] <- simplify2array(parallel::mclapply(which(to_test), get_ad_cJ2))
+    } else {
+        ad_cJ2[to_test] <- simplify2array(lapply(which(to_test), get_ad_cJ2))
+    }
+
+    design$ad_cJ2 <- ad_cJ2
+    design$ad_bounds_2 <- apply(design$ad_weights_matrix, 2, function(w) ad_cJ2 * w)
+    design
+}

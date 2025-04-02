@@ -121,3 +121,44 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
     ))
 }
 
+# gives cer for a single intersection hypothesis
+get_cer <- function(
+    p_values,
+    weights,
+    cJ2,
+    correlation,
+    t
+) {
+    I <- which(weights > 0)
+    pos_weights <- weights[I]
+    correlation <- correlation[I,I, drop=FALSE]
+    p_values <- p_values[I]
+
+    conn <- gMCPLite:::conn.comp(correlation)
+
+    algorithm <- mvtnorm::Miwa(
+                    steps = getOption("adagraph.miwa_steps"),
+                    checkCorr = FALSE,
+                    maxval = getOption("adagraph.miwa_maxval")
+    )
+
+    # compute cer for one connected compononent of the correlation graph
+    comp_cer <- function(conn_indices) {
+        comp_weights <- pos_weights[conn_indices]
+        comp_p_values <- p_values[conn_indices]
+        if (length(conn_indices) == 1) {
+            cer <- 1 - stats::pnorm((stats::qnorm(1 - min(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(t)) / sqrt(1 - t)) 
+        } else {
+            comp_corr <- correlation[conn_indices, conn_indices]
+            cer <- 1 - mvtnorm::pmvnorm(
+                lower = -Inf,
+                upper = (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(t)) / sqrt(1 - t),
+                corr = comp_corr,
+                algorithm = algorithm
+            )[1]
+        }
+        return(cer)
+    }
+
+    sum(sapply(conn, comp_cer))
+}
