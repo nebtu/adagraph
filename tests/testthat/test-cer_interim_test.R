@@ -4,7 +4,7 @@ test_that("example from paper works", {
 
     design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
 
-    expect_equal(design$rej, c(TRUE, FALSE, FALSE, FALSE))
+    expect_equal(design$rej_interim, c(TRUE, FALSE, FALSE, FALSE))
 
     expected_cer <- c(0.05942545, 0.21788263, 0.14148870, 0.07015712, 0.07015712, 
                   0.11166979, 0.11166979, 1.00000000, 1.00000000, 1.00000000, 

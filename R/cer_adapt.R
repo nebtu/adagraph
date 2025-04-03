@@ -204,8 +204,7 @@ cer_alt_drop_hypotheses <- function(
 #' design
 cer_adapt_bounds <- function(design) {
     to_test <- ((rowSums(design$ad_weights_matrix) > 0) & 
-        (rowSums(design$ad_weights_matrix[, design$rej, drop=FALSE]) == 0))
-    print(to_test)
+        (rowSums(design$hyp_matrix[, design$rej_interim, drop=FALSE]) == 0))
     
     get_ad_cJ2 <- function(index) {
         if (sum(design$ad_weights_matrix[index, ] > 0) <= design$cer_vec[index]) {

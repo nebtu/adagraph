@@ -32,6 +32,6 @@ design <- cer_design(
  t=0.5)
 
 design <- cer_interim_test(design, c(0.001, 0.02))
-design$rej
+design$rej_interim
 design$cer_vec
 }

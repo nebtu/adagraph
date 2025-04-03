@@ -16,6 +16,7 @@ design with specified hypotheses dropped (so TRUE means the hypothesis is droppe
 }
 \description{
 The weights of the dropped hypotheses are set to 0 and distributed according to the prespecified graph.
+However, the time fraction is not adapted, this needs to be done manually if desired.
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))

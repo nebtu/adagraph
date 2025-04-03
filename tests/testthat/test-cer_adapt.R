@@ -77,4 +77,9 @@ test_that("adapting bounds works", {
     design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, TRUE, FALSE)) |>
         cer_adapt(weights = c(0, 0.5, 0, 0.5), t=ad_t)
     
+    design_adj_bounds <- cer_adapt_bounds(design_adj)
+
+    tcJ2v <- c(0.02371429, 0, 0.05413301, 0.02439775, 0.02746754, 0.03825017, 0.04193392)
+    expect_equal(round(design_adj_bounds$ad_cJ2[1:7], 8), tcJ2v)
+    #note that this also depends on the order of the intersection hypotheses to be the same to pass
 })

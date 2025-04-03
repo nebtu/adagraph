@@ -20,7 +20,7 @@
 #'  t=0.5)
 #' 
 #' design <- cer_interim_test(design, c(0.001, 0.02))
-#' design$rej
+#' design$rej_interim
 #' design$cer_vec
 cer_interim_test <- function(
     design,
@@ -29,8 +29,10 @@ cer_interim_test <- function(
 ) {
     if (is.na(t)) {
         t <- design$t
+    } else {
+        design$t <- t
     }
-    intersection_rej <- (p_values < t(design$bounds_1))
+    rej_matrix <- (p_values < t(design$bounds_1))
 
     cer_vec <- mapply(
         function(weights, cJ2, rej) {
@@ -42,17 +44,21 @@ cer_interim_test <- function(
         },
         asplit(design$weights_matrix, 1),
         design$cJ2,
-        asplit(intersection_rej, 2)
+        asplit(rej_matrix, 2)
     )
 
     if (design$seq_bonf) {
-        intersection_rej[which(cer_vec > 1)] <- TRUE
+        rej_matrix[which(cer_vec > 1)] <- TRUE
     }
+ 
+    intersection_rej <- apply(rej_matrix, 2, any)
     rej <- sapply(1:attr(design, "k"), function(i) {
-        all(intersection_rej[i, design$closed_matrix[,i]])
+        all(intersection_rej[design$closed_matrix[,i]])
     })
+
     design$p_values_interim <- p_values
     design$cer_vec <- cer_vec
-    design$rej <- rej
+    design$rej_interim <- rej
+    design$intersection_rej_interim <- intersection_rej
     design
 }

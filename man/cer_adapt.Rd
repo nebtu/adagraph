@@ -15,7 +15,8 @@ For dropping hypotheses, set the according weights to 0 or use \link{cer_drop_hy
 
 \item{test_m}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses}
 
-\item{t}{new list of information fractions (or single information fraction) at which the interim test was conducted}
+\item{t}{adapted information fraction at which the first stage test occured.
+Note that this can now be a vector with a different value for different hypotheses or a single value}
 }
 \value{
 An object of class cer_design, with the adaptions applied.
