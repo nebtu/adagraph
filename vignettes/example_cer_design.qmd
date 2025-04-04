@@ -1,0 +1,119 @@
+---
+title: "Example for using the CER Method with adagraph"
+vignette: >
+  %\VignetteIndexEntry{Example of using the CER Method with adagraph}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: '#>'
+---
+
+```{r}
+#| label: setup
+library(adagraph)
+```
+
+We want to to explain how to design and test a multi-stage, multi-arm clinical trial with adaptions after the interim analysis using the CER method as described in Mehta 2025 ([arXiv:2501.03197](https://arxiv.org/abs/2501.03197)).
+We consider a double blind clinical trial of patients with acute exacerbation of schizophrenia where to doses of an experimental drug were compared to a matching control drug.
+For more details on the trial see the aformentioned paper.
+We are mostly interested in the variant using the CER-Method, as described in section 3.2.4.
+
+To work with the trial in `adagraph`, we first need to make a `cer_design` object with which we save all our prespecified trial specifications.
+These are:
+
+ * `test_m`, the matrix specifing the graph used for the closed testing procedure
+ * `weights`, the corresponding weights for the closed testing procedure
+ * `correlation`, a matrix specifing the different correlations between the hypotheses. Note that to make it clear we dont know anything about the correlation between to hypotheses we need to use the value `NA`, since giving 0 would still use parametric tests, only with know correlation 0.
+ * `alpha`, the overall FWER we want to control for
+ * `alpha_spending_function`, for specifing how much of the FWER should be spent at the interim test
+ * `t`, the time information fraction at which the interim test is planned. Since for our trial, it is planned that the interim look is performed after 50% of the participants have enrolled, t is 1/2.
+
+By default, we also use the fact that if $B_J(\chi_1)\geq 1$ for some intersection hypotheses, we can also reject that subhypotheses at the interim, as described in the beginning of section 3.2.3.
+If this is not the desired behaviour, set `seq_bonf` to `FALSE`.
+
+```{r}
+test_m <- rbind(H1=c(0,1/2,1/2,0),
+               H2=c(1/2,0,0,1/2),
+               H3=c(0,1,0,0),
+               H4=c(1,0,0,0))
+
+correlation <- rbind(c(1, 1/2, NA, NA),
+                     c(1/2, 1, NA, NA),
+                     c(NA, NA, 1, 1/2),
+                     c(NA, NA, 1/2, 1))
+
+as <- function(x,t) 2-2*stats::pnorm(stats::qnorm(1-x/2)/sqrt(t))
+
+design <- cer_design(
+  correlation = correlation,
+  weights = c(1/2, 1/2, 0, 0),
+  alpha = 0.025,
+  test_m = test_m,
+  alpha_spending_f = as,
+  t= 1/2
+)
+```
+
+Following the description of the paper, we get after the unblinding for the interim analysis the values $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$, $p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$.
+
+```{r}
+design_interim <- cer_interim_test(design, p_values = c(0.00045, 0.0952, 0.0225, 0.1104))
+```
+We can now perform the interim test on our `design` object.
+This returns the same object with new information about which hypotheses are rejected only calculated internally.
+To acces this information, we can manually look at the rej_interim value.
+
+```{r}
+design_interim$rej_interim
+```
+
+We can see that for now, only the first hypotheses is rejected.
+Adagraph does by itself not assume that we will change anything about our trial design, even if a hypotheses was rejected.
+For our example, it is decided that not only the rejected first hypotheses, but also the third hypotheses will not be further tested.
+This can be easily accomplished using `cer_drop_hypotheses`, which autmatically adjust the weights and test matrix according to the transition graph.
+However, this does not change the time fraction, which we calculate like specified on page 24.
+The weights are also further changed.
+Both of those adjustments can be done with `cer_adapt()`.
+
+
+```{r}
+reallocated_t <- (1/(2/35))/(1/(2/35) + 1/(1/52 + 1/53))
+ad_t <- c(1, reallocated_t, 1, reallocated_t)
+
+design_adj <- design_interim |>
+  cer_drop_hypotheses(
+    c(TRUE, FALSE, TRUE, FALSE)
+  ) |>
+  cer_adapt(
+    weights = c(0, 0.5, 0, 0.5), 
+    t=ad_t
+  )
+```
+
+Note the new testing matrix resulting from those changes:
+
+```{r}
+design_adj$ad_test_m
+```
+
+Now that the adjustments are done, we need to calculate the adjusted bounds for the rejection of the intersection hypthoses.
+This ist done using `cer_adapt_bounds()`.
+
+```{r}
+design_adj_bounds <- cer_adapt_bounds(design_adj)
+```
+
+Now we can test for the final results, $\tilde{p}_{2,2} = 0.0111$, and $\tilde{p}_{4,2}$.
+Note that the hypthoses that we no further use are still present in the design object, they just don't get any weight assigned.
+Therefore, we still need to use a vector of lenght 4 for our p-values, but can use `NA` as a corresponding value.
+
+
+```{r}
+design_tested <- cer_final_test(design_adj_bounds, c(NA, 0.0111, NA, 0.0234))
+
+design_tested$rej
+```
+
+As we can see, both the hypotheses that we are still testing for are now also being rejected.

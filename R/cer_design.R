@@ -1,8 +1,8 @@
 #' Internal function for cer_design
 #' 
-#' For documentation on how to generate cer_designs, see [cer_design].
-#' The parameters for this fucntion are the same as in [cer_design], with the exception of 
-#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf,parallelize Same as for [cer_design]
+#' For documentation on how to generate cer_designs, see [cer_design()].
+#' The parameters for this fucntion are the same as in [cer_design()], with the exception of 
+#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf,parallelize Same as for [cer_design()]
 #' @param class character, makes it possible to add subbclasses
 #' @param ... additional parameters, not used
 #'
@@ -24,7 +24,7 @@
 #'  * bounds_2: same as bounds_1, but for rejection at the second stage according to the preplanned design
 #'  * cJ1: values used for calulation of bounds_1, bounds_1 := cJ1 * weights (with rowwise multiplication)
 #'  * cJ2: as cJ1, but for bounds_2
-#'  
+#' @noRd
 new_cer_design <- function(
     correlation=matrix(),
     weights=double(),
@@ -109,7 +109,7 @@ validate_cer_design_params <- function(
 
 #' Make a new CER trial design
 #'
-#' Returns an object of class cer_design. 
+#' Returns an object of class `cer_design`. 
 #' This can be used for clinical trials with potential adaptions that are controlled
 #' for using the conditional error method.
 #' 
@@ -123,7 +123,7 @@ validate_cer_design_params <- function(
 #' @param seq_bonf to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1
 #' @param parallelize set TRUE to use parallization, for now only available on unix systems
 #'
-#' @return An object of class cer_design
+#' @return An object of class `cer_design`
 #' @export
 #'
 #' @examples

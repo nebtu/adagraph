@@ -35,10 +35,10 @@ between the different hypotheses, use NA for uncorrelated}
 \item{parallelize}{set TRUE to use parallization, for now only available on unix systems}
 }
 \value{
-An object of class cer_design
+An object of class \code{cer_design}
 }
 \description{
-Returns an object of class cer_design.
+Returns an object of class \code{cer_design}.
 This can be used for clinical trials with potential adaptions that are controlled
 for using the conditional error method.
 }

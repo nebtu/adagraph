@@ -10,7 +10,7 @@ test_that("example from paper works", {
     
     design_adj <- cer_adapt_bounds(design_adj)
 
-    design_tested <- cer_final_test(design_adj, c(1, 0.0111, 1, 0.0234))
+    design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
     expect_equal(design_tested$rej, c(T, T, F, T))
 
 

@@ -11,7 +11,7 @@ cer_adapt(design, weights = NA, test_m = NA, t = NA)
 
 \item{weights}{New weights vector
 Note that the lenght should be the same as in the prespecified design
-For dropping hypotheses, set the according weights to 0 or use \link{cer_drop_hypotheses}}
+For dropping hypotheses, set the according weights to 0 or use \code{\link[=cer_drop_hypotheses]{cer_drop_hypotheses()}}}
 
 \item{test_m}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses}
 

@@ -3,7 +3,7 @@
 #' @param design A cer_design object
 #' @param weights New weights vector
 #'  Note that the lenght should be the same as in the prespecified design
-#'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses]
+#'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses()]
 #' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses
 #' @param t adapted information fraction at which the first stage test occured.
 #'  Note that this can now be a vector with a different value for different hypotheses or a single value

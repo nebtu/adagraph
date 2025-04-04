@@ -12,7 +12,7 @@ make_example_design <- function() {
     diag(correlation)=1
     t=0.5
     alpha=0.025
-    as=function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))#spending function
+    as=function(x,t) 2-2*stats::pnorm(stats::qnorm(1-x/2)/sqrt(t))#spending function
     #========
 
     design <- cer_design(
