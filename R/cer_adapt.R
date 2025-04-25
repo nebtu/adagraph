@@ -33,7 +33,8 @@ cer_adapt <- function(
     design,
     weights = NA,
     test_m = NA,
-    t = NA
+    t = NA,
+    correlation = NA
 ) {
     if (any(!is.na(weights))) {
         design$ad_weights <- weights
@@ -49,6 +50,11 @@ cer_adapt <- function(
         design$ad_t <- t
     } else if (is.null(design$ad_t)) {
         design$ad_t <- design$t
+    }
+    if (any(!is.na(correlation))) {
+        design$ad_correlation <- correlation
+    } else if (is.null(design$ad_correlation)) {
+        design$ad_correlation <- design$correlation
     }
 
     if (any(!is.na(weights)) || any(!is.na(test_m))) {
@@ -216,7 +222,7 @@ cer_adapt_bounds <- function(design) {
                         p_values = design$p_values_interim,
                         weights = design$ad_weights_matrix[index, ],
                         cJ2 = ad_cJ2,
-                        correlation = design$correlation,
+                        correlation = design$ad_correlation,
                         t = design$ad_t
                     ) - design$cer_vec[index]
                 },

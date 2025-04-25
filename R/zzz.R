@@ -8,5 +8,9 @@
     toset <- !(names(op_adagraph) %in% names(op))
     if (any(toset)) options(op_adagraph[toset])
 
+    # Note that will not work well with parallelization, but provides a nice speedup for now
+    get_cer <<- memoise::memoise(get_cer)
+    cer_prep_bounds <<- memoise::memoise(cer_prep_bounds)
+
     invisible()
 }

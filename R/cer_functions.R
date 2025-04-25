@@ -155,12 +155,16 @@ get_cer <- function(
             cer <- 1 - stats::pnorm((stats::qnorm(1 - min(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) / sqrt(1 - comp_t)) 
         } else {
             comp_corr <- correlation[conn_indices, conn_indices]
-            cer <- 1 - mvtnorm::pmvnorm(
-                lower = -Inf,
-                upper = (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) / sqrt(1 - comp_t),
-                corr = comp_corr,
-                algorithm = algorithm
-            )[1]
+            upper <- (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) / sqrt(1 - comp_t)
+            cer <- 1 - min(
+                mvtnorm::pmvnorm(
+                    lower = -Inf,
+                    upper = upper,
+                    corr = comp_corr,
+                    algorithm = algorithm
+                )[1],
+                1 # in rare cases, pmvnorm returns values greater than 1
+            )
         }
         return(cer)
     }
