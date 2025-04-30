@@ -1,4 +1,5 @@
-
+#Note that using this function works exactly as the simrun and wrap functions
+# in the original script when using the same seed
 
 get_sim_design <- function() {
   ws=.75# (weight given to secondary endpoint)
