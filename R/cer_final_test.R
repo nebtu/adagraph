@@ -42,5 +42,6 @@ cer_final_test <- function(
     })
 
     design$rej<- rej
+    design$p_values_final <- p_values
     design
 }

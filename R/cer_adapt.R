@@ -98,6 +98,11 @@ cer_drop_hypotheses <- function(
     design,
     hypotheses
 ) {
+
+   if (is.null(design$keep_hyp)) {
+     design$keep_hyp <- rep(TRUE, attr(design, "k"))
+   }
+   design$keep_hyp[hypotheses] <- FALSE
    hypotheses <- ifelse(hypotheses, 0, 1)
    hyp_index <- which(sapply(asplit(design$hyp_matrix, 1), function(x) all(x == hypotheses)))
    if (!is.null(design$ad_weights_matrix)) {
@@ -175,6 +180,7 @@ cer_alt_drop_hypotheses <- function(
         }
     }))
 
+    design$keep_hyp <- !hypotheses
     design$ad_weights <- weights
     design$ad_weights_matrix <- weights_matrix
     design
@@ -234,12 +240,15 @@ cer_adapt_bounds <- function(design) {
     
     ad_cJ2 <- numeric(dim(design$ad_weights_matrix)[1])
     if (design$parallelize) {
-        ad_cJ2[to_test] <- simplify2array(parallel::mclapply(which(to_test), get_ad_cJ2))
+        ad_cJ2[to_test] <- parallel::mclapply(which(to_test), get_ad_cJ2)
+        ad_cJ2 <- simplify2array(ad_cJ2)
     } else {
-        ad_cJ2[to_test] <- simplify2array(lapply(which(to_test), get_ad_cJ2))
+        ad_cJ2[to_test] <- lapply(which(to_test), get_ad_cJ2)
+        ad_cJ2 <- simplify2array(ad_cJ2)
     }
 
     design$ad_cJ2 <- ad_cJ2
-    design$ad_bounds_2 <- apply(design$ad_weights_matrix, 2, function(w) ad_cJ2 * w)
+    design$ad_bounds_2 <- apply(design$ad_weights_matrix, 2, function(w) {ad_cJ2 * w})
+
     design
 }

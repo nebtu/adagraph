@@ -17,35 +17,46 @@ stage_1_data_old <- function(mu, corr, n) {
 gen_data <- function(n, corr_control, corr_treatment, cont_treat_association, eff, n_cont, n_treat) {
   #it is much more efficent to generate all data in only one call to rmvnorm instead of length seperate ones,
   #since else eigenvalues for the correlation matrix are computed each time
+  print(n_cont)
+  print(n_treat)
+  print(corr_control)
+  print(corr_treatment)
+
+  controls <- dim(corr_control)[1]
+  arms <- dim(corr_treatment)[1]
+
   if (length(n_cont) == 1) {
-    n_cont <- rep(n_cont, dim(corr_control)[1])
+    n_cont <- rep(n_cont, controls)
   }
   if (length(n_treat) == 1) {
-    n_treat <- rep(n_treat, dim(corr_treatment)[1])
+    n_treat <- rep(n_treat, arms)
   }
 
   control <- array(
-    t(rmvnorm(max(n_cont)*n, sigma = corr_control)),
-    dim = c(length(n_cont), max(n_cont), n)
+    rmvnorm(max(n_cont)*n, sigma = corr_control),
+    dim = c(n, max(n_cont), controls)
   )
 
   treatment <- array(
-    t(rmvnorm(max(n_treat)*n, mean = eff, sigma = corr_treatment)),
-    dim = c(length(n_treat), max(n_treat), n)
+    rmvnorm(max(n_treat)*n, mean = eff, sigma = corr_treatment),
+    dim = c(n, max(n_treat), arms)
   )
 
-  control <- aperm(control, c(2, 1, 3))
-  treatment <- aperm(treatment, c(2, 1, 3))
+  control <- aperm(control, c(2, 3, 1))
+  treatment <- aperm(treatment, c(2, 3, 1))
   # now the shape is (number of treated people, number of arms, number of runs)
 
   #set all values outside of the desired sample size to 0
-  cont_indices <- arrayInd(seq_along(control), .dim = dim(control))
-  inds <- which(cont_indices[, 1] > n_cont[cont_indices[, 2]])
-  control[inds] <- NA
-
-  treat_indices <- arrayInd(seq_along(treatment), .dim = dim(treatment))
-  inds <- which(treat_indices[, 1] > n_treat[treat_indices[, 2]])
-  treatment[inds] <- NA
+  for (i in 1:controls) {
+    if (n_cont[i] < max(n_cont)) {
+      control[n_cont[i]:max(n_cont), i, ] <- NA
+    }
+  }
+  for (i in 1:arms) {
+    if (n_treat[i] < max(n_treat)) {
+      treatment[n_treat[i]:max(n_treat), i, ] <- NA
+    }
+  }
 
   cont_mean <- colMeans(control, na.rm=T)
   treat_mean <- colMeans(treatment, na.rm=T)
@@ -115,7 +126,6 @@ stage_2_data_old <- function(mu, corr, n2, trt2, runs2) {
     tn2=rep(0,5) 
     tn2[c(1,1+trt2)]=tn2base
     tn2[c(1,1+trt2)][0:tn2remainder]=tn2base+1 # second stage per treatment sample size
-    
 
     tn2s=tn2[c(1,1+trt2)]# sample sizes of the selected arms (out of 5)
     mtn2=max(tn2s)
@@ -194,12 +204,12 @@ eff <- rep(0, 8)
 gen_data_s2 <- function(trt2, n_patients, n) {
   n_cont <- n_patients
   n_arms <- length(trt2)
-  n_treat_prim <- rep(n_patients, n_arms)
+  n_treat_prim <- rep(n_patients, n_arms+1)
   
-  n_treat_prim <- n_treat_prim + floor(((4 - n_arms) * n_patients)/n_arms)
-  rem <- ((4 - n_arms) * n_patients) %% n_arms
+  n_treat_prim <- n_treat_prim + floor(((4 - n_arms) * n_patients)/(n_arms+1))
+  rem <- ((4 - n_arms) * n_patients) %% (n_arms + 1)
   
-  n_treat_prim[which(1:n_arms <= rem)] <- n_treat_prim[1:rem] + 1
+  n_treat_prim[1:rem] <- n_treat_prim[1:rem] + 1
 
   sel_hyp <- c(trt2, trt2 + 4)
 
@@ -209,8 +219,8 @@ gen_data_s2 <- function(trt2, n_patients, n) {
     corr_treatment = corr_treatment[sel_hyp, sel_hyp],
     cont_treat_association = cont_treat_association[sel_hyp],
     eff = eff[sel_hyp],
-    n_cont = n_cont,
-    n_treat = c(n_treat_prim, n_treat_prim)
+    n_cont = n_treat_prim[1],
+    n_treat = c(n_treat_prim[-1], n_treat_prim[-1])
   )
 }
 
@@ -224,8 +234,6 @@ p_long_old_2 <- as_tibble(
   .name_repair = "universal"
 )
 colnames(p_long_old_2) <- paste0("H", 1:6)
-
-p2 <- gen_data_s2(trt2, 50, 100)
 
 p_long_2 <- as_tibble(
   gen_data_s2(trt2, 50, 20000),
@@ -266,5 +274,7 @@ for (i in 1:6) {
   }
 }
 
-p_val |>  ggplot(aes(x=H1, y=H4)) + 
-  geom_point()
+p_long |>
+  pivot_longer(cols = H1:H8, names_to = "p_name", values_to = "p") |>
+  ggplot(aes(y = p, x = p_name)) + 
+   geom_boxplot()
