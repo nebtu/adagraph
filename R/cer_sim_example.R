@@ -114,7 +114,7 @@ run_example_trial <- function(
     corr = 0.8,
     eff = c(0,0,0,0),
     futility = 0.75,
-    alt_drop = FALSE
+    alt_drop = TRUE
 ) {
     design <- get_sim_design()
     dat <- example_data_gen(corr, eff, n1, n2)

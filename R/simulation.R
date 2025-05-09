@@ -31,7 +31,8 @@ sim_trial <- function(design, runs1, runs2, adapt_rule, data_gen_1, data_gen_2, 
     # maybe use smth else than do.call here? vec.rbind from vctrs, or map_dfr from purrr would work
     # or pre-allocating and filling the dataframe if performance is an issue, but then how to parallelize?
     results <- do.call(rbind, future_lapply(1:length(designs_interim), function(i) {
-        design_adj <- cer_adapt_bounds(adapt_rule(designs_interim[[i]]))
+        design_adapted <- adapt_rule(designs_interim[[i]])
+        design_adj <- cer_adapt_bounds(design_adapted)
         data_2 <- data_gen_2(runs2, design_adj)
 
         designs_final <- apply(data_2, 1, function(p_values) {
@@ -67,7 +68,10 @@ sim_trial <- function(design, runs1, runs2, adapt_rule, data_gen_1, data_gen_2, 
         }
 
         df
-    }, future.seed = TRUE))
+    },
+    future.globals = c("designs_interim", "runs2", "adapt_rule", "data_gen_2", "include_designs"),
+    future.packages = "adagraph",
+    future.seed = TRUE))
 
     return(results)
 }

@@ -129,7 +129,7 @@ get_cer <- function(
     correlation,
     t
 ) {
-    I <- which(weights > 0)
+    I <- weights > 0
     pos_weights <- weights[I]
     correlation <- correlation[I,I, drop=FALSE]
     p_values <- p_values[I]
@@ -138,7 +138,11 @@ get_cer <- function(
     }
     t <- t[I]
 
-    conn <- gMCPLite:::conn.comp(correlation)
+    if(length(correlation) > 1) {
+        conn <- gMCPLite:::conn.comp(correlation)
+    } else {
+        conn <- 1
+    }
 
     algorithm <- mvtnorm::Miwa(
                     steps = getOption("adagraph.miwa_steps"),

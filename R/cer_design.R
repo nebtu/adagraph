@@ -54,8 +54,9 @@ new_cer_design <- function(
     boundslist <- future_apply(
         design$weights_matrix,
         1,
-        function(weights) adagraph::cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t),
-        future.seed = TRUE
+        function(weights) cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t),
+        future.seed=NULL,
+        future.packages = "adagraph"
     )
 
     design$bounds_1 <- t(sapply(boundslist,`[[`, "bounds_1"))

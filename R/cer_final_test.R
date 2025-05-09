@@ -31,13 +31,13 @@ cer_final_test <- function(
 ) {
     p_values[is.na(p_values)] <- 1 #hypotheses which are no futher tested can not be rejected
     k <- attr(design, "k")
-    intersection_rej <- sapply(1:(2^k-1), function(i) {
-        any(p_values < design$ad_bounds_2[i,]) | (design$intersection_rej_interim[i] == 1)
-        #intersection hypotheses is rejected if any second stage p-value is below the adjusted bounds
-        #or it was rejected at the interim already
-    })
-    
-    rej<- sapply(1:k, function(i) {
+
+    intersection_rej <- pmax(
+        design$intersection_rej_interim,
+        matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0
+    )
+
+    rej <- sapply(1:k, function(i) {
         all(intersection_rej[design$closed_matrix[,i]])
     })
 
