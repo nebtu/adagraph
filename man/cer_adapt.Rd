@@ -4,7 +4,7 @@
 \alias{cer_adapt}
 \title{Adapt the trial design after the interim test}
 \usage{
-cer_adapt(design, weights = NA, test_m = NA, t = NA)
+cer_adapt(design, weights = NA, test_m = NA, t = NA, correlation = NA)
 }
 \arguments{
 \item{design}{A cer_design object}
@@ -17,6 +17,8 @@ For dropping hypotheses, set the according weights to 0 or use \code{\link[=cer_
 
 \item{t}{adapted information fraction at which the first stage test occured.
 Note that this can now be a vector with a different value for different hypotheses or a single value}
+
+\item{correlation}{adapted correlation matrix}
 }
 \value{
 An object of class cer_design, with the adaptions applied.

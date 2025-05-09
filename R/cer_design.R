@@ -2,9 +2,10 @@
 #' 
 #' For documentation on how to generate cer_designs, see [cer_design()].
 #' The parameters for this fucntion are the same as in [cer_design()], with the exception of 
-#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf,parallelize Same as for [cer_design()]
+#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf Same as for [cer_design()]
 #' @param class character, makes it possible to add subbclasses
 #' @param ... additional parameters, not used
+#' @importFrom future.apply future_apply
 #'
 #' @return An object of class c("cer_design", "adagraph_design"), whith the following elements: 
 #'  * correlation: correlation matrix of the hypotheses, as given
@@ -33,7 +34,6 @@ new_cer_design <- function(
     alpha_spending_f=function() {},
     t=double(),
     seq_bonf=TRUE,
-    parallelize=FALSE,
     ...,
     class = character()
 ) {
@@ -47,21 +47,17 @@ new_cer_design <- function(
     design$alpha_spending_f <- alpha_spending_f
     design$seq_bonf <- seq_bonf
     design$t <- t
-    design$parallelize <- parallelize
     k <- attr(design, "k")
 
     prep_alpha_1 <- alpha_spending_f(alpha, t)
-    get_bounds <- function(index) {
-        #this function takes the index instead of directly the weights because 
-        # parallel only provides mclapply, and no equivalent of apply
-        weight_list = design$weights_matrix[index,]
-        cer_prep_bounds(correlation, weight_list, c(prep_alpha_1, alpha), t)
-    }
-    if (parallelize == TRUE) {
-        boundslist <- parallel::mclapply(1:(2^k - 1), get_bounds)
-    } else {
-        boundslist <- lapply(1:(2^k - 1), get_bounds)
-    }
+
+    boundslist <- future_apply(
+        design$weights_matrix,
+        1,
+        function(weights) adagraph::cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t),
+        future.seed = TRUE
+    )
+
     design$bounds_1 <- t(sapply(boundslist,`[[`, "bounds_1"))
     design$bounds_2 <- t(sapply(boundslist,`[[`, "bounds_2"))
     design$cJ1 <- t(sapply(boundslist,`[[`, "cJ1"))
@@ -78,7 +74,6 @@ validate_cer_design_params <- function(
     alpha_spending_f = alpha_spending_f,
     t = t,
     seq_bonf = seq_bonf,
-    parallelize = parallelize,
     call = rlang::caller_env()
 ) {
     validate_adagraph_design_params(
@@ -100,10 +95,6 @@ validate_cer_design_params <- function(
         cli::cli_abort("seq_bonf has to be a boolean.",
                        "x" = "seq_bonf is {typeof(seq_bonf)}.",
                        class = "invalid_argument_seq_bonf")
-    } else if (!is.logical(parallelize)) {
-        cli::cli_abort("parallelize has to be a boolean.",
-                       "x" = "parallelize is {typeof(parallelize)}.",
-                       class = "invalid_argument_parallelize")
     }
 }
 
@@ -121,7 +112,6 @@ validate_cer_design_params <- function(
 #' @param alpha_spending_f alpha spending function, taking parameters alpha (for overall spent alpha) and t (information fraction at interim test)
 #' @param t numeric between 0 and 1 specifing the planned time fraction for the interim test
 #' @param seq_bonf to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1
-#' @param parallelize set TRUE to use parallization, for now only available on unix systems
 #'
 #' @return An object of class `cer_design`
 #' @export
@@ -146,8 +136,7 @@ cer_design <- function(
     test_m=matrix(),
     alpha_spending_f=function() {},
     t=double(),
-    seq_bonf=TRUE,
-    parallelize=FALSE
+    seq_bonf=TRUE
 ) {
 
     validate_cer_design_params(
@@ -157,8 +146,7 @@ cer_design <- function(
         test_m = test_m,
         alpha_spending_f = alpha_spending_f,
         t = t,
-        seq_bonf = seq_bonf,
-        parallelize = parallelize
+        seq_bonf = seq_bonf
     )
 
     new_cer_design(
@@ -168,7 +156,6 @@ cer_design <- function(
         test_m = test_m,
         alpha_spending_f = alpha_spending_f,
         t = t,
-        seq_bonf = seq_bonf,
-        parallelize = parallelize
+        seq_bonf = seq_bonf
     )
 }

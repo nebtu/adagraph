@@ -7,6 +7,7 @@
 #' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses
 #' @param t adapted information fraction at which the first stage test occured.
 #'  Note that this can now be a vector with a different value for different hypotheses or a single value
+#' @param correlation adapted correlation matrix
 #'
 #' @return An object of class cer_design, with the adaptions applied.
 #' @export
@@ -239,13 +240,8 @@ cer_adapt_bounds <- function(design) {
     }
     
     ad_cJ2 <- numeric(dim(design$ad_weights_matrix)[1])
-    if (design$parallelize) {
-        ad_cJ2[to_test] <- parallel::mclapply(which(to_test), get_ad_cJ2)
-        ad_cJ2 <- simplify2array(ad_cJ2)
-    } else {
-        ad_cJ2[to_test] <- lapply(which(to_test), get_ad_cJ2)
-        ad_cJ2 <- simplify2array(ad_cJ2)
-    }
+    ad_cJ2[to_test] <- lapply(which(to_test), get_ad_cJ2)
+    ad_cJ2 <- simplify2array(ad_cJ2)
 
     design$ad_cJ2 <- ad_cJ2
     design$ad_bounds_2 <- apply(design$ad_weights_matrix, 2, function(w) {ad_cJ2 * w})

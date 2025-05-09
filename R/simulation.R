@@ -18,8 +18,8 @@
 #' and return in the same format as data_gen_1.
 #' 
 #' @return A dataframe containing the various results
+#' @importFrom future.apply future_lapply
 #' @export
-#'
 sim_trial <- function(design, runs1, runs2, adapt_rule, data_gen_1, data_gen_2, include_designs = FALSE) {
     k <- attr(design, "k")
 
@@ -30,7 +30,7 @@ sim_trial <- function(design, runs1, runs2, adapt_rule, data_gen_1, data_gen_2, 
 
     # maybe use smth else than do.call here? vec.rbind from vctrs, or map_dfr from purrr would work
     # or pre-allocating and filling the dataframe if performance is an issue, but then how to parallelize?
-    results <- do.call(rbind, lapply(1:length(designs_interim), function(i) {
+    results <- do.call(rbind, future_lapply(1:length(designs_interim), function(i) {
         design_adj <- cer_adapt_bounds(adapt_rule(designs_interim[[i]]))
         data_2 <- data_gen_2(runs2, design_adj)
 
@@ -67,11 +67,12 @@ sim_trial <- function(design, runs1, runs2, adapt_rule, data_gen_1, data_gen_2, 
         }
 
         df
-    }))
+    }, future.seed = TRUE))
 
     return(results)
 }
 
+#'@importFrom stats pnorm qnorm pt
 get_data_gen <- function(corr_control, corr_treatment, cont_treat_association, eff, n_cont, n_treat) {
   controls <- dim(corr_control)[1]
   arms <- dim(corr_treatment)[1]

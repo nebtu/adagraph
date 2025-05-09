@@ -1,3 +1,4 @@
+#'@importFrom stats pnorm qnorm pt
 get_sim_design <- function() {
     ws=.75# (weight given to secondary endpoint)
     wp=(1-ws)/3 # weight given to the other arms primary endpoint

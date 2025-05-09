@@ -177,12 +177,4 @@ test_that("Correct validation of cer_design", {
                                                     t = t,
                                                     seq_bonf = "TRUE"),
                              class = "invalid_argument_seq_bonf")
-    expect_error(cer_design(correlation = correlation,
-                                                    weights = weights,
-                                                    alpha = alpha,
-                                                    test_m = test_m,
-                                                    alpha_spending_f = alpha_spending_f,
-                                                    t = t,
-                                                    parallelize = "FALSE"),
-                             class = "invalid_argument_parallelize")
 })
