@@ -34,32 +34,39 @@ By default, we also use the fact that if $B_J(\chi_1)\geq 1$ for some intersecti
 If this is not the desired behaviour, set `seq_bonf` to `FALSE`.
 
 ```{r}
-test_m <- rbind(H1=c(0,1/2,1/2,0),
-               H2=c(1/2,0,0,1/2),
-               H3=c(0,1,0,0),
-               H4=c(1,0,0,0))
+test_m <- rbind(
+  H1 = c(0, 1 / 2, 1 / 2, 0),
+  H2 = c(1 / 2, 0, 0, 1 / 2),
+  H3 = c(0, 1, 0, 0),
+  H4 = c(1, 0, 0, 0)
+)
 
-correlation <- rbind(c(1, 1/2, NA, NA),
-                     c(1/2, 1, NA, NA),
-                     c(NA, NA, 1, 1/2),
-                     c(NA, NA, 1/2, 1))
+correlation <- rbind(
+  c(1, 1 / 2, NA, NA),
+  c(1 / 2, 1, NA, NA),
+  c(NA, NA, 1, 1 / 2),
+  c(NA, NA, 1 / 2, 1)
+)
 
-as <- function(x,t) 2-2*stats::pnorm(stats::qnorm(1-x/2)/sqrt(t))
+as <- function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
 
 design <- cer_design(
   correlation = correlation,
-  weights = c(1/2, 1/2, 0, 0),
+  weights = c(1 / 2, 1 / 2, 0, 0),
   alpha = 0.025,
   test_m = test_m,
   alpha_spending_f = as,
-  t= 1/2
+  t = 1 / 2
 )
 ```
 
 Following the description of the paper, we get after the unblinding for the interim analysis the values $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$, $p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$.
 
 ```{r}
-design_interim <- cer_interim_test(design, p_values = c(0.00045, 0.0952, 0.0225, 0.1104))
+design_interim <- cer_interim_test(
+  design,
+  p_values = c(0.00045, 0.0952, 0.0225, 0.1104)
+)
 ```
 We can now perform the interim test on our `design` object.
 This returns the same object with new information about which hypotheses are rejected only calculated internally.
@@ -79,7 +86,7 @@ Both of those adjustments can be done with `cer_adapt()`.
 
 
 ```{r}
-reallocated_t <- (1/(2/35))/(1/(2/35) + 1/(1/52 + 1/53))
+reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
 ad_t <- c(1, reallocated_t, 1, reallocated_t)
 
 design_adj <- design_interim |>
@@ -87,8 +94,8 @@ design_adj <- design_interim |>
     c(TRUE, FALSE, TRUE, FALSE)
   ) |>
   cer_adapt(
-    weights = c(0, 0.5, 0, 0.5), 
-    t=ad_t
+    weights = c(0, 0.5, 0, 0.5),
+    t = ad_t
   )
 ```
 

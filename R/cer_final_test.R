@@ -17,31 +17,31 @@
 #'               c(1, 0)),
 #'  alpha_spending_f=as,
 #'  t=0.5)
-#' 
+#'
 #' design <- cer_interim_test(design, c(0.001, 0.02))
-#' 
+#'
 #' design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
 #' design <- cer_adapt_bounds(design)
-#' 
+#'
 #' design <- cer_final_test(design, c(NA, 0.01))
 #' design$rej
 cer_final_test <- function(
-    design,
-    p_values
+  design,
+  p_values
 ) {
-    p_values[is.na(p_values)] <- 1 #hypotheses which are no futher tested can not be rejected
-    k <- attr(design, "k")
+  p_values[is.na(p_values)] <- 1 #hypotheses which are no futher tested can not be rejected
+  k <- attr(design, "k")
 
-    intersection_rej <- pmax(
-        design$intersection_rej_interim,
-        matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0
-    )
+  intersection_rej <- pmax(
+    design$intersection_rej_interim,
+    matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0
+  )
 
-    rej <- sapply(1:k, function(i) {
-        all(intersection_rej[design$closed_matrix[,i]])
-    })
+  rej <- sapply(1:k, function(i) {
+    all(intersection_rej[design$closed_matrix[, i]])
+  })
 
-    design$rej<- rej
-    design$p_values_final <- p_values
-    design
+  design$rej <- rej
+  design$p_values_final <- p_values
+  design
 }

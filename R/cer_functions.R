@@ -4,7 +4,7 @@
 # anyway to allow more granular application of the methods as well.
 
 #' Calculate bounds for preplanned test
-#' 
+#'
 #' Calculates the bounds and cJ values for the p-values for the interim test and the planned final test
 #'
 #' @param correlation matrix describing the correlation structure of the hypotheses
@@ -18,7 +18,7 @@
 #'  * cJ1: number that gets multiplied by the weights to get bounds_1
 #'  * bounds_1: vector of same lenght as weights with bounds for the planned final test
 #'  * cJ2: number that gets multiplied by the weights to get bounds_2
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -28,7 +28,7 @@
 #'      weights = c(0.5,0.5),
 #'      alpha = c(0.001525323, 0.025),
 #'      t = 0.5)
-#' 
+#'
 #'  #weighted bonferroni with correlation 0.5
 #'  cer_prep_bounds(
 #'      correlation = rbind(c(1,0.5), c(0.5,1)),
@@ -36,142 +36,159 @@
 #'      alpha = c(0.001525323, 0.025),
 #'      t = 0.5)
 cer_prep_bounds <- function(correlation, weights, alpha, t) {
-    k <- dim(correlation)[1]
-    I <- which(weights > 0)
+  k <- dim(correlation)[1]
+  I <- which(weights > 0)
 
-    if (length(I) == 0) {
-        return(list(
-          bounds_1 = 0 * weights,
-          bounds_2 = 0 * weights,
-          cJ1 = 0,
-          cJ2 = 0 
-        ))
+  if (length(I) == 0) {
+    return(list(
+      bounds_1 = 0 * weights,
+      bounds_2 = 0 * weights,
+      cJ1 = 0,
+      cJ2 = 0
+    ))
+  }
+
+  pos_weights <- weights[I]
+  correlation <- correlation[I, I, drop = FALSE]
+
+  conn <- gMCPLite:::conn.comp(correlation)
+
+  algorithm <- mvtnorm::Miwa(
+    steps = getOption("adagraph.miwa_steps"),
+    checkCorr = FALSE,
+    maxval = getOption("adagraph.miwa_maxval")
+  )
+
+  #computes error for one connected component (i.e. parametric case)
+  comp_err_1 <- function(conn_indices, cJ1) {
+    comp_weights <- pos_weights[conn_indices]
+    if (length(conn_indices) > 1) {
+      comp_corr <- correlation[conn_indices, conn_indices]
+      return(
+        1 -
+          mvtnorm::pmvnorm(
+            lower = -Inf,
+            upper = stats::qnorm(1 - comp_weights * cJ1),
+            corr = comp_corr,
+            algorithm = algorithm
+          )[1]
+      )
+    } else {
+      return(cJ1 * comp_weights)
     }
+  }
 
-    pos_weights <- weights[I]
-    correlation <- correlation[I,I, drop=FALSE]
+  err_1 <- function(cJ1) {
+    sum(sapply(conn, comp_err_1, cJ1 = cJ1))
+  }
 
-    conn <- gMCPLite:::conn.comp(correlation)
+  cJ1 <- stats::uniroot(
+    function(cJ1) {
+      err_1(cJ1) - alpha[1]
+    },
+    c(alpha[1] * 0.999, alpha[1] / max(pos_weights)),
+    tol = getOption("adagraph.precision")
+  )$root
 
-    algorithm <- mvtnorm::Miwa(
-                    steps = getOption("adagraph.miwa_steps"),
-                    checkCorr = FALSE,
-                    maxval = getOption("adagraph.miwa_maxval")
+  comp_err_2 <- function(conn_indices, cJ1, cJ2) {
+    comp_weights <- pos_weights[conn_indices]
+    comp_corr <- correlation[conn_indices, conn_indices]
+    combined_comp_corr <- rbind(
+      cbind(comp_corr, comp_corr * sqrt(t)),
+      cbind(comp_corr * sqrt(t), comp_corr)
     )
 
-    #computes error for one connected component (i.e. parametric case)
-    comp_err_1 <- function(conn_indices, cJ1) {
-        comp_weights <- pos_weights[conn_indices]
-        if (length(conn_indices) > 1) {
-            comp_corr <- correlation[conn_indices, conn_indices]
-            return(1 - mvtnorm::pmvnorm(
-                lower = -Inf,
-                upper = stats::qnorm(1 - comp_weights * cJ1),
-                corr = comp_corr,
-                algorithm = algorithm
-                )[1]
-            )
-        } else {
-            return(cJ1 * comp_weights)
-        }
-    }
+    return(
+      1 -
+        mvtnorm::pmvnorm(
+          lower = -Inf,
+          upper = c(
+            stats::qnorm(1 - comp_weights * cJ1),
+            stats::qnorm(1 - comp_weights * cJ2)
+          ),
+          corr = combined_comp_corr,
+          algorithm = algorithm
+        )[1]
+    )
+  }
 
-    err_1 <- function(cJ1) {
-        sum(sapply(conn, comp_err_1, cJ1=cJ1))
-    }
+  err_2 <- function(cJ1, cJ2) {
+    sum(sapply(conn, comp_err_2, cJ1 = cJ1, cJ2 = cJ2))
+  }
 
-    cJ1 <- stats::uniroot(
-        function(cJ1) {err_1(cJ1) - alpha[1]},
-        c(alpha[1] * 0.999, alpha[1] / max(pos_weights)),
-        tol = getOption("adagraph.precision")
-    )$root
+  cJ2 <- stats::uniroot(
+    function(cJ2) err_2(cJ1, cJ2) - alpha[2],
+    c((alpha[2] - alpha[1]) * 0.999, alpha[2] / max(pos_weights)),
+    tol = getOption("adagraph.precision")
+  )$root
 
-    comp_err_2 <- function(conn_indices, cJ1, cJ2) {
-        comp_weights <- pos_weights[conn_indices]
-        comp_corr <- correlation[conn_indices, conn_indices]
-        combined_comp_corr <- rbind(
-            cbind(comp_corr, comp_corr * sqrt(t)),
-            cbind(comp_corr * sqrt(t), comp_corr)
-        )
-
-        return(1 - mvtnorm::pmvnorm(
-                lower = -Inf,
-                upper = c(stats::qnorm(1 - comp_weights * cJ1), stats::qnorm(1 - comp_weights * cJ2)),
-                corr = combined_comp_corr,
-                algorithm = algorithm
-            )[1]
-        )
-    }
-
-    err_2  <- function(cJ1, cJ2) {
-        sum(sapply(conn, comp_err_2, cJ1=cJ1, cJ2=cJ2))
-    }
-
-    cJ2 <- stats::uniroot(
-        function(cJ2) err_2(cJ1, cJ2) - alpha[2],
-        c((alpha[2] - alpha[1])*0.999, alpha[2] / max(pos_weights)),
-        tol = getOption("adagraph.precision")
-    )$root
-
-    return(list(
-        bounds_1 = cJ1 * weights,
-        bounds_2 = cJ2 * weights,
-        cJ1 = cJ1,
-        cJ2 = cJ2
-    ))
+  return(list(
+    bounds_1 = cJ1 * weights,
+    bounds_2 = cJ2 * weights,
+    cJ1 = cJ1,
+    cJ2 = cJ2
+  ))
 }
 
 # gives cer for a single intersection hypothesis
 get_cer <- function(
-    p_values,
-    weights,
-    cJ2,
-    correlation,
-    t
+  p_values,
+  weights,
+  cJ2,
+  correlation,
+  t
 ) {
-    I <- weights > 0
-    pos_weights <- weights[I]
-    correlation <- correlation[I,I, drop=FALSE]
-    p_values <- p_values[I]
-    if(length(t) == 1) {
-        t <- rep(t, length(weights))
-    }
-    t <- t[I]
+  I <- weights > 0
+  pos_weights <- weights[I]
+  correlation <- correlation[I, I, drop = FALSE]
+  p_values <- p_values[I]
+  if (length(t) == 1) {
+    t <- rep(t, length(weights))
+  }
+  t <- t[I]
 
-    if(length(correlation) > 1) {
-        conn <- gMCPLite:::conn.comp(correlation)
+  if (length(correlation) > 1) {
+    conn <- gMCPLite:::conn.comp(correlation)
+  } else {
+    conn <- 1
+  }
+
+  algorithm <- mvtnorm::Miwa(
+    steps = getOption("adagraph.miwa_steps"),
+    checkCorr = FALSE,
+    maxval = getOption("adagraph.miwa_maxval")
+  )
+
+  # compute cer for one connected compononent of the correlation graph
+  comp_cer <- function(conn_indices) {
+    comp_weights <- pos_weights[conn_indices]
+    comp_p_values <- p_values[conn_indices]
+    comp_t <- t[conn_indices]
+    if (length(conn_indices) == 1) {
+      cer <- 1 -
+        stats::pnorm(
+          (stats::qnorm(1 - min(1, comp_weights * cJ2)) -
+            stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) /
+            sqrt(1 - comp_t)
+        )
     } else {
-        conn <- 1
+      comp_corr <- correlation[conn_indices, conn_indices]
+      upper <- (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) -
+        stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) /
+        sqrt(1 - comp_t)
+      cer <- 1 -
+        min(
+          mvtnorm::pmvnorm(
+            lower = -Inf,
+            upper = upper,
+            corr = comp_corr,
+            algorithm = algorithm
+          )[1],
+          1 # in rare cases, pmvnorm returns values greater than 1
+        )
     }
+    return(cer)
+  }
 
-    algorithm <- mvtnorm::Miwa(
-                    steps = getOption("adagraph.miwa_steps"),
-                    checkCorr = FALSE,
-                    maxval = getOption("adagraph.miwa_maxval")
-    )
-
-    # compute cer for one connected compononent of the correlation graph
-    comp_cer <- function(conn_indices) {
-        comp_weights <- pos_weights[conn_indices]
-        comp_p_values <- p_values[conn_indices]
-        comp_t <- t[conn_indices]
-        if (length(conn_indices) == 1) {
-            cer <- 1 - stats::pnorm((stats::qnorm(1 - min(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) / sqrt(1 - comp_t)) 
-        } else {
-            comp_corr <- correlation[conn_indices, conn_indices]
-            upper <- (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) - stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) / sqrt(1 - comp_t)
-            cer <- 1 - min(
-                mvtnorm::pmvnorm(
-                    lower = -Inf,
-                    upper = upper,
-                    corr = comp_corr,
-                    algorithm = algorithm
-                )[1],
-                1 # in rare cases, pmvnorm returns values greater than 1
-            )
-        }
-        return(cer)
-    }
-
-    sum(sapply(conn, comp_cer))
+  sum(sapply(conn, comp_cer))
 }
