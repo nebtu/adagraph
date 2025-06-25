@@ -34,7 +34,8 @@ cer_final_test <- function(
 
   intersection_rej <- pmax(
     design$intersection_rej_interim,
-    matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0
+    matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0,
+    na.rm = TRUE
   )
 
   rej <- sapply(1:k, function(i) {
