@@ -96,9 +96,9 @@ validate_adagraph_design_params <- function(
     )
   } else if (dim(test_m)[1] != dim(test_m)[2] | dim(test_m)[1] != k) {
     cli::cli_abort(
-      "test_m has to be a quadratic matrix with lenght/height equal to number of hypotheses.",
+      "test_m must be a {k}x{k} matrix matching the number of hypotheses",
       "i" = "There are {k} Hypotheses",
-      "x" = "test_m has dimenstion {dim(correlation)[1]} x {dim(correlation)[2]}.",
+      "x" = "test_m has dimenstion {nrow(correlation)} x {ncol(correlation)}.",
       class = "invalid_argument_test_m"
     )
   }
