@@ -22,7 +22,7 @@ make_example_design <- function() {
     alpha = alpha,
     test_m = m,
     alpha_spending_f = as,
-    t = 1 / 2
+    t = t
   )
 
   design

@@ -1,7 +1,7 @@
 #'@importFrom stats pnorm qnorm pt
 get_sim_design <- function() {
-  ws = .75 # (weight given to secondary endpoint)
-  wp = (1 - ws) / 3 # weight given to the other arms primary endpoint
+  ws <- .75 # (weight given to secondary endpoint)
+  wp <- (1 - ws) / 3 # weight given to the other arms primary endpoint
   m <- rbind(
     H1 = c(0, wp, wp, wp, ws, 0, 0, 0),
     H2 = c(wp, 0, wp, wp, 0, ws, 0, 0),
@@ -18,9 +18,11 @@ get_sim_design <- function() {
   correlation[1:4, 5:8] <- NA
   correlation[5:8, 1:4] <- NA
   diag(correlation) <- 1
-  t = 0.5 # information time
+  t <- 0.5 # information time
   alpha <- 0.025 #overall alpha
-  as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t)) #spending function
+
+  #spending function
+  as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
 
   design <- cer_design(
     correlation = correlation,
@@ -72,10 +74,10 @@ example_data_gen <- function(corr, eff, n1, n2) {
     n2
   )
 
-  return(c(data_gen_1, data_gen_2))
+  c(data_gen_1, data_gen_2)
 }
 
-get_example_adaption <- function(futility, n1, n2, alt_drop = F) {
+get_example_adaption <- function(futility, n1, n2, alt_drop = FALSE) {
   function(design) {
     p <- design$p_values_interim[1:4]
 

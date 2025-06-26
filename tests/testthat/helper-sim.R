@@ -193,7 +193,7 @@ simrun <- function(
 sim_wrap <- function(
   design,
   eff = c(0, 0.25, 0.25, 0.25, 0.25),
-  futility = futility_v,
+  futility = .75,
   runs1 = 100,
   runs2 = 100,
   corr = 0.5
@@ -201,7 +201,7 @@ sim_wrap <- function(
   mu = c(eff, eff)
   results = lapply(
     1:runs1,
-    function(i)
+    function(i) {
       simrun(
         design,
         mu = mu,
@@ -211,6 +211,7 @@ sim_wrap <- function(
         n2 = 50,
         futility = futility
       )
+    }
   )
 
   res_df <- do.call(

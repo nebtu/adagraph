@@ -8,7 +8,7 @@ test_that("simulation works as in paper", {
   runs1 <- 10
 
   set.seed(0)
-  fwer = lapply(c(.75, .50, .25, 0), function(futility) {
+  fwer <- lapply(c(.75, .50, .25, 0), function(futility) {
     sim_wrap(
       eff1,
       design = design,
@@ -18,7 +18,7 @@ test_that("simulation works as in paper", {
     )$fwer
   })
 
-  power = lapply(c(.75, .50, .25, 0), function(futility) {
+  power <- lapply(c(.75, .50, .25, 0), function(futility) {
     sim_wrap(
       eff2,
       design = design,
