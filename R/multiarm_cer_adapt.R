@@ -1,4 +1,19 @@
-#' redistributing is asumming that th
+get_t <- function(n_cont_1, n_cont_2, n_treat_1, n_treat_2) {
+  inv_var_1 <- ifelse(
+    n_cont_1 != 0 | n_treat_1 != 0,
+    n_treat_1 * n_cont_1 / (n_treat_1 + n_cont_1),
+    0
+  )
+
+  inv_var_2 <- ifelse(
+    n_cont_2 != 0 | n_treat_2 != 0,
+    n_treat_2 * n_cont_2 / (n_treat_2 + n_cont_2),
+    0
+  )
+
+  inv_var_1 / (inv_var_1 + inv_var_2)
+}
+
 multiarm_drop_arms <- function(
   design,
   arms,
@@ -9,6 +24,9 @@ multiarm_drop_arms <- function(
   treatment_assoc <- design$treatment_assoc
   keep_arms <- rep(TRUE, attr(design, "k"))
   keep_arms[arms] <- FALSE
+
+  # Since we assume that n_treat and n_cont accumulate proportional,
+  # the amount of assumed n is proportional as well
   n_cont_1 <- floor(design$t * design$n_controls)
   n_cont_2 <- design$n_control - n_cont_1
 
@@ -43,21 +61,19 @@ multiarm_drop_arms <- function(
     }
 
     n_cont_2[keep_cont] <- n_cont_2[keep_cont] +
-      reassign[seq_along(length(n_cont_2))]
+      reassign[seq_along(n_cont_2)]
     n_treat_2[keep_arms] <- n_treat_2[keep_arms] +
-      reassign[-seq_along(length(n_cont_2))]
+      reassign[-seq_along(n_cont_2)]
 
     n_cont_2[!keep_cont] <- 0
     n_treat_2[!keep_arms] <- 0
 
-    inv_var_1 <- n_treat_1 *
-      n_cont_1[treatment_assoc] /
-      (n_treat_1 + n_cont_1[treatment_assoc])
-    inv_var_2 <- n_treat_2 *
-      n_cont_2[treatment_assoc] /
-      (n_treat_2 + n_cont_2[treatment_assoc])
-
-    t <- inv_var_1 / (inv_var_1 + inv_var_2)
+    t <- get_t(
+      n_cont_1[treatment_assoc],
+      n_cont_2[treatment_assoc],
+      n_treat_1,
+      n_treat_2
+    )
   } else {
     n_cont_2[!keep_cont] <- 0
     n_treat_2[!keep_arms] <- 0
@@ -71,9 +87,15 @@ multiarm_drop_arms <- function(
   design$ad_n_controls <- n_cont_1 + n_cont_2
 
   if (alt_testing) {
-    design <- cer_alt_drop_hypotheses(design, arms)
+    design <- cer_alt_drop_hypotheses(
+      design,
+      (seq_along(treatment_assoc) %in% arms)
+    )
   } else {
-    design <- cer_drop_hypotheses(design, arms)
+    design <- cer_drop_hypotheses(
+      design,
+      (seq_along(treatment_assoc) %in% arms)
+    )
   }
 
   correlation <- get_multiarm_correlation(
