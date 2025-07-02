@@ -29,6 +29,15 @@ test_that("dropping hypotheses works", {
   expect_equal(design_adj$ad_t, 0.4)
   expect_equal(design_adj$ad_weights, c(0, 0.5, 0, 0.5))
 
+  expect_true(
+    all(names(design) %in% names(design_adj))
+  )
+
+  expect_equal(
+    design_adj[names(design)],
+    design[names(design)] #to remove S3 attributes
+  )
+
   design_with_changes <- cer_design(
     correlation = design$correlation,
     weights = c(0, 0.5, 0, 0.5),

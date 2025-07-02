@@ -27,3 +27,32 @@ make_example_design <- function() {
 
   design
 }
+make_example_multiarm <- function() {
+  #=======
+  m <- rbind(
+    H1 = c(0, 1 / 2, 1 / 2, 0),
+    H2 = c(1 / 2, 0, 0, 1 / 2),
+    H3 = c(0, 1, 0, 0),
+    H4 = c(1, 0, 0, 0)
+  )
+  weights <- c(rep(1 / 2, 2), rep(0, 2))
+  t = 0.5
+  alpha = 0.025
+  as = function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
+  #spending function
+  #========
+
+  design <- multiarm_cer_design(
+    controls = 2,
+    treatment_assoc = c(1, 1, 2, 2),
+    n_controls = 100,
+    n_treatments = 100,
+    weights = weights,
+    t = t,
+    alpha = alpha,
+    test_m = m,
+    alpha_spending_f = as
+  )
+
+  design
+}
