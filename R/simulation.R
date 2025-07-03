@@ -117,65 +117,81 @@ get_data_gen <- function(
     n_treat <- rep(n_treat, arms)
   }
 
+  which_arms <- n_treat > 0
+
+  arms_used <- sum(which_arms)
+  n_treat <- n_treat[which_arms]
+
   data_gen <- function(n, design) {
-    treatment_assoc <- design$treatment_assoc
-    control <- array(
-      mvtnorm::rmvnorm(max(n_cont) * n, sigma = corr_control),
-      dim = c(n, max(n_cont), controls)
-    )
+    p <- matrix(NA, nrow = n, ncol = arms)
 
-    treatment <- array(
-      mvtnorm::rmvnorm(max(n_treat) * n, mean = eff, sigma = corr_treatment),
-      dim = c(n, max(n_treat), arms)
-    )
+    if (arms_used > 0) {
+      treatment_assoc <- design$treatment_assoc
+      control <- array(
+        mvtnorm::rmvnorm(max(n_cont) * n, sigma = corr_control),
+        dim = c(n, max(n_cont), controls)
+      )
 
-    control <- aperm(control, c(2, 3, 1))
-    treatment <- aperm(treatment, c(2, 3, 1))
-    # now the shape is (number of treated people, number of arms, number of runs)
+      treatment <- array(
+        mvtnorm::rmvnorm(
+          max(n_treat) * n,
+          mean = eff[which_arms],
+          sigma = corr_treatment[which_arms, which_arms]
+        ),
+        dim = c(n, max(n_treat), arms_used)
+      )
 
-    #set all values outside of the desired sample size to 0
-    for (i in 1:controls) {
-      if (n_cont[i] < max(n_cont)) {
-        control[n_cont[i]:max(n_cont), i, ] <- NA
+      control <- aperm(control, c(2, 3, 1))
+      treatment <- aperm(treatment, c(2, 3, 1))
+      # now the shape is (number of treated people, number of arms, number of runs)
+
+      #set all values outside of the desired sample size to 0
+      for (i in 1:controls) {
+        if (n_cont[i] < max(n_cont)) {
+          control[n_cont[i]:max(n_cont), i, ] <- NA
+        }
       }
-    }
-    for (i in 1:arms) {
-      if (n_treat[i] < max(n_treat)) {
-        treatment[n_treat[i]:max(n_treat), i, ] <- NA
+      for (i in 1:arms_used) {
+        if (n_treat[i] < max(n_treat)) {
+          treatment[n_treat[i]:max(n_treat), i, ] <- NA
+        }
       }
+
+      cont_mean <- colMeans(control, na.rm = TRUE)
+      treat_mean <- colMeans(treatment, na.rm = TRUE)
+      cont_var <- matrixStats::colVars(
+        control,
+        na.rm = TRUE,
+        dim. = c(max(n_cont), length(n_cont) * n)
+      )
+      dim(cont_var) <- dim(control)[-1]
+      treat_var <- matrixStats::colVars(
+        treatment,
+        na.rm = TRUE,
+        dim. = c(max(n_treat), length(n_treat) * n)
+      )
+      dim(treat_var) <- dim(treatment)[-1]
+
+      p[, which_arms] <- sapply(
+        seq_along(treatment_assoc[which_arms]),
+        function(arm) {
+          n_arm_cont <- n_cont[treatment_assoc[arm]]
+          n_arm_treat <- n_treat[arm]
+
+          t <- (treat_mean[arm, ] - cont_mean[treatment_assoc[arm], ]) /
+            sqrt(
+              ((treat_var[arm, ] * (n_arm_treat - 1)) +
+                (cont_var[treatment_assoc[arm], ] * (n_arm_cont - 1))) /
+                (n_arm_treat + n_arm_cont - 2) *
+                (1 / n_arm_treat + 1 / n_arm_cont)
+            )
+
+          df <- n_arm_treat + n_arm_cont - 2
+
+          1 - pt(t, df = df)
+        }
+      )
     }
-
-    cont_mean <- colMeans(control, na.rm = TRUE)
-    treat_mean <- colMeans(treatment, na.rm = TRUE)
-    cont_var <- matrixStats::colVars(
-      control,
-      na.rm = TRUE,
-      dim. = c(max(n_cont), length(n_cont) * n)
-    )
-    dim(cont_var) <- dim(control)[-1]
-    treat_var <- matrixStats::colVars(
-      treatment,
-      na.rm = TRUE,
-      dim. = c(max(n_treat), length(n_treat) * n)
-    )
-    dim(treat_var) <- dim(treatment)[-1]
-
-    p <- sapply(seq_along(treatment_assoc), function(arm) {
-      n_arm_cont <- n_cont[treatment_assoc[arm]]
-      n_arm_treat <- n_treat[arm]
-
-      t <- (treat_mean[arm, ] - cont_mean[treatment_assoc[arm], ]) /
-        sqrt(
-          ((treat_var[arm, ] * (n_arm_treat - 1)) +
-            (cont_var[treatment_assoc[arm], ] * (n_arm_cont - 1))) /
-            (n_arm_treat + n_arm_cont - 2) *
-            (1 / n_arm_treat + 1 / n_arm_cont)
-        )
-
-      df <- n_arm_treat + n_arm_cont - 2
-
-      1 - pt(t, df = df)
-    })
 
     p
   }
@@ -191,8 +207,6 @@ get_data_gen_2 <- function(
   arms <- dim(corr_treatment)[1]
 
   data_gen_2 <- function(n, design) {
-    p <- matrix(NA, nrow = n, ncol = arms)
-
     hyp <- design$keep_hyp
     if (any(hyp)) {
       data_gen <- get_data_gen(
