@@ -1,7 +1,7 @@
 #Note that using this function works exactly as the simrun and wrap functions
 # in the original script when using the same seed
 
-get_sim_design <- function() {
+get_paper_sim_design <- function() {
   ws = .75 # (weight given to secondary endpoint)
   wp = (1 - ws) / 3 # weight given to the other arms primary endpoint
   m <- rbind(

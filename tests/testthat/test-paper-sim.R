@@ -1,6 +1,6 @@
 test_that("simulation works as in paper", {
   skip_on_cran()
-  design <- get_sim_design()
+  design <- get_paper_sim_design()
 
   eff1 <- c(0, 0, 0, 0, 0)
   eff2 <- c(0, 0, 0, 0, 0.4)
