@@ -79,7 +79,8 @@ get_example_adaption <- function(futility, alt_drop = FALSE) {
     if (futility > 0) {
       drop_hyp <- (p > futility) | trt_rej
     } else {
-      drop_hyp <- (p != min(p[!trt_rej]))
+      # drop all but the best performing one (and that as well if it is rejected)
+      drop_hyp <- (p != min(p)) | trt_rej
     }
 
     drop_arms <- which(drop_hyp)
