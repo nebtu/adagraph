@@ -27,10 +27,6 @@ gen_data <- function(
 ) {
   #it is much more efficent to generate all data in only one call to rmvnorm instead of length seperate ones,
   #since else eigenvalues for the correlation matrix are computed each time
-  print(n_cont)
-  print(n_treat)
-  print(corr_control)
-  print(corr_treatment)
 
   controls <- dim(corr_control)[1]
   arms <- dim(corr_treatment)[1]

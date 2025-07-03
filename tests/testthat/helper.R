@@ -6,7 +6,7 @@ make_example_design <- function() {
     H3 = c(0, 1, 0, 0),
     H4 = c(1, 0, 0, 0)
   )
-  weights <- c(rep(1 / 2, 2), rep(0, 2))
+  weights <- c(1 / 2, 1 / 2, 0, 0)
   correlation = matrix(rep(1 / 2, 16), nrow = 4) + 1 / 2 * diag(4)
   correlation[1:2, 3:4] = NA
   correlation[3:4, 1:2] = NA
@@ -35,11 +35,11 @@ make_example_multiarm <- function() {
     H3 = c(0, 1, 0, 0),
     H4 = c(1, 0, 0, 0)
   )
-  weights <- c(rep(1 / 2, 2), rep(0, 2))
-  t = 0.5
-  alpha = 0.025
-  as = function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
+  weights <- c(1 / 2, 1 / 2, 0, 0)
+  t <- 0.5
+  alpha <- 0.025
   #spending function
+  as <- function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
   #========
 
   design <- multiarm_cer_design(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulation.R
 \name{sim_trial}
 \alias{sim_trial}
-\title{Run a series of simulated trials according to a specified design, with}
+\title{Run a series of simulated trials according to a specified design}
 \usage{
 sim_trial(
   design,
@@ -21,26 +21,25 @@ sim_trial(
 
 \item{runs2}{Number of second stage to run for every first stage trial}
 
-\item{adapt_rule}{function that takes a cer_design object after the first interim test and
-returns the same object with appropiate adaptions}
+\item{adapt_rule}{function that takes a cer_design object after the
+first interim test and returns the same object with appropiate adaptions}
 
 \item{data_gen_1}{function for generating first stage data, see details}
 
 \item{data_gen_2}{function for generating second stage data, see details}
 
-\item{include_designs}{boolean indicating whether to include the designs objects in the output}
+\item{include_designs}{boolean indicating whether to include
+the designs objects in the output}
 }
 \value{
 A dataframe containing the various results
 }
 \description{
-Run a series of simulated trials according to a specified design, with
+Run a series of simulated trials according to a specified design
 }
 \details{
-data_gen_1 should take a single argument, the number of trials to simulate
-The function is only called a single time and
-should return a matrix or dataframe with each row being the p-values for a single trial.
-
-data_gen_2 should take two arguments, the number of trials to simulate and the adapted design object,
-and return in the same format as data_gen_1.
+data_gen_1 and data_gen_2 should take two arguments,
+the number of trials to simulate and the adapted design object,
+and return a matrix or dataframe with each row being the p-values
+for a single trial.
 }

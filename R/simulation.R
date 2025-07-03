@@ -197,19 +197,19 @@ get_data_gen_2 <- function(
     if (any(hyp)) {
       data_gen <- get_data_gen(
         corr_control = corr_control,
-        corr_treatment = corr_treatment[hyp, hyp],
-        eff = eff[hyp],
+        corr_treatment = corr_treatment,
+        eff = eff,
         n_cont = design$n_cont_2,
         n_treat = design$n_treat_2
       )
 
       p2 <- data_gen(n, design)
-      p[, hyp] <- t(apply(p2, 1, \(x) {
+      p <- t(apply(p2, 1, \(x) {
         1 -
           pnorm(
-            sqrt(design$ad_t[hyp]) *
-              qnorm(1 - design$p_values_interim[hyp]) +
-              sqrt(1 - design$ad_t[hyp]) * qnorm(1 - x)
+            sqrt(design$ad_t) *
+              qnorm(1 - design$p_values_interim) +
+              sqrt(1 - design$ad_t) * qnorm(1 - x)
           )
       }))
     }
