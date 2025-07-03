@@ -18,7 +18,7 @@ multiarm_drop_arms <- function(
   design,
   arms,
   redistribute_n = TRUE,
-  alt_testing = FALSE,
+  alt_adj = FALSE,
   simple_redistribute = FALSE
 ) {
   treatment_assoc <- design$treatment_assoc
@@ -86,7 +86,7 @@ multiarm_drop_arms <- function(
   design$ad_n_treatments <- n_treat_1 + n_treat_2
   design$ad_n_controls <- n_cont_1 + n_cont_2
 
-  if (alt_testing) {
+  if (alt_adj) {
     design <- cer_alt_drop_hypotheses(
       design,
       (seq_along(treatment_assoc) %in% arms)

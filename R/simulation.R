@@ -11,13 +11,10 @@
 #'   the designs objects in the output
 #'
 #' @details
-#' data_gen_1 should take a single argument, the number of trials to simulate
-#' The function is only called a single time and should return
-#' a matrix or dataframe with each row being the p-values for a single trial.
-#'
-#' data_gen_2 should take two arguments,
+#' data_gen_1 and data_gen_2 should take two arguments,
 #'   the number of trials to simulate and the adapted design object,
-#' and return in the same format as data_gen_1.
+#'  and return a matrix or dataframe with each row being the p-values
+#'  for a single trial.
 #'
 #' @return A dataframe containing the various results
 #' @importFrom future.apply future_lapply
@@ -33,17 +30,18 @@ sim_trial <- function(
 ) {
   k <- attr(design, "k")
 
-  data_1 <- data_gen_1(runs1)
+  data_1 <- data_gen_1(runs1, design)
   designs_interim <- apply(data_1, 1, function(p_values) {
     cer_interim_test(design, p_values)
   })
 
-  # maybe use smth else than do.call here? vec.rbind from vctrs, or map_dfr from purrr would work
-  # or pre-allocating and filling the dataframe if performance is an issue, but then how to parallelize?
+  # maybe use smth else than do.call here? vec.rbind from vctrs,
+  # or map_dfr from purrr would work or pre-allocating and filling
+  # the dataframe if performance is an issue, but then how to parallelize?
   results <- do.call(
     rbind,
     future_lapply(
-      1:length(designs_interim),
+      seq_along(designs_interim),
       function(i) {
         design_adapted <- adapt_rule(designs_interim[[i]])
         design_adj <- cer_adapt_bounds(design_adapted)
@@ -86,13 +84,13 @@ sim_trial <- function(
 
         df
       },
-      future.globals = c(
-        "designs_interim",
-        "runs2",
-        "adapt_rule",
-        "data_gen_2",
-        "include_designs"
-      ),
+      # future.globals = c(
+      #   "designs_interim",
+      #   "runs2",
+      #   "adapt_rule",
+      #   "data_gen_2",
+      #   "include_designs"
+      # ),
       future.packages = "adagraph",
       future.seed = TRUE
     )
@@ -105,10 +103,9 @@ sim_trial <- function(
 get_data_gen <- function(
   corr_control,
   corr_treatment,
-  cont_treat_association,
   eff,
-  n_cont,
-  n_treat
+  n_cont = NA,
+  n_treat = NA
 ) {
   controls <- dim(corr_control)[1]
   arms <- dim(corr_treatment)[1]
@@ -120,7 +117,8 @@ get_data_gen <- function(
     n_treat <- rep(n_treat, arms)
   }
 
-  data_gen <- function(n, design = NA) {
+  data_gen <- function(n, design) {
+    treatment_assoc <- design$treatment_assoc
     control <- array(
       mvtnorm::rmvnorm(max(n_cont) * n, sigma = corr_control),
       dim = c(n, max(n_cont), controls)
@@ -147,100 +145,65 @@ get_data_gen <- function(
       }
     }
 
-    cont_mean <- colMeans(control, na.rm = T)
-    treat_mean <- colMeans(treatment, na.rm = T)
+    cont_mean <- colMeans(control, na.rm = TRUE)
+    treat_mean <- colMeans(treatment, na.rm = TRUE)
     cont_var <- matrixStats::colVars(
       control,
-      na.rm = T,
+      na.rm = TRUE,
       dim. = c(max(n_cont), length(n_cont) * n)
     )
     dim(cont_var) <- dim(control)[-1]
     treat_var <- matrixStats::colVars(
       treatment,
-      na.rm = T,
+      na.rm = TRUE,
       dim. = c(max(n_treat), length(n_treat) * n)
     )
     dim(treat_var) <- dim(treatment)[-1]
 
-    p <- sapply(1:length(cont_treat_association), function(arm) {
-      n_arm_cont <- n_cont[cont_treat_association[arm]]
+    p <- sapply(seq_along(treatment_assoc), function(arm) {
+      n_arm_cont <- n_cont[treatment_assoc[arm]]
       n_arm_treat <- n_treat[arm]
 
-      t <- (treat_mean[arm, ] - cont_mean[cont_treat_association[arm], ]) /
+      t <- (treat_mean[arm, ] - cont_mean[treatment_assoc[arm], ]) /
         sqrt(
           ((treat_var[arm, ] * (n_arm_treat - 1)) +
-            (cont_var[cont_treat_association[arm], ] * (n_arm_cont - 1))) /
+            (cont_var[treatment_assoc[arm], ] * (n_arm_cont - 1))) /
             (n_arm_treat + n_arm_cont - 2) *
             (1 / n_arm_treat + 1 / n_arm_cont)
         )
 
       df <- n_arm_treat + n_arm_cont - 2
-      return(1 - pt(t, df = df))
+
+      1 - pt(t, df = df)
     })
-    return(p)
+
+    p
   }
-  return(data_gen)
+
+  data_gen
 }
 
 get_data_gen_2 <- function(
   corr_control,
   corr_treatment,
-  cont_treat_association,
-  eff,
-  n_cont,
-  n_treat,
-  reassign_n = TRUE
+  eff
 ) {
-  controls <- dim(corr_control)[1]
   arms <- dim(corr_treatment)[1]
-
-  if (length(n_cont) == 1) {
-    n_cont <- rep(n_cont, controls)
-  }
-  if (length(n_treat) == 1) {
-    n_treat <- rep(n_treat, arms)
-  }
 
   data_gen_2 <- function(n, design) {
     p <- matrix(NA, nrow = n, ncol = arms)
 
     hyp <- design$keep_hyp
     if (any(hyp)) {
-      if (reassign_n) {
-        # boolean vector indicating which control groups are still needed
-        cont <- 1:controls %in% cont_treat_association[hyp]
-
-        #amount of people to be reassigned
-        n_reassign <- sum(n_treat[!hyp]) + sum(n_cont[!cont])
-
-        n_treat_ad <- n_treat[hyp] + n_reassign %/% (sum(hyp) + sum(cont))
-        # to avoid having to change cont_treat_association, even controls that arent needed are kept
-        n_cont[cont] <- n_cont[cont] + n_reassign %/% (sum(hyp) + sum(cont))
-        rem <- n_reassign %% (sum(hyp) + sum(cont))
-        if (!is.na(rem)) {
-          rem_cont <- min(rem, length(cont))
-          n_cont[1:rem_cont] <- n_cont[1:rem_cont] + 1
-          if (rem > length(cont)) {
-            n_treat_ad[1:(rem - length(cont))] <- n_treat_ad[
-              1:(rem - length(cont))
-            ] +
-              1
-          }
-        }
-      } else {
-        n_cont_ad <- n_cont[hyp]
-      }
-
       data_gen <- get_data_gen(
         corr_control = corr_control,
         corr_treatment = corr_treatment[hyp, hyp],
-        cont_treat_association = cont_treat_association[hyp],
         eff = eff[hyp],
-        n_cont = n_cont,
-        n_treat = n_treat_ad
+        n_cont = design$n_cont_2,
+        n_treat = design$n_treat_2
       )
 
-      p2 <- data_gen(n)
+      p2 <- data_gen(n, design)
       p[, hyp] <- t(apply(p2, 1, \(x) {
         1 -
           pnorm(
@@ -250,6 +213,8 @@ get_data_gen_2 <- function(
           )
       }))
     }
-    return(p)
+    p
   }
+
+  data_gen_2
 }
