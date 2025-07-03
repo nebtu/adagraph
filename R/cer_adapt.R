@@ -224,24 +224,22 @@ cer_adapt_bounds <- function(design) {
 
   get_ad_cJ2 <- function(index) {
     if (sum(design$ad_weights_matrix[index, ] > 0) <= design$cer_vec[index]) {
-      return(Inf)
+      Inf
     } else {
-      return(
-        stats::uniroot(
-          function(ad_cJ2) {
-            get_cer(
-              p_values = design$p_values_interim,
-              weights = design$ad_weights_matrix[index, ],
-              cJ2 = ad_cJ2,
-              correlation = design$ad_correlation,
-              t = design$ad_t
-            ) -
-              design$cer_vec[index]
-          },
-          c(0, 1 / max(design$ad_weights_matrix[index, ])),
-          tol = getOption("adagraph.precision")
-        )$root
-      )
+      stats::uniroot(
+        function(ad_cJ2) {
+          get_cer(
+            p_values = design$p_values_interim,
+            weights = design$ad_weights_matrix[index, ],
+            cJ2 = ad_cJ2,
+            correlation = design$ad_correlation,
+            t = design$ad_t
+          ) -
+            design$cer_vec[index]
+        },
+        c(0, 1 / max(design$ad_weights_matrix[index, ])),
+        tol = getOption("adagraph.precision")
+      )$root
     }
   }
 

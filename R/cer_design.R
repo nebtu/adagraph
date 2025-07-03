@@ -31,8 +31,7 @@ new_cer_design <- function(
   weights = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {
-  },
+  alpha_spending_f = function() {},
   t = double(),
   seq_bonf = TRUE,
   ...,
@@ -55,10 +54,17 @@ new_cer_design <- function(
   boundslist <- future_apply(
     design$weights_matrix,
     1,
-    function(weights)
-      cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t),
-    future.seed = NULL,
-    future.packages = "adagraph"
+    function(weights) {
+      cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
+    },
+    future.seed = TRUE
+    #future.globals = c(
+    #"correlation",
+    #"prep_alpha_1",
+    #"alpha",
+    #"t"
+    #),
+    #future.packages = "adagraph"
   )
 
   design$bounds_1 <- t(sapply(boundslist, `[[`, "bounds_1"))
@@ -143,8 +149,7 @@ cer_design <- function(
   weights = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {
-  },
+  alpha_spending_f = function() {},
   t = double(),
   seq_bonf = TRUE
 ) {
