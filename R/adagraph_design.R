@@ -17,7 +17,10 @@ new_adagraph_design <- function(
     hyp_matrix = int_hyp$hyp_matrix,
     weights_matrix = int_hyp$weights_matrix,
     closed_matrix = int_hyp$closed_matrix,
-    test_m = test_m
+    test_m = test_m,
+    interim_test = FALSE,
+    adaptions = FALSE,
+    final_test = FALSE
   )
   structure(
     design,

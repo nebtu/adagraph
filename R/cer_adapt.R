@@ -37,6 +37,9 @@ cer_adapt <- function(
   t = NA,
   correlation = NA
 ) {
+  if (design$final_test) {
+    cli::cli_warn("A final test for this trial has already been done.")
+  }
   if (any(!is.na(weights))) {
     design$ad_weights <- weights
   } else if (all(is.null(design$ad_weights))) {
@@ -65,6 +68,7 @@ cer_adapt <- function(
     design$ad_weights_matrix <- design$weights_matrix
   }
 
+  design$adaptions <- TRUE
   design
 }
 

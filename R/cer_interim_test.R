@@ -27,6 +27,12 @@ cer_interim_test <- function(
   p_values,
   t = NA
 ) {
+  if (design$interim_test) {
+    cli::cli_warn(
+      "Overwriting previous interim test, no change to
+       adaptions or final results will happen."
+    )
+  }
   if (is.na(t)) {
     t <- design$t
   } else {
@@ -60,5 +66,6 @@ cer_interim_test <- function(
   design$cer_vec <- cer_vec
   design$rej_interim <- rej
   design$intersection_rej_interim <- intersection_rej
+  design$interim_test <- TRUE
   design
 }

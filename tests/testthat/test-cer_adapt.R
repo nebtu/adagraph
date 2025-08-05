@@ -33,9 +33,13 @@ test_that("dropping hypotheses works", {
     all(names(design) %in% names(design_adj))
   )
 
+  # Test that adaptions is properly set
+  expect_true(design_adj$adaptions)
+
+  # Test everything else is unchanged
   expect_equal(
-    design_adj[names(design)],
-    design[names(design)] #to remove S3 attributes
+    design_adj[setdiff(names(design), "adaptions")],
+    design[setdiff(names(design), "adaptions")]
   )
 
   design_with_changes <- cer_design(

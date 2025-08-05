@@ -29,7 +29,16 @@ cer_final_test <- function(
   design,
   p_values
 ) {
-  p_values[is.na(p_values)] <- 1 #hypotheses which are no futher tested can not be rejected
+  if (!design$interim_test) {
+    cli::cli_abort("Attempting to do a final test before interim test.")
+    #TODO: proper error format
+  }
+  if (design$final_test) {
+    cli::cli_warn(
+      "Overwriting previous final test."
+    )
+  }
+  p_values[is.na(p_values)] <- 1 #hypotheses which are no further tested can not be rejected
   k <- attr(design, "k")
 
   intersection_rej <- pmax(
@@ -44,5 +53,6 @@ cer_final_test <- function(
 
   design$rej <- rej
   design$p_values_final <- p_values
+  design$final_test <- TRUE
   design
 }
