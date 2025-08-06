@@ -36,7 +36,7 @@ get_sim_design <- function(n, t) {
   design
 }
 
-example_data_gen <- function(corr, eff, n1) {
+example_data_gen <- function(corr, eff, n1, n2) {
   mu <- c(eff, eff)
 
   corr_control <- rbind(
@@ -60,7 +60,7 @@ example_data_gen <- function(corr, eff, n1) {
     corr_treatment,
     mu,
     n1,
-    n1
+    n2
   )
   data_gen_2 <- get_data_gen_2(
     corr_control,

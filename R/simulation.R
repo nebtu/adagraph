@@ -104,8 +104,8 @@ get_data_gen <- function(
   corr_control,
   corr_treatment,
   eff,
-  n_cont = NA,
-  n_treat = NA
+  n_cont,
+  n_treat
 ) {
   controls <- dim(corr_control)[1]
   arms <- dim(corr_treatment)[1]
@@ -145,7 +145,7 @@ get_data_gen <- function(
       treatment <- aperm(treatment, c(2, 3, 1))
       # now the shape is (number of treated people, number of arms, number of runs)
 
-      #set all values outside of the desired sample size to 0
+      #set all values outside of the desired sample size to NA
       for (i in 1:controls) {
         if (n_cont[i] < max(n_cont)) {
           control[n_cont[i]:max(n_cont), i, ] <- NA
@@ -204,8 +204,6 @@ get_data_gen_2 <- function(
   corr_treatment,
   eff
 ) {
-  arms <- dim(corr_treatment)[1]
-
   data_gen_2 <- function(n, design) {
     hyp <- design$keep_hyp
     if (any(hyp)) {
