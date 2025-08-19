@@ -47,7 +47,6 @@ test_that("dropping arms works", {
   expect_true(design_adj$adaptions)
 
   # Test everything else is unchanged
-  print(setdiff(names(design_adj), "adaptions"))
   expect_equal(
     design_adj[setdiff(names(design), "adaptions")],
     design[setdiff(names(design), "adaptions")]

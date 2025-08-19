@@ -98,8 +98,6 @@ test_that("adapting bounds works", {
   design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, TRUE, FALSE)) |>
     cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t)
 
-  design_adj_bounds <- cer_adapt_bounds(design_adj)
-
   tcJ2v <- c(
     0.02371429,
     0,
@@ -109,6 +107,31 @@ test_that("adapting bounds works", {
     0.03825017,
     0.04193392
   )
-  expect_equal(round(design_adj_bounds$ad_cJ2[1:7], 8), tcJ2v)
+  expect_equal(round(design_adj$ad_cJ2[1:7], 8), tcJ2v)
   #note that this also depends on the order of the intersection hypotheses to be the same to pass
+
+  design_adj_manual_bounds <- cer_drop_hypotheses(
+    design,
+    c(TRUE, FALSE, TRUE, FALSE),
+    adapt_bounds = FALSE
+  ) |>
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t, adapt_bounds = FALSE) |>
+    cer_adapt_bounds()
+
+  expect_equal(design_adj, design_adj_manual_bounds, list_as_map = TRUE)
+})
+
+test_that("warnings and errors are handled", {
+  design <- make_example_design()
+  design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
+  reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
+  ad_t <- c(1, reallocated_t, 1, reallocated_t)
+  design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, TRUE, FALSE)) |>
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t)
+  design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
+
+  expect_warning(
+    design_tested |> cer_adapt(t = 0.1),
+    class = "wrong_sequence_after_final"
+  )
 })
