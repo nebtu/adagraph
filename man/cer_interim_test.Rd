@@ -4,7 +4,7 @@
 \alias{cer_interim_test}
 \title{Test a cer design for early rejection of hypotheses and calculate the CER for adaptions}
 \usage{
-cer_interim_test(design, p_values, t = NA)
+cer_interim_test(design, p_values)
 }
 \arguments{
 \item{design}{A cer_design object}

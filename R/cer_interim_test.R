@@ -24,20 +24,23 @@
 #' design$cer_vec
 cer_interim_test <- function(
   design,
-  p_values,
-  t = NA
+  p_values
 ) {
   if (design$interim_test) {
     cli::cli_warn(
       "Overwriting previous interim test, no change to
-       adaptions or final results will happen."
+       adaptions or final results will happen.",
+      class = "overwrites_interim_result"
     )
   }
-  if (is.na(t)) {
-    t <- design$t
-  } else {
-    design$t <- t
+  if (design$final_test) {
+    cli::cli_warn(
+      "A final test for this trial has already been done.",
+      class = "wrong_sequence_after_final"
+    )
   }
+  t <- design$t
+
   rej_matrix <- (p_values < t(design$bounds_1))
 
   cer_vec <- mapply(

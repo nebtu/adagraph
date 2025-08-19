@@ -35,10 +35,14 @@ cer_adapt <- function(
   weights = NA,
   test_m = NA,
   t = NA,
-  correlation = NA
+  correlation = NA,
+  adapt_bounds = TRUE
 ) {
   if (design$final_test) {
-    cli::cli_warn("A final test for this trial has already been done.")
+    cli::cli_warn(
+      "A final test for this trial has already been done, the final results will not be changed without running the final test again.",
+      class = "wrong_sequence_after_final"
+    )
   }
   if (any(!is.na(weights))) {
     design$ad_weights <- weights
@@ -69,7 +73,13 @@ cer_adapt <- function(
   }
 
   design$adaptions <- TRUE
-  design
+
+  if (adapt_bounds) {
+    design |> cer_adapt_bounds()
+  } else {
+    design$ad_bounds_outdated <- TRUE
+    design
+  }
 }
 
 #' Adapt a cer design by dropping hypotheses
@@ -101,7 +111,8 @@ cer_adapt <- function(
 #' design
 cer_drop_hypotheses <- function(
   design,
-  hypotheses
+  hypotheses,
+  adapt_bounds = TRUE
 ) {
   if (is.null(design$keep_hyp)) {
     design$keep_hyp <- rep(TRUE, attr(design, "k"))
@@ -140,7 +151,12 @@ cer_drop_hypotheses <- function(
     test_m[, hyp] <- 0
     diag(test_m) <- 0
   }
-  cer_adapt(design, weights = weights, test_m = test_m)
+  cer_adapt(
+    design,
+    weights = weights,
+    test_m = test_m,
+    adapt_bounds = adapt_bounds
+  )
 }
 
 #' Adapt a cer design by dropping hypotheses, with a simplified strategy for redistributing weights
@@ -173,7 +189,8 @@ cer_drop_hypotheses <- function(
 #' design
 cer_alt_drop_hypotheses <- function(
   design,
-  hypotheses
+  hypotheses,
+  adapt_bounds = TRUE
 ) {
   weights <- design$weights
   weights[hypotheses] <- 0
@@ -191,7 +208,9 @@ cer_alt_drop_hypotheses <- function(
   design$keep_hyp <- !hypotheses
   design$ad_weights <- weights
   design$ad_weights_matrix <- weights_matrix
-  design
+  design$adaptions <- TRUE
+
+  cer_adapt(design, adapt_bounds = adapt_bounds)
 }
 
 #' Adjust bounds after changing some design parameters
@@ -255,6 +274,7 @@ cer_adapt_bounds <- function(design) {
   design$ad_bounds_2 <- apply(design$ad_weights_matrix, 2, function(w) {
     ad_cJ2 * w
   })
+  design$ad_bounds_outdated <- FALSE
 
   design
 }

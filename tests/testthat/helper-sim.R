@@ -88,12 +88,11 @@ simrun <- function(
     diag(corradapt) = 1 # corradapt has only for selected hypothesis a valid entry
 
     design_adapted <- design_interim |>
-      cer_alt_drop_hypotheses(drop_hyp) |>
+      cer_alt_drop_hypotheses(drop_hyp, adapt_bounds = FALSE) |>
       cer_adapt(
         t = th,
         correlation = corradapt
-      ) |>
-      cer_adapt_bounds()
+      )
 
     p2 = matrix(NA, nrow = runs2, ncol = 8)
 

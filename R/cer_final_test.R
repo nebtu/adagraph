@@ -30,15 +30,27 @@ cer_final_test <- function(
   p_values
 ) {
   if (!design$interim_test) {
-    cli::cli_abort("Attempting to do a final test before interim test.")
-    #TODO: proper error format
+    cli::cli_abort(
+      "Attempting to do a final test before interim test.",
+      class = "wrong_sequence_no_interim_test"
+    )
+  }
+  if (design$ad_bounds_outdated) {
+    cli::abort(
+      "There have been adaptions without adjusting the bounds for rejecting hypotheses.",
+      "i" = "Either set adapt_bounds to true for the last adaption to the trial, or use the adapt_bounds function after all adaptions are done.",
+      class = "wrong_sequence_bounds_outdated"
+    )
   }
   if (design$final_test) {
     cli::cli_warn(
-      "Overwriting previous final test."
+      "Overwriting previous final test.",
+      class = "overwrites_final_result"
     )
   }
-  p_values[is.na(p_values)] <- 1 #hypotheses which are no further tested can not be rejected
+
+  #hypotheses which are no further tested can not be rejected
+  p_values[is.na(p_values)] <- 1
   k <- attr(design, "k")
 
   intersection_rej <- pmax(

@@ -4,7 +4,7 @@
 \alias{cer_alt_drop_hypotheses}
 \title{Adapt a cer design by dropping hypotheses, with a simplified strategy for redistributing weights}
 \usage{
-cer_alt_drop_hypotheses(design, hypotheses)
+cer_alt_drop_hypotheses(design, hypotheses, adapt_bounds = TRUE)
 }
 \arguments{
 \item{design}{cer_design object}

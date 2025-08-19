@@ -4,7 +4,14 @@
 \alias{cer_adapt}
 \title{Adapt the trial design after the interim test}
 \usage{
-cer_adapt(design, weights = NA, test_m = NA, t = NA, correlation = NA)
+cer_adapt(
+  design,
+  weights = NA,
+  test_m = NA,
+  t = NA,
+  correlation = NA,
+  adapt_bounds = TRUE
+)
 }
 \arguments{
 \item{design}{A cer_design object}
