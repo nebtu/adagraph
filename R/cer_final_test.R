@@ -36,7 +36,7 @@ cer_final_test <- function(
     )
   }
   if (design$ad_bounds_outdated) {
-    cli::abort(
+    cli::cli_abort(
       "There have been adaptions without adjusting the bounds for rejecting hypotheses.",
       "i" = "Either set adapt_bounds to true for the last adaption to the trial, or use the adapt_bounds function after all adaptions are done.",
       class = "wrong_sequence_bounds_outdated"
