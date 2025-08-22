@@ -10,6 +10,9 @@ cer_drop_hypotheses(design, hypotheses, adapt_bounds = TRUE)
 \item{design}{cer_design object}
 
 \item{hypotheses}{vector of booleans indicating for each hypotheses if it should be dropped}
+
+\item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
+FWER with the new adaptions, see \code{cer_adapt()}}
 }
 \value{
 design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)

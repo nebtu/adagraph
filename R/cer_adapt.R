@@ -8,9 +8,16 @@
 #' @param t adapted information fraction at which the first stage test occured.
 #'  Note that this can now be a vector with a different value for different hypotheses or a single value
 #' @param correlation adapted correlation matrix
+#' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
+#'   FWER with the new adaptions
 #'
 #' @return An object of class cer_design, with the adaptions applied.
 #' @export
+#'
+#' @details
+#' For all adaptions, adapt_bounds needs to be used only once, with or after the
+#' last adaption. For this, either make sure that adapt_bounds is TRUE, or use
+#' the `adapt_bounds()` function manually
 #'
 #' @examples
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
@@ -95,6 +102,8 @@ cer_adapt <- function(
 #'
 #' @param design cer_design object
 #' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
+#' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
+#'   FWER with the new adaptions, see `cer_adapt()`
 #'
 #' @return design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
 #' @export
@@ -173,6 +182,8 @@ cer_drop_hypotheses <- function(
 #'
 #' @param design cer_design object
 #' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
+#' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
+#'   FWER with the new adaptions, see `cer_adapt()`
 #'
 #' @return design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
 #' @export
@@ -222,7 +233,8 @@ cer_alt_drop_hypotheses <- function(
 #' Adjust bounds after changing some design parameters
 #'
 #' This function calculates the new bounds for the p-values for the final test.
-#' It should be run once after finishing all adaptions after the interim test.
+#' It should be run once after finishing all adaptions after the interim test,
+#' if the `adapt_bounds` option was not true for the last adaption anyway.
 #'
 #' @param design A cer_design object
 #'

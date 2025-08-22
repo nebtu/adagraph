@@ -14,7 +14,8 @@ A cer_design object, with the new bounds calculated
 }
 \description{
 This function calculates the new bounds for the p-values for the final test.
-It should be run once after finishing all adaptions after the interim test.
+It should be run once after finishing all adaptions after the interim test,
+if the \code{adapt_bounds} option was not true for the last adaption anyway.
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))

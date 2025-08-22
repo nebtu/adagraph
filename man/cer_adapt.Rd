@@ -22,6 +22,9 @@ For dropping hypotheses, set the according weights to 0 or use \code{\link[=cer_
 
 \item{test_m}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses}
 
+\item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
+FWER with the new adaptions}
+
 \item{t}{adapted information fraction at which the first stage test occured.
 Note that this can now be a vector with a different value for different hypotheses or a single value}
 
@@ -32,6 +35,11 @@ An object of class cer_design, with the adaptions applied.
 }
 \description{
 Adapt the trial design after the interim test
+}
+\details{
+For all adaptions, adapt_bounds needs to be used only once, with or after the
+last adaption. For this, either make sure that adapt_bounds is TRUE, or use
+the \code{adapt_bounds()} function manually
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))

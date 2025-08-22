@@ -70,6 +70,8 @@ redistribute_n <- function(
   n2
 }
 
+#' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
+#'   FWER with the new adaptions, see `cer_adapt()`
 # for now this assumes that n1, n of the first stage, was like planned according
 # to t
 # n_cont_2 and n_treat_2 still has the same lenght as before, so dropped arms
@@ -79,7 +81,8 @@ multiarm_drop_arms <- function(
   arms,
   n_cont_2 = NA,
   n_treat_2 = NA,
-  alt_adj = FALSE
+  alt_adj = FALSE,
+  adapt_bounds = TRUE
 ) {
   treatment_assoc <- design$treatment_assoc
   keep_arms <- rep(TRUE, attr(design, "k"))
@@ -110,12 +113,14 @@ multiarm_drop_arms <- function(
   if (alt_adj) {
     design <- cer_alt_drop_hypotheses(
       design,
-      (seq_along(treatment_assoc) %in% arms)
+      (seq_along(treatment_assoc) %in% arms),
+      adapt_bounds = FALSE
     )
   } else {
     design <- cer_drop_hypotheses(
       design,
-      (seq_along(treatment_assoc) %in% arms)
+      (seq_along(treatment_assoc) %in% arms),
+      adapt_bounds = FALSE
     )
   }
 
@@ -126,5 +131,6 @@ multiarm_drop_arms <- function(
     n_treat_2
   )
 
-  design |> cer_adapt(t = t, correlation = correlation)
+  design |>
+    cer_adapt(time = t, correlation = correlation, adapt_bounds = adapt_bounds)
 }
