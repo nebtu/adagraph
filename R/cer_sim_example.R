@@ -1,5 +1,6 @@
 #'@importFrom stats pnorm qnorm pt
 
+#'@export
 get_sim_design <- function(n, t) {
   ws <- .75 # (weight given to secondary endpoint)
   wp <- (1 - ws) / 3 # weight given to the other arms primary endpoint
@@ -112,7 +113,7 @@ run_example_trial <- function(
   alt_drop = TRUE
 ) {
   design <- get_sim_design(n1 + n2, n1 / (n1 + n2))
-  dat <- example_data_gen(corr, eff, n1)
+  dat <- example_data_gen(corr, eff, n1, n2)
   data_gen_1 <- dat[[1]]
   data_gen_2 <- dat[[2]]
   adapt_rule <- get_example_adaption(futility, alt_drop = alt_drop)

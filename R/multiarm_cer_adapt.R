@@ -76,6 +76,8 @@ redistribute_n <- function(
 # to t
 # n_cont_2 and n_treat_2 still has the same lenght as before, so dropped arms
 # should proabbly, but not automatically have n of 0
+# n for treatments that are dropped are set to 0
+#' @export
 multiarm_drop_arms <- function(
   design,
   arms,
@@ -104,6 +106,8 @@ multiarm_drop_arms <- function(
 
     t <- design$t
   }
+
+  n_treat_2[arms] <- 0
 
   design$n_cont_2 <- n_cont_2
   design$n_treat_2 <- n_treat_2
