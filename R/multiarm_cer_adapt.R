@@ -14,11 +14,31 @@ get_t <- function(n_cont_1, n_cont_2, n_treat_1, n_treat_2) {
   inv_var_1 / (inv_var_1 + inv_var_2)
 }
 
+#' Get the amount of people for each hypotheses in the 2. stage of a trial
+#' assuming a fixed population
+#'
+#' @param n vector of number of people for each arm of the trial
+#' @param t time fraction at which the second stage begins
+#' @param n1 number of people used in the first stage, instead of t
+#' @param which_drop list of arms to drop, by their index in n
+#' @param simple_redistribute if the distribution of the dropped arms to the
+#'   rest has remainders, wether those remainders are distributed to the largest
+#'   ramainders or simply to the first in the list
+#'
+#' Either t or n1 needs to be specified
+#' If $t * n$ is not an integer, the number of people in the first stage is
+#' rounded down
+#'
+#' @return list of number of people in the second stage for all the arms
+#'   (including dropped ones)
+#' @export
+#' @examples
+#' redistribute_n(c(100, 100), t = 1/2, which_drop = 1)
 redistribute_n <- function(
   n,
-  which_drop,
-  t = 1 / 2,
+  t = NA,
   n1 = NA,
+  which_drop = NA,
   simple_redistribute = FALSE
 ) {
   if (!is.na(t)) {
@@ -29,7 +49,7 @@ redistribute_n <- function(
   if (any(!keep)) {
     weights <- n[keep]
 
-    n_reassign <- sum(n[!keep])
+    n_reassign <- sum(n2[!keep])
 
     quotas <- n_reassign * weights / sum(weights)
     reassign <- floor(quotas)
@@ -38,7 +58,7 @@ redistribute_n <- function(
     remaining <- n_reassign - sum(reassign)
     if (remaining > 0) {
       if (simple_redistribute) {
-        top_indices <- remainders[1:remaining]
+        top_indices <- 1:remaining
       } else {
         top_indices <- order(remainders, decreasing = TRUE)[1:remaining]
       }

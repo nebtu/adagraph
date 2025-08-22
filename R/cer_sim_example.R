@@ -86,9 +86,9 @@ get_example_adaption <- function(futility, alt_drop = FALSE) {
     drop_arms <- which(drop_hyp)
 
     new_n <- redistribute_n(
-      c(design$n_treatments[1:4], design$n_controls[1]),
-      drop_arms,
-      design$t
+      n = c(design$n_treatments[1:4], design$n_controls[1]),
+      t = design$t,
+      which_drop = drop_arms
     )
 
     design |>
