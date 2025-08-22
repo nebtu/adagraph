@@ -32,10 +32,10 @@
 #' design
 cer_adapt <- function(
   design,
-  weights = NA,
-  test_m = NA,
-  t = NA,
-  correlation = NA,
+  weights = NULL,
+  test_m = NULL,
+  time = NULL,
+  correlation = NULL,
   adapt_bounds = TRUE
 ) {
   if (design$final_test) {
@@ -44,28 +44,34 @@ cer_adapt <- function(
       class = "wrong_sequence_after_final"
     )
   }
-  if (any(!is.na(weights))) {
+  if (!design$interim_test) {
+    cli::cli_abort(
+      "No interim test has been performed yet. Adaptions can only be applied once an interim test has been done.",
+      class = "wrong_sequence_before_interim"
+    )
+  }
+  if (!is.null(weights)) {
     design$ad_weights <- weights
   } else if (all(is.null(design$ad_weights))) {
     design$ad_weights <- design$weights
   }
-  if (any(!is.na(test_m))) {
+  if (!is.null(test_m)) {
     design$ad_test_m <- test_m
   } else if (is.null(design$ad_test_m)) {
     design$ad_test_m <- design$test_m
   }
-  if (any(!is.na(t))) {
-    design$ad_t <- t
+  if (!is.null(time)) {
+    design$ad_t <- time
   } else if (is.null(design$ad_t)) {
     design$ad_t <- design$t
   }
-  if (any(!is.na(correlation))) {
+  if (!is.null(correlation)) {
     design$ad_correlation <- correlation
   } else if (is.null(design$ad_correlation)) {
     design$ad_correlation <- design$correlation
   }
 
-  if (any(!is.na(weights)) || any(!is.na(test_m))) {
+  if (!is.null(weights) || !is.null(test_m)) {
     int_hyp <- get_intersection_hypotheses(design$ad_weights, design$ad_test_m)
     design$ad_weights_matrix <- int_hyp$weights_matrix
   } else if (is.null(design$ad_weights_matrix)) {

@@ -6,10 +6,10 @@
 \usage{
 cer_adapt(
   design,
-  weights = NA,
-  test_m = NA,
-  t = NA,
-  correlation = NA,
+  weights = NULL,
+  test_m = NULL,
+  time = NULL,
+  correlation = NULL,
   adapt_bounds = TRUE
 )
 }

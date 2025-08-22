@@ -46,7 +46,7 @@ test_that("warnings and errors are handled", {
     design_tested,
     c(TRUE, FALSE, TRUE, FALSE)
   ) |>
-    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t)
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t)
   design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
 
   expect_warning(

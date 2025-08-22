@@ -24,7 +24,7 @@ test_that("dropping hypotheses works", {
     rbind(c(0, 0, 0, 0), c(0, 0, 0, 1), c(0, 0, 0, 0), c(0, 1, 0, 0))
   )
 
-  design_adj <- cer_adapt(design_adj, weights = c(0, 0.5, 0, 0.5), t = 0.4)
+  design_adj <- cer_adapt(design_adj, weights = c(0, 0.5, 0, 0.5), time = 0.4)
 
   expect_equal(design_adj$ad_t, 0.4)
   expect_equal(design_adj$ad_weights, c(0, 0.5, 0, 0.5))
@@ -78,13 +78,13 @@ test_that("multiple adaptions work the same as one adaption", {
         cer_adapt(design, test_m = new_test_m),
         weights = c(0, 0.5, 0, 0.5)
       ),
-      t = 0.4
+      time = 0.4
     ),
     cer_adapt(
       design,
       weights = c(0, 0.5, 0, 0.5),
       test_m = new_test_m,
-      t = 0.4
+      time = 0.4
     ),
     list_as_map = TRUE
   )
@@ -96,7 +96,7 @@ test_that("adapting bounds works", {
   reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
   ad_t <- c(1, reallocated_t, 1, reallocated_t)
   design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, TRUE, FALSE)) |>
-    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t)
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t)
 
   tcJ2v <- c(
     0.02371429,
@@ -115,7 +115,7 @@ test_that("adapting bounds works", {
     c(TRUE, FALSE, TRUE, FALSE),
     adapt_bounds = FALSE
   ) |>
-    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t, adapt_bounds = FALSE) |>
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t, adapt_bounds = FALSE) |>
     cer_adapt_bounds()
 
   expect_equal(design_adj, design_adj_manual_bounds, list_as_map = TRUE)
@@ -127,11 +127,11 @@ test_that("warnings and errors are handled", {
   reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
   ad_t <- c(1, reallocated_t, 1, reallocated_t)
   design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, TRUE, FALSE)) |>
-    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t)
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t)
   design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
 
   expect_warning(
-    design_tested |> cer_adapt(t = 0.1),
+    design_tested |> cer_adapt(time = 0.1),
     class = "wrong_sequence_after_final"
   )
 })

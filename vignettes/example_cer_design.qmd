@@ -95,7 +95,7 @@ design_adj <- design_interim |>
   ) |>
   cer_adapt(
     weights = c(0, 0.5, 0, 0.5),
-    t = ad_t
+    time = ad_t
   )
 ```
 
