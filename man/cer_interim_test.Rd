@@ -10,8 +10,6 @@ cer_interim_test(design, p_values)
 \item{design}{A cer_design object}
 
 \item{p_values}{A list of p-values for the hypotheses}
-
-\item{t}{The time fraction for the interim test, defaults to the t of the design}
 }
 \value{
 a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses

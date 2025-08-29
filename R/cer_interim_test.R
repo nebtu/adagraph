@@ -2,7 +2,6 @@
 #'
 #' @param design A cer_design object
 #' @param p_values A list of p-values for the hypotheses
-#' @param t The time fraction for the interim test, defaults to the t of the design
 #'
 #' @return a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses
 #'@export
