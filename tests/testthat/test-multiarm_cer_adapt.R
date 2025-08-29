@@ -90,12 +90,12 @@ test_that("dropping arms works", {
 
   expect_equal(
     design_adj$ad_n_treatments,
-    c(50, 110, 110, 110)
+    c(35, 95, 95, 95)
   )
 
   expect_equal(
     design_adj$ad_n_controls,
-    c(110, 110)
+    c(95, 95)
   )
   expect_equal(
     design_adj$n_cont_2,

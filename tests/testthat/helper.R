@@ -46,9 +46,9 @@ make_example_multiarm <- function() {
 
   design <- multiarm_cer_design(
     controls = 2,
-    treatment_assoc = c(1, 1, 2, 2),
-    n_controls = 100,
-    n_treatments = 100,
+    treatment_assoc = c(1, 2, 1, 2),
+    n_controls = 70,
+    n_treatments = 70,
     weights = weights,
     t = t,
     alpha = alpha,
