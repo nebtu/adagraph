@@ -70,7 +70,7 @@ data_gen <- get_data_gen(
    c(1, 0.5),
    c(0.5, 1)
  ),
-  c(0, 0),
+  c(0, 0.3),
   100,
   100
 )
@@ -86,8 +86,8 @@ data_gen_2 <- get_data_gen_2(
 
 sim_trial(
   design,
-  10,
-  10,
+  5,
+  3,
   adaption,
   data_gen,
   data_gen_2
