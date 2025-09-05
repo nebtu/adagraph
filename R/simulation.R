@@ -1,6 +1,6 @@
 #' Run a series of simulated trials according to a specified design
 #'
-#' @param design cer_design object to be used for the simulation
+#' @param design cer_design or multiarm_design object to be used for the simulation
 #' @param runs1 Number of trials to run in the first stage
 #' @param runs2 Number of second stage to run for every first stage trial
 #' @param adapt_rule function that takes a cer_design object after the
@@ -16,8 +16,58 @@
 #'  and return a matrix or dataframe with each row being the p-values
 #'  for a single trial.
 #'
+#' See also `get_data_gen()` and `get_data_gen_2()` for further information on
+#' how the input and output of data generating functions should look.
+#'
 #' @return A dataframe containing the various results
-#' @importFrom future.apply future_lapply
+#'
+#' @examples
+#' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
+#' design <- multiarm_cer_design(
+#'  controls = 1,
+#'  treatment_assoc = c(1,1),
+#'  n_controls = 50,
+#'  n_treatments = 50,
+#'  weights = c(0.5, 0.5),
+#'  alpha = 0.05,
+#'  test_m = rbind(c(0, 1),
+#'               c(1, 0)),
+#'  alpha_spending_f = as,
+#'  t = 0.5)
+#'
+#' adaption <- function(design) {
+#'   design |> multiarm_drop_arms(1)
+#' }
+#'
+#' data_gen <- get_data_gen(
+#'   matrix(1),
+#'   rbind(
+#'    c(1, 0.5),
+#'    c(0.5, 1)
+#'  ),
+#'   c(0, 0),
+#'   100,
+#'   100
+#' )
+#'
+#' data_gen_2 <- get_data_gen_2(
+#'   matrix(1),
+#'   rbind(
+#'    c(1, 0.5),
+#'    c(0.5, 1)
+#'   ),
+#'   c(0, 0)
+#' )
+#'
+#' sim_trial(
+#'   design,
+#'   10,
+#'   10,
+#'   adaption,
+#'   data_gen,
+#'   data_gen_2
+#' )
+#'
 #' @export
 sim_trial <- function(
   design,
@@ -40,7 +90,7 @@ sim_trial <- function(
   # the dataframe if performance is an issue, but then how to parallelize?
   results <- do.call(
     rbind,
-    future_lapply(
+    future.apply::future_lapply(
       seq_along(designs_interim),
       function(i) {
         design_adapted <- adapt_rule(designs_interim[[i]])
