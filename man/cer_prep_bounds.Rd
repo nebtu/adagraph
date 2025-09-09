@@ -29,17 +29,17 @@ A list with the following elements:
 Calculates the bounds and cJ values for the p-values for the interim test and the planned final test
 }
 \examples{
- #simple non-parametric bonferroni
- cer_prep_bounds(
-     correlation = rbind(c(1,0), c(0,1)),
-     weights = c(0.5,0.5),
-     alpha = c(0.001525323, 0.025),
-     t = 0.5)
+#simple non-parametric bonferroni
+cer_prep_bounds(
+    correlation = rbind(c(1,0), c(0,1)),
+    weights = c(0.5,0.5),
+    alpha = c(0.001525323, 0.025),
+    t = 0.5)
 
- #weighted bonferroni with correlation 0.5
- cer_prep_bounds(
-     correlation = rbind(c(1,0.5), c(0.5,1)),
-     weights = c(2/3,1/3),
-     alpha = c(0.001525323, 0.025),
-     t = 0.5)
+#weighted bonferroni with correlation 0.5
+cer_prep_bounds(
+    correlation = rbind(c(1,0.5), c(0.5,1)),
+    weights = c(2/3,1/3),
+    alpha = c(0.001525323, 0.025),
+    t = 0.5)
 }

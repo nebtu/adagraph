@@ -22,21 +22,20 @@
 #' @export
 #'
 #' @examples
-#'  #simple non-parametric bonferroni
-#'  cer_prep_bounds(
-#'      correlation = rbind(c(1,0), c(0,1)),
-#'      weights = c(0.5,0.5),
-#'      alpha = c(0.001525323, 0.025),
-#'      t = 0.5)
+#' #simple non-parametric bonferroni
+#' cer_prep_bounds(
+#'     correlation = rbind(c(1,0), c(0,1)),
+#'     weights = c(0.5,0.5),
+#'     alpha = c(0.001525323, 0.025),
+#'     t = 0.5)
 #'
-#'  #weighted bonferroni with correlation 0.5
-#'  cer_prep_bounds(
-#'      correlation = rbind(c(1,0.5), c(0.5,1)),
-#'      weights = c(2/3,1/3),
-#'      alpha = c(0.001525323, 0.025),
-#'      t = 0.5)
+#' #weighted bonferroni with correlation 0.5
+#' cer_prep_bounds(
+#'     correlation = rbind(c(1,0.5), c(0.5,1)),
+#'     weights = c(2/3,1/3),
+#'     alpha = c(0.001525323, 0.025),
+#'     t = 0.5)
 cer_prep_bounds <- function(correlation, weights, alpha, t) {
-  k <- dim(correlation)[1]
   I <- which(weights > 0)
 
   if (length(I) == 0) {
@@ -130,7 +129,45 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
   ))
 }
 
-# gives cer for a single intersection hypothesis
+#' Get the Conditional Error Rate for a intersection of hypotheses
+#'
+#' Gives the CER (condtional error rate) for a given set of hypotheses, with arbitrary
+#' weights and correlation between the hypotheses.
+#' This is an upper bound on the probabilty of rejecting all the hypotheses
+#' with weight greater 0 under the null hypothesis conditional on the stage one
+#' data, assuming we reject whenever a final p-value is smaller than cJ2 * weight
+#'
+#' Note that if the correlation between some values is unkown, the result may be
+#' greater than 1, see also the examples
+#'
+#' @param p_values vector of stage 1 p-values for the hypothesis
+#' @param weights weight to give to each hypothesis, ignoring all with weight 0
+#' @param cJ2 factor used for deciding if the hypothesis should be rejected
+#' @param correlation matrix describing a potential known correlation structure
+#'   between some hypotheses. Use NA for unkown correlations
+#' @param t information time fraction at which the interim test is performed
+#'
+#' @return a single number greate than 0, the CER
+#'
+#' @examples
+#' #the CER is high (even >1) if the p_values of the first stage are already low
+#' get_cer(
+#'  c(0.01, 0.01, 0.9, 0.9),
+#'  c(1, 1, 0, 0),
+#'  0.05,
+#'  matrix(rep(NA, 16), nrow = 4),
+#'  0.5
+#' )
+#'
+#' #and lower otherwise
+#' get_cer(
+#'  c(0.01, 0.01, 0.9, 0.9),
+#'  c(0, 0, 1, 1),
+#'  0.05,
+#'  matrix(rep(NA, 16), nrow = 4),
+#'  0.5
+#' )
+#' @export
 get_cer <- function(
   p_values,
   weights,
