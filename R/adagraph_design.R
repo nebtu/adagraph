@@ -1,3 +1,23 @@
+#' Internal function for adagraph_design
+#'
+#' For documentation on how to generate adagraph_designs, see `adagraph_design()`
+#'
+#' @param correlation,weights,alpha,test_m Same as for `adagraph_design()`
+#' @param class character, makes it possible to add subbclasses
+#' @param ... additional parameters, not used
+#'
+#' @return An object of class "adagraph_design, with the following elements"
+#'  * correlation: correlation matrix of the hypotheses, as given
+#'  * weights: list of weights of the hypotheses, as given
+#'  * alpha: overall FWER, as given
+#'  * test_m: transition matrix of the graph, as given
+#'  * hyp_matrix: matrix of format #intersection-hypotheses x #hypotheses where
+#'      each row specifies which hypothosis is part of the given intersection hypotheses
+#'  * weights_matrix: same format as hyp_matrix, but each row specifies
+#'      the weights of the hypotheses for the given intersection hypothesis
+#'  * closed_matrix: each of the #hypothesis columns specifies which
+#'      intersection hypotheses need to be tested to reject the given hypothesis
+#' @noRd
 new_adagraph_design <- function(
   correlation = matrix(),
   weights = double(),
@@ -29,6 +49,33 @@ new_adagraph_design <- function(
   )
 }
 
+#' Internal function for generating intersection hypothesis
+#'
+#' From given weights and test matrix, generate descriptions of intersection
+#' hypotheses in multiple ways
+#'
+#' Intersection hypothesis in this context means all possible intersection of a
+#' given hypothesis sets, which need to be tested at level alpha to guarante the
+#' overall FWER according to the closed testing principle.
+#'
+#' Uses `gMCPLite::generateWeights()` internally
+#'
+#' @param weights starting weights of the different hypothesis
+#' @param test_m transition matrix of the graph used to determine the weights
+#'   for the intersection hypothesis
+#'
+#' @returns a list with the following components:
+#'
+#' * hyp_matrix: matrix of dimension 2^k-1 x k describing for all 2*(k-1) hypotheses which hypotheses
+#'   from 1 to k are included in this intersection hypothesis
+#' * weights_matrix: matrix of dimension 2^k-1 x k describing for all 2*(k-1)
+#'   hpyotheses what the weight of each hypothesis is for testing this
+#'   intersection hypothesis
+#' * closed_matrix: matrix of dimension 2^(k-1) * k describing for each
+#'   hypothesis (one per column) which intersection hypothesis need to be
+#'   rejected (whith numbers to be used for subsetting the previous matrices) to
+#'   reject the overall hypothesis
+#' @noRd
 get_intersection_hypotheses <- function(weights, test_m) {
   k <- length(weights)
   if (k == 1) {

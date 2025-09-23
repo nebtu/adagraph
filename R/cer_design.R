@@ -1,13 +1,15 @@
 #' Internal function for cer_design
 #'
-#' For documentation on how to generate cer_designs, see [cer_design()].
-#' The parameters for this fucntion are the same as in [cer_design()], with the exception of
-#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf Same as for [cer_design()]
+#' For documentation on how to generate cer_designs, see `cer_design()`.
+#'
+#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf Same as
+#' for `cer_design()`
 #' @param class character, makes it possible to add subbclasses
 #' @param ... additional parameters, not used
-#' @importFrom future.apply future_apply
 #'
-#' @return An object of class c("cer_design", "adagraph_design"), whith the following elements:
+#' @return An object of class c("cer_design", "adagraph_design"), whith the
+#' following elements (sometimes inherited from `new_adagraph_design()`:
+#'
 #'  * correlation: correlation matrix of the hypotheses, as given
 #'  * weights: list of weights of the hypotheses, as given
 #'  * alpha: overall FWER, as given
@@ -25,6 +27,7 @@
 #'  * bounds_2: same as bounds_1, but for rejection at the second stage according to the preplanned design
 #'  * cJ1: values used for calulation of bounds_1, bounds_1 := cJ1 * weights (with rowwise multiplication)
 #'  * cJ2: as cJ1, but for bounds_2
+#'
 #' @noRd
 new_cer_design <- function(
   correlation = matrix(),
@@ -50,7 +53,7 @@ new_cer_design <- function(
 
   prep_alpha_1 <- alpha_spending_f(alpha, t)
 
-  boundslist <- future_apply(
+  boundslist <- future.apply::future_apply(
     design$weights_matrix,
     1,
     function(weights) {

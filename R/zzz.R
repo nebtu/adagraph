@@ -6,9 +6,12 @@
     adagraph.precision = 1e-6
   )
   toset <- !(names(op_adagraph) %in% names(op))
-  if (any(toset)) options(op_adagraph[toset])
+  if (any(toset)) {
+    options(op_adagraph[toset])
+  }
 
-  # Note that will not work well with parallelization, but provides a nice speedup for now
+  # Since in simulation, a whole design gets simulated at once, memoisation has
+  # still some benefits
   get_cer <<- memoise::memoise(get_cer)
   cer_prep_bounds <<- memoise::memoise(cer_prep_bounds)
 

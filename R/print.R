@@ -1,4 +1,12 @@
-# shared internal helper used by both print methods
+#' Shared internal helper used by S3 print methods
+#'
+#' @param x design to be printed
+#' @param header_label label describing the type of design being printed
+#' @param hooks list containing functions for printing additional information, should
+#'   have names out of c("after_initial_spec", "after_adaptions"). Each function
+#'   should only take x as argument
+#'
+#' @noRd
 print_design_common <- function(x, header_label = "CER", hooks = list()) {
   k <- attr(x, "k")
   cli::cat_line(

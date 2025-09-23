@@ -50,6 +50,19 @@ new_multiarm_cer_design <- function(
   design
 }
 
+#' Internal function for generating a correlation matrix for a given multiarm design
+#'
+#' When two arms of a given multiarm design share a control group, we assume
+#' that their resulting p-values will be correlated. This function calculates
+#' this correlation.
+#'
+#' @param controls,treatment_assoc,n_controls,n_treatments As provided to
+#'   `multiarm_cer_design()`
+#'
+#' @return A quadratic correlation matrix with dimensions of
+#'   length(treatment_assoc), detailing the correlation resulting from shared
+#'   controls
+#' @noRd
 get_multiarm_correlation <- function(
   controls = integer(),
   treatment_assoc = integer(),
