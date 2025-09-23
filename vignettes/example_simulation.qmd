@@ -25,10 +25,40 @@ It is taken from the description in section 4 of Mehta 2025 ([arXiv:2501.03197](
 We assume here a sample size of 100 people for each of the 2 dose regiments and
 the control group.
 Also, we assume that after half of the results are in, an interim analysis is
-performed, so that the time fraction is 0.5.
+performed, which results in a time fraction of $0.5$.
 
 ```{r}
-design <- get_sim_design(100, 1 / 2)
+ws <- .75 # (weight given to secondary endpoint)
+wp <- (1 - ws) / 3 # weight given to the other arms primary endpoint
+m <- rbind(
+  H1 = c(0, wp, wp, wp, ws, 0, 0, 0),
+  H2 = c(wp, 0, wp, wp, 0, ws, 0, 0),
+  H3 = c(wp, wp, 0, wp, 0, 0, ws, 0),
+  H4 = c(wp, wp, wp, 0, 0, 0, 0, ws),
+  H5 = c(0, 1 / 3, 1 / 3, 1 / 3, 0, 0, 0, 0),
+  H6 = c(1 / 3, 0, 1 / 3, 1 / 3, 0, 0, 0, 0),
+  H7 = c(1 / 3, 1 / 3, 0, 1 / 3, 0, 0, 0, 0),
+  H8 = c(1 / 3, 1 / 3, 1 / 3, 0, 0, 0, 0, 0)
+)
+```
+
+  
+```{r}
+#alpha spending function
+as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+
+design <- multiarm_cer_design(
+  controls = 2,
+  treatment_assoc = c(1, 1, 1, 1, 2, 2, 2, 2),
+  n_controls = 100,
+  n_treatments = 100,
+  weights = c(1 / 4, 1 / 4, 1 / 4, 1 / 4, 0, 0, 0, 0),
+  t = 1 / 2,
+  alpha = 0.025,
+  test_m = m,
+  alpha_spending_f = as
+)
+
 design
 ```
 
@@ -144,7 +174,6 @@ we could also return the used multiarm_cer_design objects with the
 `include_designs` option.
 
 Now we can see the resulting FWER by simply calculating it from the results.
-
 
 ```{r}
 print(mean(data$rej_any))
