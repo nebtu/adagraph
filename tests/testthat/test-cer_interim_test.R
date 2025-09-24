@@ -49,8 +49,12 @@ test_that("warnings and errors are handled", {
     cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t)
   design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
 
+  # not sure nesting expect_ should be done, but it works
   expect_warning(
-    design_tested |> cer_interim_test(c(0.00045, 0.0952, 0.0225, 0.1104)),
-    class = "wrong_sequence_after_final"
+    expect_warning(
+      design_tested |> cer_interim_test(c(0.00045, 0.0952, 0.0225, 0.1104)),
+      class = "wrong_sequence_after_final"
+    ),
+    class = "overwrites_interim_result"
   )
 })

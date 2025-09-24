@@ -100,6 +100,13 @@ validate_cer_design_params <- function(
       "x" = "t is {typeof(t)}.",
       class = "invalid_argument_t"
     )
+  } else if (length(t) > 1) {
+    cli::cli_abort(
+      "t has to have length 1.",
+      "x" = "t is {t}, with length {length(t)}.",
+      "i" = "Different time fractions for different hypotheses are only supported for adaptions, not for the initial design.",
+      class = "invalid_argument_t"
+    )
   } else if (t < 0 | t > 1) {
     cli::cli_abort(
       "t has to be between 0 and 1",

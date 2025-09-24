@@ -19,7 +19,7 @@ between some hypotheses. Use NA for unkown correlations}
 \item{t}{information time fraction at which the interim test is performed}
 }
 \value{
-a single number greate than 0, the CER
+a single number greater than 0, the CER
 }
 \description{
 Gives the CER (condtional error rate) for a given set of hypotheses, with arbitrary

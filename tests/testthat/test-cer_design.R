@@ -196,6 +196,17 @@ test_that("Correct validation of cer_design", {
       alpha = alpha,
       test_m = test_m,
       alpha_spending_f = alpha_spending_f,
+      t = c(0.5, 0.5)
+    ),
+    class = "invalid_argument_t"
+  )
+  expect_error(
+    cer_design(
+      correlation = correlation,
+      weights = weights,
+      alpha = alpha,
+      test_m = test_m,
+      alpha_spending_f = alpha_spending_f,
       t = 1.5
     ),
     class = "invalid_argument_t"

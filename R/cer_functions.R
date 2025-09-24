@@ -147,7 +147,9 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
 #'   between some hypotheses. Use NA for unkown correlations
 #' @param t information time fraction at which the interim test is performed
 #'
-#' @return a single number greate than 0, the CER
+#' @return a single number greater than 0, the CER
+#'
+#' @export
 #'
 #' @examples
 #' #the CER is high (even >1) if the p_values of the first stage are already low
@@ -167,7 +169,6 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
 #'  matrix(rep(NA, 16), nrow = 4),
 #'  0.5
 #' )
-#' @export
 get_cer <- function(
   p_values,
   weights,
