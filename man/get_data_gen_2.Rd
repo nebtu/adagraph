@@ -4,7 +4,14 @@
 \alias{get_data_gen_2}
 \title{Get a data generating function for simulating the second stage of a trial}
 \usage{
-get_data_gen_2(corr_control, corr_treatment, eff)
+get_data_gen_2(
+  corr_control,
+  corr_treatment,
+  eff,
+  binary = integer(0),
+  bin_con_resp = NULL,
+  bin_treat_resp = NULL
+)
 }
 \arguments{
 \item{corr_control}{correlation matrix for all the control endpoints}

@@ -4,7 +4,16 @@
 \alias{get_data_gen}
 \title{Get a data generating function for simulating a trial}
 \usage{
-get_data_gen(corr_control, corr_treatment, eff, n_cont, n_treat)
+get_data_gen(
+  corr_control,
+  corr_treatment,
+  eff,
+  n_cont,
+  n_treat,
+  binary = integer(0),
+  bin_con_resp = NULL,
+  bin_treat_resp = NULL
+)
 }
 \arguments{
 \item{corr_control}{correlation matrix for all the control endpoints}
@@ -17,6 +26,13 @@ endpoints (compared to the control)}
 \item{n_cont}{number of data points in the control endpoints}
 
 \item{n_treat}{number of data points in the treatment endpoints}
+
+\item{binary}{which treatment endpoints are binary endpoints (all control
+endpoints referenced by those are also automatically treated as binary)}
+
+\item{bin_con_resp}{response rate of the binary control groups}
+
+\item{bin_treat_resp}{response rate of the binary treatment groups}
 }
 \value{
 A function taking two arguments, see details
@@ -34,3 +50,14 @@ as specified in the design object with the given correlation and mean, and
 comparing it with a t-test to the data points generated for the controls
 specified by treatment_assoc of the design object.
 }
+\section{Binary endpoints}{
+Binary endpoints have to be specified separately. Using means that eff does
+not get used anymore for those endpoints, but correlation between the
+endpoints is still given, since the binary endpoint is calculated from the
+normal data. Additionally, this currently assumes that the covariance of all
+binary endpoints (so the diagonal value of the correlations) is 1
+
+The test used for the enpoints is a one-sided two-proportion z-test, where
+the tested outcome is a higher response rate for the treatment group.
+}
+
