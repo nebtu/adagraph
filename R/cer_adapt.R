@@ -276,7 +276,7 @@ cer_adapt_bounds <- function(design) {
             correlation = design$ad_correlation,
             t = design$ad_t
           ) -
-            design$cer_vec[index]
+            min(1, design$cer_vec[index])
         },
         c(0, 1 / max(design$ad_weights_matrix[index, ])),
         tol = getOption("adagraph.precision")

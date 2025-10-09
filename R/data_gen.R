@@ -198,7 +198,7 @@ get_data_gen <- function(
                 ((1 / n_arm_cont) + (1 / n_arm_treat))
             )
 
-          1 - pnorm(z)
+          1 - ifelse(is.na(z), 0, pnorm(z))
         }
       )
     }

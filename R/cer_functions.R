@@ -202,18 +202,20 @@ get_cer <- function(
     comp_weights <- pos_weights[conn_indices]
     comp_p_values <- p_values[conn_indices]
     comp_t <- t[conn_indices]
-    if (length(conn_indices) == 1) {
-      cer <- 1 -
-        stats::pnorm(
-          (stats::qnorm(1 - min(1, comp_weights * cJ2)) -
-            stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) /
-            sqrt(1 - comp_t)
-        )
-    } else {
-      comp_corr <- correlation[conn_indices, conn_indices]
-      upper <- (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) -
+    upper <- ifelse(
+      #if the boundary is 1 or greater, we will reject, even if p == 1
+      #as.vector is necessary to remove attributes, else upper is not accepted
+      #by pmvnorm
+      as.vector((comp_weights * cJ2) >= 1),
+      -Inf,
+      (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) -
         stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) /
         sqrt(1 - comp_t)
+    )
+    if (length(conn_indices) == 1) {
+      cer <- 1 - stats::pnorm(upper)
+    } else {
+      comp_corr <- correlation[conn_indices, conn_indices]
       cer <- 1 -
         min(
           mvtnorm::pmvnorm(
