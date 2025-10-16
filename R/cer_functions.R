@@ -191,6 +191,24 @@ get_cer <- function(
     conn <- 1
   }
 
+  .get_cer(
+    p_values,
+    bounds = pos_weights * cJ2,
+    correlation,
+    t,
+    conn
+  )
+}
+
+#this internal function does the same as get_cer, but assumes that every weight
+#is greater than 0 and that the connected component is already available
+.get_cer <- function(
+  p_values,
+  bounds,
+  correlation,
+  t,
+  conn
+) {
   algorithm <- mvtnorm::Miwa(
     steps = getOption("adagraph.miwa_steps"),
     checkCorr = FALSE,
@@ -199,16 +217,16 @@ get_cer <- function(
 
   # compute cer for one connected compononent of the correlation graph
   comp_cer <- function(conn_indices) {
-    comp_weights <- pos_weights[conn_indices]
+    comp_bounds <- bounds[conn_indices]
     comp_p_values <- p_values[conn_indices]
     comp_t <- t[conn_indices]
     upper <- ifelse(
       #if the boundary is 1 or greater, we will reject, even if p == 1
       #as.vector is necessary to remove attributes, else upper is not accepted
       #by pmvnorm
-      as.vector((comp_weights * cJ2) >= 1),
+      as.vector(comp_bounds >= 1),
       -Inf,
-      (stats::qnorm(1 - pmin(1, comp_weights * cJ2)) -
+      (stats::qnorm(1 - pmin(1, comp_bounds)) -
         stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) /
         sqrt(1 - comp_t)
     )
