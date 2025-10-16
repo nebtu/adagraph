@@ -3,7 +3,8 @@
   op_adagraph <- list(
     adagraph.miwa_maxval = 1e3,
     adagraph.miwa_steps = 128,
-    adagraph.precision = 1e-6
+    adagraph.precision = 1e-6,
+    adagraph.use_future = FALSE
   )
   toset <- !(names(op_adagraph) %in% names(op))
   if (any(toset)) {

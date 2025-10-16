@@ -128,22 +128,32 @@ sim_trial <- function(
   # maybe use smth else than do.call here? vec.rbind from vctrs,
   # or map_dfr from purrr would work or pre-allocating and filling
   # the dataframe if performance is an issue, but then how to parallelize?
-  results <- do.call(
-    rbind,
-    future.apply::future_lapply(
-      seq_along(designs_interim),
-      sim_second_stage,
-      # future.globals = c(
-      #   "designs_interim",
-      #   "runs2",
-      #   "adapt_rule",
-      #   "data_gen_2",
-      #   "include_designs"
-      # ),
-      future.packages = "adagraph",
-      future.seed = TRUE
+  if (getOption("adagraph.use_future")) {
+    results <- do.call(
+      rbind,
+      future.apply::future_lapply(
+        seq_along(designs_interim),
+        sim_second_stage,
+        # future.globals = c(
+        #   "designs_interim",
+        #   "runs2",
+        #   "adapt_rule",
+        #   "data_gen_2",
+        #   "include_designs"
+        # ),
+        future.packages = "adagraph",
+        future.seed = TRUE
+      )
     )
-  )
+  } else {
+    results <- do.call(
+      rbind,
+      lapply(
+        seq_along(designs_interim),
+        sim_second_stage
+      )
+    )
+  }
 
   return(results)
 }
