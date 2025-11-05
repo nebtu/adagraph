@@ -11,7 +11,7 @@ specified by the arguments and the specification for the trials second stage"></
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,14 @@ specified by the arguments and the specification for the trials second stage</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_data_gen_2</span><span class="op">(</span><span class="va">corr_control</span>, <span class="va">corr_treatment</span>, <span class="va">eff</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_data_gen_2</span><span class="op">(</span></span>
+<span>  <span class="va">corr_control</span>,</span>
+<span>  <span class="va">corr_treatment</span>,</span>
+<span>  <span class="va">eff</span>,</span>
+<span>  binary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  bin_con_resp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bin_treat_resp <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
