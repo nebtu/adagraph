@@ -244,7 +244,6 @@ get_data_gen_2 <- function(
   bin_treat_resp = NULL
 ) {
   data_gen_2 <- function(n, design) {
-    hyp <- design$keep_hyp
     data_gen <- get_data_gen(
       corr_control = corr_control,
       corr_treatment = corr_treatment,
