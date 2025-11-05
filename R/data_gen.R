@@ -245,28 +245,26 @@ get_data_gen_2 <- function(
 ) {
   data_gen_2 <- function(n, design) {
     hyp <- design$keep_hyp
-    if (any(hyp)) {
-      data_gen <- get_data_gen(
-        corr_control = corr_control,
-        corr_treatment = corr_treatment,
-        eff = eff,
-        n_cont = design$n_cont_2,
-        n_treat = design$n_treat_2,
-        binary = binary,
-        bin_con_resp = bin_con_resp,
-        bin_treat_resp = bin_treat_resp
-      )
+    data_gen <- get_data_gen(
+      corr_control = corr_control,
+      corr_treatment = corr_treatment,
+      eff = eff,
+      n_cont = design$n_cont_2,
+      n_treat = design$n_treat_2,
+      binary = binary,
+      bin_con_resp = bin_con_resp,
+      bin_treat_resp = bin_treat_resp
+    )
 
-      p2 <- data_gen(n, design)
-      p <- t(apply(p2, 1, \(x) {
-        1 -
-          pnorm(
-            sqrt(design$ad_t) *
-              qnorm(1 - design$p_values_interim) +
-              sqrt(1 - design$ad_t) * qnorm(1 - x)
-          )
-      }))
-    }
+    p2 <- data_gen(n, design)
+    p <- t(apply(p2, 1, \(x) {
+      1 -
+        pnorm(
+          sqrt(design$ad_t) *
+            qnorm(1 - design$p_values_interim) +
+            sqrt(1 - design$ad_t) * qnorm(1 - x)
+        )
+    }))
     p
   }
 
