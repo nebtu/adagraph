@@ -36,6 +36,74 @@ get_paper_sim_design <- function() {
   design
 }
 
+get_paper_sim_design_multiarm <- function() {
+  n <- 100
+  t <- 0.5
+  ws <- .75 # (weight given to secondary endpoint)
+  wp <- (1 - ws) / 3 # weight given to the other arms primary endpoint
+  m <- rbind(
+    H1 = c(0, wp, wp, wp, ws, 0, 0, 0),
+    H2 = c(wp, 0, wp, wp, 0, ws, 0, 0),
+    H3 = c(wp, wp, 0, wp, 0, 0, ws, 0),
+    H4 = c(wp, wp, wp, 0, 0, 0, 0, ws),
+    H5 = c(0, 1 / 3, 1 / 3, 1 / 3, 0, 0, 0, 0),
+    H6 = c(1 / 3, 0, 1 / 3, 1 / 3, 0, 0, 0, 0),
+    H7 = c(1 / 3, 1 / 3, 0, 1 / 3, 0, 0, 0, 0),
+    H8 = c(1 / 3, 1 / 3, 1 / 3, 0, 0, 0, 0, 0)
+  )
+
+  weights <- c(rep(1 / 4, 4), rep(0, 4))
+
+  alpha <- 0.025 #overall alpha
+
+  #spending function
+  as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+
+  design <- multiarm_cer_design(
+    controls = 2,
+    treatment_assoc = c(1, 1, 1, 1, 2, 2, 2, 2),
+    n_controls = n,
+    n_treatments = n,
+    weights = weights,
+    t = t,
+    alpha = alpha,
+    test_m = m,
+    alpha_spending_f = as
+  )
+
+  design
+}
+
+get_sim_adaption <- function(futility, alt_drop = FALSE) {
+  function(design) {
+    p <- design$p_values_interim[1:4]
+
+    trt_rej <- design$rej_interim[1:4] & design$rej_interim[5:8]
+    if (futility > 0) {
+      drop_hyp <- (p > futility) | trt_rej
+    } else {
+      # drop all but the best performing one (and that as well if it is rejected)
+      drop_hyp <- (p != min(p)) | trt_rej
+    }
+
+    drop_arms <- which(drop_hyp)
+
+    new_n <- redistribute_n(
+      n = c(design$n_treatments[1:4], design$n_controls[1]),
+      t = design$t,
+      which_drop = drop_arms,
+    )
+
+    design |>
+      multiarm_drop_arms(
+        drop_arms,
+        n_cont_2 = rep(new_n[5], 2),
+        n_treat_2 = rep(new_n[1:4], 2),
+        alt_adj = alt_drop
+      )
+  }
+}
+
 simrun <- function(
   design,
   mu = rep(0, 10),
@@ -43,7 +111,8 @@ simrun <- function(
   futility = 0.5,
   n1 = 50,
   n2 = 50,
-  runs2 = 1000
+  runs2 = 1000,
+  new_adaption = FALSE
 ) {
   mueff = c(mu[2:5] - mu[1], mu[7:10] - mu[6])
   X1 = matrix(rnorm(n1 * 5), nrow = 5) #BF generates data
@@ -87,12 +156,17 @@ simrun <- function(
     corradapt[5:8, 5:8] = ctemp
     diag(corradapt) = 1 # corradapt has only for selected hypothesis a valid entry
 
-    design_adapted <- design_interim |>
-      cer_alt_drop_hypotheses(drop_hyp, adapt_bounds = FALSE) |>
-      cer_adapt(
-        time = th,
-        correlation = corradapt
-      )
+    if (new_adaption) {
+      adaption <- get_sim_adaption(futility = futility, alt_drop = TRUE)
+      design_adapted <- design_interim |> adaption()
+    } else {
+      design_adapted <- design_interim |>
+        cer_alt_drop_hypotheses(drop_hyp, adapt_bounds = FALSE) |>
+        cer_adapt(
+          time = th,
+          correlation = corradapt
+        )
+    }
 
     p2 = matrix(NA, nrow = runs2, ncol = 8)
 
@@ -195,7 +269,8 @@ sim_wrap <- function(
   futility = .75,
   runs1 = 100,
   runs2 = 100,
-  corr = 0.5
+  corr = 0.5,
+  new_adaption = FALSE
 ) {
   mu = c(eff, eff)
   results = lapply(
@@ -208,7 +283,8 @@ sim_wrap <- function(
         runs2 = runs2,
         n1 = 50,
         n2 = 50,
-        futility = futility
+        futility = futility,
+        new_adaption = new_adaption
       )
     }
   )
@@ -226,4 +302,6 @@ sim_wrap <- function(
       df
     })
   )
+
+  res_df
 }
