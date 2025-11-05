@@ -11,12 +11,27 @@
 #' comparing it with a t-test to the data points generated for the controls
 #' specified by treatment_assoc of the design object.
 #'
+#' # Binary endpoints
+#'
+#' Binary endpoints have to be specified separately. Using means that eff does
+#' not get used anymore for those endpoints, but correlation between the
+#' endpoints is still given, since the binary endpoint is calculated from the
+#' normal data. Additionally, this currently assumes that the covariance of all
+#' binary endpoints (so the diagonal value of the correlations) is 1
+#'
+#' The test used for the enpoints is a one-sided two-proportion z-test, where
+#' the tested outcome is a higher response rate for the treatment group.
+#'
 #' @param corr_control correlation matrix for all the control endpoints
 #' @param corr_treatment correlation matrix for all the treatment endpoints
 #' @param eff vector of effect sizes (i.e. means) of the different treatment
 #'  endpoints (compared to the control)
 #' @param n_cont number of data points in the control endpoints
 #' @param n_treat number of data points in the treatment endpoints
+#' @param binary which treatment endpoints are binary endpoints (all control
+#'   endpoints referenced by those are also automatically treated as binary)
+#' @param bin_con_resp response rate of the binary control groups
+#' @param bin_treat_resp response rate of the binary treatment groups
 #'
 #' @return A function taking two arguments, see details
 #'
@@ -27,7 +42,10 @@ get_data_gen <- function(
   corr_treatment,
   eff,
   n_cont,
-  n_treat
+  n_treat,
+  binary = integer(0),
+  bin_con_resp = NULL,
+  bin_treat_resp = NULL
 ) {
   controls <- dim(corr_control)[1]
   arms <- dim(corr_treatment)[1]
@@ -42,7 +60,8 @@ get_data_gen <- function(
   which_arms <- ifelse(is.na(n_treat), FALSE, n_treat > 0)
 
   arms_used <- sum(which_arms)
-  n_treat <- n_treat[which_arms]
+  binary <- intersect(binary, which(which_arms))
+  eff[binary] <- 0
 
   data_gen <- function(n, design) {
     p <- matrix(NA, nrow = n, ncol = arms)
@@ -54,13 +73,14 @@ get_data_gen <- function(
         dim = c(n, max(n_cont), controls)
       )
 
-      treatment <- array(
+      treatment <- array(NA, dim = c(n, max(n_treat), arms))
+      treatment[,, which_arms] <- array(
         mvtnorm::rmvnorm(
           max(n_treat) * n,
           mean = eff[which_arms, drop = FALSE],
           sigma = corr_treatment[which_arms, which_arms, drop = FALSE]
         ),
-        dim = c(n, max(n_treat), arms_used)
+        dim = c(n, max(n_treat[which_arms]), arms_used)
       )
 
       control <- aperm(control, c(2, 3, 1))
@@ -73,37 +93,50 @@ get_data_gen <- function(
           control[n_cont[i]:max(n_cont), i, ] <- NA
         }
       }
-      for (i in 1:arms_used) {
-        if (n_treat[i] < max(n_treat)) {
+      for (i in 1:arms) {
+        if (!is.na(n_treat[i]) & (n_treat[i] < max(n_treat[arms_used]))) {
           treatment[n_treat[i]:max(n_treat), i, ] <- NA
         }
       }
 
-      cont_mean <- colMeans(control, na.rm = TRUE)
-      treat_mean <- colMeans(treatment, na.rm = TRUE)
+      ##################### continous endpoints #####################
+      continuous <- setdiff((1:arms)[which_arms], binary)
+      cts_control <- control[, treatment_assoc[continuous], , drop = FALSE]
+      cts_treatment <- treatment[, continuous, , drop = FALSE]
+      cts_arms <- intersect(continuous, which(which_arms))
+      cts_n_cont <- n_cont[treatment_assoc[continuous]]
+      cts_n_treat <- n_treat[continuous]
+
+      cts_cont_idx <- treatment_assoc[continuous]
+      cts_cont_idx <- cts_cont_idx[order(cts_cont_idx)]
+      cts_treatment_assoc <- match(treatment_assoc[continuous], cts_cont_idx)
+
+      cont_mean <- colMeans(cts_control, na.rm = TRUE)
+      treat_mean <- colMeans(cts_treatment, na.rm = TRUE)
       cont_var <- matrixStats::colVars(
-        control,
+        cts_control,
         na.rm = TRUE,
-        dim. = c(max(n_cont), length(n_cont) * n)
+        dim. = c(max(n_cont, na.rm = TRUE), dim(cts_control)[2] * n)
       )
-      dim(cont_var) <- dim(control)[-1]
+      dim(cont_var) <- dim(cts_treatment)[-1]
       treat_var <- matrixStats::colVars(
-        treatment,
+        cts_treatment,
         na.rm = TRUE,
-        dim. = c(max(n_treat), length(n_treat) * n)
+        dim. = c(max(n_treat, na.rm = TRUE), dim(cts_treatment)[2] * n)
       )
-      dim(treat_var) <- dim(treatment)[-1]
+      dim(treat_var) <- dim(cts_treatment)[-1]
 
-      p[, which_arms] <- sapply(
-        seq_along(treatment_assoc[which_arms]),
+      p[, cts_arms] <- sapply(
+        seq_along(cts_arms),
         function(arm) {
-          n_arm_cont <- n_cont[treatment_assoc[arm]]
-          n_arm_treat <- n_treat[arm]
+          n_arm_cont <- cts_n_cont[arm]
+          n_arm_treat <- cts_n_treat[arm]
 
-          t <- (treat_mean[arm, ] - cont_mean[treatment_assoc[arm], ]) /
+          t <- (treat_mean[arm, ] -
+            cont_mean[arm, ]) /
             sqrt(
               ((treat_var[arm, ] * (n_arm_treat - 1)) +
-                (cont_var[treatment_assoc[arm], ] * (n_arm_cont - 1))) /
+                (cont_var[arm, ] * (n_arm_cont - 1))) /
                 (n_arm_treat + n_arm_cont - 2) *
                 (1 / n_arm_treat + 1 / n_arm_cont)
             )
@@ -111,6 +144,61 @@ get_data_gen <- function(
           df <- n_arm_treat + n_arm_cont - 2
 
           1 - pt(t, df = df)
+        }
+      )
+    }
+
+    ##################### binary endpoints #####################
+    if (length(binary) > 0) {
+      bin_cont_idx <- treatment_assoc[binary]
+      bin_cont_idx <- bin_cont_idx[order(bin_cont_idx)]
+      bin_treatment_assoc <- match(treatment_assoc[binary], bin_cont_idx)
+
+      bin_control_cont <- control[,
+        treatment_assoc[binary],
+        ,
+        drop = FALSE
+      ]
+      bin_control <- array(NA, dim = dim(bin_control_cont))
+      for (i in seq_len(dim(bin_control_cont)[2])) {
+        bin_control[, i, ] <- (bin_control_cont[, i, ] <
+          qnorm(bin_con_resp[bin_treatment_assoc[i]]))
+      }
+
+      bin_treatment_cont <- treatment[, binary, , drop = FALSE]
+      bin_treatment <- array(NA, dim = dim(bin_treatment_cont))
+      for (i in seq_len(dim(bin_treatment_cont)[2])) {
+        bin_treatment[, i, ] <- (bin_treatment_cont[, i, ] <
+          qnorm(bin_treat_resp[i]))
+      }
+
+      bin_n_cont <- n_cont[treatment_assoc[binary]]
+      bin_n_treat <- n_treat[binary]
+
+      #proportion of responders in each group
+      cont_prop <- colMeans(bin_control, na.rm = TRUE)
+      treat_prop <- colMeans(bin_treatment, na.rm = TRUE)
+
+      # number of overall responders
+      overall_num_resp <- (colSums(bin_control, na.rm = TRUE) +
+        colSums(bin_treatment, na.rm = TRUE))
+
+      p[, binary] <- sapply(
+        seq_along(binary),
+        function(arm) {
+          n_arm_cont <- bin_n_cont[arm]
+          n_arm_treat <- bin_n_treat[arm]
+
+          overall_prop <- overall_num_resp[arm, ] / (n_arm_cont + n_arm_treat)
+          z <- (treat_prop[arm, ] -
+            cont_prop[arm, ]) /
+            sqrt(
+              overall_prop *
+                (1 - overall_prop) *
+                ((1 / n_arm_cont) + (1 / n_arm_treat))
+            )
+
+          1 - ifelse(is.na(z), 0, pnorm(z))
         }
       )
     }
@@ -150,7 +238,10 @@ get_data_gen <- function(
 get_data_gen_2 <- function(
   corr_control,
   corr_treatment,
-  eff
+  eff,
+  binary = integer(0),
+  bin_con_resp = NULL,
+  bin_treat_resp = NULL
 ) {
   data_gen_2 <- function(n, design) {
     hyp <- design$keep_hyp
@@ -160,7 +251,10 @@ get_data_gen_2 <- function(
         corr_treatment = corr_treatment,
         eff = eff,
         n_cont = design$n_cont_2,
-        n_treat = design$n_treat_2
+        n_treat = design$n_treat_2,
+        binary = binary,
+        bin_con_resp = bin_con_resp,
+        bin_treat_resp = bin_treat_resp
       )
 
       p2 <- data_gen(n, design)

@@ -52,22 +52,31 @@ new_cer_design <- function(
   design$t <- t
 
   prep_alpha_1 <- alpha_spending_f(alpha, t)
-
-  boundslist <- future.apply::future_apply(
-    design$weights_matrix,
-    1,
-    function(weights) {
-      cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
-    },
-    future.seed = TRUE
-    #future.globals = c(
-    #"correlation",
-    #"prep_alpha_1",
-    #"alpha",
-    #"t"
-    #),
-    #future.packages = "adagraph"
-  )
+  if (getOption("adagraph.use_future")) {
+    boundslist <- future.apply::future_apply(
+      design$weights_matrix,
+      1,
+      function(weights) {
+        cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
+      },
+      future.seed = TRUE
+      #future.globals = c(
+      #"correlation",
+      #"prep_alpha_1",
+      #"alpha",
+      #"t"
+      #),
+      #future.packages = "adagraph"
+    )
+  } else {
+    boundslist <- apply(
+      design$weights_matrix,
+      1,
+      function(weights) {
+        cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
+      }
+    )
+  }
 
   design$bounds_1 <- t(sapply(boundslist, `[[`, "bounds_1"))
   design$bounds_2 <- t(sapply(boundslist, `[[`, "bounds_2"))

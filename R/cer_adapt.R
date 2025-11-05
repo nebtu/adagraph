@@ -265,20 +265,53 @@ cer_adapt_bounds <- function(design) {
 
   get_ad_cJ2 <- function(index) {
     if (sum(design$ad_weights_matrix[index, ] > 0) <= design$cer_vec[index]) {
+      # If the number of hypotheses is smaller than the cer, we can not get the
+      # new bound computationally, and reject always
       Inf
     } else {
+      I <- which(design$ad_weights_matrix[index, ] > 0)
+      weights <- design$ad_weights_matrix[index, ]
+      correlation <- design$ad_correlation[I, I, drop = FALSE]
+      p_values <- design$p_values_interim[I]
+
+      t <- design$ad_t
+      if (length(t) == 1) {
+        t <- rep(t, length(weights))
+      }
+      weights <- weights[I]
+      t <- t[I]
+
+      #### Connected components for the reduced correlation matrix
+      # Create mapping from old indices to new indices
+      old_to_new <- setNames(seq_along(I), I)
+
+      # Filter and remap components
+      components <- lapply(design$correlation_components, function(comp) {
+        comp_in_subgraph <- comp[comp %in% I]
+
+        # If this component has vertices in the subgraph, remap them
+        if (length(comp_in_subgraph) > 0) {
+          unname(old_to_new[as.character(comp_in_subgraph)])
+        } else {
+          NULL
+        }
+      })
+
+      # Remove empty components (those with no vertices in subgraph)
+      components <- Filter(Negate(is.null), components)
+
       stats::uniroot(
         function(ad_cJ2) {
-          get_cer(
-            p_values = design$p_values_interim,
-            weights = design$ad_weights_matrix[index, ],
-            cJ2 = ad_cJ2,
-            correlation = design$ad_correlation,
-            t = design$ad_t
+          .get_cer(
+            p_values = p_values,
+            bounds = weights * ad_cJ2,
+            correlation = correlation,
+            t = t,
+            conn = components
           ) -
-            design$cer_vec[index]
+            min(length(components), design$cer_vec[index])
         },
-        c(0, 1 / max(design$ad_weights_matrix[index, ])),
+        c(0, 1 / max(weights)),
         tol = getOption("adagraph.precision")
       )$root
     }

@@ -29,9 +29,11 @@ new_adagraph_design <- function(
   k <- dim(correlation)[1]
 
   int_hyp <- get_intersection_hypotheses(weights, test_m)
+  correlation_components <- gMCPLite:::conn.comp(correlation)
 
   design <- list(
     correlation = correlation,
+    correlation_components = correlation_components,
     weights = weights,
     alpha = alpha,
     hyp_matrix = int_hyp$hyp_matrix,
