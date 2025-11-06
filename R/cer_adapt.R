@@ -260,8 +260,10 @@ cer_alt_drop_hypotheses <- function(
 #'
 #' design
 cer_adapt_bounds <- function(design) {
-  to_test <- ((rowSums(design$ad_weights_matrix) > 0) &
-    (rowSums(design$hyp_matrix[, design$rej_interim, drop = FALSE]) == 0))
+  #get bounds only for hypotheses that still have any weight and that aren't
+  #rejected already
+  to_test <- (rowSums(design$ad_weights_matrix) > 0) &
+    !design$intersection_rej_interim
 
   get_ad_cJ2 <- function(index) {
     if (sum(design$ad_weights_matrix[index, ] > 0) <= design$cer_vec[index]) {
@@ -323,7 +325,8 @@ cer_adapt_bounds <- function(design) {
 
   design$ad_cJ2 <- ad_cJ2
   design$ad_bounds_2 <- apply(design$ad_weights_matrix, 2, function(w) {
-    ad_cJ2 * w
+    #ifelse since 0 * Inf should be 0
+    ifelse(w == 0, 0, ad_cJ2 * w)
   })
   design$ad_bounds_outdated <- FALSE
 
