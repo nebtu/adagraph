@@ -9,7 +9,9 @@
 #'  Note that this can now be a vector with a different value for different hypotheses or a single value
 #' @param correlation adapted correlation matrix
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions
+#'   FWER with the new adaptions. If doing multiple adaptions, it is enough to
+#'   adapt bounds only for the last one, or call `adapt_bounds()` manually
+#'   after.
 #'
 #' @return An object of class cer_design, with the adaptions applied.
 #' @export
@@ -103,7 +105,9 @@ cer_adapt <- function(
 #' @param design cer_design object
 #' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions, see `cer_adapt()`
+#'   FWER with the new adaptions. If doing multiple adaptions, it is enough to
+#'   adapt bounds only for the last one, or call `adapt_bounds()` manually
+#'   after.
 #'
 #' @return design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
 #' @export
@@ -183,7 +187,9 @@ cer_drop_hypotheses <- function(
 #' @param design cer_design object
 #' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions, see `cer_adapt()`
+#'   FWER with the new adaptions. If doing multiple adaptions, it is enough to
+#'   adapt bounds only for the last one, or call `adapt_bounds()` manually
+#'   after.
 #'
 #' @return design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
 #' @export
@@ -285,7 +291,7 @@ cer_adapt_bounds <- function(design) {
 
       #### Connected components for the reduced correlation matrix
       # Create mapping from old indices to new indices
-      old_to_new <- setNames(seq_along(I), I)
+      old_to_new <- stats::setNames(seq_along(I), I)
 
       # Filter and remap components
       components <- lapply(design$correlation_components, function(comp) {

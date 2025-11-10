@@ -136,6 +136,8 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
 #' This is an upper bound on the probabilty of rejecting all the hypotheses
 #' with weight greater 0 under the null hypothesis conditional on the stage one
 #' data, assuming we reject whenever a final p-value is smaller than cJ2 * weight
+#' This assumes that we did not reject in the interim already, in which case it
+#' should be 1 anyway.
 #'
 #' Note that if the correlation between some values is unkown, the result may be
 #' greater than 1, see also the examples
@@ -222,6 +224,8 @@ get_cer <- function(
     comp_t <- t[conn_indices]
     upper <- ifelse(
       #if the boundary is 1 or greater, we will reject, even if p == 1
+      #returning -Inf here corresponds to sure rejection, as in the end
+      # cer = 1 - p(upper, ...)
       #as.vector is necessary to remove attributes, else upper is not accepted
       #by pmvnorm
       as.vector(comp_bounds >= 1),

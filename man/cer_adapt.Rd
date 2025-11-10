@@ -28,7 +28,9 @@ Note that this can now be a vector with a different value for different hypothes
 \item{correlation}{adapted correlation matrix}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions}
+FWER with the new adaptions. If doing multiple adaptions, it is enough to
+adapt bounds only for the last one, or call \code{adapt_bounds()} manually
+after.}
 }
 \value{
 An object of class cer_design, with the adaptions applied.

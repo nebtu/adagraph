@@ -20,6 +20,13 @@ get_data_gen_2(
 
 \item{eff}{vector of effect sizes (i.e. means) of the different treatment
 endpoints (compared to the control)}
+
+\item{binary}{which treatment endpoints are binary endpoints (all control
+endpoints referenced by those are also automatically treated as binary)}
+
+\item{bin_con_resp}{response rate of the binary control groups}
+
+\item{bin_treat_resp}{response rate of the binary treatment groups}
 }
 \value{
 A function taking two arguments, see details

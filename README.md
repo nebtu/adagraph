@@ -40,7 +40,6 @@ design <- cer_design(
 
 design <- cer_interim_test(design, c(0.001, 0.02)) |>
   cer_drop_hypotheses(c(TRUE, FALSE)) |>
-  cer_adapt_bounds() |>
   cer_final_test(c(NA, 0.01))
 
 design

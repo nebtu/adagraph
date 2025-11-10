@@ -229,6 +229,10 @@ get_data_gen <- function(
 #' @param corr_treatment correlation matrix for all the treatment endpoints
 #' @param eff vector of effect sizes (i.e. means) of the different treatment
 #'  endpoints (compared to the control)
+#' @param binary which treatment endpoints are binary endpoints (all control
+#'   endpoints referenced by those are also automatically treated as binary)
+#' @param bin_con_resp response rate of the binary control groups
+#' @param bin_treat_resp response rate of the binary treatment groups
 #'
 #' @return A function taking two arguments, see details
 #'
