@@ -62,7 +62,9 @@ However, the time fraction is not adapted, this needs to be done manually if des
 
 <dt id="arg-adapt-bounds">adapt_bounds<a class="anchor" aria-label="anchor" href="#arg-adapt-bounds"></a></dt>
 <dd><p>Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions, see <code><a href="cer_adapt.html">cer_adapt()</a></code></p></dd>
+FWER with the new adaptions. If doing multiple adaptions, it is enough to
+adapt bounds only for the last one, or call <code>adapt_bounds()</code> manually
+after.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -133,7 +135,7 @@ FWER with the new adaptions, see <code><a href="cer_adapt.html">cer_adapt()</a><
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

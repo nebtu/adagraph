@@ -81,7 +81,9 @@ Note that this can now be a vector with a different value for different hypothes
 
 <dt id="arg-adapt-bounds">adapt_bounds<a class="anchor" aria-label="anchor" href="#arg-adapt-bounds"></a></dt>
 <dd><p>Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions</p></dd>
+FWER with the new adaptions. If doing multiple adaptions, it is enough to
+adapt bounds only for the last one, or call <code>adapt_bounds()</code> manually
+after.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -155,7 +157,7 @@ the <code>adapt_bounds()</code> function manually</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
