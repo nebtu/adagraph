@@ -161,15 +161,17 @@ get_data_gen <- function(
       ]
       bin_control <- array(NA, dim = dim(bin_control_cont))
       for (i in seq_len(dim(bin_control_cont)[2])) {
-        bin_control[, i, ] <- (bin_control_cont[, i, ] <
-          qnorm(bin_con_resp[bin_treatment_assoc[i]]))
+        bin_control[, i, ] <- (bin_control_cont[, i, ] >
+          qnorm(1 - bin_con_resp[bin_treatment_assoc[i]]))
+        #qnorm so correlation doesn't get mixed: high values of
+        #bin_control_cont -> high chance of sucess
       }
 
       bin_treatment_cont <- treatment[, binary, , drop = FALSE]
       bin_treatment <- array(NA, dim = dim(bin_treatment_cont))
       for (i in seq_len(dim(bin_treatment_cont)[2])) {
-        bin_treatment[, i, ] <- (bin_treatment_cont[, i, ] <
-          qnorm(bin_treat_resp[i]))
+        bin_treatment[, i, ] <- (bin_treatment_cont[, i, ] >
+          qnorm(1 - bin_treat_resp[i]))
       }
 
       bin_n_cont <- n_cont[treatment_assoc[binary]]
