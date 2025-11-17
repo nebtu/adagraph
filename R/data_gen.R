@@ -59,9 +59,10 @@ get_data_gen <- function(
 
   which_arms <- ifelse(is.na(n_treat), FALSE, n_treat > 0)
 
-  arms_used <- sum(which_arms)
-  binary <- intersect(binary, which(which_arms))
   eff[binary] <- 0
+  arms_used <- sum(which_arms)
+  bin_treat_resp <- bin_treat_resp[binary %in% which(which_arms)]
+  binary <- binary[binary %in% which(which_arms)]
 
   data_gen <- function(n, design) {
     p <- matrix(NA, nrow = n, ncol = arms)
