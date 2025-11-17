@@ -53,6 +53,10 @@ new_cer_design <- function(
 
   prep_alpha_1 <- alpha_spending_f(alpha, t)
   if (getOption("adagraph.use_future")) {
+    rlang::check_installed(
+      "future.apply",
+      reason = "Use `options(\"adagraph.use_future\" = FALSE)` if you don't want to use the future.apply package."
+    )
     boundslist <- future.apply::future_apply(
       design$weights_matrix,
       1,

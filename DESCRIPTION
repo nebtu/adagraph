@@ -23,17 +23,18 @@ Imports:
     gMCPLite,
     mvtnorm,
     rlang,
-    future.apply,
     memoise
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Suggests: 
+    future.apply,
     knitr,
     quarto,
     testthat (>= 3.0.0),
-    matrixStats
+    matrixStats,
+    withr
 Config/testthat/edition: 3
 VignetteBuilder: quarto
 URL: https://nebtu.github.io/adagraph/

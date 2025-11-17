@@ -129,6 +129,10 @@ sim_trial <- function(
   # or map_dfr from purrr would work or pre-allocating and filling
   # the dataframe if performance is an issue, but then how to parallelize?
   if (getOption("adagraph.use_future")) {
+    rlang::check_installed(
+      "future.apply",
+      reason = "Use `options(\"adagraph.use_future\" = FALSE)` if you don't want to use the future.apply package."
+    )
     results <- do.call(
       rbind,
       future.apply::future_lapply(
