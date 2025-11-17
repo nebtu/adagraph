@@ -1,3 +1,17 @@
+local_future_plan <- function(strategy, ..., .local_envir = parent.frame()) {
+  old_plan <- future::plan()
+  withr::local_options(
+    list("adagraph.use_future" = TRUE),
+    .local_envir = .local_envir
+  )
+
+  withr::defer(
+    future::plan(old_plan)
+  )
+
+  future::plan(strategy, ...)
+}
+
 make_example_design <- function() {
   #=======
   m <- rbind(

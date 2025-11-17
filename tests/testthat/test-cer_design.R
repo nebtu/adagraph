@@ -16,7 +16,7 @@ test_that("single hypothesis works", {
   #expect_equal(unname(design$bounds_2), cbind(???))
 })
 
-test_that("Example from paper gives correct bounds", {
+test_paper_example <- function() {
   design <- make_example_design()
 
   hyp_bound_1_pairs <- list(
@@ -68,6 +68,23 @@ test_that("Example from paper gives correct bounds", {
     hyp <- paste(design$hyp_matrix[i, ], collapse = ",")
     expect_equal(round(design$bounds_2[i, ], 4), hyp_bound_2_pairs[[hyp]])
   }
+}
+
+test_that("Example from paper gives correct bounds", {
+  test_paper_example()
+})
+
+test_that("Using future for cer design", {
+  local_future_plan(future::sequential)
+
+  test_paper_example()
+})
+
+test_that("Using future in parallel for cer design", {
+  skip_on_cran()
+  local_future_plan(future::multisession)
+
+  test_paper_example()
 })
 
 test_that("Simple CER design works", {
