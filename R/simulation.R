@@ -138,13 +138,13 @@ sim_trial <- function(
       future.apply::future_lapply(
         seq_along(designs_interim),
         sim_second_stage,
-        # future.globals = c(
-        #   "designs_interim",
-        #   "runs2",
-        #   "adapt_rule",
-        #   "data_gen_2",
-        #   "include_designs"
-        # ),
+        future.globals = c(
+          "designs_interim",
+          "runs2",
+          "adapt_rule",
+          "data_gen_2",
+          "include_designs"
+        ),
         future.packages = "adagraph",
         future.seed = TRUE
       )

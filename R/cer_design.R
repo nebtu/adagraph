@@ -63,14 +63,14 @@ new_cer_design <- function(
       function(weights) {
         cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
       },
-      future.seed = TRUE
-      #future.globals = c(
-      #"correlation",
-      #"prep_alpha_1",
-      #"alpha",
-      #"t"
-      #),
-      #future.packages = "adagraph"
+      future.seed = TRUE,
+      future.globals = c(
+        "correlation",
+        "prep_alpha_1",
+        "alpha",
+        "t"
+      ),
+      future.packages = "adagraph"
     )
   } else {
     boundslist <- apply(
