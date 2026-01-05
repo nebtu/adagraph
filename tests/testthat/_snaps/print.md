@@ -154,7 +154,7 @@
     Overall p-values of the hypotheses are:
     [1] 0.200 0.011 0.500 0.030
     Hypotheses rejected: 
-    [1] 1 2 4
+    [1] 1 2
 
 # print.multiarm_cer_design produces stable output across lifecycle
 
