@@ -34,7 +34,8 @@ Suggests:
     quarto,
     testthat (>= 3.0.0),
     matrixStats,
-    withr
+    withr,
+    future
 Config/testthat/edition: 3
 VignetteBuilder: quarto
 URL: https://nebtu.github.io/adagraph/
