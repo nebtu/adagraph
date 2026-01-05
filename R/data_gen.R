@@ -251,12 +251,23 @@ get_data_gen_2 <- function(
   bin_treat_resp = NULL
 ) {
   data_gen_2 <- function(n, design) {
+    #n_cont_2 and n_treat_2 might not be set, and should then be calculated
+    #this happens in the same way as in multiarm_drop_arms()
+    if (any(!is.na(design$n_cont_2)) || any(!is.na(design$n_treat_2))) {
+      n_cont_2 <- design$n_cont_2
+      n_treat_2 <- design$n_treat_2
+    } else {
+      n_treat_1 <- floor(design$n_treat * design$ad_t)
+      n_cont_1 <- floor(design$n_controls * design$ad_t)
+      n_cont_2 <- design$n_controls - n_cont_1
+      n_treat_2 <- design$n_treatments - n_treat_1
+    }
     data_gen <- get_data_gen(
       corr_control = corr_control,
       corr_treatment = corr_treatment,
       eff = eff,
-      n_cont = design$n_cont_2,
-      n_treat = design$n_treat_2,
+      n_cont = n_cont_2,
+      n_treat = n_treat_2,
       binary = binary,
       bin_con_resp = bin_con_resp,
       bin_treat_resp = bin_treat_resp

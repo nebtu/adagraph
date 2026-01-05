@@ -71,7 +71,8 @@ cer_adapt <- function(
   }
   if (!is.null(time)) {
     design$ad_t <- time
-  } else if (is.null(design$ad_t)) {
+  } else if (is.null(design[["ad_t"]])) {
+    #matches ad_test_matrix else
     design$ad_t <- design$t
   }
   if (!is.null(correlation)) {
@@ -282,7 +283,7 @@ cer_adapt_bounds <- function(design) {
       correlation <- design$ad_correlation[I, I, drop = FALSE]
       p_values <- design$p_values_interim[I]
 
-      t <- design$ad_t
+      t <- design[["ad_t"]]
       if (length(t) == 1) {
         t <- rep(t, length(weights))
       }
