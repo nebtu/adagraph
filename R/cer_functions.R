@@ -222,13 +222,14 @@ get_cer <- function(
     comp_bounds <- bounds[conn_indices]
     comp_p_values <- p_values[conn_indices]
     comp_t <- t[conn_indices]
+    #if the boundary is 1 or greater, we will reject, even if p == 1
+    #similarly if p is already 0
+    #returning -Inf here corresponds to sure rejection, as in the end
+    #cer = 1 - p(upper, ...)
     upper <- ifelse(
-      #if the boundary is 1 or greater, we will reject, even if p == 1
-      #returning -Inf here corresponds to sure rejection, as in the end
-      # cer = 1 - p(upper, ...)
       #as.vector is necessary to remove attributes, else upper is not accepted
       #by pmvnorm
-      as.vector(comp_bounds >= 1),
+      as.vector(comp_bounds >= 1 | comp_p_values == 0),
       -Inf,
       (stats::qnorm(1 - pmin(1, comp_bounds)) -
         stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) /
