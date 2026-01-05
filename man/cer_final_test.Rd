@@ -4,12 +4,15 @@
 \alias{cer_final_test}
 \title{Test a cer design for early rejection of hypotheses and calculate the CER for adaptions}
 \usage{
-cer_final_test(design, p_values)
+cer_final_test(design, p_values, combined = TRUE)
 }
 \arguments{
 \item{design}{A cer_design object}
 
 \item{p_values}{A list of p-values for the hypotheses}
+
+\item{combined}{Are the p-values already the combination of the p-value of
+the first and second stage or just the raw values from the second stage}
 }
 \value{
 a cer_design object, which now also includes the rejection status of the hypotheses after the final test

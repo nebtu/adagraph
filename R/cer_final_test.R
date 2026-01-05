@@ -2,6 +2,8 @@
 #'
 #' @param design A cer_design object
 #' @param p_values A list of p-values for the hypotheses
+#' @param combined Are the p-values already the combination of the p-value of
+#' the first and second stage or just the raw values from the second stage
 #'
 #' @return a cer_design object, which now also includes the rejection status of the hypotheses after the final test
 #'@export
@@ -27,7 +29,8 @@
 #' design$rej
 cer_final_test <- function(
   design,
-  p_values
+  p_values,
+  combined = TRUE
 ) {
   if (!design$interim_test) {
     cli::cli_abort(
@@ -50,12 +53,22 @@ cer_final_test <- function(
   }
 
   #hypotheses which are no further tested can not be rejected
+  if (!combined) {
+    p_values <-
+      1 -
+      pnorm(
+        sqrt(design$ad_t) *
+          qnorm(1 - design$p_values_interim) +
+          sqrt(1 - design$ad_t) * qnorm(1 - p_values)
+      )
+  }
   p_values[is.na(p_values)] <- 1
   k <- attr(design, "k")
 
+  #print(design$ad_bounds_2)
   intersection_rej <- pmax(
     design$intersection_rej_interim,
-    matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0,
+    matrixStats::colMins(p_values - t(design$ad_bounds_2)) <= 0,
     na.rm = TRUE
   )
 
