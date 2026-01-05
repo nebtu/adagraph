@@ -6,7 +6,7 @@ CER for adaptions
 ## Usage
 
 ``` r
-cer_final_test(design, p_values)
+cer_final_test(design, p_values, combined = TRUE)
 ```
 
 ## Arguments
@@ -18,6 +18,11 @@ cer_final_test(design, p_values)
 - p_values:
 
   A list of p-values for the hypotheses
+
+- combined:
+
+  Are the p-values already the combination of the p-value of the first
+  and second stage or just the raw values from the second stage
 
 ## Value
 

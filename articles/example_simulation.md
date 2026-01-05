@@ -217,5 +217,5 @@ results.
 
 ``` r
 print(mean(data$rej_any))
-#> [1] 0.07
+#> [1] 0.03
 ```
