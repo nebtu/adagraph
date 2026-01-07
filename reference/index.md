@@ -23,6 +23,8 @@
   the CER for adaptions
 - [`cer_prep_bounds()`](https://nebtu.github.io/adagraph/reference/cer_prep_bounds.md)
   : Calculate bounds for preplanned test
+- [`check_consonance()`](https://nebtu.github.io/adagraph/reference/check_consonance.md)
+  : Check if a design is consonant
 - [`get_cer()`](https://nebtu.github.io/adagraph/reference/get_cer.md) :
   Get the Conditional Error Rate for a intersection of hypotheses
 - [`get_data_gen()`](https://nebtu.github.io/adagraph/reference/get_data_gen.md)
