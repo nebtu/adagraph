@@ -58,8 +58,8 @@ cer_final_test <- function(
       1 -
       pnorm(
         sqrt(design$ad_t) *
-          qnorm(1 - design$p_values_interim) +
-          sqrt(1 - design$ad_t) * qnorm(1 - p_values)
+          qnorm(design$p_values_interim, lower.tail = FALSE) +
+          sqrt(1 - design$ad_t) * qnorm(p_values, lower.tail = FALSE)
       )
   }
   p_values[is.na(p_values)] <- 1

@@ -231,12 +231,12 @@ get_cer <- function(
       #by pmvnorm
       as.vector(comp_bounds >= 1 | comp_p_values == 0),
       -Inf,
-      (stats::qnorm(1 - pmin(1, comp_bounds)) -
-        stats::qnorm(1 - comp_p_values) * sqrt(comp_t)) /
+      (stats::qnorm(pmin(1, comp_bounds), lower.tail = FALSE) -
+        stats::qnorm(comp_p_values, lower.tail = FALSE) * sqrt(comp_t)) /
         sqrt(1 - comp_t)
     )
     if (length(conn_indices) == 1) {
-      cer <- 1 - stats::pnorm(upper)
+      cer <- stats::pnorm(upper, lower.tail = FALSE)
     } else {
       comp_corr <- correlation[conn_indices, conn_indices]
       cer <- 1 -

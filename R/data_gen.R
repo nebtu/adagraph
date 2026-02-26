@@ -144,7 +144,7 @@ get_data_gen <- function(
 
           df <- n_arm_treat + n_arm_cont - 2
 
-          1 - pt(t, df = df)
+          pt(t, df = df, lower.tail = FALSE)
         }
       )
     }
@@ -201,7 +201,7 @@ get_data_gen <- function(
                 ((1 / n_arm_cont) + (1 / n_arm_treat))
             )
 
-          1 - ifelse(is.na(z), 0, pnorm(z))
+          ifelse(is.na(z), 1, pnorm(z, lower.tail = FALSE))
         }
       )
     }
