@@ -6,7 +6,7 @@
 #'
 #' @param design A cer_design object
 #' @param adapted Boolean, use the adapted or original values
-#' @param weights Boolean, if TRUE uses the weights instead of the actual
+#' @param use_weights Boolean, if TRUE uses the weights instead of the actual
 #'   bounds. This is the same when no correlation structure is used, and else
 #'   checks consonance of the counterfactual where the graph used is the same,
 #'   but no use of correlation structure is made
@@ -44,9 +44,9 @@ check_consonance <- function(
   design,
   adapted = design$adaptions,
   stage = "both",
-  weights = FALSE
+  use_weights = FALSE
 ) {
-  if (weights) {
+  if (use_weights) {
     if (adapted) {
       bounds <- design$ad_weights_matrix
     } else {

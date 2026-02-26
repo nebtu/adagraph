@@ -7,7 +7,10 @@ test_that("basic functionality", {
     check_consonance(design, stage = "interim"),
     TRUE
   )
-  expect_equal(check_consonance(design, adapted = FALSE, weights = TRUE), TRUE)
+  expect_equal(
+    check_consonance(design, adapted = FALSE, use_weights = TRUE),
+    TRUE
+  )
   expect_equal(
     .consonance_intersec(design$weights_matrix, design$hyp_matrix),
     rep(TRUE, 15)
@@ -34,7 +37,7 @@ test_that("basic functionality", {
     FALSE
   )
   expect_equal(
-    check_consonance(design_adj, adapted = TRUE, weights = TRUE),
+    check_consonance(design_adj, adapted = TRUE, use_weights = TRUE),
     TRUE
   )
 })
