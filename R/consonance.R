@@ -43,9 +43,25 @@
 check_consonance <- function(
   design,
   adapted = design$adaptions,
-  stage = "both",
+  stage = c("both", "interim", "final"),
   use_weights = FALSE
 ) {
+  stage <- rlang::arg_match(stage)
+  if (!rlang::is_bool(use_weights)) {
+    cli::cli_abort(
+      "Argument `use_weigths` must be boolean, either TRUE or FALSE.",
+      "i" = "`use_weights` was {use_weights}.",
+      class = "adagraph_invalid_argument"
+    )
+  }
+  if (!design$adaptions && adapted) {
+    cli::cli_abort(
+      "No adaptions present",
+      "i" = "Design was not adapted, can not perform consonance check on adapted design",
+      class = "adagraph_no_adaption"
+    )
+  }
+
   if (use_weights) {
     if (adapted) {
       bounds <- design$ad_weights_matrix

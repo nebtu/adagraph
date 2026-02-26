@@ -41,3 +41,22 @@ test_that("basic functionality", {
     TRUE
   )
 })
+
+test_that("validity testing", {
+  design <- make_example_design()
+
+  expect_error(
+    check_consonance(design, adapted = TRUE),
+    class = "adagraph_no_adaption"
+  )
+
+  expect_error(
+    check_consonance(design, stage = "test"),
+    class = "rlang_error"
+  )
+
+  expect_error(
+    check_consonance(design, use_weights = "test"),
+    class = "adagraph_invalid_argument"
+  )
+})
