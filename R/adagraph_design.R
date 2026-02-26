@@ -112,46 +112,75 @@ validate_adagraph_design_params <- function(
   if (!is.matrix(correlation)) {
     cli::cli_abort(
       "correlation has to be a matrix.",
-      class = "invalid_argument_correlation"
+      class = "adagraph_invalid_argument_correlation",
+      call = call
     )
   } else if (dim(correlation)[1] != dim(correlation)[2]) {
     cli::cli_abort(
-      "correlation has to be a quadratic matrix.",
-      "x" = "correlation has dimenstion {dim(correlation)[1]} x {dim(correlation)[2]}.",
-      class = "invalid_argument_correlation"
+      c(
+        "correlation has to be a quadratic matrix.",
+        "x" = "correlation has dimension {dim(correlation)[1]} x {dim(correlation)[2]}."
+      ),
+      class = "adagraph_invalid_argument_correlation",
+      call = call
     )
   }
   k <- dim(correlation)[1]
-  if (length(weights) != k) {
+  if (!is.numeric(weights)) {
     cli::cli_abort(
-      "Need exactly one weight per hypothesis.",
-      "i" = "There are {k} hypotheses.",
-      "x" = "You suppplied {lenght(weights) weights}.",
-      class = "invalid_argument_weights"
+      c(
+        "{.var weight} needs to be a numeric",
+        "x" = "{.var weight} is {.obj_type_friendly {weight}}"
+      ),
+      class = "adagraph_invalid_argument_weights",
+      call = call
     )
-  } else if (!is.numeric(alpha)) {
+  } else if (length(weights) != k) {
     cli::cli_abort(
-      "alpha has to be numeric.",
-      "x" = "alpha is {typeof(alpha)}.",
-      class = "invalid_argument_alpha"
+      c(
+        "Need exactly one weight per hypothesis.",
+        "i" = "There are {k} hypotheses.",
+        "x" = "You suppplied {length(weights)} weights."
+      ),
+      class = "adagraph_invalid_argument_weights",
+      call = call
     )
-  } else if (alpha < 0 | alpha > 1) {
+  } else if (!rlang::is_scalar_double(alpha)) {
     cli::cli_abort(
-      "alpha has to be between 0 and 1",
-      "x" = "alpha is {alpha}.",
-      class = "invalid_argument_alpha"
+      c(
+        "{.var alpha} has to be numeric.",
+        "x" = "{.var alpha} is {.obj_type_friendly {alpha}}."
+      ),
+      class = "adagraph_invalid_argument_alpha",
+      call = call
+    )
+  } else if (alpha < 0 || alpha > 1) {
+    cli::cli_abort(
+      c(
+        "{.var alpha} has to be between 0 and 1",
+        "x" = "{.var alpha} is {alpha}."
+      ),
+      class = "adagraph_invalid_argument_alpha",
+      call = call
     )
   } else if (!is.matrix(test_m)) {
     cli::cli_abort(
-      "test_m has to be a matrix.",
-      class = "invalid_argument_test_m"
+      c(
+        "{.var test_m} has to be a matrix.",
+        "x" = "{.var test_m} is {.obj_type_friendly {test_m}}"
+      ),
+      class = "adagraph_invalid_argument_test_m",
+      call = call
     )
-  } else if (dim(test_m)[1] != dim(test_m)[2] | dim(test_m)[1] != k) {
+  } else if (dim(test_m)[1] != dim(test_m)[2] || dim(test_m)[1] != k) {
     cli::cli_abort(
-      "test_m must be a {k}x{k} matrix matching the number of hypotheses",
-      "i" = "There are {k} Hypotheses",
-      "x" = "test_m has dimenstion {nrow(correlation)} x {ncol(correlation)}.",
-      class = "invalid_argument_test_m"
+      c(
+        "{.var test_m} must be a {k}x{k} matrix matching the number of hypotheses",
+        "i" = "There are {k} Hypotheses",
+        "x" = "{.var test_m} has dimension {nrow(correlation)} x {ncol(correlation)}."
+      ),
+      class = "adagraph_invalid_argument_test_m",
+      call = call
     )
   }
   #TODO: test that weights sum to 1 (or less than one?)

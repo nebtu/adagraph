@@ -33,7 +33,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       test_m = test_m
     ),
-    class = "invalid_argument_correlation"
+    class = "adagraph_invalid_argument_correlation"
   )
   expect_error(
     adagraph_design(
@@ -42,7 +42,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       test_m = test_m
     ),
-    class = "invalid_argument_correlation"
+    class = "adagraph_invalid_argument_correlation"
   )
   expect_error(
     adagraph_design(
@@ -51,7 +51,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       test_m = test_m
     ),
-    class = "invalid_argument_weights"
+    class = "adagraph_invalid_argument_weights"
   )
   expect_error(
     adagraph_design(
@@ -60,7 +60,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = "0.0025",
       test_m = test_m
     ),
-    class = "invalid_argument_alpha"
+    class = "adagraph_invalid_argument_alpha"
   )
   expect_error(
     adagraph_design(
@@ -69,7 +69,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = 1.0025,
       test_m = test_m
     ),
-    class = "invalid_argument_alpha"
+    class = "adagraph_invalid_argument_alpha"
   )
   expect_error(
     adagraph_design(
@@ -78,7 +78,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       test_m = "test_m"
     ),
-    class = "invalid_argument_test_m"
+    class = "adagraph_invalid_argument_test_m"
   )
   expect_error(
     adagraph_design(
@@ -87,6 +87,6 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       test_m = rbind(c(1, 0, 0), c(1, 0, 0), c(1, 0, 0))
     ),
-    class = "invalid_argument_test_m"
+    class = "adagraph_invalid_argument_test_m"
   )
 })

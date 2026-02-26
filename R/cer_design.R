@@ -107,30 +107,38 @@ validate_cer_design_params <- function(
     test_m = test_m,
     call = call
   )
-  if (!is.numeric(t)) {
+  if (!rlang::is_scalar_double(t)) {
     cli::cli_abort(
-      "t has to be numeric.",
-      "x" = "t is {typeof(t)}.",
-      class = "invalid_argument_t"
+      c(
+        "{.var t} has to be numeric of length 1.",
+        "x" = "{.var t} is {t}, with length {length(t)}",
+        "i" = "Different time fractions for different hypotheses are only supported for adaptions, not for the initial design."
+      ),
+      class = "adagraph_invalid_argument_t",
+      call = call
     )
-  } else if (length(t) > 1) {
+  } else if (t < 0 || t > 1) {
     cli::cli_abort(
-      "t has to have length 1.",
-      "x" = "t is {t}, with length {length(t)}.",
-      "i" = "Different time fractions for different hypotheses are only supported for adaptions, not for the initial design.",
-      class = "invalid_argument_t"
+      c(
+        "{.var t} has to be between 0 and 1",
+        "x" = "t is {t}."
+      ),
+      class = "adagraph_invalid_argument_t",
+      call = call
     )
-  } else if (t < 0 | t > 1) {
+  } else if (!rlang::is_bool(seq_bonf)) {
     cli::cli_abort(
-      "t has to be between 0 and 1",
-      "x" = "t is {t}.",
-      class = "invalid_argument_t"
+      "{.var seq_bonf} has to be a boolean of length one.",
+      "x" = "{.var seq_bonf}` is {.obj_type_friendly {seq_bonf}}.",
+      class = "adagraph_invalid_argument_seq_bonf",
+      call = call
     )
-  } else if (!is.logical(seq_bonf)) {
+  } else if (!rlang::is_function(alpha_spending_f)) {
     cli::cli_abort(
-      "seq_bonf has to be a boolean.",
-      "x" = "seq_bonf is {typeof(seq_bonf)}.",
-      class = "invalid_argument_seq_bonf"
+      "{.var alpha_spending_f} has to be a function",
+      "x" = "`seq_bonf` is {.obj_type_friendly {alpa_spending_f}}.",
+      class = "adagraph_invalid_argument_alpha_spending_f",
+      call = call
     )
   }
 }
