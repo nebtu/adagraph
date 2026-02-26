@@ -68,7 +68,8 @@ cer_final_test <- function(
   #print(design$ad_bounds_2)
   intersection_rej <- pmax(
     design$intersection_rej_interim,
-    matrixStats::colMins(p_values - t(design$ad_bounds_2)) <= 0,
+    matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0,
+    #use strictly < 0 for edge case of p value exactly 0, else everything get's rejected
     na.rm = TRUE
   )
 
