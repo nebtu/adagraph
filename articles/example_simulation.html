@@ -108,46 +108,11 @@
 <span><span class="va">design</span></span>
 <span><span class="co">#&gt; A Multi-arm Design object, for testing 8 hypotheses at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Inital design specification ─────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; There are 2 control groups for a total of 8 hypotheses.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Hypotheses weights</span></span>
-<span><span class="co">#&gt; [1] 0.25 0.25 0.25 0.25 0.00 0.00 0.00 0.00</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Graph Transition Matrix</span></span>
-<span><span class="co">#&gt;          [,1]       [,2]       [,3]       [,4] [,5] [,6] [,7] [,8]</span></span>
-<span><span class="co">#&gt; H1 0.00000000 0.08333333 0.08333333 0.08333333 0.75 0.00 0.00 0.00</span></span>
-<span><span class="co">#&gt; H2 0.08333333 0.00000000 0.08333333 0.08333333 0.00 0.75 0.00 0.00</span></span>
-<span><span class="co">#&gt; H3 0.08333333 0.08333333 0.00000000 0.08333333 0.00 0.00 0.75 0.00</span></span>
-<span><span class="co">#&gt; H4 0.08333333 0.08333333 0.08333333 0.00000000 0.00 0.00 0.00 0.75</span></span>
-<span><span class="co">#&gt; H5 0.00000000 0.33333333 0.33333333 0.33333333 0.00 0.00 0.00 0.00</span></span>
-<span><span class="co">#&gt; H6 0.33333333 0.00000000 0.33333333 0.33333333 0.00 0.00 0.00 0.00</span></span>
-<span><span class="co">#&gt; H7 0.33333333 0.33333333 0.00000000 0.33333333 0.00 0.00 0.00 0.00</span></span>
-<span><span class="co">#&gt; H8 0.33333333 0.33333333 0.33333333 0.00000000 0.00 0.00 0.00 0.00</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Correlation for parametric test</span></span>
-<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
-<span><span class="co">#&gt; [1,]  1.0  0.5  0.5  0.5   NA   NA   NA   NA</span></span>
-<span><span class="co">#&gt; [2,]  0.5  1.0  0.5  0.5   NA   NA   NA   NA</span></span>
-<span><span class="co">#&gt; [3,]  0.5  0.5  1.0  0.5   NA   NA   NA   NA</span></span>
-<span><span class="co">#&gt; [4,]  0.5  0.5  0.5  1.0   NA   NA   NA   NA</span></span>
-<span><span class="co">#&gt; [5,]   NA   NA   NA   NA  1.0  0.5  0.5  0.5</span></span>
-<span><span class="co">#&gt; [6,]   NA   NA   NA   NA  0.5  1.0  0.5  0.5</span></span>
-<span><span class="co">#&gt; [7,]   NA   NA   NA   NA  0.5  0.5  1.0  0.5</span></span>
-<span><span class="co">#&gt; [8,]   NA   NA   NA   NA  0.5  0.5  0.5  1.0</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of control groups:</span></span>
-<span><span class="co">#&gt; [1] 2</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Treatment-to-control assignments (per treatment arm):</span></span>
-<span><span class="co">#&gt; [1] 1 1 1 1 2 2 2 2</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Planned sample sizes per control group:</span></span>
-<span><span class="co">#&gt; [1] 100 100</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Planned sample sizes per treatment group:</span></span>
-<span><span class="co">#&gt; [1] 100 100 100 100 100 100 100 100</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Interim test is planned at time fraction 0.5</span></span></code></pre></div>
+<span><span class="co">#&gt; ── No interim test has been performed yet. ─────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── No adaptions have been performed yet ────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
 </div>
 <p>Next, we need to specify how we want the data used in the simulation to be specified. For this, we need a function that takes a number of trials to simulate and the design object and returns the p-values for the simulation. While it is possible to write such a function by hand, for this case we can use the provided <code><a href="../reference/get_data_gen.html">get_data_gen()</a></code> and <code><a href="../reference/get_data_gen_2.html">get_data_gen_2()</a></code> functions. We first define the correlation between the different endpoints of the same group and the effectiveness of the treatments. Here, we want assume that none of the treatments have an effect, so we can estimate the familywise error rate (FWER).</p>
 <div class="cell">
@@ -238,7 +203,7 @@
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">rej_any</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.03</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.05</span></span></code></pre></div>
 </div>
 
 

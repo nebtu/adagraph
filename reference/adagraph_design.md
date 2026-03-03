@@ -50,19 +50,7 @@ design <- adagraph_design(
 design
 #> A Adagraph Design object, for testing 2 hypotheses at FWER 0.05.
 #> 
-#> ── Inital design specification ─────────────────────────────────────────────────
-#> 
-#> Hypotheses weights
-#> [1] 0.6666667 0.3333333
-#> 
-#> Graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    1
-#> [2,]    1    0
-#> 
-#> Correlation for parametric test
-#>    [,1] [,2]
-#> H1    1   NA
-#> H2   NA    1
-#> 
+#> ── No interim test has been performed yet. ─────────────────────────────────────
+#> ── No adaptions have been performed yet ────────────────────────────────────────
+#> ── No final test has been performed yet ────────────────────────────────────────
 ```

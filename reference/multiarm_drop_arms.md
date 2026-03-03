@@ -77,66 +77,13 @@ design <- design |> multiarm_drop_arms(1)
 design
 #> A Multi-arm Design object, for testing 2 hypotheses at FWER 0.05.
 #> 
-#> ── Inital design specification ─────────────────────────────────────────────────
+#> There are 1 control groups for a total of 2 hypotheses.
 #> 
-#> Hypotheses weights
-#> [1] 0.5 0.5
-#> 
-#> Graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    1
-#> [2,]    1    0
-#> 
-#> Correlation for parametric test
-#>      [,1] [,2]
-#> [1,]  1.0  0.5
-#> [2,]  0.5  1.0
-#> 
-#> Number of control groups:
-#> [1] 1
-#> 
-#> Treatment-to-control assignments (per treatment arm):
-#> [1] 1 1
-#> 
-#> Planned sample sizes per control group:
-#> [1] 50
-#> 
-#> Planned sample sizes per treatment group:
-#> [1] 50 50
-#> 
-#> Interim test is planned at time fraction 0.5
-#> 
-#> ── Interim test result ─────────────────────────────────────────────────────────
-#> 
-#> P-values of interim test are:
-#> [1] 0.10 0.02
-#> No Hypotheses were rejected at the interim
-#> 
-#> ── Adaptions from inital specification ─────────────────────────────────────────
-#> 
-#> New hypotheses weights
-#> [1] 0 1
-#> 
-#> New graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    0
-#> [2,]    0    0
-#> 
-#> New correlation for parametric test
-#>      [,1] [,2]
-#> [1,]    1    0
-#> [2,]    0    1
-#> 
-#> Second-stage sample sizes (controls):
-#> [1] 25
-#> 
-#> Second-stage sample sizes (treatments):
-#> [1]  0 25
-#> 
-#> Total planned sample sizes after adaptation (controls):
-#> [1] 50
-#> 
-#> Total planned sample sizes after adaptation (treatments):
-#> [1] 25 50
-#> 
+#> ── An interim test has been performed. ─────────────────────────────────────────
+#> No Hypotheses were rejected at the interim.
+#> ── The following characteristics have been adapted: ────────────────────────────
+#> • Hypotheses weights
+#> • Graph Transition Matrix
+#> • Correlation for parametric test
+#> ── No final test has been performed yet ────────────────────────────────────────
 ```

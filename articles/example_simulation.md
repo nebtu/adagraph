@@ -50,46 +50,11 @@ design <- multiarm_cer_design(
 design
 #> A Multi-arm Design object, for testing 8 hypotheses at FWER 0.025.
 #> 
-#> ── Inital design specification ─────────────────────────────────────────────────
+#> There are 2 control groups for a total of 8 hypotheses.
 #> 
-#> Hypotheses weights
-#> [1] 0.25 0.25 0.25 0.25 0.00 0.00 0.00 0.00
-#> 
-#> Graph Transition Matrix
-#>          [,1]       [,2]       [,3]       [,4] [,5] [,6] [,7] [,8]
-#> H1 0.00000000 0.08333333 0.08333333 0.08333333 0.75 0.00 0.00 0.00
-#> H2 0.08333333 0.00000000 0.08333333 0.08333333 0.00 0.75 0.00 0.00
-#> H3 0.08333333 0.08333333 0.00000000 0.08333333 0.00 0.00 0.75 0.00
-#> H4 0.08333333 0.08333333 0.08333333 0.00000000 0.00 0.00 0.00 0.75
-#> H5 0.00000000 0.33333333 0.33333333 0.33333333 0.00 0.00 0.00 0.00
-#> H6 0.33333333 0.00000000 0.33333333 0.33333333 0.00 0.00 0.00 0.00
-#> H7 0.33333333 0.33333333 0.00000000 0.33333333 0.00 0.00 0.00 0.00
-#> H8 0.33333333 0.33333333 0.33333333 0.00000000 0.00 0.00 0.00 0.00
-#> 
-#> Correlation for parametric test
-#>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
-#> [1,]  1.0  0.5  0.5  0.5   NA   NA   NA   NA
-#> [2,]  0.5  1.0  0.5  0.5   NA   NA   NA   NA
-#> [3,]  0.5  0.5  1.0  0.5   NA   NA   NA   NA
-#> [4,]  0.5  0.5  0.5  1.0   NA   NA   NA   NA
-#> [5,]   NA   NA   NA   NA  1.0  0.5  0.5  0.5
-#> [6,]   NA   NA   NA   NA  0.5  1.0  0.5  0.5
-#> [7,]   NA   NA   NA   NA  0.5  0.5  1.0  0.5
-#> [8,]   NA   NA   NA   NA  0.5  0.5  0.5  1.0
-#> 
-#> Number of control groups:
-#> [1] 2
-#> 
-#> Treatment-to-control assignments (per treatment arm):
-#> [1] 1 1 1 1 2 2 2 2
-#> 
-#> Planned sample sizes per control group:
-#> [1] 100 100
-#> 
-#> Planned sample sizes per treatment group:
-#> [1] 100 100 100 100 100 100 100 100
-#> 
-#> Interim test is planned at time fraction 0.5
+#> ── No interim test has been performed yet. ─────────────────────────────────────
+#> ── No adaptions have been performed yet ────────────────────────────────────────
+#> ── No final test has been performed yet ────────────────────────────────────────
 ```
 
 Next, we need to specify how we want the data used in the simulation to
@@ -217,5 +182,5 @@ results.
 
 ``` r
 print(mean(data$rej_any))
-#> [1] 0.03
+#> [1] 0.05
 ```

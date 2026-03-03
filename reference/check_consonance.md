@@ -10,8 +10,8 @@ structure, or after some adaption.
 check_consonance(
   design,
   adapted = design$adaptions,
-  stage = "both",
-  weights = FALSE
+  stage = c("both", "interim", "final"),
+  use_weights = FALSE
 )
 ```
 
@@ -30,7 +30,7 @@ check_consonance(
   For which stage should the consonance be tested? Can be one of "both",
   "interim", "final". No effect if weights = TRUE.
 
-- weights:
+- use_weights:
 
   Boolean, if TRUE uses the weights instead of the actual bounds. This
   is the same when no correlation structure is used, and else checks

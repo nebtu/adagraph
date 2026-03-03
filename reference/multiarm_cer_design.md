@@ -95,33 +95,9 @@ design <- multiarm_cer_design(
 design
 #> A Multi-arm Design object, for testing 2 hypotheses at FWER 0.05.
 #> 
-#> ── Inital design specification ─────────────────────────────────────────────────
+#> There are 1 control groups for a total of 2 hypotheses.
 #> 
-#> Hypotheses weights
-#> [1] 0.5 0.5
-#> 
-#> Graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    1
-#> [2,]    1    0
-#> 
-#> Correlation for parametric test
-#>      [,1] [,2]
-#> [1,]  1.0  0.5
-#> [2,]  0.5  1.0
-#> 
-#> Number of control groups:
-#> [1] 1
-#> 
-#> Treatment-to-control assignments (per treatment arm):
-#> [1] 1 1
-#> 
-#> Planned sample sizes per control group:
-#> [1] 50
-#> 
-#> Planned sample sizes per treatment group:
-#> [1] 50 50
-#> 
-#> Interim test is planned at time fraction 0.5
-#> 
+#> ── No interim test has been performed yet. ─────────────────────────────────────
+#> ── No adaptions have been performed yet ────────────────────────────────────────
+#> ── No final test has been performed yet ────────────────────────────────────────
 ```

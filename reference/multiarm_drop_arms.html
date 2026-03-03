@@ -115,68 +115,15 @@ the first stage n was as planned accoring to t.</p>
 <span class="r-in"><span><span class="va">design</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A Multi-arm Design object, for testing 2 hypotheses at FWER 0.05.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── Inital design specification ─────────────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> There are 1 control groups for a total of 2 hypotheses.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Hypotheses weights</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Graph Transition Matrix</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    1    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Correlation for parametric test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.5  1.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of control groups:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Treatment-to-control assignments (per treatment arm):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Planned sample sizes per control group:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Planned sample sizes per treatment group:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50 50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Interim test is planned at time fraction 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── Interim test result ─────────────────────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P-values of interim test are:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.10 0.02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> No Hypotheses were rejected at the interim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ── Adaptions from inital specification ─────────────────────────────────────────</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> New hypotheses weights</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> New graph Transition Matrix</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> New correlation for parametric test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    1    0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0    1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Second-stage sample sizes (controls):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Second-stage sample sizes (treatments):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0 25</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total planned sample sizes after adaptation (controls):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total planned sample sizes after adaptation (treatments):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 25 50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── An interim test has been performed. ─────────────────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> No Hypotheses were rejected at the interim.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── The following characteristics have been adapted: ────────────────────────────</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Hypotheses weights</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Graph Transition Matrix</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Correlation for parametric test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ── No final test has been performed yet ────────────────────────────────────────</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
