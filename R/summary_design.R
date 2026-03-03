@@ -1,5 +1,5 @@
 #' @export
-summary.cer_design <- function(x, ...) {
+summary.adagraph_design <- function(x, ...) {
   summary_list <- list(
     alpha = x[["alpha"]],
     weights = x[["weights"]],
@@ -49,6 +49,15 @@ summary.cer_design <- function(x, ...) {
 }
 
 #' @export
+summary.cer_design <- function(x, ...) {
+  summary_list <- summary.adagraph_design(x)
+
+  class(summary_list) <- c("summary.cer_design", class(summary_list))
+
+  summary_list
+}
+
+#' @export
 summary.multiarm_cer_design <- function(x, ...) {
   summary_list <- summary.cer_design(x)
 
@@ -74,7 +83,7 @@ summary.multiarm_cer_design <- function(x, ...) {
     )
   }
 
-  class(summary_list) <- c("summary.multiarm_cer_design", "summary.cer_design")
+  class(summary_list) <- c("summary.multiarm_cer_design", class(summary_list))
 
   summary_list
 }
@@ -203,6 +212,10 @@ print_design_summary <- function(x, header_label, hooks = list()) {
   invisible(x)
 }
 
+#' @export
+print.summary.adagraph_design <- function(x, ...) {
+  print_design_summary(x, header_label = "Adagraph")
+}
 
 #' @export
 print.summary.cer_design <- function(x, ...) {

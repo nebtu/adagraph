@@ -7,8 +7,8 @@
 check_consonance(
   design,
   adapted = design$adaptions,
-  stage = "both",
-  weights = FALSE
+  stage = c("both", "interim", "final"),
+  use_weights = FALSE
 )
 }
 \arguments{
@@ -19,7 +19,7 @@ check_consonance(
 \item{stage}{For which stage should the consonance be tested? Can be one of
 "both", "interim", "final". No effect if weights = TRUE.}
 
-\item{weights}{Boolean, if TRUE uses the weights instead of the actual
+\item{use_weights}{Boolean, if TRUE uses the weights instead of the actual
 bounds. This is the same when no correlation structure is used, and else
 checks consonance of the counterfactual where the graph used is the same,
 but no use of correlation structure is made}
