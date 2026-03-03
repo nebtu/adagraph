@@ -2,7 +2,7 @@
 #'
 #' For documentation on how to generate cer_designs, see `cer_design()`.
 #'
-#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf Same as
+#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf,names Same as
 #' for `cer_design()`
 #' @param class character, makes it possible to add subbclasses
 #' @param ... additional parameters, not used
@@ -37,6 +37,7 @@ new_cer_design <- function(
   alpha_spending_f = function() {},
   t = double(),
   seq_bonf = TRUE,
+  names = NULL,
   ...,
   class = character()
 ) {
@@ -83,7 +84,9 @@ new_cer_design <- function(
   }
 
   design$bounds_1 <- t(sapply(boundslist, `[[`, "bounds_1"))
+  colnames(design$bounds_1) <- names
   design$bounds_2 <- t(sapply(boundslist, `[[`, "bounds_2"))
+  colnames(design$bounds_2) <- names
   design$cJ1 <- t(sapply(boundslist, `[[`, "cJ1"))
   design$cJ2 <- t(sapply(boundslist, `[[`, "cJ2"))
 
@@ -91,13 +94,14 @@ new_cer_design <- function(
 }
 
 validate_cer_design_params <- function(
-  correlation = correlation,
-  weights = weights,
-  alpha = alpha,
-  test_m = test_m,
-  alpha_spending_f = alpha_spending_f,
-  t = t,
-  seq_bonf = seq_bonf,
+  correlation = matrix(),
+  weights = double(),
+  alpha = double(),
+  test_m = matrix(),
+  alpha_spending_f = function() {},
+  t = double(),
+  seq_bonf = TRUE,
+  names = NULL,
   call = rlang::caller_env()
 ) {
   validate_adagraph_design_params(
@@ -105,7 +109,8 @@ validate_cer_design_params <- function(
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    call = call
+    call = call,
+    names = names
   )
   if (!rlang::is_scalar_double(t)) {
     cli::cli_abort(
@@ -157,6 +162,11 @@ validate_cer_design_params <- function(
 #' @param alpha_spending_f alpha spending function, taking parameters alpha (for overall spent alpha) and t (information fraction at interim test)
 #' @param t numeric between 0 and 1 specifing the planned time fraction for the interim test
 #' @param seq_bonf to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1
+#' @param names optional names for the hypotheses
+#'
+#' If no names are provided in the `names` argument, the names of the `weights`
+#' arguments are used. If that is also unweighted, the names `H1`, `H2`, etc. are
+#' used.
 #'
 #' @return An object of class `cer_design`
 #' @export
@@ -181,7 +191,8 @@ cer_design <- function(
   test_m = matrix(),
   alpha_spending_f = function() {},
   t = double(),
-  seq_bonf = TRUE
+  seq_bonf = TRUE,
+  names = NULL
 ) {
   validate_cer_design_params(
     correlation = correlation,
@@ -190,7 +201,8 @@ cer_design <- function(
     test_m = test_m,
     alpha_spending_f = alpha_spending_f,
     t = t,
-    seq_bonf = seq_bonf
+    seq_bonf = seq_bonf,
+    names = names
   )
 
   new_cer_design(
@@ -200,6 +212,7 @@ cer_design <- function(
     test_m = test_m,
     alpha_spending_f = alpha_spending_f,
     t = t,
-    seq_bonf = seq_bonf
+    seq_bonf = seq_bonf,
+    names = names
   )
 }

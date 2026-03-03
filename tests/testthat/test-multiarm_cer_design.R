@@ -33,14 +33,14 @@ test_that("Uncorrelated multiarm design works (different controls)", {
   expect_equal(design$treatment_assoc, treatment_assoc)
   expect_equal(design$n_controls, rep(n_controls, controls))
   expect_equal(design$n_treatments, rep(n_treatments, length(treatment_assoc)))
-  expect_equal(design$weights, weights)
+  expect_equal(unname(design$weights), weights)
   expect_equal(design$alpha, alpha)
-  expect_equal(design$test_m, test_m)
+  expect_equal(unname(design$test_m), test_m)
   expect_equal(design$t, t)
 
   # Check correlation matrix - should be uncorrelated (NA off-diagonal)
   expected_correlation <- matrix(c(1, NA, NA, 1), nrow = 2, ncol = 2)
-  expect_equal(design$correlation, expected_correlation)
+  expect_equal(unname(design$correlation), expected_correlation)
 
   # Check that bounds matrices exist and have correct dimensions
   expect_true(is.matrix(design$bounds_1))
@@ -86,7 +86,11 @@ test_that("Correlated multiarm design works (same control)", {
 
   # Check correlation matrix - should be correlated with correlation = 1/2
   expected_correlation <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)
-  expect_equal(design$correlation, expected_correlation, tolerance = 1e-10)
+  expect_equal(
+    unname(design$correlation),
+    expected_correlation,
+    tolerance = 1e-10
+  )
 })
 
 test_that("Different sample sizes work correctly", {
@@ -119,7 +123,7 @@ test_that("Different sample sizes work correctly", {
 
   # Check that correlation matrix is still uncorrelated (different controls)
   expected_correlation <- matrix(c(1, NA, NA, 1), nrow = 2, ncol = 2)
-  expect_equal(design$correlation, expected_correlation)
+  expect_equal(unname(design$correlation), expected_correlation)
 })
 
 test_that("Complex correlated design with multiple treatments per control", {
@@ -409,7 +413,7 @@ test_that("handle low p-values", {
       n_treat_2 = c(NA, NA, 100, 2000)
     )
 
-  expect_equal(design_ad$ad_weights, c(0, 0, 0.5, 0.5))
+  expect_equal(unname(design_ad$ad_weights), c(0, 0, 0.5, 0.5))
 
   #NOTE: Here we can not reject even with p value 0 because of floating point
   #arithmetic reasons. A more accurate calculation of the bound would be
@@ -417,4 +421,3 @@ test_that("handle low p-values", {
   #work. Changing the tolerance from the default should change that
   #design_ad |> cer_final_test(c(NA, NA, 0, 0.5))
 })
-

@@ -96,6 +96,7 @@ cer_adapt_bounds <- function(design) {
     #ifelse since 0 * Inf should be 0
     ifelse(w == 0, 0, ad_cJ2 * w)
   })
+  colnames(design$ad_bounds_2) <- colnames(design$bounds_2)
   design$ad_bounds_outdated <- FALSE
 
   design

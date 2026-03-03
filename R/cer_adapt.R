@@ -61,11 +61,13 @@ cer_adapt <- function(
   }
   if (!is.null(weights)) {
     design$ad_weights <- weights
+    names(design$ad_weights) <- names(design$weights)
   } else if (all(is.null(design$ad_weights))) {
     design$ad_weights <- design$weights
   }
   if (!is.null(test_m)) {
     design$ad_test_m <- test_m
+    colnames(design$ad_test_m) <- colnames(design$test_m)
   } else if (is.null(design$ad_test_m)) {
     design$ad_test_m <- design$test_m
   }
@@ -77,6 +79,7 @@ cer_adapt <- function(
   }
   if (!is.null(correlation)) {
     design$ad_correlation <- correlation
+    colnames(design$ad_correlation) <- colnames(design$correlation)
   } else if (is.null(design$ad_correlation)) {
     design$ad_correlation <- design$correlation
   }
@@ -84,6 +87,7 @@ cer_adapt <- function(
   if (!is.null(weights) || !is.null(test_m)) {
     int_hyp <- get_intersection_hypotheses(design$ad_weights, design$ad_test_m)
     design$ad_weights_matrix <- int_hyp$weights_matrix
+    colnames(design$ad_weights_matrix) <- colnames(design$weights_matrix)
   } else if (is.null(design$ad_weights_matrix)) {
     design$ad_weights_matrix <- design$weights_matrix
   }

@@ -4,7 +4,7 @@ test_that("dropping hypotheses works", {
 
   design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, FALSE, FALSE))
 
-  expect_equal(design_adj$ad_weights, c(0, 0.75, 0.25, 0))
+  expect_equal(unname(design_adj$ad_weights), c(0, 0.75, 0.25, 0))
 
   expect_equal(
     unname(design_adj$ad_test_m),
@@ -18,7 +18,7 @@ test_that("dropping hypotheses works", {
 
   design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, TRUE, FALSE))
 
-  expect_equal(design_adj$ad_weights, c(0, 1, 0, 0))
+  expect_equal(unname(design_adj$ad_weights), c(0, 1, 0, 0))
   expect_equal(
     unname(design_adj$ad_test_m),
     rbind(c(0, 0, 0, 0), c(0, 0, 0, 1), c(0, 0, 0, 0), c(0, 1, 0, 0))
@@ -27,7 +27,7 @@ test_that("dropping hypotheses works", {
   design_adj <- cer_adapt(design_adj, weights = c(0, 0.5, 0, 0.5), time = 0.4)
 
   expect_equal(design_adj$ad_t, 0.4)
-  expect_equal(design_adj$ad_weights, c(0, 0.5, 0, 0.5))
+  expect_equal(unname(design_adj$ad_weights), c(0, 0.5, 0, 0.5))
 
   expect_true(
     all(names(design) %in% names(design_adj))
@@ -51,7 +51,10 @@ test_that("dropping hypotheses works", {
     t = 0.4
   )
 
-  expect_equal(design_adj$ad_weights_matrix, design_with_changes$weights_matrix)
+  expect_equal(
+    design_adj$ad_weights_matrix,
+    design_with_changes$weights_matrix
+  )
 })
 
 test_that("multiple adaptions work the same as one adaption", {

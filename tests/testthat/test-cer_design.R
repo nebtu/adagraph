@@ -66,7 +66,10 @@ test_paper_example <- function() {
   expect_equal(dim(design$bounds_2), c(15, 4))
   for (i in 1:dim(design$bounds_2)[1]) {
     hyp <- paste(design$hyp_matrix[i, ], collapse = ",")
-    expect_equal(round(design$bounds_2[i, ], 4), hyp_bound_2_pairs[[hyp]])
+    expect_equal(
+      round(unname(design$bounds_2[i, ]), 4),
+      hyp_bound_2_pairs[[hyp]]
+    )
   }
 }
 
@@ -88,7 +91,7 @@ test_that("Using future in parallel for cer design", {
 })
 
 test_that("Simple CER design works", {
-  correlation <- rbind(H1 = c(1, NA), H2 = c(NA, 1))
+  correlation <- rbind(c(1, NA), c(NA, 1))
   weights <- c(2 / 3, 1 / 3)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025
@@ -103,16 +106,16 @@ test_that("Simple CER design works", {
     t = t
   )
   expect_s3_class(design, c("cer_design", "adagraph_design"))
-  expect_equal(design$correlation, correlation)
-  expect_equal(design$weights, weights)
-  expect_equal(design$test_m, test_m)
+  expect_equal(unname(design$correlation), correlation)
+  expect_equal(unname(design$weights), weights)
+  expect_equal(unname(design$test_m), test_m)
   expect_equal(design$alpha, alpha)
   expect_equal(design$alpha_spending_f, alpha_spending_f)
   expect_equal(design$t, t)
 })
 
 test_that("Correct validation of cer_design", {
-  correlation <- rbind(H1 = c(1, NA), H2 = c(NA, 1))
+  correlation <- rbind(c(1, NA), c(NA, 1))
   weights <- c(2 / 3, 1 / 3)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025

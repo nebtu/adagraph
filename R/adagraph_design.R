@@ -23,6 +23,7 @@ new_adagraph_design <- function(
   weights = double(),
   alpha = double(),
   test_m = matrix(),
+  names = NULL,
   ...,
   class = character()
 ) {
@@ -30,6 +31,21 @@ new_adagraph_design <- function(
 
   int_hyp <- get_intersection_hypotheses(weights, test_m)
   correlation_components <- gMCPLite:::conn.comp(correlation)
+
+  if (is.null(names)) {
+    if (!is.null(names(weights))) {
+      names <- names(weights)
+    } else {
+      names = paste0("H", as.character(1:k))
+    }
+  }
+
+  names(weights) <- names
+  dimnames(correlation) <- list(names, names)
+  colnames(int_hyp$hyp_matrix) <- names
+  colnames(int_hyp$weights_matrix) <- names
+  colnames(int_hyp$closed_matrix) <- names
+  dimnames(test_m) <- list(names, names)
 
   design <- list(
     correlation = correlation,
@@ -107,6 +123,7 @@ validate_adagraph_design_params <- function(
   weights = double(),
   alpha = double(),
   test_m = matrix(),
+  names = NULL(),
   call = rlang::caller_env()
 ) {
   if (!is.matrix(correlation)) {
@@ -126,21 +143,12 @@ validate_adagraph_design_params <- function(
     )
   }
   k <- dim(correlation)[1]
-  if (!is.numeric(weights)) {
+  if (!rlang::is_double(weights, n = k)) {
     cli::cli_abort(
       c(
-        "{.var weight} needs to be a numeric",
-        "x" = "{.var weight} is {.obj_type_friendly {weight}}"
-      ),
-      class = "adagraph_invalid_argument_weights",
-      call = call
-    )
-  } else if (length(weights) != k) {
-    cli::cli_abort(
-      c(
-        "Need exactly one weight per hypothesis.",
-        "i" = "There are {k} hypotheses.",
-        "x" = "You suppplied {length(weights)} weights."
+        "{.var weights} needs to be a numeric with exactly one weight per hypothesis.",
+        "x" = "{.var weights} is {.obj_type_friendly {weights}} of length {length(weights)}.}",
+        "i" = "There are {k} hypotheses."
       ),
       class = "adagraph_invalid_argument_weights",
       call = call
@@ -183,8 +191,19 @@ validate_adagraph_design_params <- function(
       call = call
     )
   }
-  #TODO: test that weights sum to 1 (or less than one?)
+  if (!is.null(names) && !rlang::is_character(names, n = k)) {
+    cli::cli_abort(
+      c(
+        "{.var names} needs to be a character vector with exactly one name per hypothesis.",
+        "x" = "{.var names} is {.obj_type_friendly {names}} of length {length(names)}.",
+        "i" = "There are {k} hypotheses."
+      ),
+      class = "adagraph_invalid_argument_names",
+      call = call
+    )
+  }
 }
+#TODO: test that weights sum to 1 (or less than one?)
 
 #' Make a new (generic) trial design
 #'
@@ -210,18 +229,21 @@ adagraph_design <- function(
   correlation = matrix(),
   weights = double(),
   alpha = double(),
-  test_m = matrix()
+  test_m = matrix(),
+  names = NULL
 ) {
   validate_adagraph_design_params(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m
+    test_m = test_m,
+    names = names
   )
   new_adagraph_design(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m
+    test_m = test_m,
+    names = names
   )
 }

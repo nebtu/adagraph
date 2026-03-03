@@ -5,21 +5,22 @@
     -- Inital design specification -------------------------------------------------
     
     Hypotheses weights
-    [1] 0.5 0.5 0.0 0.0
+     H1  H2  H3  H4 
+    0.5 0.5 0.0 0.0 
     
     Graph Transition Matrix
-       [,1] [,2] [,3] [,4]
-    H1  0.0  0.5  0.5  0.0
-    H2  0.5  0.0  0.0  0.5
-    H3  0.0  1.0  0.0  0.0
-    H4  1.0  0.0  0.0  0.0
+        H1  H2  H3  H4
+    H1 0.0 0.5 0.5 0.0
+    H2 0.5 0.0 0.0 0.5
+    H3 0.0 1.0 0.0 0.0
+    H4 1.0 0.0 0.0 0.0
     
     Correlation for parametric test
-         [,1] [,2] [,3] [,4]
-    [1,]  1.0  0.5   NA   NA
-    [2,]  0.5  1.0   NA   NA
-    [3,]   NA   NA  1.0  0.5
-    [4,]   NA   NA  0.5  1.0
+        H1  H2  H3  H4
+    H1 1.0 0.5  NA  NA
+    H2 0.5 1.0  NA  NA
+    H3  NA  NA 1.0 0.5
+    H4  NA  NA 0.5 1.0
     
     Interim test is planned at time fraction 0.5
     
@@ -40,21 +41,22 @@
     -- Inital design specification -------------------------------------------------
     
     Hypotheses weights
-    [1] 0.5 0.5 0.0 0.0
+     H1  H2  H3  H4 
+    0.5 0.5 0.0 0.0 
     
     Graph Transition Matrix
-       [,1] [,2] [,3] [,4]
-    H1  0.0  0.5  0.5  0.0
-    H2  0.5  0.0  0.0  0.5
-    H3  0.0  1.0  0.0  0.0
-    H4  1.0  0.0  0.0  0.0
+        H1  H2  H3  H4
+    H1 0.0 0.5 0.5 0.0
+    H2 0.5 0.0 0.0 0.5
+    H3 0.0 1.0 0.0 0.0
+    H4 1.0 0.0 0.0 0.0
     
     Correlation for parametric test
-         [,1] [,2] [,3] [,4]
-    [1,]  1.0  0.5   NA   NA
-    [2,]  0.5  1.0   NA   NA
-    [3,]   NA   NA  1.0  0.5
-    [4,]   NA   NA  0.5  1.0
+        H1  H2  H3  H4
+    H1 1.0 0.5  NA  NA
+    H2 0.5 1.0  NA  NA
+    H3  NA  NA 1.0 0.5
+    H4  NA  NA 0.5 1.0
     
     Interim test is planned at time fraction 0.5
     
@@ -67,7 +69,8 @@
     -- Adaptions from inital specification -----------------------------------------
     
     New hypotheses weights
-    [1] 0.3333333 0.6666667 0.0000000 0.0000000
+           H1        H2        H3        H4 
+    0.3333333 0.6666667 0.0000000 0.0000000 
     
 
 ---
@@ -77,21 +80,22 @@
     -- Inital design specification -------------------------------------------------
     
     Hypotheses weights
-    [1] 0.5 0.5 0.0 0.0
+     H1  H2  H3  H4 
+    0.5 0.5 0.0 0.0 
     
     Graph Transition Matrix
-       [,1] [,2] [,3] [,4]
-    H1  0.0  0.5  0.5  0.0
-    H2  0.5  0.0  0.0  0.5
-    H3  0.0  1.0  0.0  0.0
-    H4  1.0  0.0  0.0  0.0
+        H1  H2  H3  H4
+    H1 0.0 0.5 0.5 0.0
+    H2 0.5 0.0 0.0 0.5
+    H3 0.0 1.0 0.0 0.0
+    H4 1.0 0.0 0.0 0.0
     
     Correlation for parametric test
-         [,1] [,2] [,3] [,4]
-    [1,]  1.0  0.5   NA   NA
-    [2,]  0.5  1.0   NA   NA
-    [3,]   NA   NA  1.0  0.5
-    [4,]   NA   NA  0.5  1.0
+        H1  H2  H3  H4
+    H1 1.0 0.5  NA  NA
+    H2 0.5 1.0  NA  NA
+    H3  NA  NA 1.0 0.5
+    H4  NA  NA 0.5 1.0
     
     Interim test is planned at time fraction 0.5
     
@@ -104,7 +108,8 @@
     -- Adaptions from inital specification -----------------------------------------
     
     New hypotheses weights
-    [1] 0.3333333 0.6666667 0.0000000 0.0000000
+           H1        H2        H3        H4 
+    0.3333333 0.6666667 0.0000000 0.0000000 
     
     -- Final test result -----------------------------------------------------------
     
