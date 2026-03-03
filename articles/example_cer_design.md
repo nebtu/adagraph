@@ -117,11 +117,11 @@ Note the new testing matrix resulting from those changes:
 
 ``` r
 design_adj$ad_test_m
-#>    [,1] [,2] [,3] [,4]
-#> H1    0    0    0    0
-#> H2    0    0    0    1
-#> H3    0    0    0    0
-#> H4    0    1    0    0
+#>    H1 H2 H3 H4
+#> H1  0  0  0  0
+#> H2  0  0  0  1
+#> H3  0  0  0  0
+#> H4  0  1  0  0
 ```
 
 Now that the adjustments are done, we need to calculate the adjusted
