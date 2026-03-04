@@ -82,7 +82,7 @@ new_adagraph_design <- function(
 #' @param test_m transition matrix of the graph used to determine the weights
 #'   for the intersection hypothesis
 #'
-#' @returns a list with the following components:
+#' @return a list with the following components:
 #'
 #' * hyp_matrix: matrix of dimension 2^k-1 x k describing for all 2*(k-1) hypotheses which hypotheses
 #'   from 1 to k are included in this intersection hypothesis
@@ -212,6 +212,7 @@ validate_adagraph_design_params <- function(
 #' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
+#' @param names optional names for the hypotheses
 #'
 #' @return An object of class adagraph_design
 #' @export

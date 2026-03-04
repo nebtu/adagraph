@@ -41,7 +41,10 @@ test_paper_example <- function() {
   expect_equal(dim(design$bounds_1), c(15, 4))
   for (i in 1:dim(design$bounds_1)[1]) {
     hyp <- paste(design$hyp_matrix[i, ], collapse = ",")
-    expect_equal(round(design$bounds_1[i, ], 6), hyp_bound_1_pairs[[hyp]])
+    expect_equal(
+      round(unname(design$bounds_1[i, ]), 6),
+      hyp_bound_1_pairs[[hyp]]
+    )
   }
 
   hyp_bound_2_pairs <- list(

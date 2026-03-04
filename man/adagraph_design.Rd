@@ -8,7 +8,8 @@ adagraph_design(
   correlation = matrix(),
   weights = double(),
   alpha = double(),
-  test_m = matrix()
+  test_m = matrix(),
+  names = NULL
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ between the different hypotheses, use NA for uncorrelated}
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 
 \item{test_m}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
+
+\item{names}{optional names for the hypotheses}
 }
 \value{
 An object of class adagraph_design

@@ -48,6 +48,7 @@ new_cer_design <- function(
     test_m = test_m,
     class = c(class, "cer_design")
   )
+  names <- names(design[["weights"]]) #use default from adagraph_design
   design$alpha_spending_f <- alpha_spending_f
   design$seq_bonf <- seq_bonf
   design$t <- t
@@ -59,7 +60,7 @@ new_cer_design <- function(
       reason = "Use `options(\"adagraph.use_future\" = FALSE)` if you don't want to use the future.apply package."
     )
     boundslist <- future.apply::future_apply(
-      design$weights_matrix,
+      design[["weights_matrix"]],
       1,
       function(weights) {
         cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
@@ -75,7 +76,7 @@ new_cer_design <- function(
     )
   } else {
     boundslist <- apply(
-      design$weights_matrix,
+      design[["weights_matrix"]],
       1,
       function(weights) {
         cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
@@ -87,8 +88,8 @@ new_cer_design <- function(
   colnames(design$bounds_1) <- names
   design$bounds_2 <- t(sapply(boundslist, `[[`, "bounds_2"))
   colnames(design$bounds_2) <- names
-  design$cJ1 <- t(sapply(boundslist, `[[`, "cJ1"))
-  design$cJ2 <- t(sapply(boundslist, `[[`, "cJ2"))
+  design$cJ1 <- sapply(boundslist, `[[`, "cJ1")
+  design$cJ2 <- sapply(boundslist, `[[`, "cJ2")
 
   design
 }

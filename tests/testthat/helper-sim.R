@@ -156,7 +156,7 @@ simrun <- function(
     corradapt[5:8, 5:8] = ctemp
     diag(corradapt) = 1 # corradapt has only for selected hypothesis a valid entry
 
-    if (new_adaption) {
+    if (isTRUE(new_adaption)) {
       adaption <- get_sim_adaption(futility = futility, alt_drop = TRUE)
       design_adapted <- design_interim |> adaption()
     } else {

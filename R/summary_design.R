@@ -1,44 +1,44 @@
 #' @export
-summary.adagraph_design <- function(x, ...) {
+summary.adagraph_design <- function(object, ...) {
   summary_list <- list(
-    alpha = x[["alpha"]],
-    weights = x[["weights"]],
-    test_m = x[["test_m"]],
-    correlation = x[["correlation"]],
-    t = x[["t"]],
-    interim_test = x[["interim_test"]],
-    adaptions = x[["adaptions"]],
-    final_test = x[["final_test"]]
+    alpha = object[["alpha"]],
+    weights = object[["weights"]],
+    test_m = object[["test_m"]],
+    correlation = object[["correlation"]],
+    t = object[["t"]],
+    interim_test = object[["interim_test"]],
+    adaptions = object[["adaptions"]],
+    final_test = object[["final_test"]]
   )
 
-  if (isTRUE(x[["interim_test"]])) {
+  if (isTRUE(object[["interim_test"]])) {
     summary_list <- c(
       summary_list,
       list(
-        p_values_interim = x[["p_values_interim"]],
-        rej_interim = x[["rej_interim"]]
+        p_values_interim = object[["p_values_interim"]],
+        rej_interim = object[["rej_interim"]]
       )
     )
   }
 
-  if (isTRUE(x[["adaptions"]])) {
+  if (isTRUE(object[["adaptions"]])) {
     summary_list <- c(
       summary_list,
       list(
-        ad_weights = x[["ad_weights"]],
-        ad_test_m = x[["ad_test_m"]],
-        ad_correlation = x[["ad_correlation"]],
-        ad_t = x[["ad_t"]]
+        ad_weights = object[["ad_weights"]],
+        ad_test_m = object[["ad_test_m"]],
+        ad_correlation = object[["ad_correlation"]],
+        ad_t = object[["ad_t"]]
       )
     )
   }
 
-  if (isTRUE(x[["final_test"]])) {
+  if (isTRUE(object[["final_test"]])) {
     summary_list <- c(
       summary_list,
       list(
-        p_values_final = x[["p_values_final"]],
-        rej = x[["rej"]]
+        p_values_final = object[["p_values_final"]],
+        rej = object[["rej"]]
       )
     )
   }
@@ -49,8 +49,8 @@ summary.adagraph_design <- function(x, ...) {
 }
 
 #' @export
-summary.cer_design <- function(x, ...) {
-  summary_list <- summary.adagraph_design(x)
+summary.cer_design <- function(object, ...) {
+  summary_list <- summary.adagraph_design(object)
 
   class(summary_list) <- c("summary.cer_design", class(summary_list))
 
@@ -58,27 +58,27 @@ summary.cer_design <- function(x, ...) {
 }
 
 #' @export
-summary.multiarm_cer_design <- function(x, ...) {
-  summary_list <- summary.cer_design(x)
+summary.multiarm_cer_design <- function(object, ...) {
+  summary_list <- summary.cer_design(object)
 
   summary_list <- c(
     summary_list,
     list(
-      controls = x[["controls"]],
-      treatment_assoc = x[["treatment_assoc"]],
-      n_controls = x[["n_controls"]],
-      n_treatments = x[["n_treatments"]]
+      controls = object[["controls"]],
+      treatment_assoc = object[["treatment_assoc"]],
+      n_controls = object[["n_controls"]],
+      n_treatments = object[["n_treatments"]]
     )
   )
 
-  if (isTRUE(x[["adaptions"]])) {
+  if (isTRUE(object[["adaptions"]])) {
     summary_list <- c(
       summary_list,
       list(
-        n_cont_2 = x[["n_cont_2"]],
-        n_treat_2 = x[["n_treat_2"]],
-        ad_n_controls = x[["ad_n_controls"]],
-        ad_n_treatments = x[["ad_n_treatments"]]
+        n_cont_2 = object[["n_cont_2"]],
+        n_treat_2 = object[["n_treat_2"]],
+        ad_n_controls = object[["ad_n_controls"]],
+        ad_n_treatments = object[["ad_n_treatments"]]
       )
     )
   }

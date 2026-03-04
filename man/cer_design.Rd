@@ -12,7 +12,8 @@ cer_design(
   alpha_spending_f = function() {
  },
   t = double(),
-  seq_bonf = TRUE
+  seq_bonf = TRUE,
+  names = NULL
 )
 }
 \arguments{
@@ -30,6 +31,12 @@ between the different hypotheses, use NA for uncorrelated}
 \item{t}{numeric between 0 and 1 specifing the planned time fraction for the interim test}
 
 \item{seq_bonf}{to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1}
+
+\item{names}{optional names for the hypotheses
+
+If no names are provided in the \code{names} argument, the names of the \code{weights}
+arguments are used. If that is also unweighted, the names \code{H1}, \code{H2}, etc. are
+used.}
 }
 \value{
 An object of class \code{cer_design}

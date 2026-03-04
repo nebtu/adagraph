@@ -240,7 +240,6 @@ get_data_gen <- function(
 #' @return A function taking two arguments, see details
 #'
 #' @importFrom stats pnorm qnorm pt
-#' @export
 #'@export
 get_data_gen_2 <- function(
   corr_control,
