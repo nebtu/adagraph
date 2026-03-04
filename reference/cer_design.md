@@ -15,7 +15,8 @@ cer_design(
   alpha_spending_f = function() {
  },
   t = double(),
-  seq_bonf = TRUE
+  seq_bonf = TRUE,
+  names = NULL
 )
 ```
 
@@ -53,6 +54,14 @@ cer_design(
 
   to automatically reject hypotheses at the second stage if the sum of
   their PCER is greater 1
+
+- names:
+
+  optional names for the hypotheses
+
+  If no names are provided in the `names` argument, the names of the
+  `weights` arguments are used. If that is also unweighted, the names
+  `H1`, `H2`, etc. are used.
 
 ## Value
 

@@ -9,7 +9,8 @@ adagraph_design(
   correlation = matrix(),
   weights = double(),
   alpha = double(),
-  test_m = matrix()
+  test_m = matrix(),
+  names = NULL
 )
 ```
 
@@ -32,6 +33,10 @@ adagraph_design(
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
+
+- names:
+
+  optional names for the hypotheses
 
 ## Value
 

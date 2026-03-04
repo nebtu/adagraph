@@ -114,6 +114,8 @@ design
   trial
 - [`get_t()`](https://nebtu.github.io/adagraph/reference/get_t.md) : Get
   the time fractions for given sample sizes
+- [`intersection_hypotheses()`](https://nebtu.github.io/adagraph/reference/intersection_hypotheses.md)
+  : Get information about the intersection hypothesis of a design
 - [`multiarm_cer_design()`](https://nebtu.github.io/adagraph/reference/multiarm_cer_design.md)
   : Make a new multiarm CER trial design
 - [`multiarm_drop_arms()`](https://nebtu.github.io/adagraph/reference/multiarm_drop_arms.md)

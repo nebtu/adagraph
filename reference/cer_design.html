@@ -56,7 +56,8 @@ for using the conditional error method.</p>
 <span>  alpha_spending_f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span> <span class="op">}</span>,</span>
 <span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  seq_bonf <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  seq_bonf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  names <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,6 +92,13 @@ between the different hypotheses, use NA for uncorrelated</p></dd>
 
 <dt id="arg-seq-bonf">seq_bonf<a class="anchor" aria-label="anchor" href="#arg-seq-bonf"></a></dt>
 <dd><p>to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1</p></dd>
+
+
+<dt id="arg-names">names<a class="anchor" aria-label="anchor" href="#arg-names"></a></dt>
+<dd><p>optional names for the hypotheses</p>
+<p>If no names are provided in the <code>names</code> argument, the names of the <code>weights</code>
+arguments are used. If that is also unweighted, the names <code>H1</code>, <code>H2</code>, etc. are
+used.</p></dd>
 
 </dl></div>
     <div class="section level2">
