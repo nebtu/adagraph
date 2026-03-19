@@ -113,36 +113,36 @@ sim_trial(
   data_gen,
   data_gen_2
 )
-#>    run1 rej_1 rej_2 rej_any p_1        p_2 interim_rej_1 interim_rej_2
-#> 1     1 FALSE  TRUE    TRUE   1 0.01448593         FALSE          TRUE
-#> 2     1 FALSE  TRUE    TRUE   1 0.02949321         FALSE          TRUE
-#> 3     1 FALSE  TRUE    TRUE   1 0.01318780         FALSE          TRUE
-#> 4     2 FALSE FALSE   FALSE   1 0.61156774         FALSE         FALSE
-#> 5     2 FALSE FALSE   FALSE   1 0.52810949         FALSE         FALSE
-#> 6     2 FALSE FALSE   FALSE   1 0.83927697         FALSE         FALSE
-#> 7     3 FALSE FALSE   FALSE   1 0.07885208         FALSE         FALSE
-#> 8     3 FALSE FALSE   FALSE   1 0.06541350         FALSE         FALSE
-#> 9     3 FALSE FALSE   FALSE   1 0.02679034         FALSE         FALSE
-#> 10    4 FALSE  TRUE    TRUE   1 0.01389317         FALSE         FALSE
-#> 11    4 FALSE FALSE   FALSE   1 0.09854194         FALSE         FALSE
-#> 12    4 FALSE  TRUE    TRUE   1 0.02575248         FALSE         FALSE
-#> 13    5 FALSE FALSE   FALSE   1 0.55841748         FALSE         FALSE
-#> 14    5 FALSE FALSE   FALSE   1 0.35244674         FALSE         FALSE
-#> 15    5 FALSE FALSE   FALSE   1 0.25244952         FALSE         FALSE
-#>    interim_p_1 interim_p_2
-#> 1    0.3815457 0.001889621
-#> 2    0.3815457 0.001889621
-#> 3    0.3815457 0.001889621
-#> 4    0.9800523 0.515780672
-#> 5    0.9800523 0.515780672
-#> 6    0.9800523 0.515780672
-#> 7    0.7844791 0.008659191
-#> 8    0.7844791 0.008659191
-#> 9    0.7844791 0.008659191
-#> 10   0.6278657 0.045058499
-#> 11   0.6278657 0.045058499
-#> 12   0.6278657 0.045058499
-#> 13   0.8622252 0.445776016
-#> 14   0.8622252 0.445776016
-#> 15   0.8622252 0.445776016
+#>    run1 rej_1 rej_2 rej_any p_1         p_2 interim_rej_1 interim_rej_2
+#> 1     1 FALSE FALSE   FALSE   1 0.061830826         FALSE         FALSE
+#> 2     1 FALSE FALSE   FALSE   1 0.056145939         FALSE         FALSE
+#> 3     1 FALSE FALSE   FALSE   1 0.036178806         FALSE         FALSE
+#> 4     2 FALSE  TRUE    TRUE   1 0.012265674         FALSE          TRUE
+#> 5     2 FALSE  TRUE    TRUE   1 0.003457375         FALSE          TRUE
+#> 6     2 FALSE  TRUE    TRUE   1 0.005817646         FALSE          TRUE
+#> 7     3 FALSE FALSE   FALSE   1 0.339765072         FALSE         FALSE
+#> 8     3 FALSE FALSE   FALSE   1 0.484106858         FALSE         FALSE
+#> 9     3 FALSE FALSE   FALSE   1 0.384640005         FALSE         FALSE
+#> 10    4 FALSE FALSE   FALSE   1 0.268783357         FALSE         FALSE
+#> 11    4 FALSE  TRUE    TRUE   1 0.018918162         FALSE         FALSE
+#> 12    4 FALSE FALSE   FALSE   1 0.260208052         FALSE         FALSE
+#> 13    5 FALSE FALSE   FALSE   1 0.280803577         FALSE         FALSE
+#> 14    5 FALSE FALSE   FALSE   1 0.363945824         FALSE         FALSE
+#> 15    5 FALSE FALSE   FALSE   1 0.205548661         FALSE         FALSE
+#>    interim_p_1  interim_p_2
+#> 1   0.89363632 2.816060e-02
+#> 2   0.89363632 2.816060e-02
+#> 3   0.89363632 2.816060e-02
+#> 4   0.03056606 1.759008e-05
+#> 5   0.03056606 1.759008e-05
+#> 6   0.03056606 1.759008e-05
+#> 7   0.87314871 4.835961e-01
+#> 8   0.87314871 4.835961e-01
+#> 9   0.87314871 4.835961e-01
+#> 10  0.92771779 1.421499e-01
+#> 11  0.92771779 1.421499e-01
+#> 12  0.92771779 1.421499e-01
+#> 13  0.87169078 2.272435e-01
+#> 14  0.87169078 2.272435e-01
+#> 15  0.87169078 2.272435e-01
 ```
