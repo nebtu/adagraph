@@ -1,7 +1,7 @@
 #' Internal function for mame_design
 #'
 #' For documentation on how to generate mame_design objects, see [mame_design()].
-#' The parameters for this function are mostly the same as in [mame_cer_design()]
+#' The parameters for this function are mostly the same as in [mame_design()]
 #' Note however that all parameters have to already be expanded to vectors if
 #' possible
 #'
@@ -63,8 +63,10 @@ new_mame_design <- function(
     correlation <- kronecker(diag_na, correlation_endpoint)
   } else {
     correlation_subgroups <- get_subgroup_correlation(
-      n_subgroups,
+      subgroups,
       arms,
+      n_subgroups,
+      names_arms,
       correlation_endpoint
     )
   }
@@ -106,7 +108,27 @@ validate_multiarm_cer_design_params <- function(
 #' The ordering of of the hypothesis is automatically determined in the
 #' following way: All hypotheses associated with on endpoint are grouped
 #' together, so first all arms with their first endpoint, than all arms with the
-#' second endpoint, etc. See also the examples.
+#' second endpoint, etc. If there are multiple subgroups, these subgroups follow
+#' (with the same structure) after the full population.
+#'
+#' If no names for some structure are provided, they are determined
+#' automatically. For endpoints, the default names are E1, E2, ..., for arms,
+#' they are A1, A2, ... and for subgroups G1, G2, .. are used.
+#'
+#' To provide the subgroup correlation structure, subgroup structure can be provided
+#' either as proportions or case number either with this function or when doing
+#' the interim test.
+#' The structure (in argument n_subgroups) should be given as a dataframe, where
+#' each row specifies a specific subgroup in a specific arm (or the control).
+#' Therefore the first column should be names arm, and have values of
+#' "control" and the names of the arms. Then should be columns for each of the
+#' subgroups (using the subgroup name as a column name), with logical values,
+#' specifying the exact combination of subgroups that are being specified. The
+#' last column should be either names 'n' (for case numbers) or 'prop' (for
+#' proportions) and give the given value for this exact intersection of
+#' subgroups.
+#' A dataframe with this structure can also be generated with the helper
+#' function [get_n_subgroup()].
 #'
 #' @param arms Number of arms
 #' @param endpoints Number of endpoints
@@ -114,6 +136,8 @@ validate_multiarm_cer_design_params <- function(
 #'   patients in the control group
 #' @param n_treatments Integer (or vector of integers) determining the number of
 #'   patients in each treatment group
+#' @param n_subgroups A data.frame specifying the structure of the subgroups,
+#'   see details for more information
 #' @param weights List of weights, measuring how important each hypothesis is.
 #'   See details for numbering of hypotheses
 #' @param t information fraction, at which fraction of assigned people will the
@@ -128,7 +152,7 @@ validate_multiarm_cer_design_params <- function(
 #' @param names optional names for the hypotheses. IF NULL, the names are of the
 #'   form E1_A1 for enpoint 1, arm 1, etc.
 #'
-#' @return An object of class `mame_cer_design`
+#' @return An object of class `mame_design`
 #' @export
 #'
 #' @examples
