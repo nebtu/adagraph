@@ -101,20 +101,19 @@ check_consonance <- function(
     seq_len(nrow(bounds)),
     \(idx) {
       J <- (hyp_matrix[idx, ] == 1)
-      if (sum(J) == 1) {
-        return(TRUE)
-      }
 
       supersets <- which(rowSums(hyp_matrix[, !J, drop = FALSE]) == 0)
       supersets <- setdiff(supersets, idx) # only strict supersets, exclude current idx
 
-      bounds_J <- bounds[idx, J, drop = FALSE] #note that nothing here is 0 by defintion of J
+      bounds_J <- bounds[idx, J, drop = FALSE]
       bounds_super <- bounds[supersets, J, drop = FALSE]
 
       # for each p-value (each hypothesis), assume this is the one that lead to
       # the rejection. Is any superset also being rejected?
-      all(sapply(seq_along(sum(J)), \(j) {
-        any(bounds_super[, j, drop = FALSE] >= bounds_J[j])
+      all(sapply(which(J), \(j) {
+        super_j <- supersets[hyp_matrix[supersets, j] == 1]
+        all(bounds[super_j, j] >= bounds[idx, j])
+        #any(bounds_super[, j, drop = FALSE] >= bounds_J[j])
       }))
     },
     logical(1)
