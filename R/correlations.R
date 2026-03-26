@@ -1,3 +1,20 @@
+n_subgroups <- tribble(
+  ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
+  "control" , F     , F     ,    0 ,
+  "control" , F     , T     ,   10 ,
+  "control" , T     , F     ,   10 ,
+  "control" , T     , T     ,   10 ,
+  "A1"      , F     , F     ,   20 ,
+  "A1"      , F     , T     ,   20 ,
+  "A1"      , T     , F     ,   20 ,
+  "A1"      , T     , T     ,   20 ,
+  "A2"      , F     , F     ,   10 ,
+  "A2"      , F     , T     ,   10 ,
+  "A2"      , T     , F     ,   30 ,
+  "A2"      , T     , T     ,   10 ,
+)
+
+
 #' Get correlation between different subgroups and arms
 #'
 #' Using the exact proportions/case numbers, calculate the correlations between
@@ -7,32 +24,130 @@ get_subgroup_correlation <- function(
   arms,
   n_subgroups,
   names_arms,
-  names_subgroups,
-  correlation_endpoint
+  names_subgroups
 ) {
   corr <- matrix(
     nrow = (subgroups + 1) * arms,
     ncol = (subgroups + 1) * arms
   )
-  n_name = ifelse("n" %in% colnames(n_subgroups), "n", "prop")
+  n_name <- ifelse("n" %in% colnames(n_subgroups), "n", "prop")
 
-  n_total_subgroups = lapply(names_subgroups, \(name) {
-    sum(n_subgroups[n_subgroups[name], n_name])
-  })
-  entries <- expand.grid(
-    arms = seq_len(arms),
-    subgroups = seq_len(subgroups + 1)
+  #number of people in each (subgroup, arm) combination
+  n_total_subgroups <- do.call(
+    rbind,
+    lapply(c(names_arms, "control"), \(arm_name) {
+      do.call(
+        rbind,
+        lapply(names_subgroups, \(name) {
+          n = sum(n_subgroups[
+            n_subgroups[, name] == TRUE & n_subgroups[, "arm"] == arm_name,
+            n_name
+          ])
+          data.frame(arm = arm_name, subgroup = name, n = n)
+        })
+      )
+    })
   )
 
-  for (idx in seq_along(entries)) {
-    name_group
-    shared_n <- sum(n_subgroups[n_subgroups[names_]])
-    #separate case if full group included, else:
-    #get name of group before (1 - idx for index)
-    #get shared n
-    #call get_Z_correlation()
-    #add to matrix
+  # add total n per arm
+  n_total_subgroups <- rbind(
+    n_total_subgroups,
+    do.call(
+      rbind,
+      lapply(c(names_arms, "control"), \(arm_name) {
+        n = sum(n_subgroups[n_subgroups[, "arm"] == arm_name, n_name])
+        data.frame(arm = arm_name, subgroup = "Total", n = n)
+      })
+    )
+  )
+  names_subgroups <- c("Total", names_subgroups)
+
+  #### We want to iterate through all entries of the upper diagonal of the
+  ###correlation matrix, i.e. all unordered combinations of (group, arm) tuples
+  # All (group, arm) combinations
+  cells <- expand.grid(group = seq_len(subgroups + 1), arm = seq_len(arms))
+  # All unordered pairs of those cells (including diagonal)
+  idx <- expand.grid(i = seq_len(nrow(cells)), j = seq_len(nrow(cells)))
+  #need only upper left of matrix
+  idx <- idx[idx$i < idx$j, ]
+
+  entries <- cbind(
+    setNames(cells[idx$i, ], c("group_1", "arm_1")),
+    setNames(cells[idx$j, ], c("group_2", "arm_2"))
+  )
+  rownames(entries) <- NULL
+
+  diag(corr) <- 1
+  for (idx in seq_len(nrow(entries))) {
+    group_1 <- entries[idx, "group_1"]
+    group_2 <- entries[idx, "group_2"]
+    arm_1 <- entries[idx, "arm_1"]
+    arm_2 <- entries[idx, "arm_2"]
+    idx_1 <- (group_1 - 1) * (arms) + arm_1
+    idx_2 <- (group_2 - 1) * (arms) + arm_2
+
+    if (group_1 == 1) {
+      group_1_filter <- TRUE
+    } else {
+      group_1_filter <- n_subgroups[, names_subgroups[group_1]] == 1
+    }
+    if (group_2 == 1) {
+      group_2_filter <- TRUE
+    } else {
+      group_2_filter <- n_subgroups[, names_subgroups[group_2]] == 1
+    }
+
+    if (arm_1 != arm_2) {
+      n_treatment_shared <- 0
+    } else {
+      filter_rows <- (n_subgroups[, "arm"] == names_arms[arm_1]) &
+        group_1_filter &
+        group_2_filter
+      n_treatment_shared <- sum(n_subgroups[filter_rows, n_name])
+    }
+
+    filter_rows <- (n_subgroups[, "arm"] == "control") &
+      group_1_filter &
+      group_2_filter
+    n_control_shared <- sum(n_subgroups[filter_rows, n_name])
+
+    n_control_1 <- n_total_subgroups[
+      n_total_subgroups[, "arm"] == "control" &
+        n_total_subgroups[, "subgroup"] == names_subgroups[group_1],
+      n_name
+    ]
+    n_control_2 <- n_total_subgroups[
+      n_total_subgroups[, "arm"] == "control" &
+        n_total_subgroups[, "subgroup"] == names_subgroups[group_2],
+      n_name
+    ]
+
+    n_treatment_1 <- n_total_subgroups[
+      n_total_subgroups[, "arm"] == names_arms[arm_1] &
+        n_total_subgroups[, "subgroup"] == names_subgroups[group_1],
+      n_name
+    ]
+
+    n_treatment_2 <- n_total_subgroups[
+      n_total_subgroups[, "arm"] == names_arms[arm_2] &
+        n_total_subgroups[, "subgroup"] == names_subgroups[group_2],
+      n_name
+    ]
+
+    corr_entry <- get_Z_correlation(
+      n_control_1 = n_control_1,
+      n_control_2 = n_control_2,
+      n_control_shared = n_control_shared,
+      n_treatment_1 = n_treatment_1,
+      n_treatment_2 = n_treatment_2,
+      n_treatment_shared = n_treatment_shared
+    )
+
+    corr[idx_1, idx_2] <- corr_entry
+    corr[idx_2, idx_1] <- corr_entry
   }
+
+  corr
 }
 
 #' Internal function for generating a correlation matrix for a given multiarm design
