@@ -49,26 +49,73 @@ new_mame_design <- function(
     names_subgroups = paste0("G", 1:arms)
   }
 
-  #correlation inside one endpoint
-  correlation_endpoint <- get_multiarm_correlation(
-    controls = 1,
-    treatment_assoc = rep(1:endpoints, each = arms),
-    n_control,
-    n_treatments
-  )
-
   if (subgroups == 0) {
-    # between different endpoints, correlation is unknown
-    diag_na <- ifelse(diag(endpoints) == 1, 1, NA)
-    correlation <- kronecker(diag_na, correlation_endpoint)
+    #correlation inside one endpoint
+    correlation_endpoint <- get_multiarm_correlation(
+      controls = 1,
+      treatment_assoc = rep(1:endpoints, each = arms),
+      n_control,
+      n_treatments
+    )
   } else {
-    correlation_subgroups <- get_subgroup_correlation(
+    correlation_endpoint <- get_subgroup_correlation(
       subgroups,
       arms,
       n_subgroups,
       names_arms,
-      correlation_endpoint
+      names_subgroups
     )
+  }
+
+  # We now need to combine the correlation into a complete correlation matrix
+  # for all endpoints. The correlation inside each endpoint is given by
+  # correlation_endpoint, and across different endpoints it is not specified.
+  # However, the blocks don't stay together, since they the structure is
+  # (groups, endpoints, arms). The operation is therefore as follows:
+  # Given the correlation_endpoint matrix (where each A is a block matrix with
+  # the different arms)
+  #
+  #           Total   G1
+  #   Total  [ A11  A12 ]
+  #    G1    [ A21  A22 ]
+  #
+  # We produce for two endpoints the matrix
+  #
+  #                     Total       G1
+  #                   E1   E2    E1   E2
+  #   Tot-    E1   [ A11   NA | A12   NA ]
+  #    al     E2   [  NA  A11 |  NA  A12 ]
+  #                [ ---------+--------- ]
+  #    G      E1   [ A21   NA | A22   NA ]
+  #    1      E2   [  NA  A21 |  NA  A22 ]
+  #
+  k <- arms * endpoints * (subgroups + 1)
+  correlation <- matrix(NA_real_, k, k)
+  for (ep in seq_len(endpoints)) {
+    idx <- unlist(lapply(1:(subgroups + 1), \(g) {
+      ((g - 1) * (subgroups + 1) + (ep - 1)) * arms + 1:arms
+    }))
+    correlation[idx, idx] <- correlation_endpoint
+  }
+
+  if (is.null(names)) {
+    print("making names")
+    if (subgroups != 0) {
+      names <- paste0(
+        rep(c("", paste0(names_subgroups, "_")), each = arms * endpoints),
+        rep(names_endpoints, each = arms),
+        "_",
+        names_arms
+      )
+    } else {
+      names <-
+        paste0(
+          rep(names_endpoints, arms),
+          "_",
+          names_arms
+        )
+    }
+    print(names)
   }
 
   design <- new_cer_design(
@@ -85,17 +132,22 @@ new_mame_design <- function(
   design
 }
 
-validate_multiarm_cer_design_params <- function(
+validate_mame_design_params <- function(
   arms = integer(),
   endpoints = integer(),
+  subgroups = integer(),
   n_control = integer(),
   n_treatments = integer(),
+  n_subgroups = integer(),
   weights = double(),
   t = double(),
   alpha = double(),
   test_m = matrix(),
   alpha_spending_f = function() {},
   seq_bonf = TRUE,
+  names_arms = NULL,
+  names_endpoints = NULL,
+  names_subgroups = NULL,
   names = names,
   call = rlang::caller_env()
 ) {}
@@ -184,6 +236,9 @@ mame_design <- function(
   test_m = matrix(),
   alpha_spending_f = function() {},
   seq_bonf = TRUE,
+  names_arms = NULL,
+  names_endpoints = NULL,
+  names_subgroups = NULL,
   names = NULL
 ) {
   if (length(n_treatments) == 1) {
@@ -192,28 +247,38 @@ mame_design <- function(
   validate_mame_design_params(
     arms = arms,
     endpoints = endpoints,
+    subgroups = subgroups,
     n_control = n_control,
     n_treatments = n_treatments,
+    n_subgroups = n_subgroups,
     weights = weights,
     t = t,
     alpha = alpha,
     test_m = test_m,
     alpha_spending_f = alpha_spending_f,
     seq_bonf = seq_bonf,
+    names_arms = names_arms,
+    names_endpoints = names_endpoints,
+    names_subgroups = names_subgroups,
     names = names
   )
 
-  new_multiarm_design(
+  new_mame_design(
     arms = arms,
     endpoints = endpoints,
+    subgroups = subgroups,
     n_control = n_control,
     n_treatments = n_treatments,
+    n_subgroups = n_subgroups,
     weights = weights,
     t = t,
     alpha = alpha,
     test_m = test_m,
     alpha_spending_f = alpha_spending_f,
     seq_bonf = seq_bonf,
+    names_arms = names_arms,
+    names_endpoints = names_endpoints,
+    names_subgroups = names_subgroups,
     names = names
   )
 }

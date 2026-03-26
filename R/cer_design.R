@@ -46,7 +46,8 @@ new_cer_design <- function(
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    class = c(class, "cer_design")
+    class = c(class, "cer_design"),
+    names = names
   )
   names <- names(design[["weights"]]) #use default from adagraph_design
   design$alpha_spending_f <- alpha_spending_f

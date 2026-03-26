@@ -18,6 +18,9 @@ mame_design(
   alpha_spending_f = function() {
  },
   seq_bonf = TRUE,
+  names_arms = NULL,
+  names_endpoints = NULL,
+  names_subgroups = NULL,
   names = NULL
 )
 }
@@ -31,6 +34,9 @@ patients in the control group}
 
 \item{n_treatments}{Integer (or vector of integers) determining the number of
 patients in each treatment group}
+
+\item{n_subgroups}{A data.frame specifying the structure of the subgroups,
+see details for more information}
 
 \item{weights}{List of weights, measuring how important each hypothesis is.
 See details for numbering of hypotheses}
@@ -64,7 +70,7 @@ The ordering of of the hypothesis is automatically determined in the
 following way: All hypotheses associated with on endpoint are grouped
 together, so first all arms with their first endpoint, than all arms with the
 second endpoint, etc. If there are multiple subgroups, these subgroups follow
-(with the same structure) after the full population
+(with the same structure) after the full population.
 
 If no names for some structure are provided, they are determined
 automatically. For endpoints, the default names are E1, E2, ..., for arms,

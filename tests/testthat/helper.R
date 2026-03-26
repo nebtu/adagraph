@@ -43,6 +43,7 @@ make_example_design <- function() {
 
   design
 }
+
 make_example_multiarm <- function() {
   #=======
   m <- rbind(
@@ -71,4 +72,52 @@ make_example_multiarm <- function() {
   )
 
   design
+}
+
+make_example_mames <- function() {
+  n_subgroups <- tribble(
+    ~"arm"      , ~"HPV+" , ~"n" ,
+    "control"   , F       ,  120 ,
+    "control"   , T       ,   80 ,
+    "primary"   , F       ,  120 ,
+    "primary"   , T       ,   80 ,
+    "secondary" , F       ,  120 ,
+    "secondary" , T       ,   80 ,
+  )
+  names_arms <- c("primary", "secondary")
+  names_subgroups <- "HPV+"
+
+  alpha <- 0.025
+  t <- 0.5
+  weights <- c(0.35, 0.35, 0, 0, 0.15, 0.15, 0, 0)
+
+  sec_to_prim <- 1 / 3
+  inter_prim <- 0.2
+  prim_to_sec <- 0.4
+  test_m <- as.matrix(tribble(
+    ~"total_E1_prim" , ~"total_E1_sec" , ~"total_E2_prim" , ~"total_E2_sec" , ~"HPV+_E1_prim" , ~"HPV+_E1_sec" , ~"HPV+_E2_prim" , ~"HPV+_E2_sec" ,
+                   1 , prim_to_sec     , inter_prim       ,               0 , inter_prim      ,              0 , inter_prim      ,              0 ,
+                   0 ,               1 , sec_to_prim      ,               0 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
+    inter_prim       ,               0 ,                1 , prim_to_sec     , inter_prim      ,              0 , inter_prim      ,              0 ,
+    sec_to_prim      ,               0 ,                0 ,               1 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
+    inter_prim       ,               0 , inter_prim       ,               0 ,               1 , prim_to_sec    , inter_prim      ,              0 ,
+    sec_to_prim      ,               0 , sec_to_prim      ,               0 ,               0 ,              1 , sec_to_prim     ,              0 ,
+    inter_prim       ,               0 , inter_prim       ,               0 , inter_prim      ,              0 ,               1 , prim_to_sec    ,
+    sec_to_prim      ,               0 , sec_to_prim      ,               0 , sec_to_prim     ,              0 ,               0 ,              1 ,
+  ))
+  as = function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
+
+  mame_design(
+    arms = 2,
+    endpoints = 2,
+    subgroups = 1,
+    n_subgroups = n_subgroups,
+    weights = weights,
+    t = t,
+    alpha = alpha,
+    test_m = test_m,
+    alpha_spending_f = as,
+    names_arms = names_arms,
+    names_subgroups = names_subgroups
+  )
 }
