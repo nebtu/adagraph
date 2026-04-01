@@ -61,7 +61,7 @@ make_example_multiarm <- function() {
 
   design <- multiarm_cer_design(
     controls = 2,
-    treatment_assoc = c(1, 2, 1, 2),
+    treatment_assoc = c(1, 1, 2, 2),
     n_controls = 70,
     n_treatments = 70,
     weights = weights,
@@ -74,17 +74,25 @@ make_example_multiarm <- function() {
   design
 }
 
-make_example_mames <- function() {
-  n_subgroups <- tribble(
-    ~"arm"      , ~"HPV+" , ~"n" ,
-    "control"   , F       ,  120 ,
-    "control"   , T       ,   80 ,
-    "primary"   , F       ,  120 ,
-    "primary"   , T       ,   80 ,
-    "secondary" , F       ,  120 ,
-    "secondary" , T       ,   80 ,
+make_example_mame <- function() {
+  # n_subgroups <- tribble(
+  #   ~"arm"      , ~"HPV+" , ~"n" ,
+  #   "control"   , F       ,  120 ,
+  #   "control"   , T       ,   80 ,
+  #   "primary"   , F       ,  120 ,
+  #   "primary"   , T       ,   80 ,
+  #   "secondary" , F       ,  120 ,
+  #   "secondary" , T       ,   80 ,
+  # )
+  n_subgroups <- rbind(
+    data.frame(arm = "control", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "control", `HPV+` = TRUE, n = 80, check.names = FALSE),
+    data.frame(arm = "prim", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "prim", `HPV+` = TRUE, n = 80, check.names = FALSE),
+    data.frame(arm = "sec", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "sec", `HPV+` = TRUE, n = 80, check.names = FALSE)
   )
-  names_arms <- c("primary", "secondary")
+  names_arms <- c("prim", "sec")
   names_subgroups <- "HPV+"
 
   alpha <- 0.025
@@ -94,18 +102,36 @@ make_example_mames <- function() {
   sec_to_prim <- 1 / 3
   inter_prim <- 0.2
   prim_to_sec <- 0.4
-  test_m <- as.matrix(tribble(
-    ~"total_E1_prim" , ~"total_E1_sec" , ~"total_E2_prim" , ~"total_E2_sec" , ~"HPV+_E1_prim" , ~"HPV+_E1_sec" , ~"HPV+_E2_prim" , ~"HPV+_E2_sec" ,
-                   1 , prim_to_sec     , inter_prim       ,               0 , inter_prim      ,              0 , inter_prim      ,              0 ,
-                   0 ,               1 , sec_to_prim      ,               0 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
-    inter_prim       ,               0 ,                1 , prim_to_sec     , inter_prim      ,              0 , inter_prim      ,              0 ,
-    sec_to_prim      ,               0 ,                0 ,               1 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
-    inter_prim       ,               0 , inter_prim       ,               0 ,               1 , prim_to_sec    , inter_prim      ,              0 ,
-    sec_to_prim      ,               0 , sec_to_prim      ,               0 ,               0 ,              1 , sec_to_prim     ,              0 ,
-    inter_prim       ,               0 , inter_prim       ,               0 , inter_prim      ,              0 ,               1 , prim_to_sec    ,
-    sec_to_prim      ,               0 , sec_to_prim      ,               0 , sec_to_prim     ,              0 ,               0 ,              1 ,
+  # test_m <- as.matrix(tribble(
+  #   ~"total_E1_prim" , ~"total_E1_sec" , ~"total_E2_prim" , ~"total_E2_sec" , ~"HPV+_E1_prim" , ~"HPV+_E1_sec" , ~"HPV+_E2_prim" , ~"HPV+_E2_sec" ,
+  #                  1 , prim_to_sec     , inter_prim       ,               0 , inter_prim      ,              0 , inter_prim      ,              0 ,
+  #                  0 ,               1 , sec_to_prim      ,               0 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
+  #   inter_prim       ,               0 ,                1 , prim_to_sec     , inter_prim      ,              0 , inter_prim      ,              0 ,
+  #   sec_to_prim      ,               0 ,                0 ,               1 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
+  #   inter_prim       ,               0 , inter_prim       ,               0 ,               1 , prim_to_sec    , inter_prim      ,              0 ,
+  #   sec_to_prim      ,               0 , sec_to_prim      ,               0 ,               0 ,              1 , sec_to_prim     ,              0 ,
+  #   inter_prim       ,               0 , inter_prim       ,               0 , inter_prim      ,              0 ,               1 , prim_to_sec    ,
+  #   sec_to_prim      ,               0 , sec_to_prim      ,               0 , sec_to_prim     ,              0 ,               0 ,              1 ,
+  # ))
+
+  #fmt: skip
+  test_m <- matrix(
+    byrow = TRUE,
+    ncol = 8,
+    dimnames = list(NULL, c(
+      "total_E1_prim", "total_E1_sec", "total_E2_prim", "total_E2_sec",
+      "HPV+_E1_prim",  "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"
+    )),
+    data = c(
+              1, prim_to_sec,  inter_prim,           0,  inter_prim,           0,  inter_prim,          0,
+              0,           1, sec_to_prim,           0, sec_to_prim,           0, sec_to_prim,          0,
+    inter_prim ,           0,           1, prim_to_sec,  inter_prim,           0,  inter_prim,          0,
+    sec_to_prim,           0,           0,           1, sec_to_prim,           0, sec_to_prim,          0,
+    inter_prim ,           0,  inter_prim,           0,           1, prim_to_sec,  inter_prim,          0,
+    sec_to_prim,           0, sec_to_prim,           0,           0,           1, sec_to_prim,          0,
+    inter_prim ,           0,  inter_prim,           0,  inter_prim,           0,           1,prim_to_sec,
+    sec_to_prim,           0, sec_to_prim,           0, sec_to_prim,           0,           0,           1
   ))
-  as = function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
 
   mame_design(
     arms = 2,
@@ -116,7 +142,9 @@ make_example_mames <- function() {
     t = t,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = as,
+    alpha_spending_f = function(x, t) {
+      2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
+    },
     names_arms = names_arms,
     names_subgroups = names_subgroups
   )

@@ -93,7 +93,7 @@ function \code{\link[=get_n_subgroup]{get_n_subgroup()}}.
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
-design <- mames_cer_design(
+design <- mame_cer_design(
  arms = 2,
  enpoints = 2,
  n_control = 50,

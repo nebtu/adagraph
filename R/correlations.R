@@ -1,20 +1,3 @@
-n_subgroups <- tribble(
-  ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
-  "control" , F     , F     ,    0 ,
-  "control" , F     , T     ,   10 ,
-  "control" , T     , F     ,   10 ,
-  "control" , T     , T     ,   10 ,
-  "A1"      , F     , F     ,   20 ,
-  "A1"      , F     , T     ,   20 ,
-  "A1"      , T     , F     ,   20 ,
-  "A1"      , T     , T     ,   20 ,
-  "A2"      , F     , F     ,   10 ,
-  "A2"      , F     , T     ,   10 ,
-  "A2"      , T     , F     ,   30 ,
-  "A2"      , T     , T     ,   10 ,
-)
-
-
 #' Get correlation between different subgroups and arms
 #'
 #' Using the exact proportions/case numbers, calculate the correlations between
@@ -72,10 +55,11 @@ get_subgroup_correlation <- function(
   idx <- idx[idx$i < idx$j, ]
 
   entries <- cbind(
-    setNames(cells[idx$i, ], c("group_1", "arm_1")),
-    setNames(cells[idx$j, ], c("group_2", "arm_2"))
+    cells[idx$i, ],
+    cells[idx$j, ]
   )
   rownames(entries) <- NULL
+  colnames(entries) <- c("group_1", "arm_1", "group_2", "arm_2")
 
   diag(corr) <- 1
   for (idx in seq_len(nrow(entries))) {

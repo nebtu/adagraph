@@ -53,7 +53,7 @@ new_mame_design <- function(
     #correlation inside one endpoint
     correlation_endpoint <- get_multiarm_correlation(
       controls = 1,
-      treatment_assoc = rep(1:endpoints, each = arms),
+      treatment_assoc = rep(1, arms),
       n_control,
       n_treatments
     )
@@ -99,7 +99,6 @@ new_mame_design <- function(
   }
 
   if (is.null(names)) {
-    print("making names")
     if (subgroups != 0) {
       names <- paste0(
         rep(c("", paste0(names_subgroups, "_")), each = arms * endpoints),
@@ -115,7 +114,6 @@ new_mame_design <- function(
           names_arms
         )
     }
-    print(names)
   }
 
   design <- new_cer_design(
@@ -209,7 +207,7 @@ validate_mame_design_params <- function(
 #'
 #' @examples
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
-#' design <- mames_cer_design(
+#' design <- mame_cer_design(
 #'  arms = 2,
 #'  enpoints = 2,
 #'  n_control = 50,
@@ -242,7 +240,7 @@ mame_design <- function(
   names = NULL
 ) {
   if (length(n_treatments) == 1) {
-    n_treatments <- rep(n_treatments, length())
+    n_treatments <- rep(n_treatments, arms)
   }
   validate_mame_design_params(
     arms = arms,

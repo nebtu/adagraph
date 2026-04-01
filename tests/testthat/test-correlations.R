@@ -25,6 +25,68 @@ test_that("multiarm and direct calculation are similar", {
   )
 
   for (i in nrow(options)) {
+    # n_subgroups <- tribble(
+    #   ~"arm"    , ~"G1" , ~"G2" , ~"G3" , ~"n"                   ,
+    #   "control" , F     , F     , F     ,                      0 ,
+    #   "control" , F     , T     , F     ,                      0 ,
+    #   "control" , T     , F     , F     ,                      0 ,
+    #   "control" , T     , T     , F     ,                      0 ,
+    #   "control" , F     , F     , T     ,                      0 ,
+    #   "control" , F     , T     , T     ,                      0 ,
+    #   "control" , T     , F     , T     ,                      0 ,
+    #   "control" , T     , T     , T     , options$control[i]     ,
+    #   "A1"      , F     , F     , T     , options$treatment_3[i] ,
+    #   "A1"      , F     , T     , T     ,                      0 ,
+    #   "A1"      , T     , F     , T     ,                      0 ,
+    #   "A1"      , T     , T     , T     ,                      0 ,
+    #   "A1"      , F     , F     , F     ,                      0 ,
+    #   "A1"      , F     , T     , F     , options$treatment_2[i] ,
+    #   "A1"      , T     , F     , F     , options$treatment_1[i] ,
+    #   "A1"      , T     , T     , F     ,                      0 ,
+    # )
+
+    #fmt: skip
+    n_subgroups <- rbind(
+      data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 0),
+      data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 0),
+      data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 0),
+      data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 0),
+      data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = TRUE,  n = 0),
+      data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 0),
+      data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 0),
+      data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = options$control[i]),
+      data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, G3 = TRUE,  n = options$treatment_3[i]),
+      data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 0),
+      data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 0),
+      data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = 0),
+      data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 0),
+      data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = options$treatment_2[i]),
+      data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = options$treatment_1[i]),
+      data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 0)
+    )
+
+    names_arms <- "A1"
+    names_subgroups <- c("G1", "G2", "G3")
+    corr <- get_subgroup_correlation(
+      subgroups = 3,
+      arms = 1,
+      n_subgroups = n_subgroups,
+      names_arms = names_arms,
+      names_subgroups = names_subgroups
+    )
+
+    expect_equal(
+      corr[c(2, 3, 4), c(2, 3, 4)],
+      direct_multiarm(
+        n_controls = options$control[i],
+        n_treatments = c(
+          options$treatment_1[i],
+          options$treatment_2[i],
+          options$treatment_3[i]
+        )
+      )
+    )
+
     expect_equal(
       direct_multiarm(
         n_controls = options$control[i],
@@ -49,20 +111,35 @@ test_that("multiarm and direct calculation are similar", {
 })
 
 test_that("subgroup correlation calculations, with 2 groups and 2 arms", {
-  n_subgroups <- tribble(
-    ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
-    "control" , F     , F     ,    0 ,
-    "control" , F     , T     ,   10 ,
-    "control" , T     , F     ,   10 ,
-    "control" , T     , T     ,   10 ,
-    "A1"      , F     , F     ,   20 ,
-    "A1"      , F     , T     ,   20 ,
-    "A1"      , T     , F     ,   20 ,
-    "A1"      , T     , T     ,   20 ,
-    "A2"      , F     , F     ,   10 ,
-    "A2"      , F     , T     ,   10 ,
-    "A2"      , T     , F     ,   30 ,
-    "A2"      , T     , T     ,   10 ,
+  # n_subgroups <- tribble(
+  #   ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
+  #   "control" , F     , F     ,    0 ,
+  #   "control" , F     , T     ,   10 ,
+  #   "control" , T     , F     ,   10 ,
+  #   "control" , T     , T     ,   10 ,
+  #   "A1"      , F     , F     ,   20 ,
+  #   "A1"      , F     , T     ,   20 ,
+  #   "A1"      , T     , F     ,   20 ,
+  #   "A1"      , T     , T     ,   20 ,
+  #   "A2"      , F     , F     ,   10 ,
+  #   "A2"      , F     , T     ,   10 ,
+  #   "A2"      , T     , F     ,   30 ,
+  #   "A2"      , T     , T     ,   10 ,
+  # )
+  #fmt: skip
+  n_subgroups <- rbind(
+    data.frame(arm = "control", G1 = FALSE, G2 = FALSE, n =  0),
+    data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  n = 10),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, n = 20),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  n = 20),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, n = 20),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  n = 20),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = FALSE, n = 10),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = TRUE,  n = 10),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = FALSE, n = 30),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = TRUE,  n = 10)
   )
   names_arms <- c("A1", "A2")
   names_subgroups <- c("G1", "G2")
@@ -80,32 +157,59 @@ test_that("subgroup correlation calculations, with 2 groups and 2 arms", {
 
 
 test_that("subgroup correlation calculations, with 3 groups and 2 arms", {
-  n_subgroups <- tribble(
-    ~"arm"    , ~"G1" , ~"G2" , ~"G3" , ~"n" ,
-    "control" , F     , F     , F     ,    0 ,
-    "control" , F     , T     , F     ,   10 ,
-    "control" , T     , F     , F     ,   10 ,
-    "control" , T     , T     , F     ,   10 ,
-    "A1"      , F     , F     , F     ,   20 ,
-    "A1"      , F     , T     , F     ,   30 ,
-    "A1"      , T     , F     , F     ,   40 ,
-    "A1"      , T     , T     , F     ,   50 ,
-    "A2"      , F     , F     , F     ,   10 ,
-    "A2"      , F     , T     , F     ,   10 ,
-    "A2"      , T     , F     , F     ,   30 ,
-    "A2"      , T     , T     , F     ,   10 ,
-    "control" , F     , F     , T     ,    0 ,
-    "control" , F     , T     , T     ,   10 ,
-    "control" , T     , F     , T     ,   10 ,
-    "control" , T     , T     , T     ,   10 ,
-    "A1"      , F     , F     , T     ,   20 ,
-    "A1"      , F     , T     , T     ,   10 ,
-    "A1"      , T     , F     , T     ,   20 ,
-    "A1"      , T     , T     , T     ,   20 ,
-    "A2"      , F     , F     , T     ,   10 ,
-    "A2"      , F     , T     , T     ,   10 ,
-    "A2"      , T     , F     , T     ,   30 ,
-    "A2"      , T     , T     , T     ,   10 ,
+  # n_subgroups <- tribble(
+  #   ~"arm"    , ~"G1" , ~"G2" , ~"G3" , ~"n" ,
+  #   "control" , F     , F     , F     ,    0 ,
+  #   "control" , F     , T     , F     ,   10 ,
+  #   "control" , T     , F     , F     ,   10 ,
+  #   "control" , T     , T     , F     ,   10 ,
+  #   "A1"      , F     , F     , F     ,   20 ,
+  #   "A1"      , F     , T     , F     ,   30 ,
+  #   "A1"      , T     , F     , F     ,   40 ,
+  #   "A1"      , T     , T     , F     ,   50 ,
+  #   "A2"      , F     , F     , F     ,   10 ,
+  #   "A2"      , F     , T     , F     ,   10 ,
+  #   "A2"      , T     , F     , F     ,   30 ,
+  #   "A2"      , T     , T     , F     ,   10 ,
+  #   "control" , F     , F     , T     ,    0 ,
+  #   "control" , F     , T     , T     ,   10 ,
+  #   "control" , T     , F     , T     ,   10 ,
+  #   "control" , T     , T     , T     ,   10 ,
+  #   "A1"      , F     , F     , T     ,   20 ,
+  #   "A1"      , F     , T     , T     ,   10 ,
+  #   "A1"      , T     , F     , T     ,   20 ,
+  #   "A1"      , T     , T     , T     ,   20 ,
+  #   "A2"      , F     , F     , T     ,   10 ,
+  #   "A2"      , F     , T     , T     ,   10 ,
+  #   "A2"      , T     , F     , T     ,   30 ,
+  #   "A2"      , T     , T     , T     ,   10 ,
+  # )
+  #fmt: skip
+  n_subgroups <- rbind(
+    data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = FALSE, n =  0),
+    data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 10),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 20),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 30),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 40),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 50),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 10),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 10),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 30),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 10),
+    data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = TRUE,  n =  0),
+    data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = 10),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, G3 = TRUE,  n = 20),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 10),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 20),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = 20),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = FALSE, G3 = TRUE,  n = 10),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 10),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 30),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = 10)
   )
   names_arms <- c("A1", "A2")
   names_subgroups <- c("G1", "G2", "G3")
@@ -122,17 +226,29 @@ test_that("subgroup correlation calculations, with 3 groups and 2 arms", {
 })
 
 test_that("subgroup correlation calculations, simulate arms as subgroups", {
-  n_subgroups <- tribble(
-    ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
-    "control" , F     , F     ,    0 ,
-    "control" , F     , T     ,    0 ,
-    "control" , T     , F     ,    0 ,
-    "control" , T     , T     ,   50 ,
-    "A1"      , F     , F     ,    0 ,
-    "A1"      , F     , T     ,   50 ,
-    "A1"      , T     , F     ,   50 ,
-    "A1"      , T     , T     ,    0 ,
+  # n_subgroups <- tribble(
+  #   ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
+  #   "control" , F     , F     ,    0 ,
+  #   "control" , F     , T     ,    0 ,
+  #   "control" , T     , F     ,    0 ,
+  #   "control" , T     , T     ,   50 ,
+  #   "A1"      , F     , F     ,    0 ,
+  #   "A1"      , F     , T     ,   50 ,
+  #   "A1"      , T     , F     ,   50 ,
+  #   "A1"      , T     , T     ,    0 ,
+  # )
+  #fmt: skip
+  n_subgroups <- rbind(
+    data.frame(arm = "control", G1 = FALSE, G2 = FALSE, n =  0),
+    data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  n =  0),
+    data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, n =  0),
+    data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  n = 50),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, n =  0),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  n = 50),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, n = 50),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  n =  0)
   )
+
   names_arms <- "A1"
   names_subgroups <- c("G1", "G2")
 
