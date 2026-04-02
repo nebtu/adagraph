@@ -33,11 +33,10 @@ specifications. These are:
   planned. Since for our trial, it is planned that the interim look is
   performed after 50% of the participants have enrolled, t is 1/2.
 
-By default, we also use the fact that if
-$B_{J}\left( \chi_{1} \right) \geq 1$ for some intersection hypotheses,
-we can also reject that subhypotheses at the interim, as described in
-the beginning of section 3.2.3. If this is not the desired behaviour,
-set `seq_bonf` to `FALSE`.
+By default, we also use the fact that if $B_{J}(\chi_{1}) \geq 1$ for
+some intersection hypotheses, we can also reject that subhypotheses at
+the interim, as described in the beginning of section 3.2.3. If this is
+not the desired behaviour, set `seq_bonf` to `FALSE`.
 
 ``` r
 test_m <- rbind(
