@@ -22,8 +22,8 @@ test_that("example from paper works as multiarm", {
   design_adj <- multiarm_drop_arms(
     design,
     c(1, 3),
-    n_cont_2 = c(0, 53),
-    n_treat_2 = c(0, 52, 0, 52)
+    n_cont_2 = c(53, 53), #those are the same people
+    n_treat_2 = c(0, 52, 0, 52) #those aren't
   ) |>
     cer_adapt(weights = c(0, 0.5, 0, 0.5))
 
