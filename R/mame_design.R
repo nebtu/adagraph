@@ -3,10 +3,11 @@
 #' For documentation on how to generate mame_design objects, see [mame_design()].
 #' The parameters for this function are mostly the same as in [mame_design()]
 #' Note however that all parameters have to already be expanded to vectors if
-#' possible
+#' possible. Additionally, only n_subgroups is allowed for giving the
+#' correlation structure for arms and subgroups
 #'
 #' @param
-#' arms,endpoints,n_control,n_treatments,weights,t,alpha,test_m,alpha_spending_f,seq_bonf,names
+#' arms,endpoints,,weights,t,alpha,test_m,alpha_spending_f,seq_bonf,names
 #' Same as for [mame_design()]
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
@@ -17,8 +18,6 @@ new_mame_design <- function(
   arms = integer(),
   endpoints = integer(),
   subgroups = integer(),
-  n_control = integer(),
-  n_treatments = integer(),
   n_subgroups = data.frame(),
   weights = double(),
   t = double(),
@@ -33,39 +32,13 @@ new_mame_design <- function(
   ...,
   class = character()
 ) {
-  if (is.null(names_arms)) {
-    if (!is.null(names(n_treatments))) {
-      names_arms <- names(n_treatments)
-    } else {
-      names_arms = paste0("A", 1:arms)
-    }
-  }
-
-  if (is.null(names_endpoints)) {
-    names_endpoints = paste0("E", 1:arms)
-  }
-
-  if (is.null(names_subgroups)) {
-    names_subgroups = paste0("G", 1:arms)
-  }
-
-  if (subgroups == 0) {
-    #correlation inside one endpoint
-    correlation_endpoint <- get_multiarm_correlation(
-      controls = 1,
-      treatment_assoc = rep(1, arms),
-      n_control,
-      n_treatments
-    )
-  } else {
-    correlation_endpoint <- get_subgroup_correlation(
-      subgroups,
-      arms,
-      n_subgroups,
-      names_arms,
-      names_subgroups
-    )
-  }
+  correlation_endpoint <- get_subgroup_correlation(
+    subgroups,
+    arms,
+    n_subgroups,
+    names_arms,
+    names_subgroups
+  )
 
   # We now need to combine the correlation into a complete correlation matrix
   # for all endpoints. The correlation inside each endpoint is given by
@@ -127,6 +100,11 @@ new_mame_design <- function(
     class = c(class, "mame_design")
   )
 
+  design$n_subgroups <- n_subgroups
+  design$names_arms <- names_arms
+  design$names_endpoints <- names_endpoints
+  design$names_subgroups <- names_subgroups
+
   design
 }
 
@@ -135,7 +113,7 @@ validate_mame_design_params <- function(
   endpoints = integer(),
   subgroups = integer(),
   n_control = integer(),
-  n_treatments = integer(),
+  n_arms = integer(),
   n_subgroups = integer(),
   weights = double(),
   t = double(),
@@ -165,27 +143,29 @@ validate_mame_design_params <- function(
 #' automatically. For endpoints, the default names are E1, E2, ..., for arms,
 #' they are A1, A2, ... and for subgroups G1, G2, .. are used.
 #'
-#' To provide the subgroup correlation structure, subgroup structure can be provided
-#' either as proportions or case number either with this function or when doing
-#' the interim test.
+#' To calculate the subgroup and arm correlation structure, subgroups can be provided
+#' either as proportions or patient numbers.
+#' Note that when using the n_control and n_arm, this is translated to the
+#' following structure internally as well.
 #' The structure (in argument n_subgroups) should be given as a dataframe, where
 #' each row specifies a specific subgroup in a specific arm (or the control).
-#' Therefore the first column should be names arm, and have values of
+#' Therefore the first column should be named arm, and have values of
 #' "control" and the names of the arms. Then should be columns for each of the
 #' subgroups (using the subgroup name as a column name), with logical values,
 #' specifying the exact combination of subgroups that are being specified. The
 #' last column should be either names 'n' (for case numbers) or 'prop' (for
 #' proportions) and give the given value for this exact intersection of
 #' subgroups.
-#' A dataframe with this structure can also be generated with the helper
-#' function [get_n_subgroup()].
+#' Those are the numbers/proportions for the first stage. Assuming that the
+#' proprortions do not stay exactly the same in the second stage, adapting for
+#' the new proportions is necessary.
 #'
 #' @param arms Number of arms
 #' @param endpoints Number of endpoints
 #' @param n_control Integer determining the number of
-#'   patients in the control group
-#' @param n_treatments Integer (or vector of integers) determining the number of
-#'   patients in each treatment group
+#'   patients in the control group, if there are no subgroups
+#' @param n_arms Integer (or vector of integers) determining the number of
+#'   patients in each arm, if there are no subgroups
 #' @param n_subgroups A data.frame specifying the structure of the subgroups,
 #'   see details for more information
 #' @param weights List of weights, measuring how important each hypothesis is.
@@ -211,7 +191,7 @@ validate_mame_design_params <- function(
 #'  arms = 2,
 #'  enpoints = 2,
 #'  n_control = 50,
-#'  n_treatments = c(50, 50),
+#'  n_arms = c(50, 50),
 #'  weights = c(0.5, 0.5, 0, 0), #all weight is at first on the first endpoint,
 #'                                #on both arms equally
 #'  alpha = 0.05,
@@ -225,9 +205,9 @@ mame_design <- function(
   arms = 1,
   endpoints = 1,
   subgroups = 0,
-  n_control = integer(),
-  n_treatments = integer(),
-  n_subgroups = data.frame(),
+  n_control = NULL,
+  n_arms = NULL,
+  n_subgroups = NULL,
   weights = double(),
   t = double(),
   alpha = double(),
@@ -239,15 +219,53 @@ mame_design <- function(
   names_subgroups = NULL,
   names = NULL
 ) {
-  if (length(n_treatments) == 1) {
-    n_treatments <- rep(n_treatments, arms)
+  if (length(n_arms) == 1) {
+    n_arms <- rep(n_arms, arms)
   }
+
+  if (is.null(names_arms)) {
+    if (!is.null(names(n_arms))) {
+      names_arms <- names(n_arms)
+    } else {
+      names_arms <- paste0("A", 1:arms)
+    }
+  }
+
+  if (is.null(names_endpoints)) {
+    names_endpoints <- paste0("E", 1:endpoints)
+  }
+
+  if (is.null(names_subgroups)) {
+    if (subgroups == 0) {
+      names_subgroups <- character(0)
+    } else {
+      names_subgroups <- paste0("G", 1:subgroups)
+    }
+  }
+
+  if (!is.null(n_control) || !is.null(n_arms)) {
+    if (subgroups != 0) {
+      cli::cli_warn(
+        "The {.arg n_control} and {.arg n_arms} arguments are only supported for designs without subgroups."
+      )
+    } else if (!is.null(n_subgroups)) {
+      cli::cli_warn(
+        "{.arg n_control} and {.arg n_arms} are ignored since {.arg n_subgroups} was supplied"
+      )
+    } else {
+      n_subgroups <- data.frame(
+        arm = c("control", names_arms),
+        n = c(n_control, n_arms)
+      )
+    }
+  }
+
   validate_mame_design_params(
     arms = arms,
     endpoints = endpoints,
     subgroups = subgroups,
     n_control = n_control,
-    n_treatments = n_treatments,
+    n_arms = n_arms,
     n_subgroups = n_subgroups,
     weights = weights,
     t = t,
@@ -266,7 +284,7 @@ mame_design <- function(
     endpoints = endpoints,
     subgroups = subgroups,
     n_control = n_control,
-    n_treatments = n_treatments,
+    n_arms = n_arms,
     n_subgroups = n_subgroups,
     weights = weights,
     t = t,

@@ -16,18 +16,12 @@ test_that("same as multiarm design", {
   alpha <- 0.025
   as <- function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
 
-  # n_subgroups <- rbind(
-  #   data.frame(arm = "control", n = 70),
-  #   data.frame(arm = "prim", n = 70),
-  #   data.frame(arm = "sec", n = 70)
-  # )
-
   des <- mame_design(
     arms = 2,
     endpoints = 2,
     subgroups = 0,
     n_control = 70,
-    n_treatments = 70,
+    n_arms = 70,
     weights = weights,
     t = t,
     alpha = alpha,
@@ -35,7 +29,27 @@ test_that("same as multiarm design", {
     alpha_spending_f = as,
     names = c("H1", "H2", "H3", "H4")
   )
+  des_multiarm <- make_example_multiarm()
 
-  #TODO: not completely the same ofc
-  expect_equal(des, make_example_multiarm())
+  #elements that are supposed to be different
+  # and alpha_spending_f, because it's environment can be different
+  ignore_mame <- c(
+    "alpha_spending_f",
+    "n_subgroups",
+    "names_arms",
+    "names_endpoints",
+    "names_subgroups"
+  )
+  ignore_multiarm <- c(
+    "alpha_spending_f",
+    "controls",
+    "treatment_assoc",
+    "n_controls",
+    "n_treatments"
+  )
+
+  expect_mapequal(
+    des[!(names(des) %in% ignore_mame)],
+    des_multiarm[!(names(des_multiarm) %in% ignore_multiarm)]
+  )
 })

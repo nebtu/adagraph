@@ -14,37 +14,28 @@ test_that("multiarm and direct calculation are similar", {
       }
     }
 
-    return(corr)
+    corr
   }
 
   options <- expand.grid(
-    control = 1:200,
-    treatment_1 = 1:50,
-    treatment_2 = 1:100,
-    treatment_3 = 1:200
+    control = seq(1, 100, by = 10),
+    treatment_1 = seq(1, 500, by = 100),
+    treatment_2 = seq(1, 100, by = 10),
+    treatment_3 = seq(1, 200, by = 50) + 3
   )
 
-  for (i in nrow(options)) {
-    # n_subgroups <- tribble(
-    #   ~"arm"    , ~"G1" , ~"G2" , ~"G3" , ~"n"                   ,
-    #   "control" , F     , F     , F     ,                      0 ,
-    #   "control" , F     , T     , F     ,                      0 ,
-    #   "control" , T     , F     , F     ,                      0 ,
-    #   "control" , T     , T     , F     ,                      0 ,
-    #   "control" , F     , F     , T     ,                      0 ,
-    #   "control" , F     , T     , T     ,                      0 ,
-    #   "control" , T     , F     , T     ,                      0 ,
-    #   "control" , T     , T     , T     , options$control[i]     ,
-    #   "A1"      , F     , F     , T     , options$treatment_3[i] ,
-    #   "A1"      , F     , T     , T     ,                      0 ,
-    #   "A1"      , T     , F     , T     ,                      0 ,
-    #   "A1"      , T     , T     , T     ,                      0 ,
-    #   "A1"      , F     , F     , F     ,                      0 ,
-    #   "A1"      , F     , T     , F     , options$treatment_2[i] ,
-    #   "A1"      , T     , F     , F     , options$treatment_1[i] ,
-    #   "A1"      , T     , T     , F     ,                      0 ,
-    # )
+  for (i in seq_len(nrow(options))) {
+    #direct correlation
+    corr_direct <- direct_multiarm(
+      n_controls = options$control[i],
+      n_treatments = c(
+        options$treatment_1[i],
+        options$treatment_2[i],
+        options$treatment_3[i]
+      )
+    )
 
+    #treatments as subgroups
     #fmt: skip
     n_subgroups <- rbind(
       data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 0),
@@ -67,7 +58,7 @@ test_that("multiarm and direct calculation are similar", {
 
     names_arms <- "A1"
     names_subgroups <- c("G1", "G2", "G3")
-    corr <- get_subgroup_correlation(
+    corr_subgroup <- get_subgroup_correlation(
       subgroups = 3,
       arms = 1,
       n_subgroups = n_subgroups,
@@ -76,26 +67,13 @@ test_that("multiarm and direct calculation are similar", {
     )
 
     expect_equal(
-      corr[c(2, 3, 4), c(2, 3, 4)],
-      direct_multiarm(
-        n_controls = options$control[i],
-        n_treatments = c(
-          options$treatment_1[i],
-          options$treatment_2[i],
-          options$treatment_3[i]
-        )
-      )
+      corr_subgroup[c(2, 3, 4), c(2, 3, 4)],
+      corr_direct
     )
 
+    #multiarm correlation
     expect_equal(
-      direct_multiarm(
-        n_controls = options$control[i],
-        n_treatments = c(
-          options$treatment_1[i],
-          options$treatment_2[i],
-          options$treatment_3[i]
-        )
-      ),
+      corr_direct,
       get_multiarm_correlation(
         controls = 1,
         treatment_assoc = c(1, 1, 1),
@@ -106,6 +84,28 @@ test_that("multiarm and direct calculation are similar", {
           options$treatment_3[i]
         )
       )
+    )
+
+    #multiarm from subgroup_correlation without subgroups
+    n_subgroups <- rbind(
+      data.frame(arm = "control", n = options$control[i]),
+      data.frame(arm = "A1", n = options$treatment_1[i]),
+      data.frame(arm = "A2", n = options$treatment_2[i]),
+      data.frame(arm = "A3", n = options$treatment_3[i])
+    )
+    names_arms <- c("A1", "A2", "A3")
+    names_subgroups <- c()
+
+    corr <- get_subgroup_correlation(
+      subgroups = 0,
+      arms = 3,
+      n_subgroups = n_subgroups,
+      names_arms = names_arms,
+      names_subgroups = names_subgroups
+    )
+    expect_equal(
+      corr_direct,
+      corr
     )
   }
 })
