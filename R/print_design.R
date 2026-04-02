@@ -9,6 +9,7 @@
 #' @noRd
 print_design_common <- function(x, header_label = "CER", hooks = list()) {
   k <- attr(x, "k")
+  names <- names(x[["weights"]])
   cli::cat_line(
     "A ",
     header_label,
@@ -31,7 +32,7 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
     if (any(x[["rej_interim"]])) {
       cli::cat_line(
         cli::format_inline(
-          "Hypotheses rejected at the interim: {which(x[[\"rej_interim\"]])}"
+          "Hypotheses rejected at the interim: {names[x[[\"rej_interim\"]]]}"
         )
       )
     } else {

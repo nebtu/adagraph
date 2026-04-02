@@ -19,7 +19,7 @@
     A CER Design object, for testing 4 hypotheses at FWER 0.025.
     
     -- An interim test has been performed. -----------------------------------------
-    Hypotheses rejected at the interim: 1
+    Hypotheses rejected at the interim: H1
     -- No adaptions have been performed yet ----------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
@@ -28,7 +28,7 @@
     A CER Design object, for testing 4 hypotheses at FWER 0.025.
     
     -- An interim test has been performed. -----------------------------------------
-    Hypotheses rejected at the interim: 1
+    Hypotheses rejected at the interim: H1
     -- The following characteristics have been adapted: ----------------------------
     * Hypotheses weights
     -- No final test has been performed yet ----------------------------------------
@@ -38,7 +38,7 @@
     A CER Design object, for testing 4 hypotheses at FWER 0.025.
     
     -- An interim test has been performed. -----------------------------------------
-    Hypotheses rejected at the interim: 1
+    Hypotheses rejected at the interim: H1
     -- The following characteristics have been adapted: ----------------------------
     * Hypotheses weights
     -- Final test result -----------------------------------------------------------
@@ -61,7 +61,7 @@
     There are 2 control groups for a total of 4 hypotheses.
     
     -- An interim test has been performed. -----------------------------------------
-    Hypotheses rejected at the interim: 1
+    Hypotheses rejected at the interim: H1
     -- No adaptions have been performed yet ----------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
@@ -72,7 +72,7 @@
     There are 2 control groups for a total of 4 hypotheses.
     
     -- An interim test has been performed. -----------------------------------------
-    Hypotheses rejected at the interim: 1
+    Hypotheses rejected at the interim: H1
     -- The following characteristics have been adapted: ----------------------------
     * Hypotheses weights
     * Graph Transition Matrix
@@ -87,7 +87,7 @@
     There are 2 control groups for a total of 4 hypotheses.
     
     -- An interim test has been performed. -----------------------------------------
-    Hypotheses rejected at the interim: 1
+    Hypotheses rejected at the interim: H1
     -- The following characteristics have been adapted: ----------------------------
     * Hypotheses weights
     * Graph Transition Matrix
