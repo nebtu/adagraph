@@ -63,7 +63,7 @@ automatically generated to A1, A2, etc.}
 \item{names_endpoints}{names for the different endpoints If not provided, they will be
 automatically generated to E1, E2, etc.}
 
-\item{names_subgroups}{names for the different subgroups If not provided, they will be
+\item{names_subgroups}{names for the different subgroups. If not provided, they will be
 automatically generated to G1, G2, etc.}
 
 \item{names}{optional names for the hypotheses. If not provided, they are
@@ -106,6 +106,13 @@ the new proportions is necessary.
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
+
+m <- rbind(
+  H1 = c(0, 1 / 2, 1 / 2, 0),
+ H2 = c(1 / 2, 0, 0, 1 / 2),
+  H3 = c(0, 1, 0, 0),
+  H4 = c(1, 0, 0, 0)
+)
 design <- mame_design(
  arms = 2,
  endpoints = 2,
@@ -114,10 +121,10 @@ design <- mame_design(
  weights = c(0.5, 0.5, 0, 0), #all weight is at first on the first endpoint,
                                #on both arms equally
  alpha = 0.05,
- test_m = rbind(c(0, 1),
-              c(1, 0)),
+ test_m = m,
  alpha_spending_f = as,
- t = 0.5)
+ t = 0.5
+)
 
 design
 }

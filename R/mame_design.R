@@ -162,6 +162,7 @@ validate_mame_design_params <- function(
 #'
 #' @param arms Number of arms
 #' @param endpoints Number of endpoints
+#' @param subgroups Number of subgroups in addition to the whole collective (can be 0)
 #' @param n_control Integer determining the number of
 #'   patients in the control group, if there are no subgroups
 #' @param n_arms Integer (or vector of integers) determining the number of
@@ -179,26 +180,39 @@ validate_mame_design_params <- function(
 #'   alpha (for overall spent alpha) and t (information fraction at interim test)
 #' @param seq_bonf automatically reject hypotheses at the second stage
 #'   if the sum of their PCER is greater 1
-#' @param names optional names for the hypotheses. IF NULL, the names are of the
-#'   form E1_A1 for enpoint 1, arm 1, etc.
+#' @param names_arms names for the different arms. If not provided, they will be
+#'   automatically generated to A1, A2, etc.
+#' @param names_endpoints names for the different endpoints If not provided, they will be
+#'   automatically generated to E1, E2, etc.
+#' @param names_subgroups names for the different subgroups. If not provided, they will be
+#'   automatically generated to G1, G2, etc.
+#' @param names optional names for the hypotheses. If not provided, they are
+#'   generated from the names of the endpoints, arms and subgroups
 #'
 #' @return An object of class `mame_design`
 #' @export
 #'
 #' @examples
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
-#' design <- mame_cer_design(
+#'
+#' m <- rbind(
+#'   H1 = c(0, 1 / 2, 1 / 2, 0),
+#'  H2 = c(1 / 2, 0, 0, 1 / 2),
+#'   H3 = c(0, 1, 0, 0),
+#'   H4 = c(1, 0, 0, 0)
+#' )
+#' design <- mame_design(
 #'  arms = 2,
-#'  enpoints = 2,
+#'  endpoints = 2,
 #'  n_control = 50,
 #'  n_arms = c(50, 50),
 #'  weights = c(0.5, 0.5, 0, 0), #all weight is at first on the first endpoint,
 #'                                #on both arms equally
 #'  alpha = 0.05,
-#'  test_m = rbind(c(0, 1),
-#'               c(1, 0)),
+#'  test_m = m,
 #'  alpha_spending_f = as,
-#'  t = 0.5)
+#'  t = 0.5
+#' )
 #'
 #' design
 mame_design <- function(

@@ -12,7 +12,34 @@ get_subgroup_correlation(
   names_subgroups
 )
 }
+\arguments{
+\item{subgroups}{Number of subgroups in addition to the whole collective (can be 0)}
+
+\item{arms}{Number of arms}
+
+\item{n_subgroups}{A data.frame specifying the structure of the subgroups,
+see details for more information}
+
+\item{names_arms}{names for the different arms.}
+
+\item{names_subgroups}{names for the different subgroups}
+}
 \description{
 Using the exact proportions/case numbers, calculate the correlations between
 different subgroups and study arms
+}
+\details{
+To calculate the subgroup and arm correlation structure, subgroups can be provided
+either as proportions or patient numbers.
+Note that when using the n_control and n_arm, this is translated to the
+following structure internally as well.
+The structure (in argument n_subgroups) should be given as a dataframe, where
+each row specifies a specific subgroup in a specific arm (or the control).
+Therefore the first column should be named arm, and have values of
+"control" and the names of the arms. Then should be columns for each of the
+subgroups (using the subgroup name as a column name), with logical values,
+specifying the exact combination of subgroups that are being specified. The
+last column should be either names 'n' (for case numbers) or 'prop' (for
+proportions) and give the given value for this exact intersection of
+subgroups.
 }
