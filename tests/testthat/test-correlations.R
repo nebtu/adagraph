@@ -226,17 +226,6 @@ test_that("subgroup correlation calculations, with 3 groups and 2 arms", {
 })
 
 test_that("subgroup correlation calculations, simulate arms as subgroups", {
-  # n_subgroups <- tribble(
-  #   ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
-  #   "control" , F     , F     ,    0 ,
-  #   "control" , F     , T     ,    0 ,
-  #   "control" , T     , F     ,    0 ,
-  #   "control" , T     , T     ,   50 ,
-  #   "A1"      , F     , F     ,    0 ,
-  #   "A1"      , F     , T     ,   50 ,
-  #   "A1"      , T     , F     ,   50 ,
-  #   "A1"      , T     , T     ,    0 ,
-  # )
   #fmt: skip
   n_subgroups <- rbind(
     data.frame(arm = "control", G1 = FALSE, G2 = FALSE, n =  0),

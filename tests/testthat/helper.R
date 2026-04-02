@@ -84,16 +84,18 @@ make_example_mame <- function() {
   #   "secondary" , F       ,  120 ,
   #   "secondary" , T       ,   80 ,
   # )
+
   n_subgroups <- rbind(
     data.frame(arm = "control", `HPV+` = FALSE, n = 120, check.names = FALSE),
     data.frame(arm = "control", `HPV+` = TRUE, n = 80, check.names = FALSE),
-    data.frame(arm = "prim", `HPV+` = FALSE, n = 120, check.names = FALSE),
-    data.frame(arm = "prim", `HPV+` = TRUE, n = 80, check.names = FALSE),
-    data.frame(arm = "sec", `HPV+` = FALSE, n = 120, check.names = FALSE),
-    data.frame(arm = "sec", `HPV+` = TRUE, n = 80, check.names = FALSE)
+    data.frame(arm = "arm1", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = TRUE, n = 80, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = TRUE, n = 80, check.names = FALSE)
   )
-  names_arms <- c("prim", "sec")
+  names_arms <- c("arm1", "arm2")
   names_subgroups <- "HPV+"
+  names_endpoints <- c("prim", "sec")
 
   alpha <- 0.025
   t <- 0.5
@@ -102,17 +104,6 @@ make_example_mame <- function() {
   sec_to_prim <- 1 / 3
   inter_prim <- 0.2
   prim_to_sec <- 0.4
-  # test_m <- as.matrix(tribble(
-  #   ~"total_E1_prim" , ~"total_E1_sec" , ~"total_E2_prim" , ~"total_E2_sec" , ~"HPV+_E1_prim" , ~"HPV+_E1_sec" , ~"HPV+_E2_prim" , ~"HPV+_E2_sec" ,
-  #                  1 , prim_to_sec     , inter_prim       ,               0 , inter_prim      ,              0 , inter_prim      ,              0 ,
-  #                  0 ,               1 , sec_to_prim      ,               0 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
-  #   inter_prim       ,               0 ,                1 , prim_to_sec     , inter_prim      ,              0 , inter_prim      ,              0 ,
-  #   sec_to_prim      ,               0 ,                0 ,               1 , sec_to_prim     ,              0 , sec_to_prim     ,              0 ,
-  #   inter_prim       ,               0 , inter_prim       ,               0 ,               1 , prim_to_sec    , inter_prim      ,              0 ,
-  #   sec_to_prim      ,               0 , sec_to_prim      ,               0 ,               0 ,              1 , sec_to_prim     ,              0 ,
-  #   inter_prim       ,               0 , inter_prim       ,               0 , inter_prim      ,              0 ,               1 , prim_to_sec    ,
-  #   sec_to_prim      ,               0 , sec_to_prim      ,               0 , sec_to_prim     ,              0 ,               0 ,              1 ,
-  # ))
 
   #fmt: skip
   test_m <- matrix(
@@ -146,6 +137,7 @@ make_example_mame <- function() {
       2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
     },
     names_arms = names_arms,
-    names_subgroups = names_subgroups
+    names_subgroups = names_subgroups,
+    names_endpoints = names_endpoints
   )
 }

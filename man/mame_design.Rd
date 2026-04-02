@@ -8,9 +8,9 @@ mame_design(
   arms = 1,
   endpoints = 1,
   subgroups = 0,
-  n_control = integer(),
-  n_treatments = integer(),
-  n_subgroups = data.frame(),
+  n_control = NULL,
+  n_arms = NULL,
+  n_subgroups = NULL,
   weights = double(),
   t = double(),
   alpha = double(),
@@ -29,11 +29,13 @@ mame_design(
 
 \item{endpoints}{Number of endpoints}
 
-\item{n_control}{Integer determining the number of
-patients in the control group}
+\item{subgroups}{Number of subgroups in addition to the whole collective (can be 0)}
 
-\item{n_treatments}{Integer (or vector of integers) determining the number of
-patients in each treatment group}
+\item{n_control}{Integer determining the number of
+patients in the control group, if there are no subgroups}
+
+\item{n_arms}{Integer (or vector of integers) determining the number of
+patients in each arm, if there are no subgroups}
 
 \item{n_subgroups}{A data.frame specifying the structure of the subgroups,
 see details for more information}
@@ -55,8 +57,17 @@ alpha (for overall spent alpha) and t (information fraction at interim test)}
 \item{seq_bonf}{automatically reject hypotheses at the second stage
 if the sum of their PCER is greater 1}
 
-\item{names}{optional names for the hypotheses. IF NULL, the names are of the
-form E1_A1 for enpoint 1, arm 1, etc.}
+\item{names_arms}{names for the different arms. If not provided, they will be
+automatically generated to A1, A2, etc.}
+
+\item{names_endpoints}{names for the different endpoints If not provided, they will be
+automatically generated to E1, E2, etc.}
+
+\item{names_subgroups}{names for the different subgroups If not provided, they will be
+automatically generated to G1, G2, etc.}
+
+\item{names}{optional names for the hypotheses. If not provided, they are
+generated from the names of the endpoints, arms and subgroups}
 }
 \value{
 An object of class \code{mame_design}
@@ -76,28 +87,30 @@ If no names for some structure are provided, they are determined
 automatically. For endpoints, the default names are E1, E2, ..., for arms,
 they are A1, A2, ... and for subgroups G1, G2, .. are used.
 
-To provide the subgroup correlation structure, subgroup structure can be provided
-either as proportions or case number either with this function or when doing
-the interim test.
+To calculate the subgroup and arm correlation structure, subgroups can be provided
+either as proportions or patient numbers.
+Note that when using the n_control and n_arm, this is translated to the
+following structure internally as well.
 The structure (in argument n_subgroups) should be given as a dataframe, where
 each row specifies a specific subgroup in a specific arm (or the control).
-Therefore the first column should be names arm, and have values of
+Therefore the first column should be named arm, and have values of
 "control" and the names of the arms. Then should be columns for each of the
 subgroups (using the subgroup name as a column name), with logical values,
 specifying the exact combination of subgroups that are being specified. The
 last column should be either names 'n' (for case numbers) or 'prop' (for
 proportions) and give the given value for this exact intersection of
 subgroups.
-A dataframe with this structure can also be generated with the helper
-function \code{\link[=get_n_subgroup]{get_n_subgroup()}}.
+Those are the numbers/proportions for the first stage. Assuming that the
+proprortions do not stay exactly the same in the second stage, adapting for
+the new proportions is necessary.
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
-design <- mame_cer_design(
+design <- mame_design(
  arms = 2,
- enpoints = 2,
+ endpoints = 2,
  n_control = 50,
- n_treatments = c(50, 50),
+ n_arms = c(50, 50),
  weights = c(0.5, 0.5, 0, 0), #all weight is at first on the first endpoint,
                                #on both arms equally
  alpha = 0.05,

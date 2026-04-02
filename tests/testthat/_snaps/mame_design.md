@@ -35,12 +35,12 @@
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 },
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 }
               ]
             }
@@ -69,7 +69,7 @@
             "names": {
               "type": "character",
               "attributes": {},
-              "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+              "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
             }
           },
           "value": [0.35, 0.35, 0, 0, 0.15, 0.15, 0, 0]
@@ -97,7 +97,7 @@
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 }
               ]
             }
@@ -122,7 +122,7 @@
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 }
               ]
             }
@@ -147,7 +147,7 @@
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 }
               ]
             }
@@ -169,12 +169,12 @@
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 },
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 }
               ]
             }
@@ -224,7 +224,7 @@
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 }
               ]
             }
@@ -249,7 +249,7 @@
                 {
                   "type": "character",
                   "attributes": {},
-                  "value": ["E1_prim", "E1_sec", "E2_prim", "E2_sec", "HPV+_E1_prim", "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"]
+                  "value": ["prim_arm1", "prim_arm2", "sec_arm1", "sec_arm2", "HPV+_prim_arm1", "HPV+_prim_arm2", "HPV+_sec_arm1", "HPV+_sec_arm2"]
                 }
               ]
             }
@@ -289,7 +289,7 @@
             {
               "type": "character",
               "attributes": {},
-              "value": ["control", "control", "prim", "prim", "sec", "sec"]
+              "value": ["control", "control", "arm1", "arm1", "arm2", "arm2"]
             },
             {
               "type": "logical",
@@ -306,12 +306,12 @@
         {
           "type": "character",
           "attributes": {},
-          "value": ["prim", "sec"]
+          "value": ["arm1", "arm2"]
         },
         {
           "type": "character",
           "attributes": {},
-          "value": ["E1", "E2"]
+          "value": ["prim", "sec"]
         },
         {
           "type": "character",
