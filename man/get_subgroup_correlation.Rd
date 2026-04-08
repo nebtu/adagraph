@@ -39,7 +39,9 @@ Therefore the first column should be named arm, and have values of
 "control" and the names of the arms. Then should be columns for each of the
 subgroups (using the subgroup name as a column name), with logical values,
 specifying the exact combination of subgroups that are being specified. The
-last column should be either names 'n' (for case numbers) or 'prop' (for
-proportions) and give the given value for this exact intersection of
+last column should have name 'n' and give the patient number for this exact intersection of
 subgroups.
+(Or the proportion of all patients that are in this intersection, or the same
+values multiplied by any other constant)
+Rows with no cases don't have to be passed
 }

@@ -33,6 +33,34 @@ test_that("example from paper works as multiarm", {
   expect_equal(design_tested$rej, c(T, T, F, T))
 })
 
+test_that("combining p-values works", {
+  design <- make_example_multiarm()
+
+  design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
+
+  reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
+  ad_t <- c(1, reallocated_t, 1, reallocated_t)
+  design_adj <- multiarm_drop_arms(
+    design,
+    c(1, 3),
+    n_cont_2 = c(53, 53), #those are the same people
+    n_treat_2 = c(0, 52, 0, 52) #those aren't
+  ) |>
+    cer_adapt(weights = c(0, 0.5, 0, 0.5))
+
+  design_tested <- cer_final_test(
+    design_adj,
+    c(NA, 0.0299, NA, 0.0586),
+    combined = FALSE
+  )
+  expect_equal(design_tested$rej, c(T, T, F, T))
+  expect_equal(
+    design_tested$p_values_final,
+    c(1, 0.011123393, 1, 0.023411914),
+    tolerance = 1e-7
+  )
+})
+
 test_that("warnings and errors are handled", {
   design <- make_example_design()
 

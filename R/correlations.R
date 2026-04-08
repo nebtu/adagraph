@@ -13,9 +13,11 @@
 #' "control" and the names of the arms. Then should be columns for each of the
 #' subgroups (using the subgroup name as a column name), with logical values,
 #' specifying the exact combination of subgroups that are being specified. The
-#' last column should be either names 'n' (for case numbers) or 'prop' (for
-#' proportions) and give the given value for this exact intersection of
+#' last column should have name 'n' and give the patient number for this exact intersection of
 #' subgroups.
+#' (Or the proportion of all patients that are in this intersection, or the same
+#' values multiplied by any other constant)
+#' Rows with no cases don't have to be passed
 #'
 #' @param arms Number of arms
 #' @param subgroups Number of subgroups in addition to the whole collective (can be 0)
@@ -36,7 +38,6 @@ get_subgroup_correlation <- function(
     nrow = (subgroups + 1) * arms,
     ncol = (subgroups + 1) * arms
   )
-  n_name <- ifelse("n" %in% colnames(n_subgroups), "n", "prop")
 
   #number of people in each (subgroup, arm) combination
   n_total_subgroups <- do.call(
@@ -47,7 +48,7 @@ get_subgroup_correlation <- function(
         lapply(names_subgroups, \(name) {
           n = sum(n_subgroups[
             n_subgroups[, name] == TRUE & n_subgroups[, "arm"] == arm_name,
-            n_name
+            "n"
           ])
           data.frame(arm = arm_name, subgroup = name, n = n)
         })
@@ -61,7 +62,7 @@ get_subgroup_correlation <- function(
     do.call(
       rbind,
       lapply(c(names_arms, "control"), \(arm_name) {
-        n = sum(n_subgroups[n_subgroups[, "arm"] == arm_name, n_name])
+        n = sum(n_subgroups[n_subgroups[, "arm"] == arm_name, "n"])
         data.frame(arm = arm_name, subgroup = "Total", n = n)
       })
     )
@@ -110,35 +111,35 @@ get_subgroup_correlation <- function(
       filter_rows <- (n_subgroups[, "arm"] == names_arms[arm_1]) &
         group_1_filter &
         group_2_filter
-      n_treatment_shared <- sum(n_subgroups[filter_rows, n_name])
+      n_treatment_shared <- sum(n_subgroups[filter_rows, "n"])
     }
 
     filter_rows <- (n_subgroups[, "arm"] == "control") &
       group_1_filter &
       group_2_filter
-    n_control_shared <- sum(n_subgroups[filter_rows, n_name])
+    n_control_shared <- sum(n_subgroups[filter_rows, "n"])
 
     n_control_1 <- n_total_subgroups[
       n_total_subgroups[, "arm"] == "control" &
         n_total_subgroups[, "subgroup"] == names_subgroups[group_1],
-      n_name
+      "n"
     ]
     n_control_2 <- n_total_subgroups[
       n_total_subgroups[, "arm"] == "control" &
         n_total_subgroups[, "subgroup"] == names_subgroups[group_2],
-      n_name
+      "n"
     ]
 
     n_treatment_1 <- n_total_subgroups[
       n_total_subgroups[, "arm"] == names_arms[arm_1] &
         n_total_subgroups[, "subgroup"] == names_subgroups[group_1],
-      n_name
+      "n"
     ]
 
     n_treatment_2 <- n_total_subgroups[
       n_total_subgroups[, "arm"] == names_arms[arm_2] &
         n_total_subgroups[, "subgroup"] == names_subgroups[group_2],
-      n_name
+      "n"
     ]
 
     corr_entry <- get_Z_correlation(

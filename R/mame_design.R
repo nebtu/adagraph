@@ -64,10 +64,15 @@ new_mame_design <- function(
   #
   k <- arms * endpoints * (subgroups + 1)
   correlation <- matrix(NA_real_, k, k)
+
   for (ep in seq_len(endpoints)) {
+    # idx <- unlist(lapply(1:(subgroups + 1), \(g) {
+    #   ((g - 1) * (subgroups + 1) + (ep - 1)) * arms + 1:arms
+    # }))
     idx <- unlist(lapply(1:(subgroups + 1), \(g) {
-      ((g - 1) * (subgroups + 1) + (ep - 1)) * arms + 1:arms
+      (g - 1) * (arms * endpoints) + (ep - 1) * arms + 1:arms
     }))
+
     correlation[idx, idx] <- correlation_endpoint
   }
 
