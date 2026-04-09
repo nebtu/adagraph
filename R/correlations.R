@@ -39,33 +39,10 @@ get_subgroup_correlation <- function(
     ncol = (subgroups + 1) * arms
   )
 
-  #number of people in each (subgroup, arm) combination
-  n_total_subgroups <- do.call(
-    rbind,
-    lapply(c(names_arms, "control"), \(arm_name) {
-      do.call(
-        rbind,
-        lapply(names_subgroups, \(name) {
-          n = sum(n_subgroups[
-            n_subgroups[, name] == TRUE & n_subgroups[, "arm"] == arm_name,
-            "n"
-          ])
-          data.frame(arm = arm_name, subgroup = name, n = n)
-        })
-      )
-    })
-  )
-
-  # add total n per arm
-  n_total_subgroups <- rbind(
-    n_total_subgroups,
-    do.call(
-      rbind,
-      lapply(c(names_arms, "control"), \(arm_name) {
-        n = sum(n_subgroups[n_subgroups[, "arm"] == arm_name, "n"])
-        data.frame(arm = arm_name, subgroup = "Total", n = n)
-      })
-    )
+  n_total_subgroups <- get_total_subgroup(
+    n_subgroups,
+    names_arms,
+    names_subgroups
   )
   names_subgroups <- c("Total", names_subgroups)
 

@@ -32,6 +32,75 @@ new_mame_design <- function(
   ...,
   class = character()
 ) {
+  correlation <- get_mame_correlation(
+    arms,
+    endpoints,
+    subgroups,
+    n_subgroups,
+    names_arms,
+    names_subgroups
+  )
+
+  hyp_assoc <- data.frame(
+    group = rep(c("Total", names_subgroups), each = arms * endpoints),
+    endpoints = rep(names_endpoints, each = arms, times = subgroups + 1),
+    arms = rep(names_arms, times = (subgroups + 1) * endpoints)
+  )
+
+  if (is.null(names)) {
+    if (endpoints == 1) {
+      name_part_endpoints <- ""
+    } else {
+      name_part_endpoints <- paste0(
+        hyp_assoc[["endpoints"]],
+        ifelse(arms > 1, "_", "")
+      )
+    }
+    if (arms == 1) {
+      name_part_arms <- ""
+    } else {
+      name_part_arms <-
+        hyp_assoc[["arms"]]
+    }
+    names <- paste0(
+      ifelse(
+        hyp_assoc[["group"]] == "Total",
+        "",
+        paste0(hyp_assoc[["group"]], ifelse(arms > 1 || subgroups > 1, "_", ""))
+      ),
+      name_part_endpoints,
+      name_part_arms
+    )
+  }
+
+  design <- new_cer_design(
+    correlation = correlation,
+    weights = weights,
+    alpha = alpha,
+    test_m = test_m,
+    alpha_spending_f = alpha_spending_f,
+    t = t,
+    names = names,
+    class = c(class, "mame_design")
+  )
+
+  design$n_subgroups <- n_subgroups
+  design$names_arms <- names_arms
+  design$names_endpoints <- names_endpoints
+  design$names_subgroups <- names_subgroups
+  design$hyp_assoc <- hyp_assoc
+
+  design
+}
+
+get_mame_correlation <- function(
+  arms,
+  endpoints,
+  subgroups,
+  n_subgroups,
+  names_arms,
+  names_subgroups
+) {
   correlation_endpoint <- get_subgroup_correlation(
     subgroups,
     arms,
@@ -76,41 +145,7 @@ new_mame_design <- function(
     correlation[idx, idx] <- correlation_endpoint
   }
 
-  if (is.null(names)) {
-    if (subgroups != 0) {
-      names <- paste0(
-        rep(c("", paste0(names_subgroups, "_")), each = arms * endpoints),
-        rep(names_endpoints, each = arms),
-        "_",
-        names_arms
-      )
-    } else {
-      names <-
-        paste0(
-          rep(names_endpoints, arms),
-          "_",
-          names_arms
-        )
-    }
-  }
-
-  design <- new_cer_design(
-    correlation = correlation,
-    weights = weights,
-    alpha = alpha,
-    test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
-    t = t,
-    names = names,
-    class = c(class, "mame_design")
-  )
-
-  design$n_subgroups <- n_subgroups
-  design$names_arms <- names_arms
-  design$names_endpoints <- names_endpoints
-  design$names_subgroups <- names_subgroups
-
-  design
+  correlation
 }
 
 validate_mame_design_params <- function(
@@ -164,6 +199,9 @@ validate_mame_design_params <- function(
 #' Those are the numbers/proportions for the first stage. Assuming that the
 #' proprortions do not stay exactly the same in the second stage, adapting for
 #' the new proportions is necessary.
+#' The pre-planned test without adaptions assumes that the group
+#' and arm patient numbers stay the same relative to each other.
+#' The size of the second trial in comparison to the first is determined by t.
 #'
 #' @param arms Number of arms
 #' @param endpoints Number of endpoints

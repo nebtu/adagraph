@@ -38,7 +38,8 @@ test_that("same as multiarm design", {
     "n_subgroups",
     "names_arms",
     "names_endpoints",
-    "names_subgroups"
+    "names_subgroups",
+    "hyp_assoc"
   )
   ignore_multiarm <- c(
     "alpha_spending_f",
@@ -102,7 +103,7 @@ test_that("more complicated subgroup structures work", {
     alpha_spending_f = as,
     test_m = diag(8),
     names_arms = names_arms,
-    names_endpoints = c(""),
+    names_endpoints = "E1",
     names_subgroups = names_subgroups
   )
 
