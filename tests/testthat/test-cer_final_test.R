@@ -5,7 +5,7 @@ test_that("example from paper works", {
 
   reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
   ad_t <- c(1, reallocated_t, 1, reallocated_t)
-  design_adj <- cer_drop_hypotheses(design, c(TRUE, FALSE, TRUE, FALSE)) |>
+  design_adj <- cer_drop_hypotheses(design, c(1, 3)) |>
     cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t)
 
   design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
@@ -75,7 +75,7 @@ test_that("warnings and errors are handled", {
   ad_t <- c(1, reallocated_t, 1, reallocated_t)
   design_adj <- cer_drop_hypotheses(
     design,
-    c(TRUE, FALSE, TRUE, FALSE),
+    c(1, 3),
     adapt_bounds = FALSE
   ) |>
     cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t, adapt_bounds = FALSE)

@@ -114,14 +114,14 @@ make_example_mame <- function() {
       "HPV+_E1_prim",  "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"
     )),
     data = c(
-              1, prim_to_sec,  inter_prim,           0,  inter_prim,           0,  inter_prim,          0,
-              0,           1, sec_to_prim,           0, sec_to_prim,           0, sec_to_prim,          0,
-    inter_prim ,           0,           1, prim_to_sec,  inter_prim,           0,  inter_prim,          0,
-    sec_to_prim,           0,           0,           1, sec_to_prim,           0, sec_to_prim,          0,
-    inter_prim ,           0,  inter_prim,           0,           1, prim_to_sec,  inter_prim,          0,
-    sec_to_prim,           0, sec_to_prim,           0,           0,           1, sec_to_prim,          0,
-    inter_prim ,           0,  inter_prim,           0,  inter_prim,           0,           1,prim_to_sec,
-    sec_to_prim,           0, sec_to_prim,           0, sec_to_prim,           0,           0,           1
+              0,   inter_prim, prim_to_sec,          0,  inter_prim, inter_prim,           0,           0,
+    inter_prim ,            0,           0,prim_to_sec,  inter_prim, inter_prim,           0,           0,
+              0,  sec_to_prim,           0,          0, sec_to_prim,sec_to_prim,           0,           0,
+    sec_to_prim,            0,           0,          0, sec_to_prim,sec_to_prim,           0,           0,
+    inter_prim ,   inter_prim,           0,          0,           0, inter_prim, prim_to_sec,           0,
+    inter_prim ,   inter_prim,           0,          0,  inter_prim,          0,           0, prim_to_sec,
+    sec_to_prim,  sec_to_prim,           0,          0,           0,sec_to_prim,           0,           0,
+    sec_to_prim,  sec_to_prim,           0,          0, sec_to_prim,          0,           0,            0
   ))
 
   mame_design(

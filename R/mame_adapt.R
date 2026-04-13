@@ -73,3 +73,30 @@ mame_adapt_n <- function(
   design_ad
 }
 
+#' Drop all hypotheses associated with some groups
+mame_drop_groups <- function(
+  design,
+  groups,
+  adapt_bounds = TRUE
+) {
+  drop_hyp <- which(design[["hyp_assoc"]][, "group"] %in% groups)
+  cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
+}
+
+mame_drop_arms <- function(
+  design,
+  arms,
+  adapt_bounds = TRUE
+) {
+  drop_hyp <- which(design[["hyp_assoc"]][, "arm"] %in% arms)
+  cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
+}
+
+mame_drop_endpoints <- function(
+  design,
+  endpoints,
+  adapt_bounds = TRUE
+) {
+  drop_hyp <- which(design[["hyp_assoc"]][, "endpoint"] %in% endpoints)
+  cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
+}

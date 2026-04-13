@@ -155,8 +155,6 @@ multiarm_drop_arms <- function(
   adapt_bounds = TRUE
 ) {
   treatment_assoc <- design$treatment_assoc
-  keep_arms <- rep(TRUE, attr(design, "k"))
-  keep_arms[arms] <- FALSE
 
   n_treat_1 <- floor(design$n_treat * design$t)
   n_cont_1 <- floor(design$n_controls * design$t)
@@ -185,13 +183,13 @@ multiarm_drop_arms <- function(
   if (alt_adj) {
     design <- cer_alt_drop_hypotheses(
       design,
-      (seq_along(treatment_assoc) %in% arms),
+      arms,
       adapt_bounds = FALSE
     )
   } else {
     design <- cer_drop_hypotheses(
       design,
-      (seq_along(treatment_assoc) %in% arms),
+      arms,
       adapt_bounds = FALSE
     )
   }

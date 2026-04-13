@@ -39,7 +39,10 @@ test_that("same as multiarm design", {
     "names_arms",
     "names_endpoints",
     "names_subgroups",
-    "hyp_assoc"
+    "hyp_assoc",
+    "subgroups",
+    "arms",
+    "endpoints"
   )
   ignore_multiarm <- c(
     "alpha_spending_f",

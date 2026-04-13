@@ -43,8 +43,8 @@ new_mame_design <- function(
 
   hyp_assoc <- data.frame(
     group = rep(c("Total", names_subgroups), each = arms * endpoints),
-    endpoints = rep(names_endpoints, each = arms, times = subgroups + 1),
-    arms = rep(names_arms, times = (subgroups + 1) * endpoints)
+    endpoint = rep(names_endpoints, each = arms, times = subgroups + 1),
+    arm = rep(names_arms, times = (subgroups + 1) * endpoints)
   )
 
   if (is.null(names)) {
@@ -52,7 +52,7 @@ new_mame_design <- function(
       name_part_endpoints <- ""
     } else {
       name_part_endpoints <- paste0(
-        hyp_assoc[["endpoints"]],
+        hyp_assoc[["endpoint"]],
         ifelse(arms > 1, "_", "")
       )
     }
@@ -60,7 +60,7 @@ new_mame_design <- function(
       name_part_arms <- ""
     } else {
       name_part_arms <-
-        hyp_assoc[["arms"]]
+        hyp_assoc[["arm"]]
     }
     names <- paste0(
       ifelse(
@@ -84,6 +84,9 @@ new_mame_design <- function(
     class = c(class, "mame_design")
   )
 
+  design$subgroups <- subgroups
+  design$arms <- arms
+  design$endpoints <- endpoints
   design$n_subgroups <- n_subgroups
   design$names_arms <- names_arms
   design$names_endpoints <- names_endpoints

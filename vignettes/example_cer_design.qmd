@@ -91,7 +91,7 @@ ad_t <- c(1, reallocated_t, 1, reallocated_t)
 
 design_adj <- design_interim |>
   cer_drop_hypotheses(
-    c(TRUE, FALSE, TRUE, FALSE)
+    c(1, 3)
   ) |>
   cer_adapt(
     weights = c(0, 0.5, 0, 0.5),

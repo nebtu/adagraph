@@ -132,7 +132,7 @@ futility <- 0.75
 adapt_func <- function(design) {
   p <- design$p_values_interim[1:4]
 
-  #treatments, were both primary and secndary enpoints are rejected
+  #treatments where both primary and secndary enpoints are rejected
   trt_rej <- design$rej_interim[1:4] & design$rej_interim[5:8]
 
   drop_hyp <- (p > futility) | trt_rej
