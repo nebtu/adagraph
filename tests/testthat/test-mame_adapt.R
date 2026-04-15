@@ -14,7 +14,7 @@ test_that("can adapt n", {
   n_subgroups_2 <- design$n_subgroups
   n_subgroups_2$n <- n_subgroups_2$n * 2
 
-  design_ad <- mame_adapt_n(design, n_subgroups_2)
+  design_ad <- mame_adapt_n(design, n_subgroups_2 = n_subgroups_2)
   expect_equal(design_ad$ad_correlation, design$correlation)
   expect_equal(design_ad$ad_t, rep(1 / 3, 8))
 })
@@ -59,7 +59,7 @@ test_that("paper_example works", {
 
   des_ad <- des |>
     mame_drop_arms("A1") |>
-    mame_adapt_n(n_subgroups_2)
+    mame_adapt_n(n_subgroups_2 = n_subgroups_2)
 
   ad_m <- rbind(
     c(0, 0, 0, 0),

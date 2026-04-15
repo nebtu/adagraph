@@ -8,7 +8,8 @@ summary.adagraph_design <- function(object, ...) {
     t = object[["t"]],
     interim_test = object[["interim_test"]],
     adaptions = object[["adaptions"]],
-    final_test = object[["final_test"]]
+    final_test = object[["final_test"]],
+    k = attr(object, "k")
   )
 
   if (isTRUE(object[["interim_test"]])) {
@@ -98,12 +99,11 @@ summary.multiarm_cer_design <- function(object, ...) {
 #'
 #' @noRd
 print_design_summary <- function(x, header_label, hooks = list()) {
-  k <- attr(x, "k")
   cli::cat_line(
     "A ",
     header_label,
     " Design object, for testing ",
-    k,
+    x[["k"]],
     " hypotheses at FWER ",
     x[["alpha"]],
     "."

@@ -83,7 +83,7 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
     if (any(x[["rej"]])) {
       rej <- x[["names"]][x[["rej"]]]
       cli::cat_line(cli::format_inline(
-        "Hypotheses rejected: {rej}}"
+        "Hypotheses rejected: {rej}"
       ))
     } else {
       cli::cat_line("No Hypotheses were rejected")
