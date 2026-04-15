@@ -1,0 +1,293 @@
+---
+title: "Example for using the CER Method for a multiarm trial (with subgroups) with adagraph"
+vignette: >
+  %\VignetteIndexEntry{Example of using the CER Method with adagraph}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: '#>'
+---
+
+```{r}
+#| label: setup
+library(adagraph)
+library(graphicalMCP)
+```
+
+We want to to explain how to design and test a two-stage, multi-arm, multi-endpoint clinical trial with adaptions after the interim analysis using the CER method.
+We consider the design of a phase-3 clinical trial comparing two doses (high and
+low) of a new compound for the treatment of severe oral mucositis (SOM) in
+patients undergoing postoperative radiotherapy for head and neck cancer.
+There are two endpoints being tested, the primary endpoint is to reduce the
+incidence of SOM and the secondary endpoint is to reduce the duration of SOM.
+Additionally, we will later want to test the effect of the treatment on the
+subgroup of HPV postive patients, since it is clinically plausible that the
+treatment might be more effective for this group.
+
+# Trial without subgroup analysis
+
+To work with the trial in `adagraph`, we first need to make a `mame_design` object with which we save all our prespecified trial specifications.
+
+First, we define the names of our arms and endpoints, so we can recognize them
+in all outputs.
+
+```{r}
+names_arms <- c("high", "low")
+names_endpoints <- c("prim", "sec")
+```
+
+Then, we define everything to define a valid test procedure.
+ * `test_m`, the matrix specifing the graph used for the closed testing procedure. The matrix we want to use is depicted in @fig-graph
+ * `weights`, the corresponding weights for the closed testing procedure
+ * `alpha`, the overall FWER we want to control for
+ * `alpha_spending_function`, for specifing how much of the FWER should be spent at the interim test
+ * `t`, the time information fraction at which the interim test is planned. Since for our trial, it is planned that the interim look is performed after 50% of the participants have enrolled, t is 1/2.
+
+```{r}
+test_m <- rbind(
+  c(0, 0.6, 0.4, 0),
+  c(0.6, 0, 0, 0.4),
+  c(0, 1, 0, 0),
+  c(1, 0, 0, 0)
+)
+weights <- c(0.5, 0.5, 0, 0)
+
+as <- function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
+alpha <- 0.025
+t <- 1 / 2
+```
+
+To be able to use the correlation structure between the endpoints, we also need
+to specify the patient numbers for each group.
+There are two ways to do this in our case. First, we can define the case numbers
+in a dataframe, noting for each arm the number of patients we will recruit.
+The patient numbers are then only the amount of patients expected (or already
+realised) for the first stage of the trial, 35 per arm in our case.
+We generally assume that the ratios between the different groups stay the same,
+but variations from this, either by changes in the strucutre or from random
+fluctionations, can be given as adaptations later on.
+The relative size of the first and second stage is given via the information
+fraction argument `t`.
+
+```{r}
+n_subgroups <- data.frame(
+  arm = c("control", "high", "low"),
+  n = c(35, 35, 35)
+)
+```
+
+Since there are no subgroups, we can alternatively also use simple numeric
+vectors for the control and arms separately.
+(Note that in this case the names in the vector entry are not necessary, only
+the order is relevant.)
+
+```{r}
+n_control <- 35
+n_arms <- c(high = 35, low = 35)
+```
+
+By default, we also use the fact that if $B_J(\chi_1)\geq 1$ for some intersection hypotheses, we can also reject that subhypotheses at the interim, as described in the beginning of section 3.2.3.
+If this is not the desired behaviour, set `seq_bonf` to `FALSE`.
+We now have all we need to define our testing design.
+
+```{r}
+design <- mame_design(
+  arm = 2,
+  endpoints = 2,
+  n_control = n_control,
+  n_arms = n_arms,
+  weights = weights,
+  t = t,
+  alpha = alpha,
+  test_m = test_m,
+  names_arms = names_arms,
+  names_endpoints = names_endpoints,
+  alpha_spending_f = as,
+  seq_bonf = TRUE
+)
+
+design
+```
+
+As we can see, the print method gives a short description of the design.
+For a more detailed overview, showing all arguments used, we can use the
+`summary()` function.
+
+```{r}
+summary(design)
+```
+
+Additonally, we can export and print the graph with the help of the
+`graphicalMCP`
+package.
+
+```{r}
+#| label: fig-graph
+#| fig-cap: Graph for the testing procedure we are using, generated using the
+#|   `export_graphical_mcp()` function
+gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 2)
+```
+
+Assume now the we get after the unblinding for the interim analysis the p values $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$, $p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$.
+We incorporate this information by applying the `cer_interim_test` function.
+The result is again a `mame_design` object, which now includes the interim test
+results.
+
+```{r}
+design_interim <- cer_interim_test(
+  design,
+  p_values = c(0.00045, 0.0952, 0.0225, 0.1104)
+)
+
+design_interim
+```
+
+We can see that for now, only the Hypothesis testing the primary endpoint for
+the low dose is rejected.
+While it is possible to continue now without an adaptions to the design,
+`adagraph` allows for many changes to be made to the 
+Adagraph does by itself not assume that we will change anything about our trial design, even if a hypotheses was rejected.
+
+Assume that it is decided that for the high dose, since the primary hypothesis
+was already rejected, it is not necessary to continue recruitment and the focus
+will instead be on the low dose.
+For dropping a specific arm, we can use the `mame_drop_arms()` function, which
+is made exactly for this purpose.
+This change has the benefit of allowing more patients for the low dose and control to
+be recruited than previously planned.
+This results in a change to the `t` parameter and the correlation structure, which can be calculated automatically with the `mame_adapt_n` function.
+Additionally, the weights will be redistributed equally on the two
+remaining hypotheses.
+For adjusting the weights, we use the much more general `cer_adapt()` function.
+
+```{r}
+n_control_ad <- 53
+n_arms_ad <- c(0, 52) #even tho it is being dropped, we still need to give
+#n for the low dose arm
+
+design_adj <- design_interim |>
+  mame_drop_arms("high") |>
+  mame_adapt_n(
+    n_control_2 = n_control_ad,
+    n_arms_2 = n_arms_ad
+  ) |>
+  cer_adapt(
+    weights = c(0, 0.5, 0, 0.5),
+  )
+
+design_adj
+```
+
+Note the new testing matrix resulting from those changes:
+
+```{r}
+design_adj$ad_test_m
+```
+
+Now we can test for the final results, $\tilde{p}_{2,2} = 0.0111$, and $\tilde{p}_{4,2}$.
+Note that the hypthoses that we no further use are still present in the design object, they just don't get any weight assigned.
+Therefore, we still need to use a vector of lenght 4 for our p-values, but can use `NA` as a corresponding value.
+
+
+```{r}
+design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
+
+design_tested
+```
+
+As we can see, both the hypotheses that we are still testing for are now also being rejected.
+
+# Enrichtment design
+
+Take now the same trial as before, but assuming a bigger sample size of 150
+people per arm.
+Thanks to the resulting higher power, it is decided to also check for effects
+specifically in the subgroup of patients testing positive for the human
+papilloma virus (HPV+).
+Doing this is also possible with `adagraph`, using again the `mame_design`
+class.
+
+Again, we define the names of our arms, endpoints and subgroups, as well as the
+characteristics of the design.
+This is now a bit more complicated, since we have a total of 8 hypotheses, so we
+use some helper variables.
+```{r}
+names_arms <- c("high", "low")
+names_endpoints <- c("prim", "sec")
+names_subgroups <- "HPV+"
+
+
+alpha <- 0.025
+t <- 0.5
+weights <- c(0.35, 0.35, 0, 0, 0.15, 0.15, 0, 0)
+
+s_p <- 1 / 3 #secondary to primary
+p_p <- 0.2 #primary to primary
+p_s <- 0.4 #primary to secondary
+
+#fmt: skip
+test_m <- matrix(
+    byrow = TRUE,
+    ncol = 8,
+    data = c(
+      0, p_p, p_s,   0, p_p, p_p,   0,   0,
+    p_p,   0,   0, p_s, p_p, p_p,   0,   0,
+      0, s_p,   0,   0, s_p, s_p,   0,   0,
+    s_p,   0,   0,   0, s_p, s_p,   0,   0,
+    p_p, p_p,   0,   0,   0, p_p, p_s,   0,
+    p_p, p_p,   0,   0, p_p,   0,   0, p_s,
+    s_p, s_p,   0,   0,   0, s_p,   0,   0,
+    s_p, s_p,   0,   0, s_p,   0,   0,   0
+  ))
+```
+
+For defining the first stage sample sizes, we need to use the `n_subgroups` data
+frame, where we also include the status of each group for each row (which is
+only `HPV+` in our case).
+
+```{r}
+n_subgroups <- rbind(
+  data.frame(arm = "control", `HPV+` = FALSE, n = 50, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, n = 25, check.names = FALSE),
+  data.frame(arm = "arm1", `HPV+` = FALSE, n = 50, check.names = FALSE),
+  data.frame(arm = "arm1", `HPV+` = TRUE, n = 25, check.names = FALSE),
+  data.frame(arm = "arm2", `HPV+` = FALSE, n = 50, check.names = FALSE),
+  data.frame(arm = "arm2", `HPV+` = TRUE, n = 25, check.names = FALSE)
+)
+
+design <- mame_design(
+  arm = 2,
+  endpoints = 2,
+  subgroups = 1,
+  n_subgroups = n_subgroups,
+  weights = weights,
+  t = t,
+  alpha = alpha,
+  test_m = test_m,
+  names_arms = names_arms,
+  names_endpoints = names_endpoints,
+  names_subgroups = names_subgroups,
+  alpha_spending_f = as,
+  seq_bonf = TRUE
+)
+
+design
+```
+
+Again we get a detailed summary when using the `summary()` function.
+
+```{r}
+summary(design)
+```
+
+
+```{r}
+#| label: fig-graph-subgroup
+#| fig-cap: Graph for the testing procedure we are using, generated using the
+#|   `export_graphical_mcp()` function
+gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 4)
+```
+
+
