@@ -4,12 +4,12 @@
 \alias{cer_drop_hypotheses}
 \title{Adapt a cer design by dropping hypotheses}
 \usage{
-cer_drop_hypotheses(design, hypotheses, adapt_bounds = TRUE)
+cer_drop_hypotheses(design, drop_hyp, adapt_bounds = TRUE)
 }
 \arguments{
 \item{design}{cer_design object}
 
-\item{hypotheses}{vector of booleans indicating for each hypotheses if it should be dropped}
+\item{drop_hyp}{that should be dropped, identified either by numbers or by their names}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
 FWER with the new adaptions. If doing multiple adaptions, it is enough to

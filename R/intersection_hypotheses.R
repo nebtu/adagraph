@@ -35,8 +35,8 @@ intersection_hypotheses.cer_design <- function(design, ...) {
   colnames(bounds_2) <- paste0("bound_final_", colnames(bounds_2))
   df <- data.frame(hyp_names, active_hyp, weights, bounds_1, bounds_2)
   if (isTRUE(design[["interim_test"]])) {
-    interim_rej <- data.frame(design[["intersection_rej_interim"]]) |>
-      stats::setNames("interim_rej")
+    interim_rej <- data.frame(design[["intersection_rej_interim"]])
+    colnames(interim_rej) <- "interim_rej"
     df <- cbind(df, interim_rej)
   }
   if (isTRUE(design[["adaptions"]])) {
@@ -50,8 +50,8 @@ intersection_hypotheses.cer_design <- function(design, ...) {
     df <- cbind(df, ad_weights, ad_bounds_2)
   }
   if (isTRUE(design[["final_test"]])) {
-    final_rej <- data.frame(design[["intersection_rej"]] == 1) |>
-      stats::setNames("rej")
+    final_rej <- data.frame(design[["intersection_rej"]] == 1)
+    colnames(final_rej) <- "rej"
     df <- cbind(df, final_rej)
   }
 

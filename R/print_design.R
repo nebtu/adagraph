@@ -29,9 +29,10 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
   if (isTRUE(x[["interim_test"]])) {
     cli::cat_rule("An interim test has been performed.")
     if (any(x[["rej_interim"]])) {
+      rej <- x[["names"]][x[["rej_interim"]]]
       cli::cat_line(
         cli::format_inline(
-          "Hypotheses rejected at the interim: {which(x[[\"rej_interim\"]])}"
+          "Hypotheses rejected at the interim: {rej}"
         )
       )
     } else {
@@ -80,8 +81,9 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
   if (isTRUE(x[["final_test"]])) {
     cli::cat_rule("Final test result")
     if (any(x[["rej"]])) {
+      rej <- x[["names"]][x[["rej"]]]
       cli::cat_line(cli::format_inline(
-        "Hypotheses rejected: {which(x[[\"rej\"]])}"
+        "Hypotheses rejected: {rej}}"
       ))
     } else {
       cli::cat_line("No Hypotheses were rejected")

@@ -1,9 +1,33 @@
+#' @export
 mame_adapt_n <- function(
   design,
-  n_subgroups_2,
+  n_control_2 = NULL,
+  n_arms_2 = NULL,
+  n_subgroups_2 = NULL,
   calculate_t = TRUE,
   adapt_bounds = TRUE
 ) {
+  if (length(n_arms_2) == 1) {
+    n_arms_2 <- rep(n_arms_2, design[["arms"]])
+  }
+
+  if (!is.null(n_control_2) || !is.null(n_arms_2)) {
+    if (design[["subgroups"]] != 0) {
+      cli::cli_warn(
+        "The {.arg n_control_2} and {.arg n_arms_2} arguments are only supported for designs without subgroups."
+      )
+    } else if (!is.null(n_subgroups_2)) {
+      cli::cli_warn(
+        "{.arg n_control_2} and {.arg n_arms_2} are ignored since {.arg n_subgroups_2} was supplied"
+      )
+    } else {
+      n_subgroups_2 <- data.frame(
+        arm = c("control", design[["names_arms"]]),
+        n = c(n_control_2, n_arms_2)
+      )
+    }
+  }
+
   ad_correlation <- get_mame_correlation(
     design[["arms"]],
     design[["endpoints"]],
@@ -74,6 +98,7 @@ mame_adapt_n <- function(
 }
 
 #' Drop all hypotheses associated with some groups
+#' @export
 mame_drop_groups <- function(
   design,
   groups,
@@ -83,6 +108,8 @@ mame_drop_groups <- function(
   cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
 }
 
+#' Drop all hypotheses associated with some arms
+#' @export
 mame_drop_arms <- function(
   design,
   arms,
@@ -92,6 +119,8 @@ mame_drop_arms <- function(
   cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
 }
 
+#' Drop all hypotheses associated with some endpoints
+#' @export
 mame_drop_endpoints <- function(
   design,
   endpoints,

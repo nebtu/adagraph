@@ -58,7 +58,8 @@ new_adagraph_design <- function(
     test_m = test_m,
     interim_test = FALSE,
     adaptions = FALSE,
-    final_test = FALSE
+    final_test = FALSE,
+    names = names
   )
   structure(
     design,
@@ -84,7 +85,8 @@ new_adagraph_design <- function(
 #'
 #' @return a list with the following components:
 #'
-#' * hyp_matrix: matrix of dimension 2^k-1 x k describing for all 2*(k-1) hypotheses which hypotheses
+#' * hyp_matrix: matrix of dimension 2^k-1 x k describing
+#'   for all 2*(k-1) hypotheses which hypotheses
 #'   from 1 to k are included in this intersection hypothesis
 #' * weights_matrix: matrix of dimension 2^k-1 x k describing for all 2*(k-1)
 #'   hpyotheses what the weight of each hypothesis is for testing this
@@ -101,14 +103,16 @@ get_intersection_hypotheses <- function(weights, test_m) {
     weights_matrix <- cbind(weights)
   } else {
     #generate weights for all sub-hypotheses
+    #NOTE: this function is quite slow for moderately large amounts (16) of
+    #hypotheses
     temp <- gMCPLite::generateWeights(test_m, weights)
     hyp_matrix <- temp[, 1:k]
     weights_matrix <- temp[, (k + 1):(2 * k)]
   }
-  closed_matrix = matrix(NA, nrow = 2^(k - 1), ncol = k)
+  closed_matrix <- matrix(NA, nrow = 2^(k - 1), ncol = k)
   for (i in 1:k) {
     # Fill the result matrix with row indices
-    closed_matrix[, i] = which(hyp_matrix[, i] == 1)
+    closed_matrix[, i] <- which(hyp_matrix[, i] == 1)
   }
   list(
     hyp_matrix = hyp_matrix,

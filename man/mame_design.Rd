@@ -103,6 +103,9 @@ subgroups.
 Those are the numbers/proportions for the first stage. Assuming that the
 proprortions do not stay exactly the same in the second stage, adapting for
 the new proportions is necessary.
+The pre-planned test without adaptions assumes that the group
+and arm patient numbers stay the same relative to each other.
+The size of the second trial in comparison to the first is determined by t.
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
