@@ -17,7 +17,7 @@ adapt bounds only for the last one, or call \code{adapt_bounds()} manually
 after.}
 }
 \value{
-design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
+design with specified hypotheses dropped
 }
 \description{
 The weights of the dropped hypotheses are set to 0 and distributed according to the prespecified graph.
@@ -37,6 +37,6 @@ design <- cer_design(
 
 design <- cer_interim_test(design, c(0.1, 0.02))
 
-design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+design <- cer_drop_hypotheses(design, 1)
 design
 }

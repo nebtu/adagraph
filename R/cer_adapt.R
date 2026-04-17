@@ -31,7 +31,8 @@
 #'  test_m=rbind(c(0, 1),
 #'               c(1, 0)),
 #'  alpha_spending_f=as,
-#'  t=0.5)
+#'  t=0.5
+#' )
 #'
 #' #note that it is not necessary to do an interim test before,
 #' #but that an interim test will only be done with the prespecified parameters
@@ -114,7 +115,7 @@ cer_adapt <- function(
 #'   adapt bounds only for the last one, or call `adapt_bounds()` manually
 #'   after.
 #'
-#' @return design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
+#' @return design with specified hypotheses dropped
 #' @export
 #'
 #' @examples
@@ -131,7 +132,7 @@ cer_adapt <- function(
 #'
 #' design <- cer_interim_test(design, c(0.1, 0.02))
 #'
-#' design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+#' design <- cer_drop_hypotheses(design, 1)
 #' design
 cer_drop_hypotheses <- function(
   design,

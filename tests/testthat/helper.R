@@ -75,16 +75,6 @@ make_example_multiarm <- function() {
 }
 
 make_example_mame <- function() {
-  # n_subgroups <- tribble(
-  #   ~"arm"      , ~"HPV+" , ~"n" ,
-  #   "control"   , F       ,  120 ,
-  #   "control"   , T       ,   80 ,
-  #   "primary"   , F       ,  120 ,
-  #   "primary"   , T       ,   80 ,
-  #   "secondary" , F       ,  120 ,
-  #   "secondary" , T       ,   80 ,
-  # )
-
   n_subgroups <- rbind(
     data.frame(arm = "control", `HPV+` = FALSE, n = 120, check.names = FALSE),
     data.frame(arm = "control", `HPV+` = TRUE, n = 80, check.names = FALSE),
@@ -109,10 +99,6 @@ make_example_mame <- function() {
   test_m <- matrix(
     byrow = TRUE,
     ncol = 8,
-    dimnames = list(NULL, c(
-      "total_E1_prim", "total_E1_sec", "total_E2_prim", "total_E2_sec",
-      "HPV+_E1_prim",  "HPV+_E1_sec", "HPV+_E2_prim", "HPV+_E2_sec"
-    )),
     data = c(
               0,   inter_prim, prim_to_sec,          0,  inter_prim, inter_prim,           0,           0,
     inter_prim ,            0,           0,prim_to_sec,  inter_prim, inter_prim,           0,           0,

@@ -53,7 +53,8 @@ design <- cer_design(
  test_m=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending_f=as,
- t=0.5)
+ t=0.5
+)
 
 #note that it is not necessary to do an interim test before,
 #but that an interim test will only be done with the prespecified parameters

@@ -1,7 +1,8 @@
 ---
-title: "Example for using the CER Method for a multiarm trial (with subgroups) with adagraph"
+title: "Example for using the CER Method for a MAME design (with subgroups) with adagraph"
 vignette: >
-  %\VignetteIndexEntry{Example of using the CER Method with adagraph}
+  %\VignetteIndexEntry{Example of using the CER Method for a MAME design (with
+  subgroups)}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 knitr:
@@ -39,6 +40,7 @@ names_endpoints <- c("prim", "sec")
 ```
 
 Then, we define everything to define a valid test procedure.
+
  * `test_m`, the matrix specifing the graph used for the closed testing procedure. The matrix we want to use is depicted in @fig-graph
  * `weights`, the corresponding weights for the closed testing procedure
  * `alpha`, the overall FWER we want to control for
@@ -130,7 +132,7 @@ package.
 gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 2)
 ```
 
-Assume now the we get after the unblinding for the interim analysis the p values $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$, $p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$.
+Assume now the we get after the unblinding for the interim analysis the p values are $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$, $p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$.
 We incorporate this information by applying the `cer_interim_test` function.
 The result is again a `mame_design` object, which now includes the interim test
 results.
@@ -187,6 +189,10 @@ design_adj$ad_test_m
 ```
 
 Now we can test for the final results, $\tilde{p}_{2,2} = 0.0111$, and $\tilde{p}_{4,2}$.
+By default `adagraph` expects the already combined p values, but using the
+`combined = FALSE` option adagraph calculates from the second stage p values the
+combined values, using the adapted value for `t` (which was calculated
+automatically by the `mame_adapt_n()` function).
 Note that the hypthoses that we no further use are still present in the design object, they just don't get any weight assigned.
 Therefore, we still need to use a vector of lenght 4 for our p-values, but can use `NA` as a corresponding value.
 
@@ -249,12 +255,12 @@ only `HPV+` in our case).
 
 ```{r}
 n_subgroups <- rbind(
-  data.frame(arm = "control", `HPV+` = FALSE, n = 50, check.names = FALSE),
-  data.frame(arm = "control", `HPV+` = TRUE, n = 25, check.names = FALSE),
-  data.frame(arm = "arm1", `HPV+` = FALSE, n = 50, check.names = FALSE),
-  data.frame(arm = "arm1", `HPV+` = TRUE, n = 25, check.names = FALSE),
-  data.frame(arm = "arm2", `HPV+` = FALSE, n = 50, check.names = FALSE),
-  data.frame(arm = "arm2", `HPV+` = TRUE, n = 25, check.names = FALSE)
+  data.frame(arm = "control", `HPV+` = FALSE, n = 20, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, n = 15, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = FALSE, n = 20, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = TRUE, n = 15, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, n = 20, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = TRUE, n = 15, check.names = FALSE)
 )
 
 design <- mame_design(
@@ -290,4 +296,57 @@ summary(design)
 gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 4)
 ```
 
+For the example, we assume that for the total group, we get $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$, $p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$.
+Additionally, there are p values for only the subgroup of the HPV positive
+popultaion, where we have $p_{5,1} = 0.0532$, $p_{6,1} = 0.2152$, $p_{7,1} = 0.0352$, and $p_{8,1} = 0.1728$.
+We incorporate this information by applying the `cer_interim_test` function.
+The result is again a `mame_design` object, which now includes the interim test
+results.
 
+```{r}
+design_interim <- cer_interim_test(
+  design,
+  p_values = c(0.00045, 0.0952, 0.0225, 0.1104, 0.0532, 0.2152, 0.0352, 0.1728)
+)
+
+design_interim
+```
+
+The further use of the package proceeds as above.
+One important difference is that we have to continue using the n_subgroups
+format, since there are still subgroups present.
+It is however possible to emit rows that are empty.
+There is now of course the option to also drop a whole subgroup from the
+analysis.
+For example, to arrive at the same case as before, we use the following code.
+
+```{r}
+n_subgroups <- rbind(
+  data.frame(arm = "control", `HPV+` = FALSE, n = 53, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, n = 52, check.names = FALSE)
+)
+
+design_adj <- design_interim |>
+  mame_drop_arms("high") |>
+  mame_drop_groups("HPV+") |>
+  mame_adapt_n(
+    n_control_2 = n_control_ad,
+    n_arms_2 = n_arms_ad
+  ) |>
+  cer_adapt(
+    weights = c(0, 0.5, 0, 0.5, 0, 0, 0, 0),
+  )
+
+design_adj
+```
+
+This leads then to the same result as before.
+
+```{r}
+design_tested <- cer_final_test(
+  design_adj,
+  c(NA, 0.0111, NA, 0.0234, NA, NA, NA, NA)
+)
+
+design_tested
+```

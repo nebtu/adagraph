@@ -35,7 +35,9 @@ Suggests:
     testthat (>= 3.0.0),
     matrixStats,
     withr,
-    future
+    future,
+    graphicalMCP,
+    igraph
 Config/testthat/edition: 3
 VignetteBuilder: quarto
 URL: https://nebtu.github.io/adagraph/
