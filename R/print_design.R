@@ -10,13 +10,9 @@
 print_design_common <- function(x, header_label = "CER", hooks = list()) {
   k <- attr(x, "k")
   cli::cat_line(
-    "A ",
-    header_label,
-    " Design object, for testing ",
-    k,
-    " hypotheses at FWER ",
-    x[["alpha"]],
-    "."
+    cli::format_inline(
+      "A {header_label} Design object, for testing the {k} hypotheses {x[[\"names\"]]} at FWER {x[[\"alpha\"]]}."
+    )
   )
   cli::cat_line()
 
@@ -122,4 +118,54 @@ print.cer_design <- function(x, ...) {
 print.adagraph_design <- function(x, ...) {
   # Generic graph design printer using the common helper
   print_design_common(x, header_label = "Adagraph")
+}
+
+#' @export
+print.mame_design <- function(x, ...) {
+  hooks <- list(
+    after_initial_spec = function(x) {
+      arms <- x[["arms"]]
+      endpoints <- x[["endpoints"]]
+      subgroups <- x[["subgroups"]]
+      if (arms > 1) {
+        names_arms_str <- cli::format_inline(" ({x[[\"names_arms\"]]})")
+      } else {
+        names_arms_str <- ""
+      }
+      if (endpoints > 1) {
+        names_ep_str <- cli::format_inline(" ({x[[\"names_endpoints\"]]})")
+      } else {
+        names_ep_str <- ""
+      }
+      if (subgroups > 0) {
+        names_sg_str <- cli::format_inline(" ({x[[\"names_subgroups\"]]})")
+      } else {
+        names_sg_str <- ""
+      }
+      cli::cat_line(
+        cli::format_inline(
+          "There are {arms} arm{?s}{names_arms_str}, {endpoints} endpoint{?s}{names_ep_str} and {cli::no(subgroups)} subgroup{?s}{names_sg_str}."
+        )
+      )
+      cli::cat_line(
+        cli::format_inline(
+          "The first stage sample size per arm/group is:"
+        )
+      )
+      print.data.frame(x[["n_subgroups"]], row.names = FALSE)
+      cli::cat_line()
+    },
+    after_adaptions = function(x) {
+      if (!is.null(x[["ad_n_subgroups"]])) {
+        cli::cat_line(
+          cli::format_inline(
+            "The second stage sample size per arm/group is:"
+          )
+        )
+        print.data.frame(x[["ad_n_subgroups"]], row.names = FALSE)
+      }
+    }
+  )
+
+  print_design_common(x, header_label = "MAME", hooks = hooks)
 }

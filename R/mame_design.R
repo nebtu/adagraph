@@ -303,23 +303,6 @@ mame_design <- function(
     }
   }
 
-  if (!is.null(n_control) || !is.null(n_arms)) {
-    if (subgroups != 0) {
-      cli::cli_warn(
-        "The {.arg n_control} and {.arg n_arms} arguments are only supported for designs without subgroups."
-      )
-    } else if (!is.null(n_subgroups)) {
-      cli::cli_warn(
-        "{.arg n_control} and {.arg n_arms} are ignored since {.arg n_subgroups} was supplied"
-      )
-    } else {
-      n_subgroups <- data.frame(
-        arm = c("control", names_arms),
-        n = c(n_control, n_arms)
-      )
-    }
-  }
-
   validate_mame_design_params(
     arms = arms,
     endpoints = endpoints,
@@ -339,12 +322,27 @@ mame_design <- function(
     names = names
   )
 
+  if (!is.null(n_control) || !is.null(n_arms)) {
+    if (subgroups != 0) {
+      cli::cli_warn(
+        "The {.arg n_control} and {.arg n_arms} arguments are only supported for designs without subgroups."
+      )
+    } else if (!is.null(n_subgroups)) {
+      cli::cli_warn(
+        "{.arg n_control} and {.arg n_arms} are ignored since {.arg n_subgroups} was supplied"
+      )
+    } else {
+      n_subgroups <- data.frame(
+        arm = c("control", names_arms),
+        n = c(n_control, n_arms)
+      )
+    }
+  }
+
   new_mame_design(
     arms = arms,
     endpoints = endpoints,
     subgroups = subgroups,
-    n_control = n_control,
-    n_arms = n_arms,
     n_subgroups = n_subgroups,
     weights = weights,
     t = t,
