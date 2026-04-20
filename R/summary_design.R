@@ -9,6 +9,7 @@ summary.adagraph_design <- function(object, ...) {
     interim_test = object[["interim_test"]],
     adaptions = object[["adaptions"]],
     final_test = object[["final_test"]],
+    names = object[["names"]],
     k = attr(object, "k")
   )
 
@@ -89,6 +90,40 @@ summary.multiarm_cer_design <- function(object, ...) {
   summary_list
 }
 
+#' @export
+summary.mame_design <- function(object, ...) {
+  summary_list <- summary.cer_design(object)
+
+  hyp_assoc <- cbind(hypothesis = object[["names"]], object[["hyp_assoc"]])
+  summary_list <- c(
+    summary_list,
+    list(
+      arms = object[["arms"]],
+      endpoints = object[["endpoints"]],
+      subgroups = object[["subgroups"]],
+      names_arms = object[["names_arms"]],
+      names_endpoints = object[["names_endpoints"]],
+      names_subgroups = object[["names_subgroups"]],
+      n_subgroups = object[["n_subgroups"]],
+      hyp_assoc = hyp_assoc,
+      ad_n_subgroups = object[["ad_n_subgroups"]]
+    )
+  )
+
+  if (isTRUE(object[["adaptions"]])) {
+    summary_list <- c(
+      summary_list,
+      list(
+        ad_n_subgroups = object[["ad_n_subgroups"]]
+      )
+    )
+  }
+
+  class(summary_list) <- c("summary.mame_design", class(summary_list))
+
+  summary_list
+}
+
 #' Shared internal helper used by S3 summary print methods
 #'
 #' @param x design to be printed
@@ -100,15 +135,16 @@ summary.multiarm_cer_design <- function(object, ...) {
 #' @noRd
 print_design_summary <- function(x, header_label, hooks = list()) {
   cli::cat_line(
-    "A ",
-    header_label,
-    " Design object, for testing ",
-    x[["k"]],
-    " hypotheses at FWER ",
-    x[["alpha"]],
-    "."
+    cli::format_inline(
+      "A {header_label} Design object, for testing the {x[[\"k\"]]} hypotheses {x[[\"names\"]]} at FWER {x[[\"alpha\"]]}."
+    )
   )
   cli::cat_line()
+
+  # Allow class-specific additions inside the initial spec section
+  if (is.function(hooks$after_introduction)) {
+    hooks$after_introduction(x)
+  }
 
   cli::cat_rule("Inital design specification")
   cli::cat_line()
@@ -146,12 +182,14 @@ print_design_summary <- function(x, header_label, hooks = list()) {
     cli::cat_line("P-values of interim test are:")
     cli::cat_print(x[["p_values_interim"]])
     if (any(x[["rej_interim"]])) {
+      rej <- x[["names"]][x[["rej_interim"]]]
       cli::cat_line(
-        "Hypotheses rejected at the interim: ",
-        which(x[["rej_interim"]])
+        cli::format_inline(
+          "Hypotheses rejected at the interim: {rej}"
+        )
       )
     } else {
-      cli::cat_line("No Hypotheses were rejected at the interim")
+      cli::cat_line("No Hypotheses were rejected at the interim.")
     }
     cli::cat_line("")
   }
@@ -194,21 +232,20 @@ print_design_summary <- function(x, header_label, hooks = list()) {
     hooks$after_adaptions(x)
   }
 
-  # Final results if available
   if (isTRUE(x[["final_test"]])) {
     cli::cat_rule("Final test result")
     cli::cat_line()
-
     cli::cat_line("Overall p-values of the hypotheses are:")
     cli::cat_print(x[["p_values_final"]])
     if (any(x[["rej"]])) {
-      cli::cat_line("Hypotheses rejected: ")
-      cli::cat_print(which(x[["rej"]]))
+      rej <- x[["names"]][x[["rej"]]]
+      cli::cat_line(cli::format_inline(
+        "Hypotheses rejected: {rej}"
+      ))
     } else {
       cli::cat_line("No Hypotheses were rejected")
     }
   }
-
   invisible(x)
 }
 
@@ -271,6 +308,63 @@ print.summary.multiarm_cer_design <- function(x, ...) {
         )
         cli::cat_print(x[["ad_n_treatments"]])
         cli::cat_line()
+      }
+    }
+  )
+  print_design_summary(x, header_label = "Multi-arm", hooks = hooks)
+}
+
+#' @export
+print.summary.mame_design <- function(x, ...) {
+  hooks <- list(
+    after_introduction = function(x) {
+      arms <- x[["arms"]]
+      endpoints <- x[["endpoints"]]
+      subgroups <- x[["subgroups"]]
+      if (arms > 1) {
+        names_arms_str <- cli::format_inline(" ({x[[\"names_arms\"]]})")
+      } else {
+        names_arms_str <- ""
+      }
+      if (endpoints > 1) {
+        names_ep_str <- cli::format_inline(" ({x[[\"names_endpoints\"]]})")
+      } else {
+        names_ep_str <- ""
+      }
+      if (subgroups > 0) {
+        names_sg_str <- cli::format_inline(" ({x[[\"names_subgroups\"]]})")
+      } else {
+        names_sg_str <- ""
+      }
+      cli::cat_line(
+        cli::format_inline(
+          "There are {arms} arm{?s}{names_arms_str}, {endpoints} endpoint{?s}{names_ep_str} and {cli::no(subgroups)} subgroup{?s}{names_sg_str}."
+        )
+      )
+    },
+    after_initial_spec = function(x) {
+      cli::cat_line(
+        "Association between hypotheses and arms/endpoints/subgroups:"
+      )
+      print.data.frame(x[["hyp_assoc"]])
+      cli::cat_line()
+
+      cli::cat_line(
+        cli::format_inline(
+          "First stage sample size per arm/group"
+        )
+      )
+      print.data.frame(x[["n_subgroups"]], row.names = FALSE)
+      cli::cat_line()
+    },
+    after_adaptions = function(x) {
+      if (!is.null(x[["ad_n_subgroups"]])) {
+        cli::cat_line(
+          cli::format_inline(
+            "The second stage sample size per arm/group is:"
+          )
+        )
+        print.data.frame(x[["ad_n_subgroups"]], row.names = FALSE)
       }
     }
   )

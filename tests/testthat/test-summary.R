@@ -46,3 +46,54 @@ test_that("print.summary.multiarm_cer_design produces stable output across lifec
   design_f <- cer_final_test(design_a, p_final)
   expect_snapshot_output(print(summary(design_f)))
 })
+
+test_that("print.summary.mame_design produces stable output across lifecycle", {
+  # Initial design
+  design <- make_example_mame()
+  expect_snapshot_output(print(summary(design)))
+
+  # After interim test
+  p_val <- c(
+    0.00045,
+    0.0952,
+    0.0225,
+    0.1104,
+    0.00045,
+    0.0952,
+    0.0225,
+    0.1104
+  )
+  design_i <- cer_interim_test(design, p_val)
+  expect_snapshot_output(print(summary(design_i)))
+
+  n_subgroups <- rbind(
+    data.frame(arm = "control", `HPV+` = FALSE, n = 100, check.names = FALSE),
+    data.frame(arm = "control", `HPV+` = TRUE, n = 100, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = FALSE, n = 140, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = TRUE, n = 100, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = FALSE, n = 0, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = TRUE, n = 0, check.names = FALSE)
+  )
+  # After adaptation via new n_subgroups
+  design_a <- design_i |>
+    mame_drop_arms("arm2") |>
+    mame_adapt_n(
+      ad_n_subgroups = n_subgroups
+    )
+
+  expect_snapshot_output(print(summary(design_a)))
+
+  p_final <- c(
+    0.00105,
+    NA,
+    0.0425,
+    NA,
+    0.00145,
+    NA,
+    0.0125,
+    NA
+  )
+
+  design_f <- cer_final_test(design_a, p_final)
+  expect_snapshot_output(print(summary(design_f)))
+})
