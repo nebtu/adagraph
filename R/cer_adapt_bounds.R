@@ -1,8 +1,8 @@
 #' Adjust bounds after changing some design parameters
 #'
 #' This function calculates the new bounds for the p-values for the final test.
-#' It should be run once after finishing all adaptions after the interim test,
-#' if the `adapt_bounds` option was not true for the last adaption anyway.
+#' It should be run once after finishing all adaptations after the interim test,
+#' if the `adapt_bounds` option was not true for the last adaptation anyway.
 #'
 #' @param design A cer_design object
 #'
@@ -23,7 +23,7 @@
 #'
 #' design <- cer_interim_test(design, c(0.1, 0.02))
 #'
-#' design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+#' design <- cer_drop_hypotheses(design, 1)
 #' design <- cer_adapt_bounds(design)
 #'
 #' design

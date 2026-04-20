@@ -1,4 +1,5 @@
-#' Test a cer design for early rejection of hypotheses and calculate the CER for adaptions
+#' Test a cer design for early rejection of hypotheses and calculate the CER for
+#' adaptations
 #'
 #' @param design A cer_design object
 #' @param p_values A list of p-values for the hypotheses
@@ -22,7 +23,7 @@
 #'
 #' design <- cer_interim_test(design, c(0.001, 0.02))
 #'
-#' design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+#' design <- cer_drop_hypotheses(design, 1)
 #' design <- cer_adapt_bounds(design)
 #'
 #' design <- cer_final_test(design, c(NA, 0.01))
@@ -32,20 +33,26 @@ cer_final_test <- function(
   p_values,
   combined = TRUE
 ) {
-  if (!design$interim_test) {
+  if (!design[["interim_test"]]) {
     cli::cli_abort(
       "Attempting to do a final test before interim test.",
       class = "wrong_sequence_no_interim_test"
     )
   }
-  if (design$ad_bounds_outdated) {
+  if (!design[["adaptations"]]) {
+    cli::cli_inform(
+      "No adaptations registered, using intial specifications"
+    )
+    design <- cer_adapt(design)
+  }
+  if (design[["ad_bounds_outdated"]]) {
     cli::cli_abort(
-      "There have been adaptions without adjusting the bounds for rejecting hypotheses.",
-      "i" = "Either set adapt_bounds to true for the last adaption to the trial, or use the adapt_bounds function after all adaptions are done.",
+      "There have been adaptations without adjusting the bounds for rejecting hypotheses.",
+      "i" = "Either set adapt_bounds to true for the last adaptation to the trial, or use the adapt_bounds function after all adaptations are done.",
       class = "wrong_sequence_bounds_outdated"
     )
   }
-  if (design$final_test) {
+  if (design[["final_test"]]) {
     cli::cli_warn(
       "Overwriting previous final test.",
       class = "overwrites_final_result"
@@ -65,7 +72,6 @@ cer_final_test <- function(
   p_values[is.na(p_values)] <- 1
   k <- attr(design, "k")
 
-  #print(design$ad_bounds_2)
   intersection_rej <- pmax(
     design$intersection_rej_interim,
     matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0,
@@ -79,6 +85,7 @@ cer_final_test <- function(
 
   design$rej <- rej
   design$p_values_final <- p_values
+  design$intersection_rej <- intersection_rej
   design$final_test <- TRUE
   design
 }

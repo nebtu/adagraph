@@ -4,14 +4,15 @@
 \alias{get_cer}
 \title{Get the Conditional Error Rate for a intersection of hypotheses}
 \usage{
-get_cer(p_values, weights, cJ2, correlation, t)
+get_cer(interim_p_values, weights, rej_bound, correlation, t)
 }
 \arguments{
-\item{p_values}{vector of stage 1 p-values for the hypothesis}
+\item{interim_p_values}{vector of stage 1 p-values for the hypothesis}
 
 \item{weights}{weight to give to each hypothesis, ignoring all with weight 0}
 
-\item{cJ2}{factor used for deciding if the hypothesis should be rejected}
+\item{rej_bound}{double of length 1, bound used for deciding if the
+hypothesis should be rejected}
 
 \item{correlation}{matrix describing a potential known correlation structure
 between some hypotheses. Use NA for unkown correlations}
@@ -35,7 +36,7 @@ Note that if the correlation between some values is unkown, the result may be
 greater than 1, see also the examples
 }
 \examples{
-#the CER is high (even >1) if the p_values of the first stage are already low
+#the CER is high (even >1) if the p values of the first stage are already low
 get_cer(
  c(0.01, 0.01, 0.9, 0.9),
  c(1, 1, 0, 0),

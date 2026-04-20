@@ -39,49 +39,17 @@ design <- cer_design(
 
 
 design <- cer_interim_test(design, c(0.001, 0.02)) |>
-  cer_drop_hypotheses(c(TRUE, FALSE)) |>
+  cer_drop_hypotheses(1) |>
   cer_final_test(c(NA, 0.01))
 
 design
 #> A CER Design object, for testing 2 hypotheses at FWER 0.05.
 #> 
-#> ── Inital design specification ─────────────────────────────────────────────────
-#> 
-#> Hypotheses weights
-#> [1] 0.6666667 0.3333333
-#> 
-#> Graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    1
-#> [2,]    1    0
-#> 
-#> Correlation for parametric test
-#>    [,1] [,2]
-#> H1    1   NA
-#> H2   NA    1
-#> 
-#> Interim test is planned at time fraction 0.5
-#> 
-#> ── Interim test result ─────────────────────────────────────────────────────────
-#> 
-#> P-values of interim test are:
-#> [1] 0.001 0.020
-#> Hypotheses rejected at the interim: 1
-#> 
-#> ── Adaptions from inital specification ─────────────────────────────────────────
-#> 
-#> New hypotheses weights
-#> [1] 0 1
-#> 
-#> New graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    0
-#> [2,]    0    0
-#> 
+#> ── An interim test has been performed. ─────────────────────────────────────────
+#> Hypotheses rejected at the interim: H1
+#> ── The following characteristics have been adapted: ────────────────────────────
+#> • Hypotheses weights
+#> • Graph Transition Matrix
 #> ── Final test result ───────────────────────────────────────────────────────────
-#> 
-#> Overall p-values of the hypotheses are:
-#> [1] 1.00 0.01
-#> Hypotheses rejected: 
-#> [1] 1 2
+#> Hypotheses rejected: H1 and H2
 ```

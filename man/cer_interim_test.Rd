@@ -2,7 +2,8 @@
 % Please edit documentation in R/cer_interim_test.R
 \name{cer_interim_test}
 \alias{cer_interim_test}
-\title{Test a cer design for early rejection of hypotheses and calculate the CER for adaptions}
+\title{Test a cer design for early rejection of hypotheses and calculate the CER for
+adaptations}
 \usage{
 cer_interim_test(design, p_values)
 }
@@ -15,7 +16,8 @@ cer_interim_test(design, p_values)
 a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses
 }
 \description{
-Test a cer design for early rejection of hypotheses and calculate the CER for adaptions
+Test a cer design for early rejection of hypotheses and calculate the CER for
+adaptations
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))

@@ -4,20 +4,20 @@
 \alias{cer_drop_hypotheses}
 \title{Adapt a cer design by dropping hypotheses}
 \usage{
-cer_drop_hypotheses(design, hypotheses, adapt_bounds = TRUE)
+cer_drop_hypotheses(design, drop_hyp, adapt_bounds = TRUE)
 }
 \arguments{
 \item{design}{cer_design object}
 
-\item{hypotheses}{vector of booleans indicating for each hypotheses if it should be dropped}
+\item{drop_hyp}{that should be dropped, identified either by numbers or by their names}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions. If doing multiple adaptions, it is enough to
+FWER with the new adaptations. If doing multiple adaptations, it is enough to
 adapt bounds only for the last one, or call \code{adapt_bounds()} manually
 after.}
 }
 \value{
-design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
+design with specified hypotheses dropped
 }
 \description{
 The weights of the dropped hypotheses are set to 0 and distributed according to the prespecified graph.
@@ -37,6 +37,6 @@ design <- cer_design(
 
 design <- cer_interim_test(design, c(0.1, 0.02))
 
-design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+design <- cer_drop_hypotheses(design, 1)
 design
 }

@@ -1,7 +1,7 @@
 #' Get information about the intersection hypothesis of a design
 #'
 #' For given design, this returns for each intersection hypothesis the weights
-#' and boundaries for rejecting. After adaptions, it also includes
+#' and boundaries for rejecting. After adaptations, it also includes
 #' the updated weights and boundaries.
 #'
 #' @param design A cer_design object
@@ -35,11 +35,11 @@ intersection_hypotheses.cer_design <- function(design, ...) {
   colnames(bounds_2) <- paste0("bound_final_", colnames(bounds_2))
   df <- data.frame(hyp_names, active_hyp, weights, bounds_1, bounds_2)
   if (isTRUE(design[["interim_test"]])) {
-    interim_rej <- data.frame(design[["intersection_rej_interim"]]) |>
-      stats::setNames("interim_rej")
+    interim_rej <- data.frame(design[["intersection_rej_interim"]])
+    colnames(interim_rej) <- "interim_rej"
     df <- cbind(df, interim_rej)
   }
-  if (isTRUE(design[["adaptions"]])) {
+  if (isTRUE(design[["adaptations"]])) {
     ad_weights <- data.frame(design[["ad_weights_matrix"]])
     ad_weights[!active_hyp] <- NA
     colnames(ad_weights) <- paste0("ad_weights_", colnames(ad_weights))
@@ -50,8 +50,8 @@ intersection_hypotheses.cer_design <- function(design, ...) {
     df <- cbind(df, ad_weights, ad_bounds_2)
   }
   if (isTRUE(design[["final_test"]])) {
-    final_rej <- data.frame(design[["intersection_rej"]] == 1) |>
-      stats::setNames("rej")
+    final_rej <- data.frame(design[["intersection_rej"]] == 1)
+    colnames(final_rej) <- "rej"
     df <- cbind(df, final_rej)
   }
 
@@ -118,9 +118,9 @@ print.intersection_hypotheses <- function(
     if (any(grep("^rej", names(x)))) {
       print(x[["rej"]])
       ad_df <- cbind(ad_df, `Rejected` = x[["rej"]])
-      cli::cat_line("After adaption and final result")
+      cli::cat_line("After adaptation and final result")
     } else {
-      cli::cat_line("After adaption")
+      cli::cat_line("After adaptation")
     }
 
     print.data.frame(ad_df, row.names = FALSE, ...)

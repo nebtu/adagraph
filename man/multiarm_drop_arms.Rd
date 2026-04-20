@@ -28,7 +28,7 @@ will always be set to 0}
 instead of \code{cer_drop_hypotheses()}}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions, see \code{cer_adapt()}}
+FWER with the new adaptations, see \code{cer_adapt()}}
 }
 \description{
 This adapts a multiarm design by dropping a treatment arm and adjusting the

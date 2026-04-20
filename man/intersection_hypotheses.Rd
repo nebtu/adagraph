@@ -22,6 +22,6 @@ function, but works like a data frame in any other aspect. Use
 }
 \description{
 For given design, this returns for each intersection hypothesis the weights
-and boundaries for rejecting. After adaptions, it also includes
+and boundaries for rejecting. After adaptations, it also includes
 the updated weights and boundaries.
 }

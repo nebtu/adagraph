@@ -1,4 +1,5 @@
-#' Test a cer design for early rejection of hypotheses and calculate the CER for adaptions
+#' Test a cer design for early rejection of hypotheses and calculate the CER for
+#' adaptations
 #'
 #' @param design A cer_design object
 #' @param p_values A list of p-values for the hypotheses
@@ -28,7 +29,7 @@ cer_interim_test <- function(
   if (design$interim_test) {
     cli::cli_warn(
       "Overwriting previous interim test, no change to
-       adaptions or final results will happen.",
+       adaptations or final results will happen.",
       class = "overwrites_interim_result"
     )
   }

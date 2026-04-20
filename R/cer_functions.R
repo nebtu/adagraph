@@ -142,9 +142,10 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
 #' Note that if the correlation between some values is unkown, the result may be
 #' greater than 1, see also the examples
 #'
-#' @param p_values vector of stage 1 p-values for the hypothesis
+#' @param interim_p_values vector of stage 1 p-values for the hypothesis
 #' @param weights weight to give to each hypothesis, ignoring all with weight 0
-#' @param cJ2 factor used for deciding if the hypothesis should be rejected
+#' @param rej_bound double of length 1, bound used for deciding if the
+#'   hypothesis should be rejected
 #' @param correlation matrix describing a potential known correlation structure
 #'   between some hypotheses. Use NA for unkown correlations
 #' @param t information time fraction at which the interim test is performed
@@ -154,7 +155,7 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
 #' @export
 #'
 #' @examples
-#' #the CER is high (even >1) if the p_values of the first stage are already low
+#' #the CER is high (even >1) if the p values of the first stage are already low
 #' get_cer(
 #'  c(0.01, 0.01, 0.9, 0.9),
 #'  c(1, 1, 0, 0),
@@ -172,16 +173,16 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
 #'  0.5
 #' )
 get_cer <- function(
-  p_values,
+  interim_p_values,
   weights,
-  cJ2,
+  rej_bound,
   correlation,
   t
 ) {
   I <- weights > 0
   pos_weights <- weights[I]
   correlation <- correlation[I, I, drop = FALSE]
-  p_values <- p_values[I]
+  interim_p_values <- interim_p_values[I]
   if (length(t) == 1) {
     t <- rep(t, length(weights))
   }
@@ -194,8 +195,8 @@ get_cer <- function(
   }
 
   .get_cer(
-    p_values,
-    bounds = pos_weights * cJ2,
+    interim_p_values,
+    bounds = pos_weights * rej_bound,
     correlation,
     t,
     conn

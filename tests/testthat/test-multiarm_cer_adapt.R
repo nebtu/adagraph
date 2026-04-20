@@ -110,12 +110,12 @@ test_that("dropping arms works", {
     all(names(design) %in% names(design_adj))
   )
 
-  # Test that adaptions is properly set
-  expect_true(design_adj$adaptions)
+  # Test that adaptations is properly set
+  expect_true(design_adj$adaptations)
 
   # Test everything else is unchanged
   expect_equal(
-    design_adj[setdiff(names(design), "adaptions")],
-    design[setdiff(names(design), "adaptions")]
+    design_adj[setdiff(names(design), "adaptations")],
+    design[setdiff(names(design), "adaptations")]
   )
 })

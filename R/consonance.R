@@ -2,7 +2,7 @@
 #'
 #' For some CER design, see if the defined test sequence is consonant, either
 #' from just it's graph and weights, also using the correlation structure, or
-#' after some adaption.
+#' after some adaptation.
 #'
 #' @param design A cer_design object
 #' @param adapted Boolean, use the adapted or original values
@@ -42,7 +42,7 @@
 #' check_consonance(design, stage = "final")
 check_consonance <- function(
   design,
-  adapted = design$adaptions,
+  adapted = design$adaptations,
   stage = c("both", "interim", "final"),
   use_weights = FALSE
 ) {
@@ -54,11 +54,11 @@ check_consonance <- function(
       class = "adagraph_invalid_argument"
     )
   }
-  if (!design$adaptions && adapted) {
+  if (!design$adaptations && adapted) {
     cli::cli_abort(
-      "No adaptions present",
+      "No adaptations present",
       "i" = "Design was not adapted, can not perform consonance check on adapted design",
-      class = "adagraph_no_adaption"
+      class = "adagraph_no_adaptation"
     )
   }
 

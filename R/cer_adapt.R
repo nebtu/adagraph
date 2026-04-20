@@ -9,16 +9,16 @@
 #'  Note that this can now be a vector with a different value for different hypotheses or a single value
 #' @param correlation adapted correlation matrix
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions. If doing multiple adaptions, it is enough to
+#'   FWER with the new adaptations. If doing multiple adaptations, it is enough to
 #'   adapt bounds only for the last one, or call `adapt_bounds()` manually
 #'   after.
 #'
-#' @return An object of class cer_design, with the adaptions applied.
+#' @return An object of class cer_design, with the adaptations applied.
 #' @export
 #'
 #' @details
-#' For all adaptions, adapt_bounds needs to be used only once, with or after the
-#' last adaption. For this, either make sure that adapt_bounds is TRUE, or use
+#' For all adaptations, adapt_bounds needs to be used only once, with or after the
+#' last adaptation. For this, either make sure that adapt_bounds is TRUE, or use
 #' the `adapt_bounds()` function manually
 #'
 #' @examples
@@ -31,7 +31,8 @@
 #'  test_m=rbind(c(0, 1),
 #'               c(1, 0)),
 #'  alpha_spending_f=as,
-#'  t=0.5)
+#'  t=0.5
+#' )
 #'
 #' #note that it is not necessary to do an interim test before,
 #' #but that an interim test will only be done with the prespecified parameters
@@ -55,7 +56,7 @@ cer_adapt <- function(
   }
   if (!design$interim_test) {
     cli::cli_abort(
-      "No interim test has been performed yet. Adaptions can only be applied once an interim test has been done.",
+      "No interim test has been performed yet. Adaptations can only be applied once an interim test has been done.",
       class = "wrong_sequence_before_interim"
     )
   }
@@ -79,7 +80,7 @@ cer_adapt <- function(
   }
   if (!is.null(correlation)) {
     design$ad_correlation <- correlation
-    colnames(design$ad_correlation) <- colnames(design$correlation)
+    dimnames(design$ad_correlation) <- dimnames(design$correlation)
   } else if (is.null(design$ad_correlation)) {
     design$ad_correlation <- design$correlation
   }
@@ -92,7 +93,7 @@ cer_adapt <- function(
     design$ad_weights_matrix <- design$weights_matrix
   }
 
-  design$adaptions <- TRUE
+  design$adaptations <- TRUE
 
   if (adapt_bounds) {
     design |> cer_adapt_bounds()
@@ -108,13 +109,13 @@ cer_adapt <- function(
 #' However, the time fraction is not adapted, this needs to be done manually if desired.
 #'
 #' @param design cer_design object
-#' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
+#' @param drop_hyp that should be dropped, identified either by numbers or by their names
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions. If doing multiple adaptions, it is enough to
+#'   FWER with the new adaptations. If doing multiple adaptations, it is enough to
 #'   adapt bounds only for the last one, or call `adapt_bounds()` manually
 #'   after.
 #'
-#' @return design with specified hypotheses dropped (so TRUE means the hypothesis is dropped)
+#' @return design with specified hypotheses dropped
 #' @export
 #'
 #' @examples
@@ -131,21 +132,27 @@ cer_adapt <- function(
 #'
 #' design <- cer_interim_test(design, c(0.1, 0.02))
 #'
-#' design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+#' design <- cer_drop_hypotheses(design, 1)
 #' design
 cer_drop_hypotheses <- function(
   design,
-  hypotheses,
+  drop_hyp,
   adapt_bounds = TRUE
 ) {
   if (is.null(design$keep_hyp)) {
     design$keep_hyp <- rep(TRUE, attr(design, "k"))
+    names(design$keep_hyp) <- names(design[["weights"]])
   }
-  design$keep_hyp[hypotheses] <- FALSE
-  hypotheses <- ifelse(hypotheses, 0, 1)
-  hyp_index <- which(sapply(
+  if (is.character(drop_hyp)) {
+    drop_hyp <- match(drop_hyp, names(design[["weights"]]))
+  }
+  design$keep_hyp[drop_hyp] <- FALSE
+  hyp_index <- which(vapply(
     asplit(design$hyp_matrix, 1),
-    function(x) all(x == hypotheses)
+    function(x) {
+      all(x == as.integer(!(seq_along(design[["weights"]]) %in% drop_hyp)))
+    },
+    logical(1)
   ))
   if (!is.null(design$ad_weights_matrix)) {
     weights <- design$ad_weights_matrix[hyp_index, ]
@@ -159,8 +166,8 @@ cer_drop_hypotheses <- function(
     test_m <- design$test_m
   }
 
-  for (hyp in which(hypotheses == 0)) {
-    for (i in 1:dim(test_m)[1]) {
+  for (hyp in drop_hyp) {
+    for (i in seq_len(dim(test_m)[1])) {
       if (test_m[hyp, i] == 1 && test_m[i, hyp] == 1) {
         # no transfer of weight is possible, if it is only transfered to the now obselete hypothesis
         test_m[i, ] <- 0
@@ -192,7 +199,7 @@ cer_drop_hypotheses <- function(
 #' @param design cer_design object
 #' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions. If doing multiple adaptions, it is enough to
+#'   FWER with the new adaptations. If doing multiple adaptations, it is enough to
 #'   adapt bounds only for the last one, or call `adapt_bounds()` manually
 #'   after.
 #'
@@ -236,7 +243,7 @@ cer_alt_drop_hypotheses <- function(
   design$keep_hyp <- !hypotheses
   design$ad_weights <- weights
   design$ad_weights_matrix <- weights_matrix
-  design$adaptions <- TRUE
+  design$adaptations <- TRUE
 
   cer_adapt(design, adapt_bounds = adapt_bounds)
 }

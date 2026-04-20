@@ -111,7 +111,7 @@ data_gen_2 <- get_data_gen_2(
 
 Next we need to define how we want to adapt our trial once the interim results
 are generated and tested for.
-Here, we define a simple adaption were any arms where the p-value for the
+Here, we define a simple adaptation were any arms where the p-value for the
 primary enpoint is higher than 0.75 is dropped.
 (Addtionally, we also dont continue any arms that are already rejected in both
 primary and secondary endpoints.)
@@ -132,7 +132,7 @@ futility <- 0.75
 adapt_func <- function(design) {
   p <- design$p_values_interim[1:4]
 
-  #treatments, were both primary and secndary enpoints are rejected
+  #treatments where both primary and secndary enpoints are rejected
   trt_rej <- design$rej_interim[1:4] & design$rej_interim[5:8]
 
   drop_hyp <- (p > futility) | trt_rej
@@ -157,7 +157,7 @@ adapt_func <- function(design) {
 
 Now we have all the pieces to simulate our trials.
 Since the most computationally intensive step here is to calculate the adjusted
-bound for rejecting hypotheses after the adaption,
+bound for rejecting hypotheses after the adaptation,
 we simulate for every first stage multiple second stages, in this case 10.
 
 ```{r}

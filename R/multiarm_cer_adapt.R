@@ -124,7 +124,7 @@ redistribute_n <- function(
 #' @param alt_adj uses `cer_alt_drop_hypotheses()` for dropping the hypotheses
 #'   instead of `cer_drop_hypotheses()`
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions, see `cer_adapt()`
+#'   FWER with the new adaptations, see `cer_adapt()`
 #'
 #' @examples
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
@@ -155,8 +155,6 @@ multiarm_drop_arms <- function(
   adapt_bounds = TRUE
 ) {
   treatment_assoc <- design$treatment_assoc
-  keep_arms <- rep(TRUE, attr(design, "k"))
-  keep_arms[arms] <- FALSE
 
   n_treat_1 <- floor(design$n_treat * design$t)
   n_cont_1 <- floor(design$n_controls * design$t)
@@ -185,13 +183,13 @@ multiarm_drop_arms <- function(
   if (alt_adj) {
     design <- cer_alt_drop_hypotheses(
       design,
-      (seq_along(treatment_assoc) %in% arms),
+      arms,
       adapt_bounds = FALSE
     )
   } else {
     design <- cer_drop_hypotheses(
       design,
-      (seq_along(treatment_assoc) %in% arms),
+      arms,
       adapt_bounds = FALSE
     )
   }

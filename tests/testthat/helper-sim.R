@@ -74,7 +74,7 @@ get_paper_sim_design_multiarm <- function() {
   design
 }
 
-get_sim_adaption <- function(futility, alt_drop = FALSE) {
+get_sim_adaptation <- function(futility, alt_drop = FALSE) {
   function(design) {
     p <- design$p_values_interim[1:4]
 
@@ -112,7 +112,7 @@ simrun <- function(
   n1 = 50,
   n2 = 50,
   runs2 = 1000,
-  new_adaption = FALSE
+  new_adaptation = FALSE
 ) {
   mueff = c(mu[2:5] - mu[1], mu[7:10] - mu[6])
   X1 = matrix(rnorm(n1 * 5), nrow = 5) #BF generates data
@@ -156,9 +156,9 @@ simrun <- function(
     corradapt[5:8, 5:8] = ctemp
     diag(corradapt) = 1 # corradapt has only for selected hypothesis a valid entry
 
-    if (isTRUE(new_adaption)) {
-      adaption <- get_sim_adaption(futility = futility, alt_drop = TRUE)
-      design_adapted <- design_interim |> adaption()
+    if (isTRUE(new_adaptation)) {
+      adaptation <- get_sim_adaptation(futility = futility, alt_drop = TRUE)
+      design_adapted <- design_interim |> adaptation()
     } else {
       design_adapted <- design_interim |>
         cer_alt_drop_hypotheses(drop_hyp, adapt_bounds = FALSE) |>
@@ -270,7 +270,7 @@ sim_wrap <- function(
   runs1 = 100,
   runs2 = 100,
   corr = 0.5,
-  new_adaption = FALSE
+  new_adaptation = FALSE
 ) {
   mu = c(eff, eff)
   results = lapply(
@@ -284,7 +284,7 @@ sim_wrap <- function(
         n1 = 50,
         n2 = 50,
         futility = futility,
-        new_adaption = new_adaption
+        new_adaptation = new_adaptation
       )
     }
   )

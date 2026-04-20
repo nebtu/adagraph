@@ -28,19 +28,19 @@ Note that this can now be a vector with a different value for different hypothes
 \item{correlation}{adapted correlation matrix}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions. If doing multiple adaptions, it is enough to
+FWER with the new adaptations. If doing multiple adaptations, it is enough to
 adapt bounds only for the last one, or call \code{adapt_bounds()} manually
 after.}
 }
 \value{
-An object of class cer_design, with the adaptions applied.
+An object of class cer_design, with the adaptations applied.
 }
 \description{
 Adapt the trial design after the interim test
 }
 \details{
-For all adaptions, adapt_bounds needs to be used only once, with or after the
-last adaption. For this, either make sure that adapt_bounds is TRUE, or use
+For all adaptations, adapt_bounds needs to be used only once, with or after the
+last adaptation. For this, either make sure that adapt_bounds is TRUE, or use
 the \code{adapt_bounds()} function manually
 }
 \examples{
@@ -53,7 +53,8 @@ design <- cer_design(
  test_m=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending_f=as,
- t=0.5)
+ t=0.5
+)
 
 #note that it is not necessary to do an interim test before,
 #but that an interim test will only be done with the prespecified parameters

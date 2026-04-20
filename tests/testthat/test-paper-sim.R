@@ -74,7 +74,7 @@ test_that("simulation works as in paper with multiarm design", {
   )
 })
 
-test_that("simulation works as in paper with own adaption", {
+test_that("simulation works as in paper with own adaptation", {
   skip_on_cran()
   design <- get_paper_sim_design_multiarm()
 
@@ -93,7 +93,7 @@ test_that("simulation works as in paper with own adaption", {
           runs1 = runs1,
           runs2 = 100,
           futility = futility,
-          new_adaption = TRUE
+          new_adaptation = TRUE
         )$fwer
       })
 
@@ -104,7 +104,7 @@ test_that("simulation works as in paper with own adaption", {
           runs1 = runs1,
           runs2 = 100,
           futility = futility,
-          new_adaption = TRUE
+          new_adaptation = TRUE
         )$rej2_4
       })
 

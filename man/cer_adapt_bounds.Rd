@@ -14,8 +14,8 @@ A cer_design object, with the new bounds calculated
 }
 \description{
 This function calculates the new bounds for the p-values for the final test.
-It should be run once after finishing all adaptions after the interim test,
-if the \code{adapt_bounds} option was not true for the last adaption anyway.
+It should be run once after finishing all adaptations after the interim test,
+if the \code{adapt_bounds} option was not true for the last adaptation anyway.
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
@@ -31,7 +31,7 @@ design <- cer_design(
 
 design <- cer_interim_test(design, c(0.1, 0.02))
 
-design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+design <- cer_drop_hypotheses(design, 1)
 design <- cer_adapt_bounds(design)
 
 design
