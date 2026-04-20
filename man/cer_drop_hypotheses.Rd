@@ -12,7 +12,7 @@ cer_drop_hypotheses(design, drop_hyp, adapt_bounds = TRUE)
 \item{drop_hyp}{that should be dropped, identified either by numbers or by their names}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions. If doing multiple adaptions, it is enough to
+FWER with the new adaptations. If doing multiple adaptations, it is enough to
 adapt bounds only for the last one, or call \code{adapt_bounds()} manually
 after.}
 }

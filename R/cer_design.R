@@ -119,7 +119,7 @@ validate_cer_design_params <- function(
       c(
         "{.var t} has to be numeric of length 1.",
         "x" = "{.var t} is {t}, with length {length(t)}",
-        "i" = "Different time fractions for different hypotheses are only supported for adaptions, not for the initial design."
+        "i" = "Different time fractions for different hypotheses are only supported for adaptations, not for the initial design."
       ),
       class = "adagraph_invalid_argument_t",
       call = call
@@ -153,7 +153,7 @@ validate_cer_design_params <- function(
 #' Make a new CER trial design
 #'
 #' Returns an object of class `cer_design`.
-#' This can be used for clinical trials with potential adaptions that are controlled
+#' This can be used for clinical trials with potential adaptations that are controlled
 #' for using the conditional error method.
 #'
 #' @param correlation Correlation matrix describing the structure of the correlations

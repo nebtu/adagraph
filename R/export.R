@@ -6,7 +6,7 @@
 #'
 #' @param design the adagraph_design object that should be exported
 #' @param adapted boolean indicating if the adapted version of the testing
-#'   strategy should be exported. Defaults to TRUE if an adaption has been made,
+#'   strategy should be exported. Defaults to TRUE if an adaptation has been made,
 #'   FALSE else
 #'
 #' @return An object with S4 class `graphMCP`, with matrix and weights of the
@@ -14,7 +14,7 @@
 #' @export
 export_gmcp_lite <- function(
   design,
-  adapted = design$adaptions
+  adapted = design$adaptations
 ) {
   rlang::check_installed(
     "gMCPLite",
@@ -44,7 +44,7 @@ export_gmcp_lite <- function(
 #'
 #' @param design the adagraph_design object that should be exported
 #' @param adapted boolean indicating if the adapted version of the testing
-#'   strategy should be exported. Defaults to TRUE if an adaption has been made,
+#'   strategy should be exported. Defaults to TRUE if an adaptation has been made,
 #'   FALSE else
 #'
 #' @return An S3 object of class `initial_graph`, with hypotheses weights and
@@ -72,7 +72,7 @@ export_gmcp_lite <- function(
 #' export_graphical_mcp(design)
 export_graphical_mcp <- function(
   design,
-  adapted = design$adaptions
+  adapted = design$adaptations
 ) {
   rlang::check_installed(
     "graphicalMCP",

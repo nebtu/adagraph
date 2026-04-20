@@ -7,7 +7,7 @@
 #' either as proportions or patient numbers.
 #' Note that when using the n_control and n_arm, this is translated to the
 #' following structure internally as well.
-#' The structure (in argument n_subgroups) should be given as a dataframe, where
+#' The structure (in argument n_table) should be given as a dataframe, where
 #' each row specifies a specific subgroup in a specific arm (or the control).
 #' Therefore the first column should be named arm, and have values of
 #' "control" and the names of the arms. Then should be columns for each of the
@@ -21,7 +21,7 @@
 #'
 #' @param arms Number of arms
 #' @param subgroups Number of subgroups in addition to the whole collective (can be 0)
-#' @param n_subgroups A data.frame specifying the structure of the subgroups,
+#' @param n_table A data.frame specifying the structure of the subgroups,
 #'   see details for more information
 #' @param names_arms names for the different arms.
 #' @param names_subgroups names for the different subgroups
@@ -30,7 +30,7 @@
 get_subgroup_correlation <- function(
   subgroups,
   arms,
-  n_subgroups,
+  n_table,
   names_arms,
   names_subgroups
 ) {
@@ -40,7 +40,7 @@ get_subgroup_correlation <- function(
   )
 
   n_total_subgroups <- get_total_subgroup(
-    n_subgroups,
+    n_table,
     names_arms,
     names_subgroups
   )
@@ -74,27 +74,27 @@ get_subgroup_correlation <- function(
     if (group_1 == 1) {
       group_1_filter <- TRUE
     } else {
-      group_1_filter <- n_subgroups[, names_subgroups[group_1]] == 1
+      group_1_filter <- n_table[, names_subgroups[group_1]] == 1
     }
     if (group_2 == 1) {
       group_2_filter <- TRUE
     } else {
-      group_2_filter <- n_subgroups[, names_subgroups[group_2]] == 1
+      group_2_filter <- n_table[, names_subgroups[group_2]] == 1
     }
 
     if (arm_1 != arm_2) {
       n_treatment_shared <- 0
     } else {
-      filter_rows <- (n_subgroups[, "arm"] == names_arms[arm_1]) &
+      filter_rows <- (n_table[, "arm"] == names_arms[arm_1]) &
         group_1_filter &
         group_2_filter
-      n_treatment_shared <- sum(n_subgroups[filter_rows, "n"])
+      n_treatment_shared <- sum(n_table[filter_rows, "n"])
     }
 
-    filter_rows <- (n_subgroups[, "arm"] == "control") &
+    filter_rows <- (n_table[, "arm"] == "control") &
       group_1_filter &
       group_2_filter
-    n_control_shared <- sum(n_subgroups[filter_rows, "n"])
+    n_control_shared <- sum(n_table[filter_rows, "n"])
 
     n_control_1 <- n_total_subgroups[
       n_total_subgroups[, "arm"] == "control" &

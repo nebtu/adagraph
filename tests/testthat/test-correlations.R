@@ -37,7 +37,7 @@ test_that("multiarm and direct calculation are similar", {
 
     #treatments as subgroups
     #fmt: skip
-    n_subgroups <- rbind(
+    n_table <- rbind(
       data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 0),
       data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 0),
       data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 0),
@@ -61,7 +61,7 @@ test_that("multiarm and direct calculation are similar", {
     corr_subgroup <- get_subgroup_correlation(
       subgroups = 3,
       arms = 1,
-      n_subgroups = n_subgroups,
+      n_table = n_table,
       names_arms = names_arms,
       names_subgroups = names_subgroups
     )
@@ -87,7 +87,7 @@ test_that("multiarm and direct calculation are similar", {
     )
 
     #multiarm from subgroup_correlation without subgroups
-    n_subgroups <- rbind(
+    n_table <- rbind(
       data.frame(arm = "control", n = options$control[i]),
       data.frame(arm = "A1", n = options$treatment_1[i]),
       data.frame(arm = "A2", n = options$treatment_2[i]),
@@ -99,7 +99,7 @@ test_that("multiarm and direct calculation are similar", {
     corr <- get_subgroup_correlation(
       subgroups = 0,
       arms = 3,
-      n_subgroups = n_subgroups,
+      n_table = n_table,
       names_arms = names_arms,
       names_subgroups = names_subgroups
     )
@@ -111,7 +111,7 @@ test_that("multiarm and direct calculation are similar", {
 })
 
 test_that("subgroup correlation calculations, with 2 groups and 2 arms", {
-  # n_subgroups <- tribble(
+  # n_table <- tribble(
   #   ~"arm"    , ~"G1" , ~"G2" , ~"n" ,
   #   "control" , F     , F     ,    0 ,
   #   "control" , F     , T     ,   10 ,
@@ -127,7 +127,7 @@ test_that("subgroup correlation calculations, with 2 groups and 2 arms", {
   #   "A2"      , T     , T     ,   10 ,
   # )
   #fmt: skip
-  n_subgroups <- rbind(
+  n_table <- rbind(
     data.frame(arm = "control", G1 = FALSE, G2 = FALSE, n =  0),
     data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  n = 10),
     data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, n = 10),
@@ -147,7 +147,7 @@ test_that("subgroup correlation calculations, with 2 groups and 2 arms", {
   corr <- get_subgroup_correlation(
     subgroups = 2,
     arms = 2,
-    n_subgroups = n_subgroups,
+    n_table = n_table,
     names_arms = names_arms,
     names_subgroups = names_subgroups
   )
@@ -158,7 +158,7 @@ test_that("subgroup correlation calculations, with 2 groups and 2 arms", {
 
 test_that("subgroup correlation calculations, with 3 groups and 2 arms", {
   #fmt: skip
-  n_subgroups <- rbind(
+  n_table <- rbind(
     data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = FALSE, n =  0),
     data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 10),
     data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 10),
@@ -190,7 +190,7 @@ test_that("subgroup correlation calculations, with 3 groups and 2 arms", {
   corr <- get_subgroup_correlation(
     subgroups = 3,
     arms = 2,
-    n_subgroups = n_subgroups,
+    n_table = n_table,
     names_arms = names_arms,
     names_subgroups = names_subgroups
   )
@@ -198,13 +198,13 @@ test_that("subgroup correlation calculations, with 3 groups and 2 arms", {
   expect_snapshot_value(corr, style = "json2")
 
   ### Same for prop
-  n_subgroups_prop <- n_subgroups
-  n_subgroups_prop[, "n"] <- n_subgroups[, "n"] /
-    sum(n_subgroups[, "n"])
+  n_table_prop <- n_table
+  n_table_prop[, "n"] <- n_table[, "n"] /
+    sum(n_table[, "n"])
   corr_prop <- get_subgroup_correlation(
     subgroups = 3,
     arms = 2,
-    n_subgroups = n_subgroups_prop,
+    n_table = n_table_prop,
     names_arms = names_arms,
     names_subgroups = names_subgroups
   )
@@ -214,7 +214,7 @@ test_that("subgroup correlation calculations, with 3 groups and 2 arms", {
 
 test_that("subgroup correlation calculations, simulate arms as subgroups", {
   #fmt: skip
-  n_subgroups <- rbind(
+  n_table <- rbind(
     data.frame(arm = "control", G1 = FALSE, G2 = FALSE, n =  0),
     data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  n =  0),
     data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, n =  0),
@@ -231,14 +231,14 @@ test_that("subgroup correlation calculations, simulate arms as subgroups", {
   corr <- get_subgroup_correlation(
     subgroups = 2,
     arms = 1,
-    n_subgroups = n_subgroups,
+    n_table = n_table,
     names_arms = names_arms,
     names_subgroups = names_subgroups
   )
 
   expect_equal(corr[c(2, 3), c(2, 3)], rbind(c(1, 1 / 2), c(1 / 2, 1)))
 
-  n_subgroups <- rbind(
+  n_table <- rbind(
     data.frame(arm = "control", G1 = TRUE, G2 = TRUE, n = 50),
     data.frame(arm = "A1", G1 = FALSE, G2 = TRUE, n = 50),
     data.frame(arm = "A1", G1 = TRUE, G2 = FALSE, n = 50)
@@ -247,7 +247,7 @@ test_that("subgroup correlation calculations, simulate arms as subgroups", {
   corr_simple_df <- get_subgroup_correlation(
     subgroups = 2,
     arms = 1,
-    n_subgroups = n_subgroups,
+    n_table = n_table,
     names_arms = names_arms,
     names_subgroups = names_subgroups
   )

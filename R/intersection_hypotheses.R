@@ -1,7 +1,7 @@
 #' Get information about the intersection hypothesis of a design
 #'
 #' For given design, this returns for each intersection hypothesis the weights
-#' and boundaries for rejecting. After adaptions, it also includes
+#' and boundaries for rejecting. After adaptations, it also includes
 #' the updated weights and boundaries.
 #'
 #' @param design A cer_design object
@@ -39,7 +39,7 @@ intersection_hypotheses.cer_design <- function(design, ...) {
     colnames(interim_rej) <- "interim_rej"
     df <- cbind(df, interim_rej)
   }
-  if (isTRUE(design[["adaptions"]])) {
+  if (isTRUE(design[["adaptations"]])) {
     ad_weights <- data.frame(design[["ad_weights_matrix"]])
     ad_weights[!active_hyp] <- NA
     colnames(ad_weights) <- paste0("ad_weights_", colnames(ad_weights))
@@ -118,9 +118,9 @@ print.intersection_hypotheses <- function(
     if (any(grep("^rej", names(x)))) {
       print(x[["rej"]])
       ad_df <- cbind(ad_df, `Rejected` = x[["rej"]])
-      cli::cat_line("After adaption and final result")
+      cli::cat_line("After adaptation and final result")
     } else {
-      cli::cat_line("After adaption")
+      cli::cat_line("After adaptation")
     }
 
     print.data.frame(ad_df, row.names = FALSE, ...)

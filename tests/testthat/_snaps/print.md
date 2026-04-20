@@ -3,7 +3,7 @@
     A Adagraph Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
     
     -- No interim test has been performed yet. -------------------------------------
-    -- No adaptions have been performed yet ----------------------------------------
+    -- No adaptations have been performed yet --------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
 # print.cer_design produces stable output across lifecycle
@@ -11,7 +11,7 @@
     A CER Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
     -- No interim test has been performed yet. -------------------------------------
-    -- No adaptions have been performed yet ----------------------------------------
+    -- No adaptations have been performed yet --------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
 ---
@@ -20,7 +20,7 @@
     
     -- An interim test has been performed. -----------------------------------------
     Hypotheses rejected at the interim: H1
-    -- No adaptions have been performed yet ----------------------------------------
+    -- No adaptations have been performed yet --------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
 ---
@@ -51,7 +51,7 @@
     There are 2 control groups for a total of 4 hypotheses.
     
     -- No interim test has been performed yet. -------------------------------------
-    -- No adaptions have been performed yet ----------------------------------------
+    -- No adaptations have been performed yet --------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
 ---
@@ -62,7 +62,7 @@
     
     -- An interim test has been performed. -----------------------------------------
     Hypotheses rejected at the interim: H1
-    -- No adaptions have been performed yet ----------------------------------------
+    -- No adaptations have been performed yet --------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
 ---
@@ -96,9 +96,9 @@
     -- Final test result -----------------------------------------------------------
     Hypotheses rejected: H1 and H2
 
-# print.mame_design produces stable output across lifecycle
+# print.trial_design produces stable output across lifecycle
 
-    A MAME Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:
@@ -111,12 +111,12 @@
         arm2  TRUE  80
     
     -- No interim test has been performed yet. -------------------------------------
-    -- No adaptions have been performed yet ----------------------------------------
+    -- No adaptations have been performed yet --------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
 ---
 
-    A MAME Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:
@@ -130,12 +130,12 @@
     
     -- An interim test has been performed. -----------------------------------------
     Hypotheses rejected at the interim: prim_arm1
-    -- No adaptions have been performed yet ----------------------------------------
+    -- No adaptations have been performed yet --------------------------------------
     -- No final test has been performed yet ----------------------------------------
 
 ---
 
-    A MAME Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:
@@ -166,7 +166,7 @@
 
 ---
 
-    A MAME Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:

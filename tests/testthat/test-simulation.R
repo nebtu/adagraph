@@ -62,7 +62,7 @@ test_simulation_workflow <- function() {
     100
   )
 
-  adaption <- function(design) {
+  adaptation <- function(design) {
     design |> multiarm_drop_arms(1)
   }
 
@@ -72,7 +72,7 @@ test_simulation_workflow <- function() {
     design,
     10,
     10,
-    adaption,
+    adaptation,
     data_gen,
     data_gen_2,
     include_designs = TRUE

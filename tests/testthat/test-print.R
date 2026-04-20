@@ -59,9 +59,9 @@ test_that("print.multiarm_cer_design produces stable output across lifecycle", {
 })
 
 
-test_that("print.mame_design produces stable output across lifecycle", {
+test_that("print.trial_design produces stable output across lifecycle", {
   # Initial design
-  design <- make_example_mame()
+  design <- make_example_trial()
   expect_snapshot_output(print(design))
 
   # After interim test
@@ -78,7 +78,7 @@ test_that("print.mame_design produces stable output across lifecycle", {
   design_i <- cer_interim_test(design, p_val)
   expect_snapshot_output(print(design_i))
 
-  n_subgroups <- rbind(
+  n_table <- rbind(
     data.frame(arm = "control", `HPV+` = FALSE, n = 100, check.names = FALSE),
     data.frame(arm = "control", `HPV+` = TRUE, n = 100, check.names = FALSE),
     data.frame(arm = "arm1", `HPV+` = FALSE, n = 140, check.names = FALSE),
@@ -86,11 +86,11 @@ test_that("print.mame_design produces stable output across lifecycle", {
     data.frame(arm = "arm2", `HPV+` = FALSE, n = 0, check.names = FALSE),
     data.frame(arm = "arm2", `HPV+` = TRUE, n = 0, check.names = FALSE)
   )
-  # After adaptation via new n_subgroups
+  # After adaptation via new n_table
   design_a <- design_i |>
-    mame_drop_arms("arm2") |>
-    mame_adapt_n(
-      ad_n_subgroups = n_subgroups
+    trial_drop_arms("arm2") |>
+    trial_adapt_n(
+      ad_n_table = n_table
     )
 
   expect_snapshot_output(print(design_a))

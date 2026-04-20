@@ -1,4 +1,5 @@
-#' Test a cer design for early rejection of hypotheses and calculate the CER for adaptions
+#' Test a cer design for early rejection of hypotheses and calculate the CER for
+#' adaptations
 #'
 #' @param design A cer_design object
 #' @param p_values A list of p-values for the hypotheses
@@ -38,16 +39,16 @@ cer_final_test <- function(
       class = "wrong_sequence_no_interim_test"
     )
   }
-  if (!design[["adaptions"]]) {
+  if (!design[["adaptations"]]) {
     cli::cli_inform(
-      "No adaptions registered, using intial specifications"
+      "No adaptations registered, using intial specifications"
     )
     design <- cer_adapt(design)
   }
   if (design[["ad_bounds_outdated"]]) {
     cli::cli_abort(
-      "There have been adaptions without adjusting the bounds for rejecting hypotheses.",
-      "i" = "Either set adapt_bounds to true for the last adaption to the trial, or use the adapt_bounds function after all adaptions are done.",
+      "There have been adaptations without adjusting the bounds for rejecting hypotheses.",
+      "i" = "Either set adapt_bounds to true for the last adaptation to the trial, or use the adapt_bounds function after all adaptations are done.",
       class = "wrong_sequence_bounds_outdated"
     )
   }

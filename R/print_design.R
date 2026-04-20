@@ -3,7 +3,7 @@
 #' @param x design to be printed
 #' @param header_label label describing the type of design being printed
 #' @param hooks list containing functions for printing additional information, should
-#'   have names out of c("after_initial_spec", "after_adaptions"). Each function
+#'   have names out of c("after_initial_spec", "after_adaptations"). Each function
 #'   should only take x as argument
 #'
 #' @noRd
@@ -39,7 +39,7 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
   }
 
   # Adaptations section (print only available changes)
-  if (isTRUE(x[["adaptions"]])) {
+  if (isTRUE(x[["adaptations"]])) {
     cli::cat_rule("The following characteristics have been adapted:")
     if (
       !is.null(x[["ad_weights"]]) &&
@@ -66,11 +66,11 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
       )))
     }
   } else {
-    cli::cat_rule("No adaptions have been performed yet")
+    cli::cat_rule("No adaptations have been performed yet")
   }
 
-  if (is.function(hooks$after_adaptions)) {
-    hooks$after_adaptions(x)
+  if (is.function(hooks$after_adaptations)) {
+    hooks$after_adaptations(x)
   }
 
   # Final results if available
@@ -121,7 +121,7 @@ print.adagraph_design <- function(x, ...) {
 }
 
 #' @export
-print.mame_design <- function(x, ...) {
+print.trial_design <- function(x, ...) {
   hooks <- list(
     after_initial_spec = function(x) {
       arms <- x[["arms"]]
@@ -152,20 +152,20 @@ print.mame_design <- function(x, ...) {
           "The first stage sample size per arm/group is:"
         )
       )
-      print.data.frame(x[["n_subgroups"]], row.names = FALSE)
+      print.data.frame(x[["n_table"]], row.names = FALSE)
       cli::cat_line()
     },
-    after_adaptions = function(x) {
-      if (!is.null(x[["ad_n_subgroups"]])) {
+    after_adaptations = function(x) {
+      if (!is.null(x[["ad_n_table"]])) {
         cli::cat_line(
           cli::format_inline(
             "The second stage sample size per arm/group is:"
           )
         )
-        print.data.frame(x[["ad_n_subgroups"]], row.names = FALSE)
+        print.data.frame(x[["ad_n_table"]], row.names = FALSE)
       }
     }
   )
 
-  print_design_common(x, header_label = "MAME", hooks = hooks)
+  print_design_common(x, header_label = "trial", hooks = hooks)
 }

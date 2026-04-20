@@ -36,13 +36,13 @@ test_that("dropping hypotheses works", {
     all(names(design) %in% names(design_adj))
   )
 
-  # Test that adaptions is properly set
-  expect_true(design_adj$adaptions)
+  # Test that adaptations is properly set
+  expect_true(design_adj$adaptations)
 
   # Test everything else is unchanged
   expect_equal(
-    design_adj[setdiff(names(design), "adaptions")],
-    design[setdiff(names(design), "adaptions")]
+    design_adj[setdiff(names(design), "adaptations")],
+    design[setdiff(names(design), "adaptations")]
   )
 
   design_with_changes <- cer_design(
@@ -60,7 +60,7 @@ test_that("dropping hypotheses works", {
   )
 })
 
-test_that("multiple adaptions work the same as one adaption", {
+test_that("multiple adaptations work the same as one adaptation", {
   design <- make_example_design()
   design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
 
@@ -142,7 +142,7 @@ test_that("warnings and errors are handled", {
   )
 })
 
-test_that("no adaptions works as expected", {
+test_that("no adaptations works as expected", {
   design <- make_example_design()
   design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
 
@@ -153,5 +153,5 @@ test_that("no adaptions works as expected", {
   expect_equal(design_adj$ad_test_m, design$test_m)
   expect_equal(design_adj$ad_correlation, design$correlation)
   expect_equal(design_adj$ad_weights_matrix, design$weights_matrix)
-  expect_equal(design_adj$adaptions, TRUE)
+  expect_equal(design_adj$adaptations, TRUE)
 })

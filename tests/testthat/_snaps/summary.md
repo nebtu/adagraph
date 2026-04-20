@@ -90,7 +90,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptions from inital specification -----------------------------------------
+    -- Adaptations from inital specification ---------------------------------------
     
     New hypotheses weights
            H1        H2        H3        H4 
@@ -129,7 +129,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptions from inital specification -----------------------------------------
+    -- Adaptations from inital specification ---------------------------------------
     
     New hypotheses weights
            H1        H2        H3        H4 
@@ -269,7 +269,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptions from inital specification -----------------------------------------
+    -- Adaptations from inital specification ---------------------------------------
     
     New hypotheses weights
       H1   H2   H3   H4 
@@ -349,7 +349,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptions from inital specification -----------------------------------------
+    -- Adaptations from inital specification ---------------------------------------
     
     New hypotheses weights
       H1   H2   H3   H4 
@@ -390,7 +390,7 @@
     [1] 1.000 0.012 0.400 0.025
     Hypotheses rejected: H1 and H2
 
-# print.summary.mame_design produces stable output across lifecycle
+# print.summary.trial_design produces stable output across lifecycle
 
     A Multi-arm Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
@@ -629,7 +629,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: prim_arm1
     
-    -- Adaptions from inital specification -----------------------------------------
+    -- Adaptations from inital specification ---------------------------------------
     
     New hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 
@@ -771,7 +771,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: prim_arm1
     
-    -- Adaptions from inital specification -----------------------------------------
+    -- Adaptations from inital specification ---------------------------------------
     
     New hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 

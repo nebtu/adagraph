@@ -57,7 +57,7 @@ new_adagraph_design <- function(
     closed_matrix = int_hyp$closed_matrix,
     test_m = test_m,
     interim_test = FALSE,
-    adaptions = FALSE,
+    adaptations = FALSE,
     final_test = FALSE,
     names = names
   )

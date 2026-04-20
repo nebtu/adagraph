@@ -4,7 +4,7 @@
 #' @param runs1 Number of trials to run in the first stage
 #' @param runs2 Number of second stage to run for every first stage trial
 #' @param adapt_rule function that takes a cer_design object after the
-#'   first interim test and returns the same object with appropiate adaptions
+#'   first interim test and returns the same object with appropiate adaptations
 #' @param data_gen_1 function for generating first stage data, see details
 #' @param data_gen_2 function for generating second stage data, see details
 #' @param include_designs boolean indicating whether to include
@@ -35,7 +35,7 @@
 #'  alpha_spending_f = as,
 #'  t = 0.5)
 #'
-#' adaption <- function(design) {
+#' adaptation <- function(design) {
 #'   design |> multiarm_drop_arms(1)
 #' }
 #'
@@ -63,7 +63,7 @@
 #'   design,
 #'   5,
 #'   3,
-#'   adaption,
+#'   adaptation,
 #'   data_gen,
 #'   data_gen_2
 #' )

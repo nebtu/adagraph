@@ -74,8 +74,8 @@ make_example_multiarm <- function() {
   design
 }
 
-make_example_mame <- function() {
-  n_subgroups <- rbind(
+make_example_trial <- function() {
+  n_table <- rbind(
     data.frame(arm = "control", `HPV+` = FALSE, n = 120, check.names = FALSE),
     data.frame(arm = "control", `HPV+` = TRUE, n = 80, check.names = FALSE),
     data.frame(arm = "arm1", `HPV+` = FALSE, n = 120, check.names = FALSE),
@@ -110,11 +110,11 @@ make_example_mame <- function() {
     sec_to_prim,  sec_to_prim,           0,          0, sec_to_prim,          0,           0,            0
   ))
 
-  mame_design(
+  trial_design(
     arms = 2,
     endpoints = 2,
     subgroups = 1,
-    n_subgroups = n_subgroups,
+    n_table = n_table,
     weights = weights,
     t = t,
     alpha = alpha,

@@ -2,7 +2,8 @@
 % Please edit documentation in R/cer_final_test.R
 \name{cer_final_test}
 \alias{cer_final_test}
-\title{Test a cer design for early rejection of hypotheses and calculate the CER for adaptions}
+\title{Test a cer design for early rejection of hypotheses and calculate the CER for
+adaptations}
 \usage{
 cer_final_test(design, p_values, combined = TRUE)
 }
@@ -18,7 +19,8 @@ the first and second stage or just the raw values from the second stage}
 a cer_design object, which now also includes the rejection status of the hypotheses after the final test
 }
 \description{
-Test a cer design for early rejection of hypotheses and calculate the CER for adaptions
+Test a cer design for early rejection of hypotheses and calculate the CER for
+adaptations
 }
 \examples{
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))

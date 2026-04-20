@@ -1,4 +1,4 @@
-get_total_subgroup <- function(n_subgroups, names_arms, names_subgroups) {
+get_total_subgroup <- function(n_table, names_arms, names_subgroups) {
   #number of people in each (subgroup, arm) combination
   n_total_subgroups <- do.call(
     rbind,
@@ -6,8 +6,8 @@ get_total_subgroup <- function(n_subgroups, names_arms, names_subgroups) {
       do.call(
         rbind,
         lapply(names_subgroups, \(name) {
-          n = sum(n_subgroups[
-            n_subgroups[, name] == TRUE & n_subgroups[, "arm"] == arm_name,
+          n = sum(n_table[
+            n_table[, name] == TRUE & n_table[, "arm"] == arm_name,
             "n"
           ])
           data.frame(arm = arm_name, subgroup = name, n = n)
@@ -22,7 +22,7 @@ get_total_subgroup <- function(n_subgroups, names_arms, names_subgroups) {
     do.call(
       rbind,
       lapply(c(names_arms, "control"), \(arm_name) {
-        n = sum(n_subgroups[n_subgroups[, "arm"] == arm_name, "n"])
+        n = sum(n_table[n_table[, "arm"] == arm_name, "n"])
         data.frame(arm = arm_name, subgroup = "Total", n = n)
       })
     )

@@ -1,8 +1,8 @@
 #' Adjust bounds after changing some design parameters
 #'
 #' This function calculates the new bounds for the p-values for the final test.
-#' It should be run once after finishing all adaptions after the interim test,
-#' if the `adapt_bounds` option was not true for the last adaption anyway.
+#' It should be run once after finishing all adaptations after the interim test,
+#' if the `adapt_bounds` option was not true for the last adaptation anyway.
 #'
 #' @param design A cer_design object
 #'

@@ -124,7 +124,7 @@ redistribute_n <- function(
 #' @param alt_adj uses `cer_alt_drop_hypotheses()` for dropping the hypotheses
 #'   instead of `cer_drop_hypotheses()`
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
-#'   FWER with the new adaptions, see `cer_adapt()`
+#'   FWER with the new adaptations, see `cer_adapt()`
 #'
 #' @examples
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))

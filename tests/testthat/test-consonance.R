@@ -47,7 +47,7 @@ test_that("validity testing", {
 
   expect_error(
     check_consonance(design, adapted = TRUE),
-    class = "adagraph_no_adaption"
+    class = "adagraph_no_adaptation"
   )
 
   expect_error(
