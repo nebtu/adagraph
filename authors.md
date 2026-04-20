@@ -9,13 +9,13 @@
 ## Citation
 
 Fallmann B, Posch M (2026). *adagraph: Design Adaptive Trials with a
-Graph-Based Closed Testing Procedure*. R package version 0.1.2,
+Graph-Based Closed Testing Procedure*. R package version 0.2.0,
 <https://nebtu.github.io/adagraph/>.
 
     @Manual{,
       title = {adagraph: Design Adaptive Trials with a Graph-Based Closed Testing Procedure},
       author = {Benjamin Fallmann and Martin Posch},
       year = {2026},
-      note = {R package version 0.1.2},
+      note = {R package version 0.2.0},
       url = {https://nebtu.github.io/adagraph/},
     }

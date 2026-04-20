@@ -43,7 +43,7 @@ multiarm_drop_arms(
 - adapt_bounds:
 
   Adapt the bounds for rejecting a hypotheses to keep the FWER with the
-  new adaptions, see
+  new adaptations, see
   [`cer_adapt()`](https://nebtu.github.io/adagraph/reference/cer_adapt.md)
 
 ## Details
@@ -75,7 +75,7 @@ design <- cer_interim_test(design, c(0.1, 0.02))
 
 design <- design |> multiarm_drop_arms(1)
 design
-#> A Multi-arm Design object, for testing 2 hypotheses at FWER 0.05.
+#> A Multi-arm Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
 #> There are 1 control groups for a total of 2 hypotheses.
 #> 

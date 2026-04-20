@@ -1,7 +1,7 @@
 # Make a new CER trial design
 
 Returns an object of class `cer_design`. This can be used for clinical
-trials with potential adaptions that are controlled for using the
+trials with potential adaptations that are controlled for using the
 conditional error method.
 
 ## Usage
@@ -82,9 +82,9 @@ design <- cer_design(
  t=0.5)
 
 design
-#> A CER Design object, for testing 2 hypotheses at FWER 0.05.
+#> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
 #> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptions have been performed yet ────────────────────────────────────────
+#> ── No adaptations have been performed yet ──────────────────────────────────────
 #> ── No final test has been performed yet ────────────────────────────────────────
 ```

@@ -33,7 +33,7 @@ sim_trial(
 - adapt_rule:
 
   function that takes a cer_design object after the first interim test
-  and returns the same object with appropiate adaptions
+  and returns the same object with appropiate adaptations
 
 - data_gen_1:
 
@@ -81,7 +81,7 @@ design <- multiarm_cer_design(
  alpha_spending_f = as,
  t = 0.5)
 
-adaption <- function(design) {
+adaptation <- function(design) {
   design |> multiarm_drop_arms(1)
 }
 
@@ -109,7 +109,7 @@ sim_trial(
   design,
   5,
   3,
-  adaption,
+  adaptation,
   data_gen,
   data_gen_2
 )

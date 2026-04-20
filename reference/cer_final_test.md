@@ -1,7 +1,7 @@
-# Test a cer design for early rejection of hypotheses and calculate the CER for adaptions
+# Test a cer design for early rejection of hypotheses and calculate the CER for adaptations
 
 Test a cer design for early rejection of hypotheses and calculate the
-CER for adaptions
+CER for adaptations
 
 ## Usage
 
@@ -45,7 +45,7 @@ design <- cer_design(
 
 design <- cer_interim_test(design, c(0.001, 0.02))
 
-design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+design <- cer_drop_hypotheses(design, 1)
 design <- cer_adapt_bounds(design)
 
 design <- cer_final_test(design, c(NA, 0.01))

@@ -53,9 +53,9 @@ design <- adagraph_design(
  test_m=rbind(c(0, 1),
               c(1, 0)))
 design
-#> A Adagraph Design object, for testing 2 hypotheses at FWER 0.05.
+#> A Adagraph Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
 #> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptions have been performed yet ────────────────────────────────────────
+#> ── No adaptations have been performed yet ──────────────────────────────────────
 #> ── No final test has been performed yet ────────────────────────────────────────
 ```

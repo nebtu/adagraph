@@ -1,7 +1,7 @@
-# Test a cer design for early rejection of hypotheses and calculate the CER for adaptions
+# Test a cer design for early rejection of hypotheses and calculate the CER for adaptations
 
 Test a cer design for early rejection of hypotheses and calculate the
-CER for adaptions
+CER for adaptations
 
 ## Usage
 

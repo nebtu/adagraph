@@ -11,12 +11,12 @@ which case it should be 1 anyway.
 ## Usage
 
 ``` r
-get_cer(p_values, weights, cJ2, correlation, t)
+get_cer(interim_p_values, weights, rej_bound, correlation, t)
 ```
 
 ## Arguments
 
-- p_values:
+- interim_p_values:
 
   vector of stage 1 p-values for the hypothesis
 
@@ -24,9 +24,10 @@ get_cer(p_values, weights, cJ2, correlation, t)
 
   weight to give to each hypothesis, ignoring all with weight 0
 
-- cJ2:
+- rej_bound:
 
-  factor used for deciding if the hypothesis should be rejected
+  double of length 1, bound used for deciding if the hypothesis should
+  be rejected
 
 - correlation:
 
@@ -49,7 +50,7 @@ may be greater than 1, see also the examples
 ## Examples
 
 ``` r
-#the CER is high (even >1) if the p_values of the first stage are already low
+#the CER is high (even >1) if the p values of the first stage are already low
 get_cer(
  c(0.01, 0.01, 0.9, 0.9),
  c(1, 1, 0, 0),

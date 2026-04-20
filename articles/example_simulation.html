@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/example_cer_design.html">Example for using the CER Method with adagraph</a></li>
     <li><a class="dropdown-item" href="../articles/example_simulation.html">Example for simulating a multiarm trial with adagraph</a></li>
+    <li><a class="dropdown-item" href="../articles/example_trial_design.html">Example for using the CER Method for a trial design (with subgroups) with adagraph</a></li>
   </ul>
 </li>
       </ul>
@@ -106,12 +107,12 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span></span>
-<span><span class="co">#&gt; A Multi-arm Design object, for testing 8 hypotheses at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Multi-arm Design object, for testing the 8 hypotheses H1, H2, H3, H4, H5, H6, H7, and H8 at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 control groups for a total of 8 hypotheses.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── No interim test has been performed yet. ─────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No adaptions have been performed yet ────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── No adaptations have been performed yet ──────────────────────────────────────</span></span>
 <span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
 </div>
 <p>Next, we need to specify how we want the data used in the simulation to be specified. For this, we need a function that takes a number of trials to simulate and the design object and returns the p-values for the simulation. While it is possible to write such a function by hand, for this case we can use the provided <code><a href="../reference/get_data_gen.html">get_data_gen()</a></code> and <code><a href="../reference/get_data_gen_2.html">get_data_gen_2()</a></code> functions. We first define the correlation between the different endpoints of the same group and the effectiveness of the treatments. Here, we want assume that none of the treatments have an effect, so we can estimate the familywise error rate (FWER).</p>
@@ -151,7 +152,7 @@
 <span>  <span class="va">mu</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Next we need to define how we want to adapt our trial once the interim results are generated and tested for. Here, we define a simple adaption were any arms where the p-value for the primary enpoint is higher than 0.75 is dropped. (Addtionally, we also dont continue any arms that are already rejected in both primary and secondary endpoints.) We need to take care when updating the number of people participating in the second stage. We assume that the total amount of people that can be recruted stays constant. This means that when we drop an arm, those people can be distributed to the remaining arms. But the trial design object has no knowledge saved about which arms correspond to the same people and only measure different endpoints. This means we must calculate the new sample sizes with only the arms, not the enpoints, using the <code><a href="../reference/redistribute_n.html">redistribute_n()</a></code> function.</p>
+<p>Next we need to define how we want to adapt our trial once the interim results are generated and tested for. Here, we define a simple adaptation were any arms where the p-value for the primary enpoint is higher than 0.75 is dropped. (Addtionally, we also dont continue any arms that are already rejected in both primary and secondary endpoints.) We need to take care when updating the number of people participating in the second stage. We assume that the total amount of people that can be recruted stays constant. This means that when we drop an arm, those people can be distributed to the remaining arms. But the trial design object has no knowledge saved about which arms correspond to the same people and only measure different endpoints. This means we must calculate the new sample sizes with only the arms, not the enpoints, using the <code><a href="../reference/redistribute_n.html">redistribute_n()</a></code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">futility</span> <span class="op">&lt;-</span> <span class="fl">0.75</span></span>
@@ -159,7 +160,7 @@
 <span><span class="va">adapt_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">design</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="va">design</span><span class="op">$</span><span class="va">p_values_interim</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
 <span></span>
-<span>  <span class="co">#treatments, were both primary and secndary enpoints are rejected</span></span>
+<span>  <span class="co">#treatments where both primary and secndary enpoints are rejected</span></span>
 <span>  <span class="va">trt_rej</span> <span class="op">&lt;-</span> <span class="va">design</span><span class="op">$</span><span class="va">rej_interim</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="op">&amp;</span> <span class="va">design</span><span class="op">$</span><span class="va">rej_interim</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span></span>
 <span></span>
 <span>  <span class="va">drop_hyp</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">p</span> <span class="op">&gt;</span> <span class="va">futility</span><span class="op">)</span> <span class="op">|</span> <span class="va">trt_rej</span></span>
@@ -181,7 +182,7 @@
 <span>    <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
-<p>Now we have all the pieces to simulate our trials. Since the most computationally intensive step here is to calculate the adjusted bound for rejecting hypotheses after the adaption, we simulate for every first stage multiple second stages, in this case 10.</p>
+<p>Now we have all the pieces to simulate our trials. Since the most computationally intensive step here is to calculate the adjusted bound for rejecting hypotheses after the adaptation, we simulate for every first stage multiple second stages, in this case 10.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sim_trial.html">sim_trial</a></span><span class="op">(</span><span class="va">design</span>, <span class="fl">10</span>, <span class="fl">10</span>, <span class="va">adapt_func</span>, <span class="va">data_gen_1</span>, <span class="va">data_gen_2</span><span class="op">)</span></span>
@@ -203,7 +204,7 @@
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">rej_any</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.03</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.02</span></span></code></pre></div>
 </div>
 
 

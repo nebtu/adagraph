@@ -2,14 +2,14 @@
 
 For some CER design, see if the defined test sequence is consonant,
 either from just it's graph and weights, also using the correlation
-structure, or after some adaption.
+structure, or after some adaptation.
 
 ## Usage
 
 ``` r
 check_consonance(
   design,
-  adapted = design$adaptions,
+  adapted = design$adaptations,
   stage = c("both", "interim", "final"),
   use_weights = FALSE
 )

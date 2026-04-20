@@ -7,7 +7,7 @@ adapted, this needs to be done manually if desired.
 ## Usage
 
 ``` r
-cer_drop_hypotheses(design, hypotheses, adapt_bounds = TRUE)
+cer_drop_hypotheses(design, drop_hyp, adapt_bounds = TRUE)
 ```
 
 ## Arguments
@@ -16,21 +16,19 @@ cer_drop_hypotheses(design, hypotheses, adapt_bounds = TRUE)
 
   cer_design object
 
-- hypotheses:
+- drop_hyp:
 
-  vector of booleans indicating for each hypotheses if it should be
-  dropped
+  that should be dropped, identified either by numbers or by their names
 
 - adapt_bounds:
 
   Adapt the bounds for rejecting a hypotheses to keep the FWER with the
-  new adaptions. If doing multiple adaptions, it is enough to adapt
+  new adaptations. If doing multiple adaptations, it is enough to adapt
   bounds only for the last one, or call `adapt_bounds()` manually after.
 
 ## Value
 
-design with specified hypotheses dropped (so TRUE means the hypothesis
-is dropped)
+design with specified hypotheses dropped
 
 ## Examples
 
@@ -48,9 +46,9 @@ design <- cer_design(
 
 design <- cer_interim_test(design, c(0.1, 0.02))
 
-design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+design <- cer_drop_hypotheses(design, 1)
 design
-#> A CER Design object, for testing 2 hypotheses at FWER 0.05.
+#> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
 #> ── An interim test has been performed. ─────────────────────────────────────────
 #> No Hypotheses were rejected at the interim.

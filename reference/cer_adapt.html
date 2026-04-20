@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/example_cer_design.html">Example for using the CER Method with adagraph</a></li>
     <li><a class="dropdown-item" href="../articles/example_simulation.html">Example for simulating a multiarm trial with adagraph</a></li>
+    <li><a class="dropdown-item" href="../articles/example_trial_design.html">Example for using the CER Method for a trial design (with subgroups) with adagraph</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -81,19 +82,19 @@ Note that this can now be a vector with a different value for different hypothes
 
 <dt id="arg-adapt-bounds">adapt_bounds<a class="anchor" aria-label="anchor" href="#arg-adapt-bounds"></a></dt>
 <dd><p>Adapt the bounds for rejecting a hypotheses to keep the
-FWER with the new adaptions. If doing multiple adaptions, it is enough to
+FWER with the new adaptations. If doing multiple adaptations, it is enough to
 adapt bounds only for the last one, or call <code>adapt_bounds()</code> manually
 after.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class cer_design, with the adaptions applied.</p>
+    <p>An object of class cer_design, with the adaptations applied.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>For all adaptions, adapt_bounds needs to be used only once, with or after the
-last adaption. For this, either make sure that adapt_bounds is TRUE, or use
+    <p>For all adaptations, adapt_bounds needs to be used only once, with or after the
+last adaptation. For this, either make sure that adapt_bounds is TRUE, or use
 the <code>adapt_bounds()</code> function manually</p>
     </div>
 
@@ -108,7 +109,8 @@ the <code>adapt_bounds()</code> function manually</p>
 <span class="r-in"><span> test_m<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> alpha_spending_f<span class="op">=</span><span class="va">as</span>,</span></span>
-<span class="r-in"><span> t<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span> t<span class="op">=</span><span class="fl">0.5</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#note that it is not necessary to do an interim test before,</span></span></span>
 <span class="r-in"><span><span class="co">#but that an interim test will only be done with the prespecified parameters</span></span></span>
@@ -116,7 +118,7 @@ the <code>adapt_bounds()</code> function manually</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu">cer_adapt</span><span class="op">(</span><span class="va">design</span>, weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">design</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A CER Design object, for testing 2 hypotheses at FWER 0.05.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ── An interim test has been performed. ─────────────────────────────────────────</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> No Hypotheses were rejected at the interim.</span>

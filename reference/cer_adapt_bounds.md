@@ -1,9 +1,9 @@
 # Adjust bounds after changing some design parameters
 
 This function calculates the new bounds for the p-values for the final
-test. It should be run once after finishing all adaptions after the
+test. It should be run once after finishing all adaptations after the
 interim test, if the `adapt_bounds` option was not true for the last
-adaption anyway.
+adaptation anyway.
 
 ## Usage
 
@@ -37,11 +37,11 @@ design <- cer_design(
 
 design <- cer_interim_test(design, c(0.1, 0.02))
 
-design <- cer_drop_hypotheses(design, c(TRUE, FALSE))
+design <- cer_drop_hypotheses(design, 1)
 design <- cer_adapt_bounds(design)
 
 design
-#> A CER Design object, for testing 2 hypotheses at FWER 0.05.
+#> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
 #> ── An interim test has been performed. ─────────────────────────────────────────
 #> No Hypotheses were rejected at the interim.

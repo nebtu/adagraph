@@ -46,18 +46,18 @@ cer_adapt(
 - adapt_bounds:
 
   Adapt the bounds for rejecting a hypotheses to keep the FWER with the
-  new adaptions. If doing multiple adaptions, it is enough to adapt
+  new adaptations. If doing multiple adaptations, it is enough to adapt
   bounds only for the last one, or call `adapt_bounds()` manually after.
 
 ## Value
 
-An object of class cer_design, with the adaptions applied.
+An object of class cer_design, with the adaptations applied.
 
 ## Details
 
-For all adaptions, adapt_bounds needs to be used only once, with or
-after the last adaption. For this, either make sure that adapt_bounds is
-TRUE, or use the `adapt_bounds()` function manually
+For all adaptations, adapt_bounds needs to be used only once, with or
+after the last adaptation. For this, either make sure that adapt_bounds
+is TRUE, or use the `adapt_bounds()` function manually
 
 ## Examples
 
@@ -71,7 +71,8 @@ design <- cer_design(
  test_m=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending_f=as,
- t=0.5)
+ t=0.5
+)
 
 #note that it is not necessary to do an interim test before,
 #but that an interim test will only be done with the prespecified parameters
@@ -79,7 +80,7 @@ design <- cer_interim_test(design, c(0.1, 0.02))
 
 design <- cer_adapt(design, weights = c(1/3, 2/3))
 design
-#> A CER Design object, for testing 2 hypotheses at FWER 0.05.
+#> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
 #> ── An interim test has been performed. ─────────────────────────────────────────
 #> No Hypotheses were rejected at the interim.

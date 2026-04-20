@@ -31,51 +31,19 @@ design <- cer_design(
 
 
 design <- cer_interim_test(design, c(0.001, 0.02)) |>
-  cer_drop_hypotheses(c(TRUE, FALSE)) |>
+  cer_drop_hypotheses(1) |>
   cer_final_test(c(NA, 0.01))
 
 design
 #> A CER Design object, for testing 2 hypotheses at FWER 0.05.
 #> 
-#> ── Inital design specification ─────────────────────────────────────────────────
-#> 
-#> Hypotheses weights
-#> [1] 0.6666667 0.3333333
-#> 
-#> Graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    1
-#> [2,]    1    0
-#> 
-#> Correlation for parametric test
-#>    [,1] [,2]
-#> H1    1   NA
-#> H2   NA    1
-#> 
-#> Interim test is planned at time fraction 0.5
-#> 
-#> ── Interim test result ─────────────────────────────────────────────────────────
-#> 
-#> P-values of interim test are:
-#> [1] 0.001 0.020
-#> Hypotheses rejected at the interim: 1
-#> 
-#> ── Adaptions from inital specification ─────────────────────────────────────────
-#> 
-#> New hypotheses weights
-#> [1] 0 1
-#> 
-#> New graph Transition Matrix
-#>      [,1] [,2]
-#> [1,]    0    0
-#> [2,]    0    0
-#> 
+#> ── An interim test has been performed. ─────────────────────────────────────────
+#> Hypotheses rejected at the interim: H1
+#> ── The following characteristics have been adapted: ────────────────────────────
+#> • Hypotheses weights
+#> • Graph Transition Matrix
 #> ── Final test result ───────────────────────────────────────────────────────────
-#> 
-#> Overall p-values of the hypotheses are:
-#> [1] 1.00 0.01
-#> Hypotheses rejected: 
-#> [1] 1 2
+#> Hypotheses rejected: H1 and H2
 ```
 
 # Package index
@@ -97,14 +65,18 @@ design
   : Adapt a cer design by dropping hypotheses
 - [`cer_final_test()`](https://nebtu.github.io/adagraph/reference/cer_final_test.md)
   : Test a cer design for early rejection of hypotheses and calculate
-  the CER for adaptions
+  the CER for adaptations
 - [`cer_interim_test()`](https://nebtu.github.io/adagraph/reference/cer_interim_test.md)
   : Test a cer design for early rejection of hypotheses and calculate
-  the CER for adaptions
+  the CER for adaptations
 - [`cer_prep_bounds()`](https://nebtu.github.io/adagraph/reference/cer_prep_bounds.md)
   : Calculate bounds for preplanned test
 - [`check_consonance()`](https://nebtu.github.io/adagraph/reference/check_consonance.md)
   : Check if a design is consonant
+- [`export_gmcp_lite()`](https://nebtu.github.io/adagraph/reference/export_gmcp_lite.md)
+  : Export the closed testing strategy as a gMCPLite graph object
+- [`export_graphical_mcp()`](https://nebtu.github.io/adagraph/reference/export_graphical_mcp.md)
+  : Export the closed testing strategy as a graphicalMCP graph object
 - [`get_cer()`](https://nebtu.github.io/adagraph/reference/get_cer.md) :
   Get the Conditional Error Rate for a intersection of hypotheses
 - [`get_data_gen()`](https://nebtu.github.io/adagraph/reference/get_data_gen.md)
@@ -112,6 +84,8 @@ design
 - [`get_data_gen_2()`](https://nebtu.github.io/adagraph/reference/get_data_gen_2.md)
   : Get a data generating function for simulating the second stage of a
   trial
+- [`get_subgroup_correlation()`](https://nebtu.github.io/adagraph/reference/get_subgroup_correlation.md)
+  : Get correlation between different subgroups and arms
 - [`get_t()`](https://nebtu.github.io/adagraph/reference/get_t.md) : Get
   the time fractions for given sample sizes
 - [`intersection_hypotheses()`](https://nebtu.github.io/adagraph/reference/intersection_hypotheses.md)
@@ -125,6 +99,14 @@ design
   trial assuming a fixed population
 - [`sim_trial()`](https://nebtu.github.io/adagraph/reference/sim_trial.md)
   : Run a series of simulated trials according to a specified design
+- [`trial_adapt_n()`](https://nebtu.github.io/adagraph/reference/trial_adapt_n.md)
+  : Adapt the patient numbers for the second stage of a trial design
+- [`trial_design()`](https://nebtu.github.io/adagraph/reference/trial_design.md)
+  : Make a new trial design with multiple arms, endpoints or subgroups
+- [`trial_drop_groups()`](https://nebtu.github.io/adagraph/reference/trial_drop.md)
+  [`trial_drop_arms()`](https://nebtu.github.io/adagraph/reference/trial_drop.md)
+  [`trial_drop_endpoints()`](https://nebtu.github.io/adagraph/reference/trial_drop.md)
+  : Dropp groups, arms or endpoints from a trial design
 
 # Articles
 
@@ -134,3 +116,6 @@ design
   adagraph](https://nebtu.github.io/adagraph/articles/example_cer_design.md):
 - [Example for simulating a multiarm trial with
   adagraph](https://nebtu.github.io/adagraph/articles/example_simulation.md):
+- [Example for using the CER Method for a trial design (with subgroups)
+  with
+  adagraph](https://nebtu.github.io/adagraph/articles/example_trial_design.md):

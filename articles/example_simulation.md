@@ -48,12 +48,12 @@ design <- multiarm_cer_design(
 )
 
 design
-#> A Multi-arm Design object, for testing 8 hypotheses at FWER 0.025.
+#> A Multi-arm Design object, for testing the 8 hypotheses H1, H2, H3, H4, H5, H6, H7, and H8 at FWER 0.025.
 #> 
 #> There are 2 control groups for a total of 8 hypotheses.
 #> 
 #> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptions have been performed yet ────────────────────────────────────────
+#> ── No adaptations have been performed yet ──────────────────────────────────────
 #> ── No final test has been performed yet ────────────────────────────────────────
 ```
 
@@ -107,17 +107,18 @@ data_gen_2 <- get_data_gen_2(
 ```
 
 Next we need to define how we want to adapt our trial once the interim
-results are generated and tested for. Here, we define a simple adaption
-were any arms where the p-value for the primary enpoint is higher than
-0.75 is dropped. (Addtionally, we also dont continue any arms that are
-already rejected in both primary and secondary endpoints.) We need to
-take care when updating the number of people participating in the second
-stage. We assume that the total amount of people that can be recruted
-stays constant. This means that when we drop an arm, those people can be
-distributed to the remaining arms. But the trial design object has no
-knowledge saved about which arms correspond to the same people and only
-measure different endpoints. This means we must calculate the new sample
-sizes with only the arms, not the enpoints, using the
+results are generated and tested for. Here, we define a simple
+adaptation were any arms where the p-value for the primary enpoint is
+higher than 0.75 is dropped. (Addtionally, we also dont continue any
+arms that are already rejected in both primary and secondary endpoints.)
+We need to take care when updating the number of people participating in
+the second stage. We assume that the total amount of people that can be
+recruted stays constant. This means that when we drop an arm, those
+people can be distributed to the remaining arms. But the trial design
+object has no knowledge saved about which arms correspond to the same
+people and only measure different endpoints. This means we must
+calculate the new sample sizes with only the arms, not the enpoints,
+using the
 [`redistribute_n()`](https://nebtu.github.io/adagraph/reference/redistribute_n.md)
 function.
 
@@ -127,7 +128,7 @@ futility <- 0.75
 adapt_func <- function(design) {
   p <- design$p_values_interim[1:4]
 
-  #treatments, were both primary and secndary enpoints are rejected
+  #treatments where both primary and secndary enpoints are rejected
   trt_rej <- design$rej_interim[1:4] & design$rej_interim[5:8]
 
   drop_hyp <- (p > futility) | trt_rej
@@ -152,8 +153,8 @@ adapt_func <- function(design) {
 
 Now we have all the pieces to simulate our trials. Since the most
 computationally intensive step here is to calculate the adjusted bound
-for rejecting hypotheses after the adaption, we simulate for every first
-stage multiple second stages, in this case 10.
+for rejecting hypotheses after the adaptation, we simulate for every
+first stage multiple second stages, in this case 10.
 
 ``` r
 data <- sim_trial(design, 10, 10, adapt_func, data_gen_1, data_gen_2)
@@ -182,5 +183,5 @@ results.
 
 ``` r
 print(mean(data$rej_any))
-#> [1] 0.03
+#> [1] 0.02
 ```

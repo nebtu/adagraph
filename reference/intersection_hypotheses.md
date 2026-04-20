@@ -1,8 +1,8 @@
 # Get information about the intersection hypothesis of a design
 
 For given design, this returns for each intersection hypothesis the
-weights and boundaries for rejecting. After adaptions, it also includes
-the updated weights and boundaries.
+weights and boundaries for rejecting. After adaptations, it also
+includes the updated weights and boundaries.
 
 ## Usage
 

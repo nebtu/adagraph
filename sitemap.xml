@@ -3,6 +3,7 @@
 <url><loc>https://nebtu.github.io/adagraph/LICENSE.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/articles/example_cer_design.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/articles/example_simulation.html</loc></url>
+<url><loc>https://nebtu.github.io/adagraph/articles/example_trial_design.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/articles/index.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/authors.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/index.html</loc></url>
@@ -16,9 +17,12 @@
 <url><loc>https://nebtu.github.io/adagraph/reference/cer_interim_test.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/cer_prep_bounds.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/check_consonance.html</loc></url>
+<url><loc>https://nebtu.github.io/adagraph/reference/export_gmcp_lite.html</loc></url>
+<url><loc>https://nebtu.github.io/adagraph/reference/export_graphical_mcp.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/get_cer.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/get_data_gen.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/get_data_gen_2.html</loc></url>
+<url><loc>https://nebtu.github.io/adagraph/reference/get_subgroup_correlation.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/get_t.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/index.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/intersection_hypotheses.html</loc></url>
@@ -26,5 +30,8 @@
 <url><loc>https://nebtu.github.io/adagraph/reference/multiarm_drop_arms.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/redistribute_n.html</loc></url>
 <url><loc>https://nebtu.github.io/adagraph/reference/sim_trial.html</loc></url>
+<url><loc>https://nebtu.github.io/adagraph/reference/trial_adapt_n.html</loc></url>
+<url><loc>https://nebtu.github.io/adagraph/reference/trial_design.html</loc></url>
+<url><loc>https://nebtu.github.io/adagraph/reference/trial_drop.html</loc></url>
 </urlset>
 

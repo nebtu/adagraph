@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/example_cer_design.html">Example for using the CER Method with adagraph</a></li>
     <li><a class="dropdown-item" href="../articles/example_simulation.html">Example for simulating a multiarm trial with adagraph</a></li>
+    <li><a class="dropdown-item" href="../articles/example_trial_design.html">Example for using the CER Method for a trial design (with subgroups) with adagraph</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -71,7 +72,7 @@
 
 <dt id="arg-adapt-rule">adapt_rule<a class="anchor" aria-label="anchor" href="#arg-adapt-rule"></a></dt>
 <dd><p>function that takes a cer_design object after the
-first interim test and returns the same object with appropiate adaptions</p></dd>
+first interim test and returns the same object with appropiate adaptations</p></dd>
 
 
 <dt id="arg-data-gen-">data_gen_1<a class="anchor" aria-label="anchor" href="#arg-data-gen-"></a></dt>
@@ -116,7 +117,7 @@ how the input and output of data generating functions should look.</p>
 <span class="r-in"><span> alpha_spending_f <span class="op">=</span> <span class="va">as</span>,</span></span>
 <span class="r-in"><span> t <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">adaption</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">design</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">adaptation</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">design</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="multiarm_drop_arms.html">multiarm_drop_arms</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
@@ -144,7 +145,7 @@ how the input and output of data generating functions should look.</p>
 <span class="r-in"><span>  <span class="va">design</span>,</span></span>
 <span class="r-in"><span>  <span class="fl">5</span>,</span></span>
 <span class="r-in"><span>  <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>  <span class="va">adaption</span>,</span></span>
+<span class="r-in"><span>  <span class="va">adaptation</span>,</span></span>
 <span class="r-in"><span>  <span class="va">data_gen</span>,</span></span>
 <span class="r-in"><span>  <span class="va">data_gen_2</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
