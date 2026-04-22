@@ -28,11 +28,13 @@ export_gmcp_lite <- function(
     m <- design[["test_m"]]
   }
 
+  #should not be necessary, but ensures correct behaviour if names was changed manually
+  colnames(m) <- design[["names"]]
+
   methods::new(
     "graphMCP",
-    m = unname(m),
-    weights = unname(weights),
-    nodeAttr = as.list(design[["names"]])
+    m = m,
+    weights = unname(weights)
   )
 }
 

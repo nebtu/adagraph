@@ -116,7 +116,6 @@ print.intersection_hypotheses <- function(
       check.names = FALSE
     )
     if (any(grep("^rej", names(x)))) {
-      print(x[["rej"]])
       ad_df <- cbind(ad_df, `Rejected` = x[["rej"]])
       cli::cat_line("After adaptation and final result")
     } else {
