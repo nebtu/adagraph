@@ -4,7 +4,7 @@
 #'
 #' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf,names Same as
 #' for `cer_design()`
-#' @param class character, makes it possible to add subbclasses
+#' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
 #' @return An object of class c("cer_design", "adagraph_design"), whith the
@@ -14,7 +14,7 @@
 #'  * weights: list of weights of the hypotheses, as given
 #'  * alpha: overall FWER, as given
 #'  * hyp_matrix: matrix of format #intersection-hypotheses x #hypotheses where
-#'      each row specifies which hypothosis is part of the given intersection hypotheses
+#'      each row specifies which hypothesis is part of the given intersection hypotheses
 #'  * weights_matrix: same format as hyp_matrix, but each row specifies
 #'      the weights of the hypotheses for the given intersection hypothesis
 #'  * closed_matrix: each of the #hypothesis columns specifies which
@@ -25,7 +25,7 @@
 #'  * t: as given
 #'  * bounds_1: matrix of same format as hyp_matrix, where each row gives the bounds for rejection of the intersection hypothesis at the first stage
 #'  * bounds_2: same as bounds_1, but for rejection at the second stage according to the preplanned design
-#'  * cJ1: values used for calulation of bounds_1, bounds_1 := cJ1 * weights (with rowwise multiplication)
+#'  * cJ1: values used for calculation of bounds_1, bounds_1 := cJ1 * weights (with rowwise multiplication)
 #'  * cJ2: as cJ1, but for bounds_2
 #'
 #' @noRd
@@ -50,9 +50,9 @@ new_cer_design <- function(
     names = names
   )
   names <- design[["names"]] #use default from adagraph_design
-  design$alpha_spending_f <- alpha_spending_f
-  design$seq_bonf <- seq_bonf
-  design$t <- t
+  design[["alpha_spending_f"]] <- alpha_spending_f
+  design[["seq_bonf"]] <- seq_bonf
+  design[["t"]] <- t
 
   prep_alpha_1 <- alpha_spending_f(alpha, t)
   if (getOption("adagraph.use_future")) {
@@ -85,12 +85,12 @@ new_cer_design <- function(
     )
   }
 
-  design$bounds_1 <- t(sapply(boundslist, `[[`, "bounds_1"))
-  colnames(design$bounds_1) <- names
-  design$bounds_2 <- t(sapply(boundslist, `[[`, "bounds_2"))
-  colnames(design$bounds_2) <- names
-  design$cJ1 <- sapply(boundslist, `[[`, "cJ1")
-  design$cJ2 <- sapply(boundslist, `[[`, "cJ2")
+  design[["bounds_1"]] <- t(sapply(boundslist, `[[`, "bounds_1"))
+  colnames(design[["bounds_1"]]) <- names
+  design[["bounds_2"]] <- t(sapply(boundslist, `[[`, "bounds_2"))
+  colnames(design[["bounds_2"]]) <- names
+  design[["cJ1"]] <- sapply(boundslist, `[[`, "cJ1")
+  design[["cJ2"]] <- sapply(boundslist, `[[`, "cJ2")
 
   design
 }
@@ -135,15 +135,17 @@ validate_cer_design_params <- function(
     )
   } else if (!rlang::is_bool(seq_bonf)) {
     cli::cli_abort(
-      "{.var seq_bonf} has to be a boolean of length one.",
-      "x" = "{.var seq_bonf}` is {.obj_type_friendly {seq_bonf}}.",
+      c(
+        "{.var seq_bonf} has to be a boolean of length one.",
+        "x" = "{.var seq_bonf}` is {.obj_type_friendly {seq_bonf}}."
+      ),
       class = "adagraph_invalid_argument_seq_bonf",
       call = call
     )
   } else if (!rlang::is_function(alpha_spending_f)) {
     cli::cli_abort(
       "{.var alpha_spending_f} has to be a function",
-      "x" = "`seq_bonf` is {.obj_type_friendly {alpa_spending_f}}.",
+      "x" = "{.var alpha_spending_f} is {.obj_type_friendly {alpha_spending_f}}.",
       class = "adagraph_invalid_argument_alpha_spending_f",
       call = call
     )

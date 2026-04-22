@@ -18,8 +18,8 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
   cli::cat_line()
 
   # Allow class-specific additions inside the initial spec section
-  if (is.function(hooks$after_initial_spec)) {
-    hooks$after_initial_spec(x)
+  if (is.function(hooks[["after_initial_spec"]])) {
+    hooks[["after_initial_spec"]](x)
   }
 
   # Interim results (only if flagged and fields available)
@@ -33,7 +33,7 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
         )
       )
     } else {
-      cli::cat_line("No Hypotheses were rejected at the interim.")
+      cli::cat_line("No hypotheses were rejected at the interim.")
     }
   } else {
     cli::cat_rule("No interim test has been performed yet.")
@@ -70,8 +70,8 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
     cli::cat_rule("No adaptations have been performed yet")
   }
 
-  if (is.function(hooks$after_adaptations)) {
-    hooks$after_adaptations(x)
+  if (is.function(hooks[["after_adaptations"]])) {
+    hooks[["after_adaptations"]](x)
   }
 
   # Final results if available
@@ -83,7 +83,7 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
         "Hypotheses rejected: {rej}"
       ))
     } else {
-      cli::cat_line("No Hypotheses were rejected")
+      cli::cat_line("No hypotheses were rejected")
     }
   } else {
     cli::cat_rule("No final test has been performed yet")

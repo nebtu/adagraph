@@ -12,11 +12,11 @@ trial_design(
   n_arms = NULL,
   n_table = NULL,
   weights = double(),
-  t = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
   alpha_spending_f = function() {
  },
+  t = 1/2,
   seq_bonf = TRUE,
   names_arms = NULL,
   names_endpoints = NULL,
@@ -43,16 +43,16 @@ see details for more information}
 \item{weights}{List of weights, measuring how important each hypothesis is.
 See details for numbering of hypotheses}
 
-\item{t}{information fraction, at which fraction of assigned people will the
-interim analysis happen}
-
-\item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
-
 \item{test_m}{Transition matrix describing the graph for
 the closed test procedure to test the hypotheses}
 
+\item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
+
 \item{alpha_spending_f}{alpha spending function, taking parameters
 alpha (for overall spent alpha) and t (information fraction at interim test)}
+
+\item{t}{information fraction, at which fraction of assigned people will the
+interim analysis happen}
 
 \item{seq_bonf}{automatically reject hypotheses at the second stage
 if the sum of their PCER is greater 1}

@@ -30,19 +30,22 @@
 cer_adapt_bounds <- function(design) {
   #get bounds only for hypotheses that still have any weight and that aren't
   #rejected already
-  to_test <- (rowSums(design$ad_weights_matrix) > 0) &
-    !design$intersection_rej_interim
+  to_test <- (rowSums(design[["ad_weights_matrix"]]) > 0) &
+    !design[["intersection_rej_interim"]]
 
   get_ad_cJ2 <- function(index) {
-    if (sum(design$ad_weights_matrix[index, ] > 0) <= design$cer_vec[index]) {
+    if (
+      sum(design[["ad_weights_matrix"]][index, ] > 0) <=
+        design[["cer_vec"]][index]
+    ) {
       # If the number of hypotheses is smaller than the cer, we can not get the
       # new bound computationally, and reject always
       Inf
     } else {
-      I <- which(design$ad_weights_matrix[index, ] > 0)
-      weights <- design$ad_weights_matrix[index, ]
-      correlation <- design$ad_correlation[I, I, drop = FALSE]
-      p_values <- design$p_values_interim[I]
+      I <- which(design[["ad_weights_matrix"]][index, ] > 0)
+      weights <- design[["ad_weights_matrix"]][index, ]
+      correlation <- design[["ad_correlation"]][I, I, drop = FALSE]
+      p_values <- design[["p_values_interim"]][I]
 
       t <- design[["ad_t"]]
       if (length(t) == 1) {
@@ -56,7 +59,7 @@ cer_adapt_bounds <- function(design) {
       old_to_new <- stats::setNames(seq_along(I), I)
 
       # Filter and remap components
-      components <- lapply(design$correlation_components, function(comp) {
+      components <- lapply(design[["correlation_components"]], function(comp) {
         comp_in_subgraph <- comp[comp %in% I]
 
         # If this component has vertices in the subgraph, remap them
@@ -79,25 +82,29 @@ cer_adapt_bounds <- function(design) {
             t = t,
             conn = components
           ) -
-            min(length(components), design$cer_vec[index])
+            min(length(components), design[["cer_vec"]][index])
         },
         c(0, 1 / max(weights)),
         tol = getOption("adagraph.precision")
-      )$root
+      )[["root"]]
     }
   }
 
-  ad_cJ2 <- numeric(dim(design$ad_weights_matrix)[1])
+  ad_cJ2 <- numeric(dim(design[["ad_weights_matrix"]])[1])
   ad_cJ2[to_test] <- lapply(which(to_test), get_ad_cJ2)
   ad_cJ2 <- simplify2array(ad_cJ2)
 
-  design$ad_cJ2 <- ad_cJ2
-  design$ad_bounds_2 <- apply(design$ad_weights_matrix, 2, function(w) {
-    #ifelse since 0 * Inf should be 0
-    ifelse(w == 0, 0, ad_cJ2 * w)
-  })
-  colnames(design$ad_bounds_2) <- colnames(design$bounds_2)
-  design$ad_bounds_outdated <- FALSE
+  design[["ad_cJ2"]] <- ad_cJ2
+  design[["ad_bounds_2"]] <- apply(
+    design[["ad_weights_matrix"]],
+    2,
+    function(w) {
+      #ifelse since 0 * Inf should be 0
+      ifelse(w == 0, 0, ad_cJ2 * w)
+    }
+  )
+  colnames(design[["ad_bounds_2"]]) <- colnames(design[["bounds_2"]])
+  design[["ad_bounds_outdated"]] <- FALSE
 
   design
 }

@@ -40,5 +40,5 @@ design <- cer_drop_hypotheses(design, 1)
 design <- cer_adapt_bounds(design)
 
 design <- cer_final_test(design, c(NA, 0.01))
-design$rej
+design[["rej"]]
 }

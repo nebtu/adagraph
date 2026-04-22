@@ -53,11 +53,11 @@ get_subgroup_correlation <- function(
   # All unordered pairs of those cells (including diagonal)
   idx <- expand.grid(i = seq_len(nrow(cells)), j = seq_len(nrow(cells)))
   #need only upper left of matrix
-  idx <- idx[idx$i < idx$j, ]
+  idx <- idx[idx[["i"]] < idx[["j"]], ]
 
   entries <- cbind(
-    cells[idx$i, ],
-    cells[idx$j, ]
+    cells[idx[["i"]], ],
+    cells[idx[["j"]], ]
   )
   rownames(entries) <- NULL
   colnames(entries) <- c("group_1", "arm_1", "group_2", "arm_2")
@@ -193,5 +193,5 @@ get_Z_correlation <- function(
   covar <- (n_control_shared / (n_control_1 * n_control_2)) +
     (n_treatment_shared / (n_treatment_1 * n_treatment_2))
 
-  return(covar / (sd_1 * sd_2))
+  covar / (sd_1 * sd_2)
 }

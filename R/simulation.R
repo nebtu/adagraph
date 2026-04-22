@@ -100,27 +100,27 @@ sim_trial <- function(
         )
 
         for (j in 1:k) {
-          df[, paste0("rej_", j)] <- x$rej[j]
+          df[, paste0("rej_", j)] <- x[["rej"]][j]
         }
-        df[, "rej_any"] <- any(x$rej)
+        df[, "rej_any"] <- any(x[["rej"]])
 
         for (j in 1:k) {
-          df[, paste0("p_", j)] <- x$p_values_final[j]
+          df[, paste0("p_", j)] <- x[["p_values_final"]][j]
         }
 
         if (include_designs) {
-          df$design <- list(x)
+          df[["design"]] <- list(x)
         }
         df
       })
     )
 
     for (j in 1:k) {
-      df[, paste0("interim_rej_", j)] <- design_adapted$rej_interim[j]
+      df[, paste0("interim_rej_", j)] <- design_adapted[["rej_interim"]][j]
     }
 
     for (j in 1:k) {
-      df[, paste0("interim_p_", j)] <- design_adapted$p_values_interim[j]
+      df[, paste0("interim_p_", j)] <- design_adapted[["p_values_interim"]][j]
     }
 
     df
@@ -160,5 +160,5 @@ sim_trial <- function(
     )
   }
 
-  return(results)
+  results
 }

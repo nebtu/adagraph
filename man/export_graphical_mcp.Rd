@@ -4,7 +4,7 @@
 \alias{export_graphical_mcp}
 \title{Export the closed testing strategy as a graphicalMCP graph object}
 \usage{
-export_graphical_mcp(design, adapted = design$adaptations)
+export_graphical_mcp(design, adapted = design[["adaptations"]])
 }
 \arguments{
 \item{design}{the adagraph_design object that should be exported}

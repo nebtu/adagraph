@@ -21,7 +21,7 @@ A list with the following elements:
 \itemize{
 \item bounds_1: vector of same length as weights with bounds for the first interim test
 \item cJ1: number that gets multiplied by the weights to get bounds_1
-\item bounds_1: vector of same lenght as weights with bounds for the planned final test
+\item bounds_2: vector of same length as weights with bounds for the planned final test
 \item cJ2: number that gets multiplied by the weights to get bounds_2
 }
 }

@@ -2,7 +2,7 @@
 #'
 #' @param design A cer_design object
 #' @param weights New weights vector
-#'  Note that the lenght should be the same as in the prespecified design
+#'  Note that the length should be the same as in the prespecified design
 #'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses()]
 #' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses
 #' @param time adapted information fraction at which the first stage test occured.
@@ -48,57 +48,62 @@ cer_adapt <- function(
   correlation = NULL,
   adapt_bounds = TRUE
 ) {
-  if (design$final_test) {
+  if (design[["final_test"]]) {
     cli::cli_warn(
       "A final test for this trial has already been done, the final results will not be changed without running the final test again.",
       class = "wrong_sequence_after_final"
     )
   }
-  if (!design$interim_test) {
+  if (!design[["interim_test"]]) {
     cli::cli_abort(
       "No interim test has been performed yet. Adaptations can only be applied once an interim test has been done.",
       class = "wrong_sequence_before_interim"
     )
   }
   if (!is.null(weights)) {
-    design$ad_weights <- weights
-    names(design$ad_weights) <- names(design$weights)
-  } else if (all(is.null(design$ad_weights))) {
-    design$ad_weights <- design$weights
+    design[["ad_weights"]] <- weights
+    names(design[["ad_weights"]]) <- names(design[["weights"]])
+  } else if (all(is.null(design[["ad_weights"]]))) {
+    design[["ad_weights"]] <- design[["weights"]]
   }
   if (!is.null(test_m)) {
-    design$ad_test_m <- test_m
-    colnames(design$ad_test_m) <- colnames(design$test_m)
-  } else if (is.null(design$ad_test_m)) {
-    design$ad_test_m <- design$test_m
+    design[["ad_test_m"]] <- test_m
+    colnames(design[["ad_test_m"]]) <- colnames(design[["test_m"]])
+  } else if (is.null(design[["ad_test_m"]])) {
+    design[["ad_test_m"]] <- design[["test_m"]]
   }
   if (!is.null(time)) {
-    design$ad_t <- time
+    design[["ad_t"]] <- time
   } else if (is.null(design[["ad_t"]])) {
     #matches ad_test_matrix else
-    design$ad_t <- design$t
+    design[["ad_t"]] <- design[["t"]]
   }
   if (!is.null(correlation)) {
-    design$ad_correlation <- correlation
-    dimnames(design$ad_correlation) <- dimnames(design$correlation)
-  } else if (is.null(design$ad_correlation)) {
-    design$ad_correlation <- design$correlation
+    design[["ad_correlation"]] <- correlation
+    dimnames(design[["ad_correlation"]]) <- dimnames(design[["correlation"]])
+  } else if (is.null(design[["ad_correlation"]])) {
+    design[["ad_correlation"]] <- design[["correlation"]]
   }
 
   if (!is.null(weights) || !is.null(test_m)) {
-    int_hyp <- get_intersection_hypotheses(design$ad_weights, design$ad_test_m)
-    design$ad_weights_matrix <- int_hyp$weights_matrix
-    colnames(design$ad_weights_matrix) <- colnames(design$weights_matrix)
-  } else if (is.null(design$ad_weights_matrix)) {
-    design$ad_weights_matrix <- design$weights_matrix
+    int_hyp <- get_intersection_hypotheses(
+      design[["ad_weights"]],
+      design[["ad_test_m"]]
+    )
+    design[["ad_weights_matrix"]] <- int_hyp[["weights_matrix"]]
+    colnames(design[["ad_weights_matrix"]]) <- colnames(design[[
+      "weights_matrix"
+    ]])
+  } else if (is.null(design[["ad_weights_matrix"]])) {
+    design[["ad_weights_matrix"]] <- design[["weights_matrix"]]
   }
 
-  design$adaptations <- TRUE
+  design[["adaptations"]] <- TRUE
 
   if (adapt_bounds) {
     design |> cer_adapt_bounds()
   } else {
-    design$ad_bounds_outdated <- TRUE
+    design[["ad_bounds_outdated"]] <- TRUE
     design
   }
 }
@@ -139,31 +144,31 @@ cer_drop_hypotheses <- function(
   drop_hyp,
   adapt_bounds = TRUE
 ) {
-  if (is.null(design$keep_hyp)) {
-    design$keep_hyp <- rep(TRUE, attr(design, "k"))
-    names(design$keep_hyp) <- names(design[["weights"]])
+  if (is.null(design[["keep_hyp"]])) {
+    design[["keep_hyp"]] <- rep(TRUE, attr(design, "k"))
+    names(design[["keep_hyp"]]) <- names(design[["weights"]])
   }
   if (is.character(drop_hyp)) {
     drop_hyp <- match(drop_hyp, names(design[["weights"]]))
   }
-  design$keep_hyp[drop_hyp] <- FALSE
+  design[["keep_hyp"]][drop_hyp] <- FALSE
   hyp_index <- which(vapply(
-    asplit(design$hyp_matrix, 1),
+    asplit(design[["hyp_matrix"]], 1),
     function(x) {
       all(x == as.integer(!(seq_along(design[["weights"]]) %in% drop_hyp)))
     },
     logical(1)
   ))
-  if (!is.null(design$ad_weights_matrix)) {
-    weights <- design$ad_weights_matrix[hyp_index, ]
+  if (!is.null(design[["ad_weights_matrix"]])) {
+    weights <- design[["ad_weights_matrix"]][hyp_index, ]
   } else {
-    weights <- design$weights_matrix[hyp_index, ]
+    weights <- design[["weights_matrix"]][hyp_index, ]
   }
 
-  if (any(!is.na(design$ad_test_m))) {
-    test_m <- design$ad_test_m
+  if (any(!is.na(design[["ad_test_m"]]))) {
+    test_m <- design[["ad_test_m"]]
   } else {
-    test_m <- design$test_m
+    test_m <- design[["test_m"]]
   }
 
   for (hyp in drop_hyp) {
@@ -227,23 +232,23 @@ cer_alt_drop_hypotheses <- function(
   hypotheses,
   adapt_bounds = TRUE
 ) {
-  weights <- design$weights
+  weights <- design[["weights"]]
   weights[hypotheses] <- 0
   weights <- weights / sum(weights)
-  weights_matrix <- design$weights_matrix
+  weights_matrix <- design[["weights_matrix"]]
   weights_matrix[, hypotheses] <- 0
   weights_matrix <- t(apply(weights_matrix, 1, function(row) {
     if (sum(row) == 0) {
       return(row)
-    } else {
-      return(row / sum(row))
     }
+
+    row / sum(row)
   }))
 
-  design$keep_hyp <- !hypotheses
-  design$ad_weights <- weights
-  design$ad_weights_matrix <- weights_matrix
-  design$adaptations <- TRUE
+  design[["keep_hyp"]] <- !hypotheses
+  design[["ad_weights"]] <- weights
+  design[["ad_weights_matrix"]] <- weights_matrix
+  design[["adaptations"]] <- TRUE
 
   cer_adapt(design, adapt_bounds = adapt_bounds)
 }

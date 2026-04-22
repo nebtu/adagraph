@@ -20,7 +20,7 @@ multiarm_drop_arms(
 
 \item{n_cont_2, n_treat_2}{list of number of datapoints for the control and
 treatment groups
-Can be different for different groups. The lenght should be equal to the
+Can be different for different groups. The length should be equal to the
 number of control/treatment groups, including dropped treatments, which
 will always be set to 0}
 

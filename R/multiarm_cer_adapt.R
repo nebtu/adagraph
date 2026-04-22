@@ -30,7 +30,7 @@
 #'   n_treat_2 = c(25, 50, 100, 150)
 #' )
 #'
-#'@export
+#' @export
 get_t <- function(n_cont_1, n_cont_2, n_treat_1, n_treat_2) {
   inv_var_1 <- ifelse(
     n_cont_1 != 0 | n_treat_1 != 0,
@@ -56,7 +56,7 @@ get_t <- function(n_cont_1, n_cont_2, n_treat_1, n_treat_2) {
 #' @param which_drop list of arms to drop, by their index in n
 #' @param simple_redistribute if the distribution of the dropped arms to the
 #'   rest has remainders, wether those remainders are distributed to the largest
-#'   ramainders or simply to the first in the list
+#'   remainders or simply to the first in the list
 #'
 #' Either t or n1 needs to be specified
 #' If $t * n$ is not an integer, the number of people in the first stage is
@@ -118,7 +118,7 @@ redistribute_n <- function(
 #' @param arms list of with integers specifing which arms should be dropped
 #' @param n_cont_2,n_treat_2 list of number of datapoints for the control and
 #'   treatment groups
-#'   Can be different for different groups. The lenght should be equal to the
+#'   Can be different for different groups. The length should be equal to the
 #'   number of control/treatment groups, including dropped treatments, which
 #'   will always be set to 0
 #' @param alt_adj uses `cer_alt_drop_hypotheses()` for dropping the hypotheses
@@ -154,10 +154,10 @@ multiarm_drop_arms <- function(
   alt_adj = FALSE,
   adapt_bounds = TRUE
 ) {
-  treatment_assoc <- design$treatment_assoc
+  treatment_assoc <- design[["treatment_assoc"]]
 
-  n_treat_1 <- floor(design$n_treat * design$t)
-  n_cont_1 <- floor(design$n_controls * design$t)
+  n_treat_1 <- floor(design[["n_treatments"]] * design[["t"]])
+  n_cont_1 <- floor(design[["n_controls"]] * design[["t"]])
 
   if (any(!is.na(n_cont_2)) || any(!is.na(n_treat_2))) {
     t <- get_t(
@@ -167,18 +167,18 @@ multiarm_drop_arms <- function(
       n_treat_2
     )
   } else {
-    n_cont_2 <- design$n_controls - n_cont_1
-    n_treat_2 <- design$n_treatments - n_treat_1
+    n_cont_2 <- design[["n_controls"]] - n_cont_1
+    n_treat_2 <- design[["n_treatments"]] - n_treat_1
 
-    t <- design$t
+    t <- design[["t"]]
   }
 
   n_treat_2[arms] <- 0
 
-  design$n_cont_2 <- n_cont_2
-  design$n_treat_2 <- n_treat_2
-  design$ad_n_treatments <- n_treat_1 + n_treat_2
-  design$ad_n_controls <- n_cont_1 + n_cont_2
+  design[["n_cont_2"]] <- n_cont_2
+  design[["n_treat_2"]] <- n_treat_2
+  design[["ad_n_treatments"]] <- n_treat_1 + n_treat_2
+  design[["ad_n_controls"]] <- n_cont_1 + n_cont_2
 
   if (alt_adj) {
     design <- cer_alt_drop_hypotheses(
@@ -195,8 +195,8 @@ multiarm_drop_arms <- function(
   }
 
   correlation <- get_multiarm_correlation(
-    design$controls,
-    design$treatment_assoc,
+    design[["controls"]],
+    design[["treatment_assoc"]],
     n_cont_2,
     n_treat_2
   )

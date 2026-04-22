@@ -7,9 +7,9 @@
 #' the first and second stage or just the raw values from the second stage
 #'
 #' @return a cer_design object, which now also includes the rejection status of the hypotheses after the final test
-#'@export
+#' @export
 #'
-#'@examples
+#' @examples
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
 #' design <- cer_design(
 #'  correlation=rbind(H1=c(1, NA),
@@ -27,7 +27,7 @@
 #' design <- cer_adapt_bounds(design)
 #'
 #' design <- cer_final_test(design, c(NA, 0.01))
-#' design$rej
+#' design[["rej"]]
 cer_final_test <- function(
   design,
   p_values,
@@ -64,28 +64,28 @@ cer_final_test <- function(
     p_values <-
       1 -
       pnorm(
-        sqrt(design$ad_t) *
-          qnorm(design$p_values_interim, lower.tail = FALSE) +
-          sqrt(1 - design$ad_t) * qnorm(p_values, lower.tail = FALSE)
+        sqrt(design[["ad_t"]]) *
+          qnorm(design[["p_values_interim"]], lower.tail = FALSE) +
+          sqrt(1 - design[["ad_t"]]) * qnorm(p_values, lower.tail = FALSE)
       )
   }
   p_values[is.na(p_values)] <- 1
   k <- attr(design, "k")
 
   intersection_rej <- pmax(
-    design$intersection_rej_interim,
-    matrixStats::colMins(p_values - t(design$ad_bounds_2)) < 0,
+    design[["intersection_rej_interim"]],
+    matrixStats::colMins(p_values - t(design[["ad_bounds_2"]])) < 0,
     #use strictly < 0 for edge case of p value exactly 0, else everything get's rejected
     na.rm = TRUE
   )
 
   rej <- sapply(1:k, function(i) {
-    all(intersection_rej[design$closed_matrix[, i]])
+    all(intersection_rej[design[["closed_matrix"]][, i]])
   })
 
-  design$rej <- rej
-  design$p_values_final <- p_values
-  design$intersection_rej <- intersection_rej
-  design$final_test <- TRUE
+  design[["rej"]] <- rej
+  design[["p_values_final"]] <- p_values
+  design[["intersection_rej"]] <- intersection_rej
+  design[["final_test"]] <- TRUE
   design
 }

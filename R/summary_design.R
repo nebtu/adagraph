@@ -45,7 +45,7 @@ summary.adagraph_design <- function(object, ...) {
     )
   }
 
-  class(summary_list) <- "summary.cer_design"
+  class(summary_list) <- "summary.adagraph_design"
 
   summary_list
 }
@@ -142,8 +142,8 @@ print_design_summary <- function(x, header_label, hooks = list()) {
   cli::cat_line()
 
   # Allow class-specific additions inside the initial spec section
-  if (is.function(hooks$after_introduction)) {
-    hooks$after_introduction(x)
+  if (is.function(hooks[["after_introduction"]])) {
+    hooks[["after_introduction"]](x)
   }
 
   cli::cat_rule("Inital design specification")
@@ -164,8 +164,8 @@ print_design_summary <- function(x, header_label, hooks = list()) {
   }
 
   # Allow class-specific additions inside the initial spec section
-  if (is.function(hooks$after_initial_spec)) {
-    hooks$after_initial_spec(x)
+  if (is.function(hooks[["after_initial_spec"]])) {
+    hooks[["after_initial_spec"]](x)
   }
 
   # Planned interim information fraction if available
@@ -189,7 +189,7 @@ print_design_summary <- function(x, header_label, hooks = list()) {
         )
       )
     } else {
-      cli::cat_line("No Hypotheses were rejected at the interim.")
+      cli::cat_line("No hypotheses were rejected at the interim.")
     }
     cli::cat_line("")
   }
@@ -228,8 +228,8 @@ print_design_summary <- function(x, header_label, hooks = list()) {
     }
   }
 
-  if (is.function(hooks$after_adaptations)) {
-    hooks$after_adaptations(x)
+  if (is.function(hooks[["after_adaptations"]])) {
+    hooks[["after_adaptations"]](x)
   }
 
   if (isTRUE(x[["final_test"]])) {
@@ -243,7 +243,7 @@ print_design_summary <- function(x, header_label, hooks = list()) {
         "Hypotheses rejected: {rej}"
       ))
     } else {
-      cli::cat_line("No Hypotheses were rejected")
+      cli::cat_line("No hypotheses were rejected")
     }
   }
   invisible(x)

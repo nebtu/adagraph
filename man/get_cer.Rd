@@ -15,7 +15,7 @@ get_cer(interim_p_values, weights, rej_bound, correlation, t)
 hypothesis should be rejected}
 
 \item{correlation}{matrix describing a potential known correlation structure
-between some hypotheses. Use NA for unkown correlations}
+between some hypotheses. Use NA for unknown correlations}
 
 \item{t}{information time fraction at which the interim test is performed}
 }
@@ -23,16 +23,16 @@ between some hypotheses. Use NA for unkown correlations}
 a single number greater than 0, the CER
 }
 \description{
-Gives the CER (condtional error rate) for a given set of hypotheses, with arbitrary
+Gives the CER (conditional error rate) for a given set of hypotheses, with arbitrary
 weights and correlation between the hypotheses.
-This is an upper bound on the probabilty of rejecting all the hypotheses
+This is an upper bound on the probability of rejecting all the hypotheses
 with weight greater 0 under the null hypothesis conditional on the stage one
 data, assuming we reject whenever a final p-value is smaller than cJ2 * weight
 This assumes that we did not reject in the interim already, in which case it
 should be 1 anyway.
 }
 \details{
-Note that if the correlation between some values is unkown, the result may be
+Note that if the correlation between some values is unknown, the result may be
 greater than 1, see also the examples
 }
 \examples{

@@ -42,10 +42,10 @@ new_multiarm_cer_design <- function(
     class = c(class, "multiarm_cer_design")
   )
 
-  design$controls <- controls
-  design$treatment_assoc <- treatment_assoc
-  design$n_controls <- n_controls
-  design$n_treatments <- n_treatments
+  design[["controls"]] <- controls
+  design[["treatment_assoc"]] <- treatment_assoc
+  design[["n_controls"]] <- n_controls
+  design[["n_treatments"]] <- n_treatments
 
   design
 }

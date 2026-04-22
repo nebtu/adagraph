@@ -42,19 +42,19 @@
 #' check_consonance(design, stage = "final")
 check_consonance <- function(
   design,
-  adapted = design$adaptations,
+  adapted = design[["adaptations"]],
   stage = c("both", "interim", "final"),
   use_weights = FALSE
 ) {
   stage <- rlang::arg_match(stage)
   if (!rlang::is_bool(use_weights)) {
     cli::cli_abort(
-      "Argument `use_weigths` must be boolean, either TRUE or FALSE.",
+      "Argument `use_weights` must be boolean, either TRUE or FALSE.",
       "i" = "`use_weights` was {use_weights}.",
       class = "adagraph_invalid_argument"
     )
   }
-  if (!design$adaptations && adapted) {
+  if (!design[["adaptations"]] && adapted) {
     cli::cli_abort(
       "No adaptations present",
       "i" = "Design was not adapted, can not perform consonance check on adapted design",
@@ -64,29 +64,31 @@ check_consonance <- function(
 
   if (use_weights) {
     if (adapted) {
-      bounds <- design$ad_weights_matrix
+      bounds <- design[["ad_weights_matrix"]]
     } else {
-      bounds <- design$weights_matrix
+      bounds <- design[["weights_matrix"]]
     }
-    return(all(.consonance_intersec(bounds, design$hyp_matrix)))
-  } else {
-    results <- c(TRUE, TRUE)
-    if (stage %in% c("both", "interim")) {
-      results[1] <- all(.consonance_intersec(
-        design$bounds_1,
-        design$hyp_matrix
-      ))
-    }
-    if (stage %in% c("both", "final")) {
-      if (adapted) {
-        bounds <- design$ad_bounds_2
-      } else {
-        bounds <- design$bounds_2
-      }
-      results[2] <- all(.consonance_intersec(bounds, design$hyp_matrix))
-    }
-    return(all(results))
+
+    return(all(.consonance_intersec(bounds, design[["hyp_matrix"]])))
   }
+
+  results <- c(TRUE, TRUE)
+  if (stage %in% c("both", "interim")) {
+    results[1] <- all(.consonance_intersec(
+      design[["bounds_1"]],
+      design[["hyp_matrix"]]
+    ))
+  }
+  if (stage %in% c("both", "final")) {
+    if (adapted) {
+      bounds <- design[["ad_bounds_2"]]
+    } else {
+      bounds <- design[["bounds_2"]]
+    }
+    results[2] <- all(.consonance_intersec(bounds, design[["hyp_matrix"]]))
+  }
+
+  all(results)
 }
 
 # checks consonance on each intersection hypothesis

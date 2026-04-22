@@ -16,7 +16,7 @@
 #' @return A list with the following elements:
 #'  * bounds_1: vector of same length as weights with bounds for the first interim test
 #'  * cJ1: number that gets multiplied by the weights to get bounds_1
-#'  * bounds_1: vector of same lenght as weights with bounds for the planned final test
+#'  * bounds_2: vector of same length as weights with bounds for the planned final test
 #'  * cJ2: number that gets multiplied by the weights to get bounds_2
 #'
 #' @export
@@ -61,20 +61,19 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
   #computes error for one connected component (i.e. parametric case)
   comp_err_1 <- function(conn_indices, cJ1) {
     comp_weights <- pos_weights[conn_indices]
-    if (length(conn_indices) > 1) {
-      comp_corr <- correlation[conn_indices, conn_indices]
-      return(
-        1 -
-          mvtnorm::pmvnorm(
-            lower = -Inf,
-            upper = stats::qnorm(1 - comp_weights * cJ1),
-            corr = comp_corr,
-            algorithm = algorithm
-          )[1]
-      )
-    } else {
+
+    if (length(conn_indices) == 1) {
       return(cJ1 * comp_weights)
     }
+    comp_corr <- correlation[conn_indices, conn_indices]
+
+    1 -
+      mvtnorm::pmvnorm(
+        lower = -Inf,
+        upper = stats::qnorm(1 - comp_weights * cJ1),
+        corr = comp_corr,
+        algorithm = algorithm
+      )[1]
   }
 
   err_1 <- function(cJ1) {
@@ -87,7 +86,7 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
     },
     c(alpha[1] * 0.999, alpha[1] / max(pos_weights)),
     tol = getOption("adagraph.precision")
-  )$root
+  )[["root"]]
 
   comp_err_2 <- function(conn_indices, cJ1, cJ2) {
     comp_weights <- pos_weights[conn_indices]
@@ -97,18 +96,16 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
       cbind(comp_corr * sqrt(t), comp_corr)
     )
 
-    return(
-      1 -
-        mvtnorm::pmvnorm(
-          lower = -Inf,
-          upper = c(
-            stats::qnorm(1 - comp_weights * cJ1),
-            stats::qnorm(1 - comp_weights * cJ2)
-          ),
-          corr = combined_comp_corr,
-          algorithm = algorithm
-        )[1]
-    )
+    1 -
+      mvtnorm::pmvnorm(
+        lower = -Inf,
+        upper = c(
+          stats::qnorm(1 - comp_weights * cJ1),
+          stats::qnorm(1 - comp_weights * cJ2)
+        ),
+        corr = combined_comp_corr,
+        algorithm = algorithm
+      )[1]
   }
 
   err_2 <- function(cJ1, cJ2) {
@@ -119,27 +116,27 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
     function(cJ2) err_2(cJ1, cJ2) - alpha[2],
     c((alpha[2] - alpha[1]) * 0.999, alpha[2] / max(pos_weights)),
     tol = getOption("adagraph.precision")
-  )$root
+  )[["root"]]
 
-  return(list(
+  list(
     bounds_1 = cJ1 * weights,
     bounds_2 = cJ2 * weights,
     cJ1 = cJ1,
     cJ2 = cJ2
-  ))
+  )
 }
 
 #' Get the Conditional Error Rate for a intersection of hypotheses
 #'
-#' Gives the CER (condtional error rate) for a given set of hypotheses, with arbitrary
+#' Gives the CER (conditional error rate) for a given set of hypotheses, with arbitrary
 #' weights and correlation between the hypotheses.
-#' This is an upper bound on the probabilty of rejecting all the hypotheses
+#' This is an upper bound on the probability of rejecting all the hypotheses
 #' with weight greater 0 under the null hypothesis conditional on the stage one
 #' data, assuming we reject whenever a final p-value is smaller than cJ2 * weight
 #' This assumes that we did not reject in the interim already, in which case it
 #' should be 1 anyway.
 #'
-#' Note that if the correlation between some values is unkown, the result may be
+#' Note that if the correlation between some values is unknown, the result may be
 #' greater than 1, see also the examples
 #'
 #' @param interim_p_values vector of stage 1 p-values for the hypothesis
@@ -147,7 +144,7 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
 #' @param rej_bound double of length 1, bound used for deciding if the
 #'   hypothesis should be rejected
 #' @param correlation matrix describing a potential known correlation structure
-#'   between some hypotheses. Use NA for unkown correlations
+#'   between some hypotheses. Use NA for unknown correlations
 #' @param t information time fraction at which the interim test is performed
 #'
 #' @return a single number greater than 0, the CER
@@ -236,22 +233,23 @@ get_cer <- function(
         stats::qnorm(comp_p_values, lower.tail = FALSE) * sqrt(comp_t)) /
         sqrt(1 - comp_t)
     )
+
     if (length(conn_indices) == 1) {
-      cer <- stats::pnorm(upper, lower.tail = FALSE)
-    } else {
-      comp_corr <- correlation[conn_indices, conn_indices]
-      cer <- 1 -
-        min(
-          mvtnorm::pmvnorm(
-            lower = -Inf,
-            upper = upper,
-            corr = comp_corr,
-            algorithm = algorithm
-          )[1],
-          1 # in rare cases, pmvnorm returns values greater than 1
-        )
+      return(stats::pnorm(upper, lower.tail = FALSE))
     }
-    return(cer)
+
+    comp_corr <- correlation[conn_indices, conn_indices]
+
+    1 -
+      min(
+        mvtnorm::pmvnorm(
+          lower = -Inf,
+          upper = upper,
+          corr = comp_corr,
+          algorithm = algorithm
+        )[1],
+        1 # in rare cases, pmvnorm returns values greater than 1
+      )
   }
 
   sum(sapply(conn, comp_cer))

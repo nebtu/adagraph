@@ -5,7 +5,7 @@
 \alias{trial_drop_groups}
 \alias{trial_drop_arms}
 \alias{trial_drop_endpoints}
-\title{Dropp groups, arms or endpoints from a trial design}
+\title{Drop groups, arms or endpoints from a trial design}
 \usage{
 trial_drop_groups(design, groups, adapt_bounds = TRUE)
 
@@ -67,7 +67,7 @@ des_ad <- des |>
   trial_drop_arms(c("A1", "A4"))
 
 des_ad
-des_ad$ad_test_m
+des_ad[["ad_test_m"]]
 
 n_table <- rbind(
   data.frame(arm = "control", `G1` = FALSE, n = 20),
@@ -97,5 +97,5 @@ des_ad <- des |>
   trial_drop_endpoints("E1")
 
 des_ad
-des_ad$ad_test_m
+des_ad[["ad_test_m"]]
 }

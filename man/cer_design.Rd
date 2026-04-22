@@ -5,30 +5,30 @@
 \title{Make a new CER trial design}
 \usage{
 cer_design(
-  correlation = matrix(),
   weights = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
+  correlation = NA,
+  t = 1/2,
   alpha_spending_f = function() {
  },
-  t = double(),
   seq_bonf = TRUE,
   names = NULL
 )
 }
 \arguments{
-\item{correlation}{Correlation matrix describing the structure of the correlations
-between the different hypotheses, use NA for uncorrelated}
-
 \item{weights}{List of weights, measuring how important each hypothesis is}
-
-\item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 
 \item{test_m}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
 
-\item{alpha_spending_f}{alpha spending function, taking parameters alpha (for overall spent alpha) and t (information fraction at interim test)}
+\item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
+
+\item{correlation}{Correlation matrix describing the structure of the correlations
+between the different hypotheses, use NA for uncorrelated}
 
 \item{t}{numeric between 0 and 1 specifing the planned time fraction for the interim test}
+
+\item{alpha_spending_f}{alpha spending function, taking parameters alpha (for overall spent alpha) and t (information fraction at interim test)}
 
 \item{seq_bonf}{to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1}
 

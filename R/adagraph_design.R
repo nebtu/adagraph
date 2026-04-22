@@ -3,16 +3,16 @@
 #' For documentation on how to generate adagraph_designs, see `adagraph_design()`
 #'
 #' @param correlation,weights,alpha,test_m Same as for `adagraph_design()`
-#' @param class character, makes it possible to add subbclasses
+#' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
-#' @return An object of class "adagraph_design, with the following elements"
+#' @return An object of class 'adagraph_design', with the following elements
 #'  * correlation: correlation matrix of the hypotheses, as given
 #'  * weights: list of weights of the hypotheses, as given
 #'  * alpha: overall FWER, as given
 #'  * test_m: transition matrix of the graph, as given
 #'  * hyp_matrix: matrix of format #intersection-hypotheses x #hypotheses where
-#'      each row specifies which hypothosis is part of the given intersection hypotheses
+#'      each row specifies which hypothesis is part of the given intersection hypotheses
 #'  * weights_matrix: same format as hyp_matrix, but each row specifies
 #'      the weights of the hypotheses for the given intersection hypothesis
 #'  * closed_matrix: each of the #hypothesis columns specifies which
@@ -40,15 +40,15 @@ new_adagraph_design <- function(
     if (!is.null(names(weights))) {
       names <- names(weights)
     } else {
-      names = paste0("H", as.character(1:k))
+      names <- paste0("H", as.character(1:k))
     }
   }
 
   names(weights) <- names
   dimnames(correlation) <- list(names, names)
-  colnames(int_hyp$hyp_matrix) <- names
-  colnames(int_hyp$weights_matrix) <- names
-  colnames(int_hyp$closed_matrix) <- names
+  colnames(int_hyp[["hyp_matrix"]]) <- names
+  colnames(int_hyp[["weights_matrix"]]) <- names
+  colnames(int_hyp[["closed_matrix"]]) <- names
   dimnames(test_m) <- list(names, names)
 
   design <- list(
@@ -56,9 +56,9 @@ new_adagraph_design <- function(
     correlation_components = correlation_components,
     weights = weights,
     alpha = alpha,
-    hyp_matrix = int_hyp$hyp_matrix,
-    weights_matrix = int_hyp$weights_matrix,
-    closed_matrix = int_hyp$closed_matrix,
+    hyp_matrix = int_hyp[["hyp_matrix"]],
+    weights_matrix = int_hyp[["weights_matrix"]],
+    closed_matrix = int_hyp[["closed_matrix"]],
     test_m = test_m,
     interim_test = FALSE,
     adaptations = FALSE,
@@ -90,9 +90,9 @@ new_adagraph_design <- function(
 #' @return a list with the following components:
 #'
 #' * hyp_matrix: matrix of dimension 2^k-1 x k describing
-#'   for all 2*(k-1) hypotheses which hypotheses
+#'   for all 2^(k-1) hypotheses which hypotheses
 #'   from 1 to k are included in this intersection hypothesis
-#' * weights_matrix: matrix of dimension 2^k-1 x k describing for all 2*(k-1)
+#' * weights_matrix: matrix of dimension 2^k-1 x k describing for all 2^(k-1)
 #'   hpyotheses what the weight of each hypothesis is for testing this
 #'   intersection hypothesis
 #' * closed_matrix: matrix of dimension 2^(k-1) * k describing for each
@@ -131,7 +131,7 @@ validate_adagraph_design_params <- function(
   weights = double(),
   alpha = double(),
   test_m = matrix(),
-  names = NULL(),
+  names = NULL,
   call = rlang::caller_env()
 ) {
   if (!rlang::is_double(weights)) {
@@ -197,8 +197,8 @@ validate_adagraph_design_params <- function(
     cli::cli_abort(
       c(
         "{.var test_m} must be a {k}x{k} matrix matching the number of hypotheses",
-        "i" = "There are {k} Hypotheses",
-        "x" = "{.var test_m} has dimension {nrow(correlation)} x {ncol(correlation)}."
+        "i" = "There are {k} hypotheses",
+        "x" = "{.var test_m} has dimension {nrow(test_m)} x {ncol(test_m)}."
       ),
       class = "adagraph_invalid_argument_test_m",
       call = call

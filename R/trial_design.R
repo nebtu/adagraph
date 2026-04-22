@@ -6,9 +6,8 @@
 #' possible. Additionally, only n_table is allowed for giving the
 #' correlation structure for arms and subgroups
 #'
-#' @param
-#' arms,endpoints,,weights,t,alpha,test_m,alpha_spending_f,seq_bonf,names
-#' Same as for [trial_design()]
+#' @param arms,endpoints,weights,t,alpha,test_m,alpha_spending_f,seq_bonf,names
+#'   Same as for [trial_design()]
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
@@ -84,14 +83,14 @@ new_trial_design <- function(
     class = c(class, "trial_design")
   )
 
-  design$subgroups <- subgroups
-  design$arms <- arms
-  design$endpoints <- endpoints
-  design$n_table <- n_table
-  design$names_arms <- names_arms
-  design$names_endpoints <- names_endpoints
-  design$names_subgroups <- names_subgroups
-  design$hyp_assoc <- hyp_assoc
+  design[["subgroups"]] <- subgroups
+  design[["arms"]] <- arms
+  design[["endpoints"]] <- endpoints
+  design[["n_table"]] <- n_table
+  design[["names_arms"]] <- names_arms
+  design[["names_endpoints"]] <- names_endpoints
+  design[["names_subgroups"]] <- names_subgroups
+  design[["hyp_assoc"]] <- hyp_assoc
 
   design
 }
@@ -167,7 +166,7 @@ validate_trial_design_params <- function(
   names_arms = NULL,
   names_endpoints = NULL,
   names_subgroups = NULL,
-  names = names,
+  names = NULL,
   call = rlang::caller_env()
 ) {}
 

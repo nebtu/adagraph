@@ -75,8 +75,8 @@ des_ad <- des |>
   trial_adapt_n(n_control_2 = 50, n_arms = c(20, 30))
 
 des_ad
-des_ad$ad_correlation #changed correlation structure
-des_ad$ad_t #changed t (different for each hypothesis)
+des_ad[["ad_correlation"]] #changed correlation structure
+des_ad[["ad_t"]] #changed t (different for each hypothesis)
 
 n_table <- rbind(
   data.frame(arm = "control", `G1` = FALSE, n = 20),
@@ -112,6 +112,6 @@ des_ad <- des |>
 
 des_ad
 
-des_ad$ad_correlation #changed correlation structure
-des_ad$ad_t #changed t (different for each hypothesis)
+des_ad[["ad_correlation"]] #changed correlation structure
+des_ad[["ad_t"]] #changed t (different for each hypothesis)
 }

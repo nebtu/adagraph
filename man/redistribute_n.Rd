@@ -24,7 +24,7 @@ redistribute_n(
 
 \item{simple_redistribute}{if the distribution of the dropped arms to the
 rest has remainders, wether those remainders are distributed to the largest
-ramainders or simply to the first in the list
+remainders or simply to the first in the list
 
 Either t or n1 needs to be specified
 If $t * n$ is not an integer, the number of people in the first stage is

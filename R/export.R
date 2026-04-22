@@ -14,7 +14,7 @@
 #' @export
 export_gmcp_lite <- function(
   design,
-  adapted = design$adaptations
+  adapted = design[["adaptations"]]
 ) {
   rlang::check_installed(
     "gMCPLite",
@@ -74,7 +74,7 @@ export_gmcp_lite <- function(
 #' export_graphical_mcp(design)
 export_graphical_mcp <- function(
   design,
-  adapted = design$adaptations
+  adapted = design[["adaptations"]]
 ) {
   rlang::check_installed(
     "graphicalMCP",

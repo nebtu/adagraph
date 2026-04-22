@@ -68,7 +68,7 @@ get_data_gen <- function(
     p <- matrix(NA, nrow = n, ncol = arms)
 
     if (arms_used > 0) {
-      treatment_assoc <- design$treatment_assoc
+      treatment_assoc <- design[["treatment_assoc"]]
       control <- array(
         mvtnorm::rmvnorm(max(n_cont) * n, sigma = corr_control),
         dim = c(n, max(n_cont), controls)
@@ -240,7 +240,7 @@ get_data_gen <- function(
 #' @return A function taking two arguments, see details
 #'
 #' @importFrom stats pnorm qnorm pt
-#'@export
+#' @export
 get_data_gen_2 <- function(
   corr_control,
   corr_treatment,
@@ -252,14 +252,16 @@ get_data_gen_2 <- function(
   data_gen_2 <- function(n, design) {
     #n_cont_2 and n_treat_2 might not be set, and should then be calculated
     #this happens in the same way as in multiarm_drop_arms()
-    if (any(!is.na(design$n_cont_2)) || any(!is.na(design$n_treat_2))) {
-      n_cont_2 <- design$n_cont_2
-      n_treat_2 <- design$n_treat_2
+    if (
+      any(!is.na(design[["n_cont_2"]])) || any(!is.na(design[["n_treat_2"]]))
+    ) {
+      n_cont_2 <- design[["n_cont_2"]]
+      n_treat_2 <- design[["n_treat_2"]]
     } else {
-      n_treat_1 <- floor(design$n_treat * design$ad_t)
-      n_cont_1 <- floor(design$n_controls * design$ad_t)
-      n_cont_2 <- design$n_controls - n_cont_1
-      n_treat_2 <- design$n_treatments - n_treat_1
+      n_treat_1 <- floor(design[["n_treat"]] * design[["ad_t"]])
+      n_cont_1 <- floor(design[["n_controls"]] * design[["ad_t"]])
+      n_cont_2 <- design[["n_controls"]] - n_cont_1
+      n_treat_2 <- design[["n_treatments"]] - n_treat_1
     }
     data_gen <- get_data_gen(
       corr_control = corr_control,
@@ -276,9 +278,9 @@ get_data_gen_2 <- function(
     p <- t(apply(p2, 1, \(x) {
       1 -
         pnorm(
-          sqrt(design$ad_t) *
-            qnorm(1 - design$p_values_interim) +
-            sqrt(1 - design$ad_t) * qnorm(1 - x)
+          sqrt(design[["ad_t"]]) *
+            qnorm(1 - design[["p_values_interim"]]) +
+            sqrt(1 - design[["ad_t"]]) * qnorm(1 - x)
         )
     }))
     p

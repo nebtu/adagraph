@@ -1,6 +1,6 @@
 test_that("example stays constant", {
   des <- make_example_trial()
-  des$alpha_spending_f <- NULL
+  des[["alpha_spending_f"]] <- NULL
   expect_snapshot_value(des, style = "json2", tolerance = 1e-5)
 })
 
@@ -118,9 +118,9 @@ test_that("more complicated subgroup structures work", {
     names_subgroups = names_subgroups
   )
 
-  expect_equal(unname(design$correlation), corr)
+  expect_equal(unname(design[["correlation"]]), corr)
 
-  design$alpha_spending_f <- NULL
+  design[["alpha_spending_f"]] <- NULL
   expect_snapshot_value(design, style = "json2", tolerance = 1e-5)
 
   # Note that we only care about the correlation, not the bounds, hence the
@@ -142,6 +142,6 @@ test_that("more complicated subgroup structures work", {
     names_subgroups = names_subgroups
   )
 
-  design$alpha_spending_f <- NULL
+  design[["alpha_spending_f"]] <- NULL
   expect_snapshot_value(design, style = "json2", tolerance = 1e-5)
 })

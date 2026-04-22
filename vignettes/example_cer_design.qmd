@@ -114,7 +114,7 @@ design_adj_bounds <- cer_adapt_bounds(design_adj)
 
 Now we can test for the final results, $\tilde{p}_{2,2} = 0.0111$, and $\tilde{p}_{4,2}$.
 Note that the hypthoses that we no further use are still present in the design object, they just don't get any weight assigned.
-Therefore, we still need to use a vector of lenght 4 for our p-values, but can use `NA` as a corresponding value.
+Therefore, we still need to use a vector of length 4 for our p-values, but can use `NA` as a corresponding value.
 
 
 ```{r}

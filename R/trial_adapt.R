@@ -54,8 +54,8 @@
 #'   trial_adapt_n(n_control_2 = 50, n_arms = c(20, 30))
 #'
 #' des_ad
-#' des_ad$ad_correlation #changed correlation structure
-#' des_ad$ad_t #changed t (different for each hypothesis)
+#' des_ad[["ad_correlation"]] #changed correlation structure
+#' des_ad[["ad_t"]] #changed t (different for each hypothesis)
 #'
 #' n_table <- rbind(
 #'   data.frame(arm = "control", `G1` = FALSE, n = 20),
@@ -91,8 +91,8 @@
 #'
 #' des_ad
 #'
-#' des_ad$ad_correlation #changed correlation structure
-#' des_ad$ad_t #changed t (different for each hypothesis)
+#' des_ad[["ad_correlation"]] #changed correlation structure
+#' des_ad[["ad_t"]] #changed t (different for each hypothesis)
 #' @export
 trial_adapt_n <- function(
   design,
@@ -187,12 +187,12 @@ trial_adapt_n <- function(
     correlation = ad_correlation,
     adapt_bounds = adapt_bounds
   )
-  design_ad$ad_n_table <- ad_n_table
+  design_ad[["ad_n_table"]] <- ad_n_table
 
   design_ad
 }
 
-#' Dropp groups, arms or endpoints from a trial design
+#' Drop groups, arms or endpoints from a trial design
 #'
 #' Functions for dropping all hypotheses associated with some subgroups, arms or
 #' endpoints. The weights of the dropped hypotheses are set to 0 and distributed
@@ -243,7 +243,7 @@ trial_adapt_n <- function(
 #'   trial_drop_arms(c("A1", "A4"))
 #'
 #' des_ad
-#' des_ad$ad_test_m
+#' des_ad[["ad_test_m"]]
 #'
 #' n_table <- rbind(
 #'   data.frame(arm = "control", `G1` = FALSE, n = 20),
@@ -273,7 +273,7 @@ trial_adapt_n <- function(
 #'   trial_drop_endpoints("E1")
 #'
 #' des_ad
-#' des_ad$ad_test_m
+#' des_ad[["ad_test_m"]]
 
 #' @rdname trial_drop
 #' @export

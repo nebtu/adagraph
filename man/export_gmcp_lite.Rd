@@ -4,7 +4,7 @@
 \alias{export_gmcp_lite}
 \title{Export the closed testing strategy as a gMCPLite graph object}
 \usage{
-export_gmcp_lite(design, adapted = design$adaptations)
+export_gmcp_lite(design, adapted = design[["adaptations"]])
 }
 \arguments{
 \item{design}{the adagraph_design object that should be exported}

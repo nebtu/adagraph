@@ -5,22 +5,23 @@
 \title{Make a new (generic) trial design}
 \usage{
 adagraph_design(
-  correlation = matrix(),
   weights = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
+  correlation = NA,
   names = NULL
 )
 }
 \arguments{
-\item{correlation}{Correlation matrix describing the structure of the correlations
-between the different hypotheses, use NA for uncorrelated}
-
 \item{weights}{List of weights, measuring how important each hypothesis is}
+
+\item{test_m}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 
-\item{test_m}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
+\item{correlation}{Correlation matrix describing the structure of the correlations
+between the different hypotheses, use NA for uncorrelated.
+Defaults to no known correlation.}
 
 \item{names}{optional names for the hypotheses}
 }
