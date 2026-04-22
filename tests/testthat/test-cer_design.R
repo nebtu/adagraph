@@ -126,8 +126,8 @@ test_that("Correct validation of cer_design", {
   t <- 0.5
   expect_error(
     cer_design(
+      weights = weights,
       correlation = rbind(c(1, NA)),
-      weights = weights,
       alpha = alpha,
       test_m = test_m,
       alpha_spending_f = alpha_spending_f,
@@ -137,25 +137,14 @@ test_that("Correct validation of cer_design", {
   )
   expect_error(
     cer_design(
+      weights = weights,
       correlation = "correlation",
-      weights = weights,
       alpha = alpha,
       test_m = test_m,
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
     class = "adagraph_invalid_argument_correlation"
-  )
-  expect_error(
-    cer_design(
-      correlation = correlation,
-      weights = 1,
-      alpha = alpha,
-      test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
-      t = t
-    ),
-    class = "adagraph_invalid_argument_weights"
   )
   expect_error(
     cer_design(

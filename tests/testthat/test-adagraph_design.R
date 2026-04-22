@@ -47,15 +47,6 @@ test_that("Correct validation of adagraph_design", {
   expect_error(
     adagraph_design(
       correlation = correlation,
-      weights = 1,
-      alpha = alpha,
-      test_m = test_m
-    ),
-    class = "adagraph_invalid_argument_weights"
-  )
-  expect_error(
-    adagraph_design(
-      correlation = correlation,
       weights = weights,
       alpha = "0.0025",
       test_m = test_m

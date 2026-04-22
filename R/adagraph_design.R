@@ -19,15 +19,19 @@
 #'      intersection hypotheses need to be tested to reject the given hypothesis
 #' @noRd
 new_adagraph_design <- function(
-  correlation = matrix(),
   weights = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
+  correlation = matrix(),
   names = NULL,
   ...,
   class = character()
 ) {
-  k <- dim(correlation)[1]
+  k <- length(weights)
+  if (rlang::is_na(correlation)) {
+    correlation <- matrix(NA, nrow = k, ncol = k)
+    diag(correlation) <- 1
+  }
 
   int_hyp <- get_intersection_hypotheses(weights, test_m)
   correlation_components <- gMCPLite:::conn.comp(correlation)
@@ -130,34 +134,39 @@ validate_adagraph_design_params <- function(
   names = NULL(),
   call = rlang::caller_env()
 ) {
-  if (!is.matrix(correlation)) {
-    cli::cli_abort(
-      "correlation has to be a matrix.",
-      class = "adagraph_invalid_argument_correlation",
-      call = call
-    )
-  } else if (dim(correlation)[1] != dim(correlation)[2]) {
-    cli::cli_abort(
-      c(
-        "correlation has to be a quadratic matrix.",
-        "x" = "correlation has dimension {dim(correlation)[1]} x {dim(correlation)[2]}."
-      ),
-      class = "adagraph_invalid_argument_correlation",
-      call = call
-    )
-  }
-  k <- dim(correlation)[1]
-  if (!rlang::is_double(weights, n = k)) {
+  if (!rlang::is_double(weights)) {
     cli::cli_abort(
       c(
         "{.var weights} needs to be a numeric with exactly one weight per hypothesis.",
-        "x" = "{.var weights} is {.obj_type_friendly {weights}} of length {length(weights)}.}",
-        "i" = "There are {k} hypotheses."
+        "x" = "{.var weights} is {.obj_type_friendly {weights}}."
       ),
       class = "adagraph_invalid_argument_weights",
       call = call
     )
-  } else if (!rlang::is_scalar_double(alpha)) {
+  }
+  k <- length(weights)
+  if (!rlang::is_na(correlation)) {
+    if (!(is.matrix(correlation))) {
+      cli::cli_abort(
+        "correlation has to be a matrix (or {NA}).",
+        class = "adagraph_invalid_argument_correlation",
+        call = call
+      )
+    } else if (
+      dim(correlation)[1] != dim(correlation)[2] || dim(correlation)[1] != k
+    ) {
+      cli::cli_abort(
+        c(
+          "correlation has to be a quadratic matrix with one row/column per hypothesis.",
+          "x" = "correlation has dimension {dim(correlation)[1]} x {dim(correlation)[2]}.",
+          "i" = "There are {k} hypotheses."
+        ),
+        class = "adagraph_invalid_argument_correlation",
+        call = call
+      )
+    }
+  }
+  if (!rlang::is_scalar_double(alpha)) {
     cli::cli_abort(
       c(
         "{.var alpha} has to be numeric.",
@@ -212,7 +221,8 @@ validate_adagraph_design_params <- function(
 #' Make a new (generic) trial design
 #'
 #' @param correlation Correlation matrix describing the structure of the correlations
-#'                    between the different hypotheses, use NA for uncorrelated
+#'                    between the different hypotheses, use NA for uncorrelated.
+#'                    Defaults to no known correlation.
 #' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
@@ -231,10 +241,10 @@ validate_adagraph_design_params <- function(
 #'               c(1, 0)))
 #' design
 adagraph_design <- function(
-  correlation = matrix(),
   weights = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
+  correlation = NA,
   names = NULL
 ) {
   validate_adagraph_design_params(

@@ -30,10 +30,10 @@
 #'
 #' @noRd
 new_cer_design <- function(
-  correlation = matrix(),
   weights = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
+  correlation = matrix(),
   alpha_spending_f = function() {},
   t = double(),
   seq_bonf = TRUE,
@@ -187,12 +187,12 @@ validate_cer_design_params <- function(
 #'
 #' design
 cer_design <- function(
-  correlation = matrix(),
   weights = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
+  correlation = NA,
+  t = 1 / 2,
   alpha_spending_f = function() {},
-  t = double(),
   seq_bonf = TRUE,
   names = NULL
 ) {

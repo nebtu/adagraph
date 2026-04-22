@@ -116,6 +116,15 @@ validate_multiarm_cer_design_params <- function(
     )
   }
 
+  if (length(weights) != length(treatment_assoc)) {
+    cli::cli_abort(
+      c(
+        "{.var weights} must be same length as {.var treatment_assoc}, the number of hypotheses.",
+        "x" = "{.var weights} is length {length(weights)}, but {.var treatment_assoc} is length {length(treatment_assoc)}."
+      ),
+      class = "adagraph_invalid_argument_weights"
+    )
+  }
   correlation <- get_multiarm_correlation(
     controls,
     treatment_assoc,
