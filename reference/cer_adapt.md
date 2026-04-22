@@ -23,7 +23,7 @@ cer_adapt(
 
 - weights:
 
-  New weights vector Note that the lenght should be the same as in the
+  New weights vector Note that the length should be the same as in the
   prespecified design For dropping hypotheses, set the according weights
   to 0 or use
   [`cer_drop_hypotheses()`](https://nebtu.github.io/adagraph/reference/cer_drop_hypotheses.md)
@@ -83,7 +83,7 @@ design
 #> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
 #> ── An interim test has been performed. ─────────────────────────────────────────
-#> No Hypotheses were rejected at the interim.
+#> No hypotheses were rejected at the interim.
 #> ── The following characteristics have been adapted: ────────────────────────────
 #> • Hypotheses weights
 #> ── No final test has been performed yet ────────────────────────────────────────

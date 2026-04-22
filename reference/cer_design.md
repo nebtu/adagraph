@@ -8,13 +8,13 @@ conditional error method.
 
 ``` r
 cer_design(
-  correlation = matrix(),
   weights = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
+  correlation = NA,
+  t = 1/2,
   alpha_spending_f = function() {
  },
-  t = double(),
   seq_bonf = TRUE,
   names = NULL
 )
@@ -22,33 +22,33 @@ cer_design(
 
 ## Arguments
 
-- correlation:
-
-  Correlation matrix describing the structure of the correlations
-  between the different hypotheses, use NA for uncorrelated
-
 - weights:
 
   List of weights, measuring how important each hypothesis is
-
-- alpha:
-
-  Single number, measuring what total alpha should be spent on the FWER
 
 - test_m:
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
 
-- alpha_spending_f:
+- alpha:
 
-  alpha spending function, taking parameters alpha (for overall spent
-  alpha) and t (information fraction at interim test)
+  Single number, measuring what total alpha should be spent on the FWER
+
+- correlation:
+
+  Correlation matrix describing the structure of the correlations
+  between the different hypotheses, use NA for uncorrelated
 
 - t:
 
   numeric between 0 and 1 specifing the planned time fraction for the
   interim test
+
+- alpha_spending_f:
+
+  alpha spending function, taking parameters alpha (for overall spent
+  alpha) and t (information fraction at interim test)
 
 - seq_bonf:
 

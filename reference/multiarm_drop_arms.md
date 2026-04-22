@@ -29,7 +29,7 @@ multiarm_drop_arms(
 - n_cont_2, n_treat_2:
 
   list of number of datapoints for the control and treatment groups Can
-  be different for different groups. The lenght should be equal to the
+  be different for different groups. The length should be equal to the
   number of control/treatment groups, including dropped treatments,
   which will always be set to 0
 
@@ -80,7 +80,7 @@ design
 #> There are 1 control groups for a total of 2 hypotheses.
 #> 
 #> ── An interim test has been performed. ─────────────────────────────────────────
-#> No Hypotheses were rejected at the interim.
+#> No hypotheses were rejected at the interim.
 #> ── The following characteristics have been adapted: ────────────────────────────
 #> • Hypotheses weights
 #> • Graph Transition Matrix

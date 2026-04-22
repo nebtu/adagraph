@@ -38,7 +38,7 @@ A list with the following elements:
 
 - cJ1: number that gets multiplied by the weights to get bounds_1
 
-- bounds_1: vector of same lenght as weights with bounds for the planned
+- bounds_2: vector of same length as weights with bounds for the planned
   final test
 
 - cJ2: number that gets multiplied by the weights to get bounds_2

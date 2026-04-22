@@ -36,7 +36,7 @@ redistribute_n(
 - simple_redistribute:
 
   if the distribution of the dropped arms to the rest has remainders,
-  wether those remainders are distributed to the largest ramainders or
+  wether those remainders are distributed to the largest remainders or
   simply to the first in the list
 
   Either t or n1 needs to be specified If \$t \* n\$ is not an integer,

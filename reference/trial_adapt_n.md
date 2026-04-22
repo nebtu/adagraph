@@ -109,13 +109,13 @@ des_ad
 #>       A1 20
 #>       A2 30
 #> ── No final test has been performed yet ────────────────────────────────────────
-des_ad$ad_correlation #changed correlation structure
+des_ad[["ad_correlation"]] #changed correlation structure
 #>           E1_A1     E1_A2     E2_A1     E2_A2
 #> E1_A1 1.0000000 0.3273268        NA        NA
 #> E1_A2 0.3273268 1.0000000        NA        NA
 #> E2_A1        NA        NA 1.0000000 0.3273268
 #> E2_A2        NA        NA 0.3273268 1.0000000
-des_ad$ad_t #changed t (different for each hypothesis)
+des_ad[["ad_t"]] #changed t (different for each hypothesis)
 #> [1] 0.5505618 0.4827586 0.5505618 0.4827586
 
 n_table <- rbind(
@@ -174,12 +174,12 @@ des_ad
 #>       A1  TRUE 15
 #> ── No final test has been performed yet ────────────────────────────────────────
 
-des_ad$ad_correlation #changed correlation structure
+des_ad[["ad_correlation"]] #changed correlation structure
 #>             E1        E2      G1E1      G1E2
 #> E1   1.0000000        NA 0.7171372        NA
 #> E2          NA 1.0000000        NA 0.7171372
 #> G1E1 0.7171372        NA 1.0000000        NA
 #> G1E2        NA 0.7171372        NA 1.0000000
-des_ad$ad_t #changed t (different for each hypothesis)
+des_ad[["ad_t"]] #changed t (different for each hypothesis)
 #> [1] 0.5121951 0.5121951 0.4666667 0.4666667
 ```

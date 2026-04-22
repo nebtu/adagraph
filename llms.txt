@@ -106,7 +106,7 @@ design
 - [`trial_drop_groups()`](https://nebtu.github.io/adagraph/reference/trial_drop.md)
   [`trial_drop_arms()`](https://nebtu.github.io/adagraph/reference/trial_drop.md)
   [`trial_drop_endpoints()`](https://nebtu.github.io/adagraph/reference/trial_drop.md)
-  : Dropp groups, arms or endpoints from a trial design
+  : Drop groups, arms or endpoints from a trial design
 
 # Articles
 

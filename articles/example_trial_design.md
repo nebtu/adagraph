@@ -293,7 +293,7 @@ adapted value for `t` (which was calculated automatically by the
 [`trial_adapt_n()`](https://nebtu.github.io/adagraph/reference/trial_adapt_n.md)
 function). Note that the hypthoses that we no further use are still
 present in the design object, they just don’t get any weight assigned.
-Therefore, we still need to use a vector of lenght 4 for our p-values,
+Therefore, we still need to use a vector of length 4 for our p-values,
 but can use `NA` as a corresponding value.
 
 ``` r

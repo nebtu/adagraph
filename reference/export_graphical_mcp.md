@@ -7,7 +7,7 @@ testing and graphing methods of gMCPLite for the testing strategy.
 ## Usage
 
 ``` r
-export_graphical_mcp(design, adapted = design$adaptations)
+export_graphical_mcp(design, adapted = design[["adaptations"]])
 ```
 
 ## Arguments

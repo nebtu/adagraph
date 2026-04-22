@@ -54,11 +54,11 @@ clinical trial design, allowing adaptation using the CER method</p>
 <span>  n_arms <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_table <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  test_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alpha_spending_f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span> <span class="op">}</span>,</span>
+<span>  t <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>,</span>
 <span>  seq_bonf <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  names_arms <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  names_endpoints <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -103,23 +103,23 @@ see details for more information</p></dd>
 See details for numbering of hypotheses</p></dd>
 
 
-<dt id="arg-t">t<a class="anchor" aria-label="anchor" href="#arg-t"></a></dt>
-<dd><p>information fraction, at which fraction of assigned people will the
-interim analysis happen</p></dd>
+<dt id="arg-test-m">test_m<a class="anchor" aria-label="anchor" href="#arg-test-m"></a></dt>
+<dd><p>Transition matrix describing the graph for
+the closed test procedure to test the hypotheses</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
 <dd><p>Single number, measuring what total alpha should be spent on the FWER</p></dd>
 
 
-<dt id="arg-test-m">test_m<a class="anchor" aria-label="anchor" href="#arg-test-m"></a></dt>
-<dd><p>Transition matrix describing the graph for
-the closed test procedure to test the hypotheses</p></dd>
-
-
 <dt id="arg-alpha-spending-f">alpha_spending_f<a class="anchor" aria-label="anchor" href="#arg-alpha-spending-f"></a></dt>
 <dd><p>alpha spending function, taking parameters
 alpha (for overall spent alpha) and t (information fraction at interim test)</p></dd>
+
+
+<dt id="arg-t">t<a class="anchor" aria-label="anchor" href="#arg-t"></a></dt>
+<dd><p>information fraction, at which fraction of assigned people will the
+interim analysis happen</p></dd>
 
 
 <dt id="arg-seq-bonf">seq_bonf<a class="anchor" aria-label="anchor" href="#arg-seq-bonf"></a></dt>

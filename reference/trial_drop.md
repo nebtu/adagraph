@@ -1,4 +1,4 @@
-# Dropp groups, arms or endpoints from a trial design
+# Drop groups, arms or endpoints from a trial design
 
 Functions for dropping all hypotheses associated with some subgroups,
 arms or endpoints. The weights of the dropped hypotheses are set to 0
@@ -93,7 +93,7 @@ des_ad
 #> • Hypotheses weights
 #> • Graph Transition Matrix
 #> ── No final test has been performed yet ────────────────────────────────────────
-des_ad$ad_test_m
+des_ad[["ad_test_m"]]
 #>    A1 A2 A3 A4
 #> A1  0  0  0  0
 #> A2  0  0  1  0
@@ -144,7 +144,7 @@ des_ad
 #> • Hypotheses weights
 #> • Graph Transition Matrix
 #> ── No final test has been performed yet ────────────────────────────────────────
-des_ad$ad_test_m
+des_ad[["ad_test_m"]]
 #>      E1 E2 G1E1 G1E2
 #> E1    0  0    0    0
 #> E2    0  0    0    0

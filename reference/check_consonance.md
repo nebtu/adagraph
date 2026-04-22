@@ -9,7 +9,7 @@ structure, or after some adaptation.
 ``` r
 check_consonance(
   design,
-  adapted = design$adaptations,
+  adapted = design[["adaptations"]],
   stage = c("both", "interim", "final"),
   use_weights = FALSE
 )

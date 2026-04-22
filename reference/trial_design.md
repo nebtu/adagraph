@@ -14,11 +14,11 @@ trial_design(
   n_arms = NULL,
   n_table = NULL,
   weights = double(),
-  t = double(),
-  alpha = double(),
   test_m = matrix(),
+  alpha = double(),
   alpha_spending_f = function() {
  },
+  t = 1/2,
   seq_bonf = TRUE,
   names_arms = NULL,
   names_endpoints = NULL,
@@ -61,24 +61,24 @@ trial_design(
   List of weights, measuring how important each hypothesis is. See
   details for numbering of hypotheses
 
-- t:
-
-  information fraction, at which fraction of assigned people will the
-  interim analysis happen
-
-- alpha:
-
-  Single number, measuring what total alpha should be spent on the FWER
-
 - test_m:
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
 
+- alpha:
+
+  Single number, measuring what total alpha should be spent on the FWER
+
 - alpha_spending_f:
 
   alpha spending function, taking parameters alpha (for overall spent
   alpha) and t (information fraction at interim test)
+
+- t:
+
+  information fraction, at which fraction of assigned people will the
+  interim analysis happen
 
 - seq_bonf:
 

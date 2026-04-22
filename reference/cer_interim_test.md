@@ -39,8 +39,8 @@ design <- cer_design(
  t=0.5)
 
 design <- cer_interim_test(design, c(0.001, 0.02))
-design$rej_interim
+design[["rej_interim"]]
 #> [1]  TRUE FALSE
-design$cer_vec
+design[["cer_vec"]]
 #> [1] 0.3833001 1.0000000 1.0000000
 ```
