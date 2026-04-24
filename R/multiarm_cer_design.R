@@ -71,7 +71,7 @@ validate_multiarm_cer_design_params <- function(
         "{.var controls} must be a positive integer.",
         "x" = "{.var controls} is {controls}, {.obj_type_friendly {controls}}."
       ),
-      class = "adagraph_invalid_argument_controls"
+      class = "adagraph_invalid_controls"
     )
   }
 
@@ -81,7 +81,7 @@ validate_multiarm_cer_design_params <- function(
         "{.var treatment_assoc} must be a vector of positive integers.",
         "x" = "{.var treatment_assoc} is {treatment_assoc}, {.obj_type_friendly {treatment_assoc}}."
       ),
-      class = "adagraph_invalid_argument_treatment_assoc"
+      class = "adagraph_invalid_treatment_assoc"
     )
   }
 
@@ -92,7 +92,7 @@ validate_multiarm_cer_design_params <- function(
         "i" = "There are {controls} control groups.",
         "x" = "{.var treatment_assoc} is {treatment_assoc}."
       ),
-      class = "adagraph_invalid_argument_treatment_assoc"
+      class = "adagraph_invalid_treatment_assoc"
     )
   }
 
@@ -102,7 +102,7 @@ validate_multiarm_cer_design_params <- function(
         "{.var n_controls} must be a positive number or vector of positive numbers.",
         "x" = "{.var n_controls} is {n_controls}."
       ),
-      class = "adagraph_invalid_argument_n_controls"
+      class = "adagraph_invalid_n_controls"
     )
   }
 
@@ -112,7 +112,7 @@ validate_multiarm_cer_design_params <- function(
         "{.var n_treatments} must be a positive number or vector of positive numbers.",
         "x" = "{.var n_treatments} is {n_treatments}."
       ),
-      class = "adagraph_invalid_argument_n_treatments"
+      class = "adagraph_invalid_n_treatments"
     )
   }
 
@@ -122,7 +122,7 @@ validate_multiarm_cer_design_params <- function(
         "{.var weights} must be same length as {.var treatment_assoc}, the number of hypotheses.",
         "x" = "{.var weights} is length {length(weights)}, but {.var treatment_assoc} is length {length(treatment_assoc)}."
       ),
-      class = "adagraph_invalid_argument_weights"
+      class = "adagraph_invalid_weights"
     )
   }
   correlation <- get_multiarm_correlation(

@@ -140,7 +140,7 @@ validate_adagraph_design_params <- function(
         "{.var weights} needs to be a numeric with exactly one weight per hypothesis.",
         "x" = "{.var weights} is {.obj_type_friendly {weights}}."
       ),
-      class = "adagraph_invalid_argument_weights",
+      class = "adagraph_invalid_weights",
       call = call
     )
   }
@@ -149,7 +149,7 @@ validate_adagraph_design_params <- function(
     if (!(is.matrix(correlation))) {
       cli::cli_abort(
         "correlation has to be a matrix (or {NA}).",
-        class = "adagraph_invalid_argument_correlation",
+        class = "adagraph_invalid_correlation",
         call = call
       )
     } else if (
@@ -161,7 +161,7 @@ validate_adagraph_design_params <- function(
           "x" = "correlation has dimension {dim(correlation)[1]} x {dim(correlation)[2]}.",
           "i" = "There are {k} hypotheses."
         ),
-        class = "adagraph_invalid_argument_correlation",
+        class = "adagraph_invalid_correlation",
         call = call
       )
     }
@@ -172,7 +172,7 @@ validate_adagraph_design_params <- function(
         "{.var alpha} has to be numeric.",
         "x" = "{.var alpha} is {.obj_type_friendly {alpha}}."
       ),
-      class = "adagraph_invalid_argument_alpha",
+      class = "adagraph_invalid_alpha",
       call = call
     )
   } else if (alpha < 0 || alpha > 1) {
@@ -181,7 +181,7 @@ validate_adagraph_design_params <- function(
         "{.var alpha} has to be between 0 and 1",
         "x" = "{.var alpha} is {alpha}."
       ),
-      class = "adagraph_invalid_argument_alpha",
+      class = "adagraph_invalid_alpha",
       call = call
     )
   } else if (!is.matrix(test_m)) {
@@ -190,7 +190,7 @@ validate_adagraph_design_params <- function(
         "{.var test_m} has to be a matrix.",
         "x" = "{.var test_m} is {.obj_type_friendly {test_m}}"
       ),
-      class = "adagraph_invalid_argument_test_m",
+      class = "adagraph_invalid_test_m",
       call = call
     )
   } else if (dim(test_m)[1] != dim(test_m)[2] || dim(test_m)[1] != k) {
@@ -200,7 +200,7 @@ validate_adagraph_design_params <- function(
         "i" = "There are {k} hypotheses",
         "x" = "{.var test_m} has dimension {nrow(test_m)} x {ncol(test_m)}."
       ),
-      class = "adagraph_invalid_argument_test_m",
+      class = "adagraph_invalid_test_m",
       call = call
     )
   }
@@ -211,7 +211,7 @@ validate_adagraph_design_params <- function(
         "x" = "{.var names} is {.obj_type_friendly {names}} of length {length(names)}.",
         "i" = "There are {k} hypotheses."
       ),
-      class = "adagraph_invalid_argument_names",
+      class = "adagraph_invalid_names",
       call = call
     )
   }

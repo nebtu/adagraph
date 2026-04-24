@@ -323,12 +323,14 @@ trial_design <- function(
 
   if (!is.null(n_control) || !is.null(n_arms)) {
     if (subgroups != 0) {
-      cli::cli_warn(
-        "The {.arg n_control} and {.arg n_arms} arguments are only supported for designs without subgroups."
+      cli::cli_abort(
+        "The {.arg n_control} and {.arg n_arms} arguments are only supported for designs without subgroups.",
+        class = "adagraph_invalid_n"
       )
     } else if (!is.null(n_table)) {
       cli::cli_warn(
-        "{.arg n_control} and {.arg n_arms} are ignored since {.arg n_table} was supplied"
+        "{.arg n_control} and {.arg n_arms} are ignored since {.arg n_table} was supplied",
+        class = "adagraph_ignore_n"
       )
     } else {
       n_table <- data.frame(

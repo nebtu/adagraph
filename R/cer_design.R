@@ -121,7 +121,7 @@ validate_cer_design_params <- function(
         "x" = "{.var t} is {t}, with length {length(t)}",
         "i" = "Different time fractions for different hypotheses are only supported for adaptations, not for the initial design."
       ),
-      class = "adagraph_invalid_argument_t",
+      class = "adagraph_invalid_t",
       call = call
     )
   } else if (t < 0 || t > 1) {
@@ -130,7 +130,7 @@ validate_cer_design_params <- function(
         "{.var t} has to be between 0 and 1",
         "x" = "t is {t}."
       ),
-      class = "adagraph_invalid_argument_t",
+      class = "adagraph_invalid_t",
       call = call
     )
   } else if (!rlang::is_bool(seq_bonf)) {
@@ -139,14 +139,14 @@ validate_cer_design_params <- function(
         "{.var seq_bonf} has to be a boolean of length one.",
         "x" = "{.var seq_bonf}` is {.obj_type_friendly {seq_bonf}}."
       ),
-      class = "adagraph_invalid_argument_seq_bonf",
+      class = "adagraph_invalid_seq_bonf",
       call = call
     )
   } else if (!rlang::is_function(alpha_spending_f)) {
     cli::cli_abort(
       "{.var alpha_spending_f} has to be a function",
       "x" = "{.var alpha_spending_f} is {.obj_type_friendly {alpha_spending_f}}.",
-      class = "adagraph_invalid_argument_alpha_spending_f",
+      class = "adagraph_invalid_alpha_spending_f",
       call = call
     )
   }

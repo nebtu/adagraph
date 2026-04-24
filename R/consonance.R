@@ -51,7 +51,7 @@ check_consonance <- function(
     cli::cli_abort(
       "Argument `use_weights` must be boolean, either TRUE or FALSE.",
       "i" = "`use_weights` was {use_weights}.",
-      class = "adagraph_invalid_argument"
+      class = "adagraph_invalid_use_weights"
     )
   }
   if (!design[["adaptations"]] && adapted) {

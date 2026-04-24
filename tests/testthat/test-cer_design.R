@@ -133,7 +133,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_correlation"
+    class = "adagraph_invalid_correlation"
   )
   expect_error(
     cer_design(
@@ -144,7 +144,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_correlation"
+    class = "adagraph_invalid_correlation"
   )
   expect_error(
     cer_design(
@@ -155,7 +155,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_alpha"
+    class = "adagraph_invalid_alpha"
   )
   expect_error(
     cer_design(
@@ -166,7 +166,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_alpha"
+    class = "adagraph_invalid_alpha"
   )
   expect_error(
     cer_design(
@@ -177,7 +177,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_test_m"
+    class = "adagraph_invalid_test_m"
   )
   expect_error(
     cer_design(
@@ -188,7 +188,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_test_m"
+    class = "adagraph_invalid_test_m"
   )
   expect_error(
     cer_design(
@@ -199,7 +199,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = "0.5"
     ),
-    class = "adagraph_invalid_argument_t"
+    class = "adagraph_invalid_t"
   )
   expect_error(
     cer_design(
@@ -210,7 +210,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = c(0.5, 0.5)
     ),
-    class = "adagraph_invalid_argument_t"
+    class = "adagraph_invalid_t"
   )
   expect_error(
     cer_design(
@@ -221,7 +221,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending_f = alpha_spending_f,
       t = 1.5
     ),
-    class = "adagraph_invalid_argument_t"
+    class = "adagraph_invalid_t"
   )
   expect_error(
     cer_design(
@@ -233,7 +233,7 @@ test_that("Correct validation of cer_design", {
       t = t,
       seq_bonf = "TRUE"
     ),
-    class = "adagraph_invalid_argument_seq_bonf"
+    class = "adagraph_invalid_seq_bonf"
   )
   expect_error(
     cer_design(
@@ -245,6 +245,6 @@ test_that("Correct validation of cer_design", {
       t = t,
       seq_bonf = TRUE
     ),
-    class = "adagraph_invalid_argument_alpha_spending_f"
+    class = "adagraph_invalid_alpha_spending_f"
   )
 })

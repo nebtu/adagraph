@@ -21,7 +21,7 @@ test_that("basic functionality", {
   reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
   ad_t <- c(1, reallocated_t, 1, reallocated_t)
   design_adj <- cer_drop_hypotheses(design, c(1, 3)) |>
-    cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t)
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t)
 
   expect_equal(
     .consonance_intersec(design_adj$ad_bounds_2, design$hyp_matrix),
@@ -89,6 +89,6 @@ test_that("validity testing", {
 
   expect_error(
     check_consonance(design, use_weights = "test"),
-    class = "adagraph_invalid_argument"
+    class = "adagraph_invalid_use_weights"
   )
 })

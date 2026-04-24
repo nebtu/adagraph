@@ -163,7 +163,7 @@ simrun <- function(
       design_adapted <- design_interim |>
         cer_alt_drop_hypotheses(drop_hyp, adapt_bounds = FALSE) |>
         cer_adapt(
-          time = th,
+          t = th,
           correlation = corradapt
         )
     }

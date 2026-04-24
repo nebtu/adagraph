@@ -26,17 +26,22 @@ cer_interim_test <- function(
   design,
   p_values
 ) {
-  if (design[["interim_test"]]) {
-    cli::cli_warn(
-      "Overwriting previous interim test, no change to
-       adaptations or final results will happen.",
-      class = "overwrites_interim_result"
+  if (isTRUE(design[["final_test"]])) {
+    cli::cli_abort(
+      "An interim and final test for this trial have already been done.",
+      class = "adagraph_already_final"
     )
   }
-  if (design[["final_test"]]) {
+  if (isTRUE(design[["adaptations"]])) {
+    cli::cli_abort(
+      "This design has already adapted after a previous interim test.",
+      class = "adagraph_already_adapted"
+    )
+  }
+  if (isTRUE(design[["interim_test"]])) {
     cli::cli_warn(
-      "A final test for this trial has already been done.",
-      class = "wrong_sequence_after_final"
+      "Overwriting previous interim test.",
+      class = "adagraph_overwrite_interim"
     )
   }
   t <- design[["t"]]

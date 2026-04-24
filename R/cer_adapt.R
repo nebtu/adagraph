@@ -5,7 +5,7 @@
 #'  Note that the length should be the same as in the prespecified design
 #'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses()]
 #' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses
-#' @param time adapted information fraction at which the first stage test occured.
+#' @param t adapted information fraction at which the first stage test occured.
 #'  Note that this can now be a vector with a different value for different hypotheses or a single value
 #' @param correlation adapted correlation matrix
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
@@ -44,20 +44,20 @@ cer_adapt <- function(
   design,
   weights = NULL,
   test_m = NULL,
-  time = NULL,
+  t = NULL,
   correlation = NULL,
   adapt_bounds = TRUE
 ) {
   if (design[["final_test"]]) {
-    cli::cli_warn(
+    cli::cli_abort(
       "A final test for this trial has already been done, the final results will not be changed without running the final test again.",
-      class = "wrong_sequence_after_final"
+      class = "adagraph_already_final"
     )
   }
   if (!design[["interim_test"]]) {
     cli::cli_abort(
       "No interim test has been performed yet. Adaptations can only be applied once an interim test has been done.",
-      class = "wrong_sequence_before_interim"
+      class = "adagraph_no_interim"
     )
   }
   if (!is.null(weights)) {
@@ -72,8 +72,8 @@ cer_adapt <- function(
   } else if (is.null(design[["ad_test_m"]])) {
     design[["ad_test_m"]] <- design[["test_m"]]
   }
-  if (!is.null(time)) {
-    design[["ad_t"]] <- time
+  if (!is.null(t)) {
+    design[["ad_t"]] <- t
   } else if (is.null(design[["ad_t"]])) {
     #matches ad_test_matrix else
     design[["ad_t"]] <- design[["t"]]

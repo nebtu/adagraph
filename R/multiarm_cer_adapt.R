@@ -202,5 +202,5 @@ multiarm_drop_arms <- function(
   )
 
   design |>
-    cer_adapt(time = t, correlation = correlation, adapt_bounds = adapt_bounds)
+    cer_adapt(t = t, correlation = correlation, adapt_bounds = adapt_bounds)
 }

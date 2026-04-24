@@ -203,7 +203,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_controls"
+    class = "adagraph_invalid_controls"
   )
 
   expect_error(
@@ -218,7 +218,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_controls"
+    class = "adagraph_invalid_controls"
   )
 
   # Test invalid treatment_assoc
@@ -234,7 +234,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_treatment_assoc"
+    class = "adagraph_invalid_treatment_assoc"
   )
 
   expect_error(
@@ -249,7 +249,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_treatment_assoc"
+    class = "adagraph_invalid_treatment_assoc"
   )
 
   # Test invalid sample sizes
@@ -265,7 +265,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_n_controls"
+    class = "adagraph_invalid_n_controls"
   )
 
   expect_error(
@@ -280,7 +280,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_n_treatments"
+    class = "adagraph_invalid_n_treatments"
   )
 
   # Test invalid weights
@@ -296,7 +296,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_weights"
+    class = "adagraph_invalid_weights"
   )
 
   # Test invalid alpha
@@ -312,7 +312,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_alpha"
+    class = "adagraph_invalid_alpha"
   )
 
   # Test invalid t
@@ -328,7 +328,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = 1.5
     ),
-    class = "adagraph_invalid_argument_t"
+    class = "adagraph_invalid_t"
   )
 
   # Test invalid test_m dimensions
@@ -344,7 +344,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending_f = alpha_spending_f,
       t = t
     ),
-    class = "adagraph_invalid_argument_test_m"
+    class = "adagraph_invalid_test_m"
   )
 
   # Test invalid seq_bonf
@@ -361,7 +361,7 @@ test_that("Parameter validation works correctly", {
       t = t,
       seq_bonf = "TRUE"
     ),
-    class = "adagraph_invalid_argument_seq_bonf"
+    class = "adagraph_invalid_seq_bonf"
   )
 })
 

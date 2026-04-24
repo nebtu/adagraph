@@ -36,7 +36,7 @@ cer_final_test <- function(
   if (!design[["interim_test"]]) {
     cli::cli_abort(
       "Attempting to do a final test before interim test.",
-      class = "wrong_sequence_no_interim_test"
+      class = "adagraph_no_interim"
     )
   }
   if (!design[["adaptations"]]) {
@@ -49,13 +49,13 @@ cer_final_test <- function(
     cli::cli_abort(
       "There have been adaptations without adjusting the bounds for rejecting hypotheses.",
       "i" = "Either set adapt_bounds to true for the last adaptation to the trial, or use the adapt_bounds function after all adaptations are done.",
-      class = "wrong_sequence_bounds_outdated"
+      class = "adagraph_outdated_bounds"
     )
   }
   if (design[["final_test"]]) {
     cli::cli_warn(
       "Overwriting previous final test.",
-      class = "overwrites_final_result"
+      class = "adagraph_overwrite_final"
     )
   }
 

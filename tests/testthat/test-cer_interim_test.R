@@ -37,7 +37,7 @@ test_that("warnings and errors are handled", {
 
   expect_warning(
     design_tested |> cer_interim_test(p_val),
-    class = "overwrites_interim_result"
+    class = "adagraph_overwrite_interim"
   )
 
   reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
@@ -46,15 +46,16 @@ test_that("warnings and errors are handled", {
     design_tested,
     c(1, 3)
   ) |>
-    cer_adapt(weights = c(0, 0.5, 0, 0.5), time = ad_t)
-  design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
+    cer_adapt(weights = c(0, 0.5, 0, 0.5), t = ad_t)
 
-  # not sure nesting expect_ should be done, but it works
-  expect_warning(
-    expect_warning(
-      design_tested |> cer_interim_test(c(0.00045, 0.0952, 0.0225, 0.1104)),
-      class = "wrong_sequence_after_final"
-    ),
-    class = "overwrites_interim_result"
+  expect_error(
+    design_adj |> cer_interim_test(p_val),
+    class = "adagraph_already_adapted"
+  )
+
+  design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
+  expect_error(
+    design_tested |> cer_interim_test(p_val),
+    class = "adagraph_already_final"
   )
 })
