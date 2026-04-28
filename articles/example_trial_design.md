@@ -212,7 +212,7 @@ design_interim
 #> ── No final test has been performed yet ────────────────────────────────────────
 ```
 
-We can see that for now, only the Hypothesis testing the primary
+We can see that for now, only the hypothesis testing the primary
 endpoint for the low dose is rejected. While it is possible to continue
 now without an adaptations to the design, `adagraph` allows for many
 changes to be made to the Adagraph does by itself not assume that we

@@ -9,7 +9,7 @@ cer_adapt(
   design,
   weights = NULL,
   test_m = NULL,
-  time = NULL,
+  t = NULL,
   correlation = NULL,
   adapt_bounds = TRUE
 )
@@ -33,7 +33,7 @@ cer_adapt(
   Adapted test matrix defining the graph for the closed test procedure
   to test the hypotheses
 
-- time:
+- t:
 
   adapted information fraction at which the first stage test occured.
   Note that this can now be a vector with a different value for
