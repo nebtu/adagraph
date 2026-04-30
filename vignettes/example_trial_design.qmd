@@ -38,10 +38,10 @@ names_arms <- c("high", "low")
 names_endpoints <- c("prim", "sec")
 ```
 
-Then, we define everything to define a valid test procedure.
+Then, we specify the parameters for a testing strategy:
 
  * `test_m`, the matrix specifing the graph used for the closed testing procedure. The matrix we want to use is depicted in @fig-graph
- * `weights`, the corresponding weights for the closed testing procedure
+ * `weights`, the corresponding initial weights for the closed testing procedure
  * `alpha`, the overall FWER we want to control for
  * `alpha_spending_function`, for specifing how much of the FWER should be spent at the interim test
  * `t`, the time information fraction at which the interim test is planned. Since for our trial, it is planned that the interim look is performed after 50% of the participants have enrolled, t is 1/2.
@@ -62,22 +62,6 @@ t <- 1 / 2
 
 To be able to use the correlation structure between the endpoints, we also need
 to specify the patient numbers for each group.
-There are two ways to do this in our case. First, we can define the case numbers
-in a dataframe, noting for each arm the number of patients we will recruit.
-The patient numbers are then only the amount of patients expected (or already
-realised) for the first stage of the trial, 35 per arm in our case.
-We generally assume that the ratios between the different groups stay the same,
-but variations from this, either by changes in the strucutre or from random
-fluctionations, can be given as adaptations later on.
-The relative size of the first and second stage is given via the information
-fraction argument `t`.
-
-```{r}
-n_table <- data.frame(
-  arm = c("control", "high", "low"),
-  n = c(35, 35, 35)
-)
-```
 
 Since there are no subgroups, we can alternatively also use simple numeric
 vectors for the control and arms separately.
@@ -216,8 +200,10 @@ class.
 
 Again, we define the names of our arms, endpoints and subgroups, as well as the
 characteristics of the design.
-This is now a bit more complicated, since we have a total of 8 hypotheses, so we
-use some helper variables.
+Note that for the subgroups, we don't need to specify the full population, which
+is always included.
+(If this is not desired, the corresponding initial weights and transition weights can simply be set to 0.)
+
 ```{r}
 names_arms <- c("high", "low")
 names_endpoints <- c("prim", "sec")
@@ -249,8 +235,13 @@ test_m <- matrix(
 ```
 
 For defining the first stage sample sizes, we need to use the `n_table` data
-frame, where we also include the status of each group for each row (which is
-only `HPV+` in our case).
+frame.
+Here we specify the sample size for each arm and each combination of subpopulations
+separately.
+In our case, for each arm (and control), this is only those with and without HPV
+positive status.
+In the last section, we explain shortly the setup for more complicated subgroup
+structures.
 
 ```{r}
 n_table <- rbind(
@@ -349,3 +340,52 @@ design_tested <- cer_final_test(
 
 design_tested
 ```
+
+# More complicated subgroup structures
+
+Here, we explain how to specify tables for testing strategies with more than one
+group.
+We take the same example as before, but assume now that additionally to the
+"HPV+" group, we also want to test the hypothesis that specifically the HPV
+negative population "HPV-" is tested. Event though this is only the converse of
+the "HPV+" population, we need to still introduce it as its own subgroup to
+generate it as it's own hypothesis.
+However, we do not need to specify the rows with the combination of "HPV+" and
+"HPV-" being true, since they are empty anyway.
+
+```{r}
+subgroups <- c("HPV+", "HPV-")
+#fmt: skip
+n_table <- rbind(
+  data.frame(arm = "control", `HPV+` = FALSE, `HPV-` = TRUE, n = 20, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, `HPV-` = FALSE, n = 15, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = FALSE, `HPV-` = TRUE, n = 20, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = TRUE, `HPV-` = FALSE, n = 15, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, `HPV-` = TRUE, n = 20, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = TRUE, `HPV-` = FALSE, n = 15, check.names = FALSE)
+)
+```
+
+If, however, a separate group (for example, of female patients) should be
+tested, every combination of groups needs to be specified to accurately
+calculate the correlations also between hypotheses of "HPV+" and "female".
+
+```{r}
+subgroups <- c("HPV+", "HPV-", "female")
+#fmt: skip
+n_table <- rbind(
+  data.frame(arm = "control", `HPV+` = FALSE, `HPV-` = TRUE, `female` = TRUE, n = 10, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, `HPV-` = FALSE, `female` = TRUE, n = 7, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = FALSE, `HPV-` = TRUE, `female` = TRUE, n = 10, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = TRUE, `HPV-` = FALSE, `female` = TRUE, n = 7, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, `HPV-` = TRUE, `female` = TRUE, n = 10, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = TRUE, `HPV-` = FALSE, `female` = TRUE, n = 7, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = FALSE, `HPV-` = TRUE, `female` = FALSE, n = 10, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, `HPV-` = FALSE, `female` = FALSE, n = 8, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = FALSE, `HPV-` = TRUE, `female` = FALSE, n = 10, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = TRUE, `HPV-` = FALSE, `female` = FALSE, n = 8, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, `HPV-` = TRUE, `female` = FALSE, n = 10, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = TRUE, `HPV-` = FALSE, `female` = FALSE, n = 8, check.names = FALSE)
+)
+```
+
