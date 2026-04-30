@@ -1,6 +1,7 @@
 # Example for using the CER Method for a trial design (with subgroups) with adagraph
 
 ``` r
+
 library(adagraph)
 library(graphicalMCP)
 ```
@@ -27,16 +28,18 @@ First, we define the names of our arms and endpoints, so we can
 recognize them in all outputs.
 
 ``` r
+
 names_arms <- c("high", "low")
 names_endpoints <- c("prim", "sec")
 ```
 
-Then, we define everything to define a valid test procedure.
+Then, we specify the parameters for a testing strategy:
 
 - `test_m`, the matrix specifing the graph used for the closed testing
   procedure. The matrix we want to use is depicted in
   [Figure 1](#fig-graph)
-- `weights`, the corresponding weights for the closed testing procedure
+- `weights`, the corresponding initial weights for the closed testing
+  procedure
 - `alpha`, the overall FWER we want to control for
 - `alpha_spending_function`, for specifing how much of the FWER should
   be spent at the interim test
@@ -45,6 +48,7 @@ Then, we define everything to define a valid test procedure.
   performed after 50% of the participants have enrolled, t is 1/2.
 
 ``` r
+
 test_m <- rbind(
   c(0, 0.6, 0.4, 0),
   c(0.6, 0, 0, 0.4),
@@ -59,23 +63,7 @@ t <- 1 / 2
 ```
 
 To be able to use the correlation structure between the endpoints, we
-also need to specify the patient numbers for each group. There are two
-ways to do this in our case. First, we can define the case numbers in a
-dataframe, noting for each arm the number of patients we will recruit.
-The patient numbers are then only the amount of patients expected (or
-already realised) for the first stage of the trial, 35 per arm in our
-case. We generally assume that the ratios between the different groups
-stay the same, but variations from this, either by changes in the
-strucutre or from random fluctionations, can be given as adaptations
-later on. The relative size of the first and second stage is given via
-the information fraction argument `t`.
-
-``` r
-n_table <- data.frame(
-  arm = c("control", "high", "low"),
-  n = c(35, 35, 35)
-)
-```
+also need to specify the patient numbers for each group.
 
 Since there are no subgroups, we can alternatively also use simple
 numeric vectors for the control and arms separately. (Note that in this
@@ -83,17 +71,19 @@ case the names in the vector entry are not necessary, only the order is
 relevant.)
 
 ``` r
+
 n_control <- 35
 n_arms <- c(high = 35, low = 35)
 ```
 
-By default, we also use the fact that if $B_{J}(\chi_{1}) \geq 1$ for
-some intersection hypotheses, we can also reject that subhypotheses at
-the interim, as described in the beginning of section 3.2.3. If this is
-not the desired behaviour, set `seq_bonf` to `FALSE`. We now have all we
+By default, we also use the fact that if $`B_J(\chi_1)\geq 1`$ for some
+intersection hypotheses, we can also reject that subhypotheses at the
+interim, as described in the beginning of section 3.2.3. If this is not
+the desired behaviour, set `seq_bonf` to `FALSE`. We now have all we
 need to define our testing design.
 
 ``` r
+
 design <- trial_design(
   arm = 2,
   endpoints = 2,
@@ -129,6 +119,7 @@ For a more detailed overview, showing all arguments used, we can use the
 [`summary()`](https://rdrr.io/r/base/summary.html) function.
 
 ``` r
+
 summary(design)
 #> A Multi-arm Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
@@ -173,6 +164,7 @@ Additonally, we can export and print the graph with the help of the
 `graphicalMCP` package.
 
 ``` r
+
 gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 2)
 ```
 
@@ -184,13 +176,14 @@ the
 function
 
 Assume now the we get after the unblinding for the interim analysis the
-p values are $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$,
-$p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$. We incorporate this
+p values are $`p_{1,1} = 0.00445`$, $`p_{2,1} = 0.0952`$,
+$`p_{3,1} = 0.0225`$, and $`p_{4,1} = 0.1104`$. We incorporate this
 information by applying the `cer_interim_test` function. The result is
 again a `trial_design` object, which now includes the interim test
 results.
 
 ``` r
+
 design_interim <- cer_interim_test(
   design,
   p_values = c(0.00045, 0.0952, 0.0225, 0.1104)
@@ -235,6 +228,7 @@ For adjusting the weights, we use the much more general
 function.
 
 ``` r
+
 n_control_ad <- 53
 n_arms_ad <- c(0, 52) #even tho it is being dropped, we still need to give
 #n for the low dose arm
@@ -277,6 +271,7 @@ design_adj
 Note the new testing matrix resulting from those changes:
 
 ``` r
+
 design_adj$ad_test_m
 #>           prim_high prim_low sec_high sec_low
 #> prim_high         0        0        0       0
@@ -285,11 +280,11 @@ design_adj$ad_test_m
 #> sec_low           0        1        0       0
 ```
 
-Now we can test for the final results, ${\widetilde{p}}_{2,2} = 0.0111$,
-and ${\widetilde{p}}_{4,2}$. By default `adagraph` expects the already
-combined p values, but using the `combined = FALSE` option adagraph
-calculates from the second stage p values the combined values, using the
-adapted value for `t` (which was calculated automatically by the
+Now we can test for the final results, $`\tilde{p}_{2,2} = 0.0111`$, and
+$`\tilde{p}_{4,2}`$. By default `adagraph` expects the already combined
+p values, but using the `combined = FALSE` option adagraph calculates
+from the second stage p values the combined values, using the adapted
+value for `t` (which was calculated automatically by the
 [`trial_adapt_n()`](https://nebtu.github.io/adagraph/reference/trial_adapt_n.md)
 function). Note that the hypthoses that we no further use are still
 present in the design object, they just don’t get any weight assigned.
@@ -297,6 +292,7 @@ Therefore, we still need to use a vector of length 4 for our p-values,
 but can use `NA` as a corresponding value.
 
 ``` r
+
 design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
 
 design_tested
@@ -337,11 +333,13 @@ testing positive for the human papilloma virus (HPV+). Doing this is
 also possible with `adagraph`, using again the `trial_design` class.
 
 Again, we define the names of our arms, endpoints and subgroups, as well
-as the characteristics of the design. This is now a bit more
-complicated, since we have a total of 8 hypotheses, so we use some
-helper variables.
+as the characteristics of the design. Note that for the subgroups, we
+don’t need to specify the full population, which is always included. (If
+this is not desired, the corresponding initial weights and transition
+weights can simply be set to 0.)
 
 ``` r
+
 names_arms <- c("high", "low")
 names_endpoints <- c("prim", "sec")
 names_subgroups <- "HPV+"
@@ -372,10 +370,14 @@ test_m <- matrix(
 ```
 
 For defining the first stage sample sizes, we need to use the `n_table`
-data frame, where we also include the status of each group for each row
-(which is only `HPV+` in our case).
+data frame. Here we specify the sample size for each arm and each
+combination of subpopulations separately. In our case, for each arm (and
+control), this is only those with and without HPV positive status. In
+the last section, we explain shortly the setup for more complicated
+subgroup structures.
 
 ``` r
+
 n_table <- rbind(
   data.frame(arm = "control", `HPV+` = FALSE, n = 20, check.names = FALSE),
   data.frame(arm = "control", `HPV+` = TRUE, n = 15, check.names = FALSE),
@@ -423,6 +425,7 @@ Again we get a detailed summary when using the
 [`summary()`](https://rdrr.io/r/base/summary.html) function.
 
 ``` r
+
 summary(design)
 #> A Multi-arm Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
@@ -499,6 +502,7 @@ summary(design)
 ```
 
 ``` r
+
 gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 4)
 ```
 
@@ -510,15 +514,16 @@ the
 function
 
 For the example, we assume that for the total group, we get
-$p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$, $p_{3,1} = 0.0225$, and
-$p_{4,1} = 0.1104$. Additionally, there are p values for only the
+$`p_{1,1} = 0.00445`$, $`p_{2,1} = 0.0952`$, $`p_{3,1} = 0.0225`$, and
+$`p_{4,1} = 0.1104`$. Additionally, there are p values for only the
 subgroup of the HPV positive popultaion, where we have
-$p_{5,1} = 0.0532$, $p_{6,1} = 0.2152$, $p_{7,1} = 0.0352$, and
-$p_{8,1} = 0.1728$. We incorporate this information by applying the
+$`p_{5,1} = 0.0532`$, $`p_{6,1} = 0.2152`$, $`p_{7,1} = 0.0352`$, and
+$`p_{8,1} = 0.1728`$. We incorporate this information by applying the
 `cer_interim_test` function. The result is again a `trial_design`
 object, which now includes the interim test results.
 
 ``` r
+
 design_interim <- cer_interim_test(
   design,
   p_values = c(0.00045, 0.0952, 0.0225, 0.1104, 0.0532, 0.2152, 0.0352, 0.1728)
@@ -551,6 +556,7 @@ subgroup from the analysis. For example, to arrive at the same case as
 before, we use the following code.
 
 ``` r
+
 n_table <- rbind(
   data.frame(arm = "control", `HPV+` = FALSE, n = 53, check.names = FALSE),
   data.frame(arm = "low", `HPV+` = FALSE, n = 52, check.names = FALSE)
@@ -595,6 +601,7 @@ design_adj
 This leads then to the same result as before.
 
 ``` r
+
 design_tested <- cer_final_test(
   design_adj,
   c(NA, 0.0111, NA, 0.0234, NA, NA, NA, NA)
@@ -622,4 +629,55 @@ design_tested
 #> • Time fractions for the hypotheses
 #> ── Final test result ───────────────────────────────────────────────────────────
 #> Hypotheses rejected: prim_high, prim_low, and sec_low
+```
+
+## More complicated subgroup structures
+
+Here, we explain how to specify tables for testing strategies with more
+than one group. We take the same example as before, but assume now that
+additionally to the “HPV+” group, we also want to test the hypothesis
+that specifically the HPV negative population “HPV-” is tested. Event
+though this is only the converse of the “HPV+” population, we need to
+still introduce it as its own subgroup to generate it as it’s own
+hypothesis. However, we do not need to specify the rows with the
+combination of “HPV+” and “HPV-” being true, since they are empty
+anyway.
+
+``` r
+
+subgroups <- c("HPV+", "HPV-")
+#fmt: skip
+n_table <- rbind(
+  data.frame(arm = "control", `HPV+` = FALSE, `HPV-` = TRUE, n = 20, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, `HPV-` = FALSE, n = 15, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = FALSE, `HPV-` = TRUE, n = 20, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = TRUE, `HPV-` = FALSE, n = 15, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, `HPV-` = TRUE, n = 20, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = TRUE, `HPV-` = FALSE, n = 15, check.names = FALSE)
+)
+```
+
+If, however, a separate group (for example, of female patients) should
+be tested, every combination of groups needs to be specified to
+accurately calculate the correlations also between hypotheses of “HPV+”
+and “female”.
+
+``` r
+
+subgroups <- c("HPV+", "HPV-", "female")
+#fmt: skip
+n_table <- rbind(
+  data.frame(arm = "control", `HPV+` = FALSE, `HPV-` = TRUE, `female` = TRUE, n = 10, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, `HPV-` = FALSE, `female` = TRUE, n = 7, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = FALSE, `HPV-` = TRUE, `female` = TRUE, n = 10, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = TRUE, `HPV-` = FALSE, `female` = TRUE, n = 7, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, `HPV-` = TRUE, `female` = TRUE, n = 10, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = TRUE, `HPV-` = FALSE, `female` = TRUE, n = 7, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = FALSE, `HPV-` = TRUE, `female` = FALSE, n = 10, check.names = FALSE),
+  data.frame(arm = "control", `HPV+` = TRUE, `HPV-` = FALSE, `female` = FALSE, n = 8, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = FALSE, `HPV-` = TRUE, `female` = FALSE, n = 10, check.names = FALSE),
+  data.frame(arm = "high", `HPV+` = TRUE, `HPV-` = FALSE, `female` = FALSE, n = 8, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = FALSE, `HPV-` = TRUE, `female` = FALSE, n = 10, check.names = FALSE),
+  data.frame(arm = "low", `HPV+` = TRUE, `HPV-` = FALSE, `female` = FALSE, n = 8, check.names = FALSE)
+)
 ```

@@ -4,6 +4,7 @@ This vignette describes how to run a simulation of a two-stage clinical
 trial with 4 endpoints and 2 different dose regiments.
 
 ``` r
+
 library(adagraph)
 ```
 
@@ -14,9 +15,10 @@ is taken from the description in section 4 of Mehta 2025
 sample size of 100 people for each of the 2 dose regiments and the
 control group. Also, we assume that after half of the results are in, an
 interim analysis is performed, which results in a time fraction of
-$0.5$.
+$`0.5`$.
 
 ``` r
+
 ws <- .75 # (weight given to secondary endpoint)
 wp <- (1 - ws) / 3 # weight given to the other arms primary endpoint
 m <- rbind(
@@ -32,6 +34,7 @@ m <- rbind(
 ```
 
 ``` r
+
 #alpha spending function
 as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
 
@@ -71,6 +74,7 @@ Here, we want assume that none of the treatments have an effect, so we
 can estimate the familywise error rate (FWER).
 
 ``` r
+
 eff <- c(0, 0, 0, 0)
 
 mu <- c(eff, eff)
@@ -123,6 +127,7 @@ using the
 function.
 
 ``` r
+
 futility <- 0.75
 
 adapt_func <- function(design) {
@@ -157,6 +162,7 @@ for rejecting hypotheses after the adaptation, we simulate for every
 first stage multiple second stages, in this case 10.
 
 ``` r
+
 data <- sim_trial(design, 10, 10, adapt_func, data_gen_1, data_gen_2)
 print(dim(data))
 #> [1] 100  34
@@ -182,6 +188,7 @@ Now we can see the resulting FWER by simply calculating it from the
 results.
 
 ``` r
+
 print(mean(data$rej_any))
-#> [1] 0.02
+#> [1] 0.05
 ```

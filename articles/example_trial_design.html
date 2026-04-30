@@ -83,13 +83,13 @@
 <code class="sourceCode R"><span><span class="va">names_arms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"high"</span>, <span class="st">"low"</span><span class="op">)</span></span>
 <span><span class="va">names_endpoints</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prim"</span>, <span class="st">"sec"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>Then, we define everything to define a valid test procedure.</p>
+<p>Then, we specify the parameters for a testing strategy:</p>
 <ul>
 <li>
 <code>test_m</code>, the matrix specifing the graph used for the closed testing procedure. The matrix we want to use is depicted in <a href="#fig-graph" class="quarto-xref">Figure 1</a>
 </li>
 <li>
-<code>weights</code>, the corresponding weights for the closed testing procedure</li>
+<code>weights</code>, the corresponding initial weights for the closed testing procedure</li>
 <li>
 <code>alpha</code>, the overall FWER we want to control for</li>
 <li>
@@ -111,23 +111,16 @@
 <span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">2</span></span></code></pre></div>
 </div>
-<p>To be able to use the correlation structure between the endpoints, we also need to specify the patient numbers for each group. There are two ways to do this in our case. First, we can define the case numbers in a dataframe, noting for each arm the number of patients we will recruit. The patient numbers are then only the amount of patients expected (or already realised) for the first stage of the trial, 35 per arm in our case. We generally assume that the ratios between the different groups stay the same, but variations from this, either by changes in the strucutre or from random fluctionations, can be given as adaptations later on. The relative size of the first and second stage is given via the information fraction argument <code>t</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">n_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  arm <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"high"</span>, <span class="st">"low"</span><span class="op">)</span>,</span>
-<span>  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">35</span>, <span class="fl">35</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-</div>
+<p>To be able to use the correlation structure between the endpoints, we also need to specify the patient numbers for each group.</p>
 <p>Since there are no subgroups, we can alternatively also use simple numeric vectors for the control and arms separately. (Note that in this case the names in the vector entry are not necessary, only the order is relevant.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_control</span> <span class="op">&lt;-</span> <span class="fl">35</span></span>
 <span><span class="va">n_arms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>high <span class="op">=</span> <span class="fl">35</span>, low <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span></code></pre></div>
 </div>
 <p>By default, we also use the fact that if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>J</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>χ</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">B_J(\chi_1)\geq 1</annotation></semantics></math> for some intersection hypotheses, we can also reject that subhypotheses at the interim, as described in the beginning of section 3.2.3. If this is not the desired behaviour, set <code>seq_bonf</code> to <code>FALSE</code>. We now have all we need to define our testing design.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trial_design.html">trial_design</a></span><span class="op">(</span></span>
 <span>  arm <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  endpoints <span class="op">=</span> <span class="fl">2</span>,</span>
@@ -159,7 +152,7 @@
 </div>
 <p>As we can see, the print method gives a short description of the design. For a more detailed overview, showing all arguments used, we can use the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A Multi-arm Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -201,7 +194,7 @@
 </div>
 <p>Additonally, we can export and print the graph with the help of the <code>graphicalMCP</code> package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gmcp_obj</span> <span class="op">&lt;-</span> <span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/export_graphical_mcp.html">export_graphical_mcp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="fig-graph" class="quarto-float quarto-figure quarto-figure-center">
@@ -216,7 +209,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </div>
 <p>Assume now the we get after the unblinding for the interim analysis the p values are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.00445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.00445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_interim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span></span>
 <span>  <span class="va">design</span>,</span>
 <span>  p_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.00045</span>, <span class="fl">0.0952</span>, <span class="fl">0.0225</span>, <span class="fl">0.1104</span><span class="op">)</span></span>
@@ -240,7 +233,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <p>We can see that for now, only the hypothesis testing the primary endpoint for the low dose is rejected. While it is possible to continue now without an adaptations to the design, <code>adagraph</code> allows for many changes to be made to the Adagraph does by itself not assume that we will change anything about our trial design, even if a hypotheses was rejected.</p>
 <p>Assume that it is decided that for the high dose, since the primary hypothesis was already rejected, it is not necessary to continue recruitment and the focus will instead be on the low dose. For dropping a specific arm, we can use the <code><a href="../reference/trial_drop.html">trial_drop_arms()</a></code> function, which is made exactly for this purpose. This change has the benefit of allowing more patients for the low dose and control to be recruited than previously planned. This results in a change to the <code>t</code> parameter and the correlation structure, which can be calculated automatically with the <code>trial_adapt_n</code> function. Additionally, the weights will be redistributed equally on the two remaining hypotheses. For adjusting the weights, we use the much more general <code><a href="../reference/cer_adapt.html">cer_adapt()</a></code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_control_ad</span> <span class="op">&lt;-</span> <span class="fl">53</span></span>
 <span><span class="va">n_arms_ad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">52</span><span class="op">)</span> <span class="co">#even tho it is being dropped, we still need to give</span></span>
 <span><span class="co">#n for the low dose arm</span></span>
@@ -281,7 +274,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </div>
 <p>Note the new testing matrix resulting from those changes:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_adj</span><span class="op">$</span><span class="va">ad_test_m</span></span>
 <span><span class="co">#&gt;           prim_high prim_low sec_high sec_low</span></span>
 <span><span class="co">#&gt; prim_high         0        0        0       0</span></span>
@@ -291,7 +284,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </div>
 <p>Now we can test for the final results, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>2</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mn>0.0111</mn></mrow><annotation encoding="application/x-tex">\tilde{p}_{2,2} = 0.0111</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>4</mn><mo>,</mo><mn>2</mn></mrow></msub><annotation encoding="application/x-tex">\tilde{p}_{4,2}</annotation></semantics></math>. By default <code>adagraph</code> expects the already combined p values, but using the <code>combined = FALSE</code> option adagraph calculates from the second stage p values the combined values, using the adapted value for <code>t</code> (which was calculated automatically by the <code><a href="../reference/trial_adapt_n.html">trial_adapt_n()</a></code> function). Note that the hypthoses that we no further use are still present in the design object, they just don’t get any weight assigned. Therefore, we still need to use a vector of length 4 for our p-values, but can use <code>NA</code> as a corresponding value.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_tested</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span><span class="va">design_adj</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.0111</span>, <span class="cn">NA</span>, <span class="fl">0.0234</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_tested</span></span>
@@ -323,9 +316,9 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </section><section class="section level2"><h2 id="enrichtment-design">Enrichtment design<a class="anchor" aria-label="anchor" href="#enrichtment-design"></a>
 </h2>
 <p>Take now the same trial as before, but assuming a bigger sample size of 150 people per arm. Thanks to the resulting higher power, it is decided to also check for effects specifically in the subgroup of patients testing positive for the human papilloma virus (HPV+). Doing this is also possible with <code>adagraph</code>, using again the <code>trial_design</code> class.</p>
-<p>Again, we define the names of our arms, endpoints and subgroups, as well as the characteristics of the design. This is now a bit more complicated, since we have a total of 8 hypotheses, so we use some helper variables.</p>
+<p>Again, we define the names of our arms, endpoints and subgroups, as well as the characteristics of the design. Note that for the subgroups, we don’t need to specify the full population, which is always included. (If this is not desired, the corresponding initial weights and transition weights can simply be set to 0.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">names_arms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"high"</span>, <span class="st">"low"</span><span class="op">)</span></span>
 <span><span class="va">names_endpoints</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prim"</span>, <span class="st">"sec"</span><span class="op">)</span></span>
 <span><span class="va">names_subgroups</span> <span class="op">&lt;-</span> <span class="st">"HPV+"</span></span>
@@ -354,9 +347,9 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span>    <span class="va">s_p</span>, <span class="va">s_p</span>,   <span class="fl">0</span>,   <span class="fl">0</span>, <span class="va">s_p</span>,   <span class="fl">0</span>,   <span class="fl">0</span>,   <span class="fl">0</span></span>
 <span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>For defining the first stage sample sizes, we need to use the <code>n_table</code> data frame, where we also include the status of each group for each row (which is only <code>HPV+</code> in our case).</p>
+<p>For defining the first stage sample sizes, we need to use the <code>n_table</code> data frame. Here we specify the sample size for each arm and each combination of subpopulations separately. In our case, for each arm (and control), this is only those with and without HPV positive status. In the last section, we explain shortly the setup for more complicated subgroup structures.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">20</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">15</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
@@ -401,7 +394,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </div>
 <p>Again we get a detailed summary when using the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A Multi-arm Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -477,7 +470,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; Interim test is planned at time fraction 0.5</span></span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gmcp_obj</span> <span class="op">&lt;-</span> <span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/export_graphical_mcp.html">export_graphical_mcp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="fig-graph-subgroup" class="quarto-float quarto-figure quarto-figure-center">
@@ -492,7 +485,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 </div>
 <p>For the example, we assume that for the total group, we get <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.00445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.00445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>. Additionally, there are p values for only the subgroup of the HPV positive popultaion, where we have <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>5</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0532</mn></mrow><annotation encoding="application/x-tex">p_{5,1} = 0.0532</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>6</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.2152</mn></mrow><annotation encoding="application/x-tex">p_{6,1} = 0.2152</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>7</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0352</mn></mrow><annotation encoding="application/x-tex">p_{7,1} = 0.0352</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>8</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1728</mn></mrow><annotation encoding="application/x-tex">p_{8,1} = 0.1728</annotation></semantics></math>. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_interim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span></span>
 <span>  <span class="va">design</span>,</span>
 <span>  p_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.00045</span>, <span class="fl">0.0952</span>, <span class="fl">0.0225</span>, <span class="fl">0.1104</span>, <span class="fl">0.0532</span>, <span class="fl">0.2152</span>, <span class="fl">0.0352</span>, <span class="fl">0.1728</span><span class="op">)</span></span>
@@ -518,7 +511,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 </div>
 <p>The further use of the package proceeds as above. One important difference is that we have to continue using the n_table format, since there are still subgroups present. It is however possible to emit rows that are empty. There is now of course the option to also drop a whole subgroup from the analysis. For example, to arrive at the same case as before, we use the following code.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">53</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">52</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -561,7 +554,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 </div>
 <p>This leads then to the same result as before.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode cell-code" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_tested</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span></span>
 <span>  <span class="va">design_adj</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.0111</span>, <span class="cn">NA</span>, <span class="fl">0.0234</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span></span>
@@ -589,6 +582,42 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; • Time fractions for the hypotheses</span></span>
 <span><span class="co">#&gt; ── Final test result ───────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; Hypotheses rejected: prim_high, prim_low, and sec_low</span></span></code></pre></div>
+</div>
+</section><section class="section level2"><h2 id="more-complicated-subgroup-structures">More complicated subgroup structures<a class="anchor" aria-label="anchor" href="#more-complicated-subgroup-structures"></a>
+</h2>
+<p>Here, we explain how to specify tables for testing strategies with more than one group. We take the same example as before, but assume now that additionally to the “HPV+” group, we also want to test the hypothesis that specifically the HPV negative population “HPV-” is tested. Event though this is only the converse of the “HPV+” population, we need to still introduce it as its own subgroup to generate it as it’s own hypothesis. However, we do not need to specify the rows with the combination of “HPV+” and “HPV-” being true, since they are empty anyway.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">subgroups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HPV+"</span>, <span class="st">"HPV-"</span><span class="op">)</span></span>
+<span><span class="co">#fmt: skip</span></span>
+<span><span class="va">n_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">20</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">15</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"high"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">20</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"high"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">15</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">20</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">15</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<p>If, however, a separate group (for example, of female patients) should be tested, every combination of groups needs to be specified to accurately calculate the correlations also between hypotheses of “HPV+” and “female”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">subgroups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HPV+"</span>, <span class="st">"HPV-"</span>, <span class="st">"female"</span><span class="op">)</span></span>
+<span><span class="co">#fmt: skip</span></span>
+<span><span class="va">n_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, `female` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">10</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, `female` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">7</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"high"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, `female` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">10</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"high"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, `female` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">7</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, `female` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">10</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, `female` <span class="op">=</span> <span class="cn">TRUE</span>, n <span class="op">=</span> <span class="fl">7</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, `female` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">10</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"control"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, `female` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">8</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"high"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, `female` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">10</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"high"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, `female` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">8</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">FALSE</span>, `HPV-` <span class="op">=</span> <span class="cn">TRUE</span>, `female` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">10</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, `female` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">8</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

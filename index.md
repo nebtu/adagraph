@@ -10,6 +10,7 @@ You can install the development version of adagraph from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("nebtu/adagraph")
 ```
@@ -17,6 +18,7 @@ pak::pak("nebtu/adagraph")
 ## Example
 
 ``` r
+
 library(adagraph)
 
 alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))

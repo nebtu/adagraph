@@ -1,6 +1,7 @@
 # Example for using the CER Method with adagraph
 
 ``` r
+
 library(adagraph)
 ```
 
@@ -33,12 +34,13 @@ specifications. These are:
   planned. Since for our trial, it is planned that the interim look is
   performed after 50% of the participants have enrolled, t is 1/2.
 
-By default, we also use the fact that if $B_{J}(\chi_{1}) \geq 1$ for
-some intersection hypotheses, we can also reject that subhypotheses at
-the interim, as described in the beginning of section 3.2.3. If this is
-not the desired behaviour, set `seq_bonf` to `FALSE`.
+By default, we also use the fact that if $`B_J(\chi_1)\geq 1`$ for some
+intersection hypotheses, we can also reject that subhypotheses at the
+interim, as described in the beginning of section 3.2.3. If this is not
+the desired behaviour, set `seq_bonf` to `FALSE`.
 
 ``` r
+
 test_m <- rbind(
   H1 = c(0, 1 / 2, 1 / 2, 0),
   H2 = c(1 / 2, 0, 0, 1 / 2),
@@ -66,10 +68,11 @@ design <- cer_design(
 ```
 
 Following the description of the paper, we get after the unblinding for
-the interim analysis the values $p_{1,1} = 0.00445$, $p_{2,1} = 0.0952$,
-$p_{3,1} = 0.0225$, and $p_{4,1} = 0.1104$.
+the interim analysis the values $`p_{1,1} = 0.00445`$,
+$`p_{2,1} = 0.0952`$, $`p_{3,1} = 0.0225`$, and $`p_{4,1} = 0.1104`$.
 
 ``` r
+
 design_interim <- cer_interim_test(
   design,
   p_values = c(0.00045, 0.0952, 0.0225, 0.1104)
@@ -82,6 +85,7 @@ only calculated internally. To acces this information, we can manually
 look at the rej_interim value.
 
 ``` r
+
 design_interim$rej_interim
 #> [1]  TRUE FALSE FALSE FALSE
 ```
@@ -99,6 +103,7 @@ done with
 [`cer_adapt()`](https://nebtu.github.io/adagraph/reference/cer_adapt.md).
 
 ``` r
+
 reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
 ad_t <- c(1, reallocated_t, 1, reallocated_t)
 
@@ -115,6 +120,7 @@ design_adj <- design_interim |>
 Note the new testing matrix resulting from those changes:
 
 ``` r
+
 design_adj$ad_test_m
 #>    H1 H2 H3 H4
 #> H1  0  0  0  0
@@ -129,16 +135,18 @@ using
 [`cer_adapt_bounds()`](https://nebtu.github.io/adagraph/reference/cer_adapt_bounds.md).
 
 ``` r
+
 design_adj_bounds <- cer_adapt_bounds(design_adj)
 ```
 
-Now we can test for the final results, ${\widetilde{p}}_{2,2} = 0.0111$,
-and ${\widetilde{p}}_{4,2}$. Note that the hypthoses that we no further
-use are still present in the design object, they just don’t get any
-weight assigned. Therefore, we still need to use a vector of length 4
-for our p-values, but can use `NA` as a corresponding value.
+Now we can test for the final results, $`\tilde{p}_{2,2} = 0.0111`$, and
+$`\tilde{p}_{4,2}`$. Note that the hypthoses that we no further use are
+still present in the design object, they just don’t get any weight
+assigned. Therefore, we still need to use a vector of length 4 for our
+p-values, but can use `NA` as a corresponding value.
 
 ``` r
+
 design_tested <- cer_final_test(design_adj_bounds, c(NA, 0.0111, NA, 0.0234))
 
 design_tested$rej
