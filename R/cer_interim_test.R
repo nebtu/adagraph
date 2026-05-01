@@ -66,9 +66,13 @@ cer_interim_test <- function(
   }
 
   intersection_rej <- apply(rej_matrix, 2, any)
-  rej <- sapply(1:attr(design, "k"), function(i) {
-    all(intersection_rej[design[["closed_matrix"]][, i]])
-  })
+  rej <- vapply(
+    1:attr(design, "k"),
+    function(i) {
+      all(intersection_rej[design[["closed_matrix"]][, i]])
+    },
+    logical(1)
+  )
 
   design[["p_values_interim"]] <- p_values
   design[["cer_vec"]] <- cer_vec

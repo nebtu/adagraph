@@ -29,7 +29,7 @@ print_design_common <- function(x, header_label = "CER", hooks = list()) {
       rej <- x[["names"]][x[["rej_interim"]]]
       cli::cat_line(
         cli::format_inline(
-          "Hypotheses rejected at the interim: {names[x[[\"rej_interim\"]]]}"
+          "Hypotheses rejected at the interim: {rej}"
         )
       )
     } else {
@@ -168,5 +168,5 @@ print.trial_design <- function(x, ...) {
     }
   )
 
-  print_design_common(x, header_label = "trial", hooks = hooks)
+  print_design_common(x, header_label = "Trial", hooks = hooks)
 }

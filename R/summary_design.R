@@ -105,8 +105,7 @@ summary.trial_design <- function(object, ...) {
       names_endpoints = object[["names_endpoints"]],
       names_subgroups = object[["names_subgroups"]],
       n_table = object[["n_table"]],
-      hyp_assoc = hyp_assoc,
-      ad_n_table = object[["ad_n_table"]]
+      hyp_assoc = hyp_assoc
     )
   )
 
@@ -146,7 +145,7 @@ print_design_summary <- function(x, header_label, hooks = list()) {
     hooks[["after_introduction"]](x)
   }
 
-  cli::cat_rule("Inital design specification")
+  cli::cat_rule("Initial design specification")
   cli::cat_line()
 
   cli::cat_line("Hypotheses weights")
@@ -196,7 +195,7 @@ print_design_summary <- function(x, header_label, hooks = list()) {
 
   # Adaptations section (print only available changes)
   if (isTRUE(x[["adaptations"]])) {
-    cli::cat_rule("Adaptations from inital specification")
+    cli::cat_rule("Adaptations from initial specification")
     cli::cat_line()
     if (
       !is.null(x[["ad_weights"]]) &&
@@ -368,5 +367,5 @@ print.summary.trial_design <- function(x, ...) {
       }
     }
   )
-  print_design_summary(x, header_label = "Multi-arm", hooks = hooks)
+  print_design_summary(x, header_label = "Trial", hooks = hooks)
 }

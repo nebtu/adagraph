@@ -11,7 +11,7 @@
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
-#' @return An object of class c("multiarm_cer_design", "cer_design", "adagraph_design")
+#' @return An object of class c("trial_design", "cer_design", "adagraph_design")
 #' @noRd
 new_trial_design <- function(
   arms = integer(),

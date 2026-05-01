@@ -100,7 +100,7 @@ get_data_gen <- function(
         }
       }
 
-      ##################### continous endpoints #####################
+      ##################### continuous endpoints #####################
       continuous <- setdiff((1:arms)[which_arms], binary)
       cts_control <- control[, treatment_assoc[continuous], , drop = FALSE]
       cts_treatment <- treatment[, continuous, , drop = FALSE]
@@ -127,7 +127,7 @@ get_data_gen <- function(
       )
       dim(treat_var) <- dim(cts_treatment)[-1]
 
-      p[, cts_arms] <- sapply(
+      p[, cts_arms] <- vapply(
         seq_along(cts_arms),
         function(arm) {
           n_arm_cont <- cts_n_cont[arm]
@@ -145,7 +145,8 @@ get_data_gen <- function(
           df <- n_arm_treat + n_arm_cont - 2
 
           pt(t, df = df, lower.tail = FALSE)
-        }
+        },
+        numeric(n)
       )
     }
 
@@ -186,7 +187,7 @@ get_data_gen <- function(
       overall_num_resp <- (colSums(bin_control, na.rm = TRUE) +
         colSums(bin_treatment, na.rm = TRUE))
 
-      p[, binary] <- sapply(
+      p[, binary] <- vapply(
         seq_along(binary),
         function(arm) {
           n_arm_cont <- bin_n_cont[arm]
@@ -202,7 +203,8 @@ get_data_gen <- function(
             )
 
           ifelse(is.na(z), 1, pnorm(z, lower.tail = FALSE))
-        }
+        },
+        numeric(n)
       )
     }
 

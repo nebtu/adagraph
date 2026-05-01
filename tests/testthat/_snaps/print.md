@@ -98,7 +98,7 @@
 
 # print.trial_design produces stable output across lifecycle
 
-    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:
@@ -116,7 +116,7 @@
 
 ---
 
-    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:
@@ -135,7 +135,7 @@
 
 ---
 
-    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:
@@ -166,7 +166,7 @@
 
 ---
 
-    A trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
     The first stage sample size per arm/group is:

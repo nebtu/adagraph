@@ -2,7 +2,7 @@
 
     A CER Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -29,7 +29,7 @@
 
     A CER Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -62,7 +62,7 @@
 
     A CER Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -90,7 +90,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptations from inital specification ---------------------------------------
+    -- Adaptations from initial specification --------------------------------------
     
     New hypotheses weights
            H1        H2        H3        H4 
@@ -101,7 +101,7 @@
 
     A CER Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -129,7 +129,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptations from inital specification ---------------------------------------
+    -- Adaptations from initial specification --------------------------------------
     
     New hypotheses weights
            H1        H2        H3        H4 
@@ -145,7 +145,7 @@
 
     A Multi-arm Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -184,7 +184,7 @@
 
     A Multi-arm Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -229,7 +229,7 @@
 
     A Multi-arm Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -269,7 +269,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptations from inital specification ---------------------------------------
+    -- Adaptations from initial specification --------------------------------------
     
     New hypotheses weights
       H1   H2   H3   H4 
@@ -309,7 +309,7 @@
 
     A Multi-arm Design object, for testing the 4 hypotheses H1, H2, H3, and H4 at FWER 0.025.
     
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
      H1  H2  H3  H4 
@@ -349,7 +349,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: H1
     
-    -- Adaptations from inital specification ---------------------------------------
+    -- Adaptations from initial specification --------------------------------------
     
     New hypotheses weights
       H1   H2   H3   H4 
@@ -392,10 +392,10 @@
 
 # print.summary.trial_design produces stable output across lifecycle
 
-    A Multi-arm Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 
@@ -468,10 +468,10 @@
 
 ---
 
-    A Multi-arm Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 
@@ -550,10 +550,10 @@
 
 ---
 
-    A Multi-arm Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 
@@ -629,7 +629,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: prim_arm1
     
-    -- Adaptations from inital specification ---------------------------------------
+    -- Adaptations from initial specification --------------------------------------
     
     New hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 
@@ -692,10 +692,10 @@
 
 ---
 
-    A Multi-arm Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
+    A Trial Design object, for testing the 8 hypotheses prim_arm1, prim_arm2, sec_arm1, sec_arm2, HPV+_prim_arm1, HPV+_prim_arm2, HPV+_sec_arm1, and HPV+_sec_arm2 at FWER 0.025.
     
     There are 2 arms (arm1 and arm2), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
-    -- Inital design specification -------------------------------------------------
+    -- Initial design specification ------------------------------------------------
     
     Hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 
@@ -771,7 +771,7 @@
     [1] 0.00045 0.09520 0.02250 0.11040 0.00045 0.09520 0.02250 0.11040
     Hypotheses rejected at the interim: prim_arm1
     
-    -- Adaptations from inital specification ---------------------------------------
+    -- Adaptations from initial specification --------------------------------------
     
     New hypotheses weights
          prim_arm1      prim_arm2       sec_arm1       sec_arm2 HPV+_prim_arm1 

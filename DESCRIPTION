@@ -21,6 +21,7 @@ Description:
 Imports:
     cli,
     gMCPLite,
+    matrixStats,
     mvtnorm,
     rlang,
     memoise
@@ -33,7 +34,6 @@ Suggests:
     knitr,
     quarto,
     testthat (>= 3.0.0),
-    matrixStats,
     withr,
     future,
     graphicalMCP,

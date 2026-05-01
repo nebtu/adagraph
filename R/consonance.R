@@ -49,15 +49,19 @@ check_consonance <- function(
   stage <- rlang::arg_match(stage)
   if (!rlang::is_bool(use_weights)) {
     cli::cli_abort(
-      "Argument `use_weights` must be boolean, either TRUE or FALSE.",
-      "i" = "`use_weights` was {use_weights}.",
+      c(
+        "Argument `use_weights` must be boolean, either TRUE or FALSE.",
+        "i" = "`use_weights` was {use_weights}."
+      ),
       class = "adagraph_invalid_use_weights"
     )
   }
   if (!design[["adaptations"]] && adapted) {
     cli::cli_abort(
-      "No adaptations present",
-      "i" = "Design was not adapted, can not perform consonance check on adapted design",
+      c(
+        "No adaptations present",
+        "i" = "Design was not adapted, can not perform consonance check on adapted design"
+      ),
       class = "adagraph_no_adaptation"
     )
   }
@@ -107,16 +111,16 @@ check_consonance <- function(
       supersets <- which(rowSums(hyp_matrix[, !J, drop = FALSE]) == 0)
       supersets <- setdiff(supersets, idx) # only strict supersets, exclude current idx
 
-      bounds_J <- bounds[idx, J, drop = FALSE]
-      bounds_super <- bounds[supersets, J, drop = FALSE]
-
       # for each p-value (each hypothesis), assume this is the one that lead to
       # the rejection. Is any superset also being rejected?
-      all(sapply(which(J), \(j) {
-        super_j <- supersets[hyp_matrix[supersets, j] == 1]
-        all(bounds[super_j, j] >= bounds[idx, j])
-        #any(bounds_super[, j, drop = FALSE] >= bounds_J[j])
-      }))
+      all(vapply(
+        which(J),
+        \(j) {
+          super_j <- supersets[hyp_matrix[supersets, j] == 1]
+          all(bounds[super_j, j] >= bounds[idx, j])
+        },
+        logical(1)
+      ))
     },
     logical(1)
   )

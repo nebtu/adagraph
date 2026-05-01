@@ -85,12 +85,13 @@ new_cer_design <- function(
     )
   }
 
-  design[["bounds_1"]] <- t(sapply(boundslist, `[[`, "bounds_1"))
+  k <- attr(design, "k")
+  design[["bounds_1"]] <- t(vapply(boundslist, `[[`, numeric(k), "bounds_1"))
   colnames(design[["bounds_1"]]) <- names
-  design[["bounds_2"]] <- t(sapply(boundslist, `[[`, "bounds_2"))
+  design[["bounds_2"]] <- t(vapply(boundslist, `[[`, numeric(k), "bounds_2"))
   colnames(design[["bounds_2"]]) <- names
-  design[["cJ1"]] <- sapply(boundslist, `[[`, "cJ1")
-  design[["cJ2"]] <- sapply(boundslist, `[[`, "cJ2")
+  design[["cJ1"]] <- vapply(boundslist, `[[`, numeric(1), "cJ1")
+  design[["cJ2"]] <- vapply(boundslist, `[[`, numeric(1), "cJ2")
 
   design
 }

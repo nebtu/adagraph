@@ -48,13 +48,13 @@ cer_adapt <- function(
   correlation = NULL,
   adapt_bounds = TRUE
 ) {
-  if (design[["final_test"]]) {
+  if (isTRUE(design[["final_test"]])) {
     cli::cli_abort(
       "A final test for this trial has already been done, the final results will not be changed without running the final test again.",
       class = "adagraph_already_final"
     )
   }
-  if (!design[["interim_test"]]) {
+  if (!isTRUE(design[["interim_test"]])) {
     cli::cli_abort(
       "No interim test has been performed yet. Adaptations can only be applied once an interim test has been done.",
       class = "adagraph_no_interim"
@@ -114,7 +114,7 @@ cer_adapt <- function(
 #' However, the time fraction is not adapted, this needs to be done manually if desired.
 #'
 #' @param design cer_design object
-#' @param drop_hyp that should be dropped, identified either by numbers or by their names
+#' @param drop_hyp hypotheses that should be dropped, identified either by numbers or by their names
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
 #'   FWER with the new adaptations. If doing multiple adaptations, it is enough to
 #'   adapt bounds only for the last one, or call `adapt_bounds()` manually

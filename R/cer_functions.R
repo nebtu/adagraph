@@ -77,7 +77,7 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
   }
 
   err_1 <- function(cJ1) {
-    sum(sapply(conn, comp_err_1, cJ1 = cJ1))
+    sum(vapply(conn, comp_err_1, numeric(1), cJ1 = cJ1))
   }
 
   cJ1 <- stats::uniroot(
@@ -109,7 +109,7 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
   }
 
   err_2 <- function(cJ1, cJ2) {
-    sum(sapply(conn, comp_err_2, cJ1 = cJ1, cJ2 = cJ2))
+    sum(vapply(conn, comp_err_2, numeric(1), cJ1 = cJ1, cJ2 = cJ2))
   }
 
   cJ2 <- stats::uniroot(
@@ -252,5 +252,5 @@ get_cer <- function(
       )
   }
 
-  sum(sapply(conn, comp_cer))
+  sum(vapply(conn, comp_cer, numeric(1)))
 }

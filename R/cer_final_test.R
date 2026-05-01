@@ -33,26 +33,28 @@ cer_final_test <- function(
   p_values,
   combined = TRUE
 ) {
-  if (!design[["interim_test"]]) {
+  if (!isTRUE(design[["interim_test"]])) {
     cli::cli_abort(
       "Attempting to do a final test before interim test.",
       class = "adagraph_no_interim"
     )
   }
-  if (!design[["adaptations"]]) {
+  if (!isTRUE(design[["adaptations"]])) {
     cli::cli_inform(
-      "No adaptations registered, using intial specifications"
+      "No adaptations registered, using initial specifications"
     )
     design <- cer_adapt(design)
   }
-  if (design[["ad_bounds_outdated"]]) {
+  if (isTRUE(design[["ad_bounds_outdated"]])) {
     cli::cli_abort(
-      "There have been adaptations without adjusting the bounds for rejecting hypotheses.",
-      "i" = "Either set adapt_bounds to true for the last adaptation to the trial, or use the adapt_bounds function after all adaptations are done.",
+      c(
+        "There have been adaptations without adjusting the bounds for rejecting hypotheses.",
+        "i" = "Either set adapt_bounds to true for the last adaptation to the trial, or use the adapt_bounds function after all adaptations are done."
+      ),
       class = "adagraph_outdated_bounds"
     )
   }
-  if (design[["final_test"]]) {
+  if (isTRUE(design[["final_test"]])) {
     cli::cli_warn(
       "Overwriting previous final test.",
       class = "adagraph_overwrite_final"
@@ -79,9 +81,13 @@ cer_final_test <- function(
     na.rm = TRUE
   )
 
-  rej <- sapply(1:k, function(i) {
-    all(intersection_rej[design[["closed_matrix"]][, i]])
-  })
+  rej <- vapply(
+    1:k,
+    function(i) {
+      all(intersection_rej[design[["closed_matrix"]][, i]])
+    },
+    logical(1)
+  )
 
   design[["rej"]] <- rej
   design[["p_values_final"]] <- p_values
