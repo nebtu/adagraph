@@ -100,7 +100,7 @@ design <- trial_design(
 )
 
 design
-#> A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
@@ -121,10 +121,10 @@ For a more detailed overview, showing all arguments used, we can use the
 ``` r
 
 summary(design)
-#> A Multi-arm Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
-#> ── Inital design specification ─────────────────────────────────────────────────
+#> ── Initial design specification ────────────────────────────────────────────────
 #> 
 #> Hypotheses weights
 #> prim_high  prim_low  sec_high   sec_low 
@@ -190,7 +190,7 @@ design_interim <- cer_interim_test(
 )
 
 design_interim
-#> A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
@@ -244,7 +244,7 @@ design_adj <- design_interim |>
   )
 
 design_adj
-#> A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
@@ -296,7 +296,7 @@ but can use `NA` as a corresponding value.
 design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
 
 design_tested
-#> A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
@@ -404,7 +404,7 @@ design <- trial_design(
 )
 
 design
-#> A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
 #> The first stage sample size per arm/group is:
@@ -427,10 +427,10 @@ Again we get a detailed summary when using the
 ``` r
 
 summary(design)
-#> A Multi-arm Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
-#> ── Inital design specification ─────────────────────────────────────────────────
+#> ── Initial design specification ────────────────────────────────────────────────
 #> 
 #> Hypotheses weights
 #>      prim_high       prim_low       sec_high        sec_low HPV+_prim_high 
@@ -530,7 +530,7 @@ design_interim <- cer_interim_test(
 )
 
 design_interim
-#> A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
 #> The first stage sample size per arm/group is:
@@ -576,7 +576,7 @@ design_adj <- design_interim |>
 #> without subgroups.
 
 design_adj
-#> A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
 #> The first stage sample size per arm/group is:
@@ -608,7 +608,7 @@ design_tested <- cer_final_test(
 )
 
 design_tested
-#> A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
 #> The first stage sample size per arm/group is:

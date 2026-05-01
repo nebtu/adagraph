@@ -76,7 +76,7 @@ des_ad <- des |>
   trial_drop_arms(c("A1", "A4"))
 
 des_ad
-#> A trial Design object, for testing the 4 hypotheses A1, A2, A3, and A4 at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses A1, A2, A3, and A4 at FWER 0.025.
 #> 
 #> There are 4 arms (A1, A2, A3, and A4), 1 endpoint and no subgroups.
 #> The first stage sample size per arm/group is:
@@ -128,7 +128,7 @@ des_ad <- des |>
   trial_drop_endpoints("E1")
 
 des_ad
-#> A trial Design object, for testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
 #> 
 #> There are 1 arm, 2 endpoints (E1 and E2) and 1 subgroup (G1).
 #> The first stage sample size per arm/group is:

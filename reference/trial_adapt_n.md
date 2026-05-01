@@ -89,7 +89,7 @@ des_ad <- des |>
   trial_adapt_n(n_control_2 = 50, n_arms = c(20, 30))
 
 des_ad
-#> A trial Design object, for testing the 4 hypotheses E1_A1, E1_A2, E2_A1, and E2_A2 at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses E1_A1, E1_A2, E2_A1, and E2_A2 at FWER 0.025.
 #> 
 #> There are 2 arms (A1 and A2), 2 endpoints (E1 and E2) and no subgroups.
 #> The first stage sample size per arm/group is:
@@ -151,7 +151,7 @@ des_ad <- des |>
   trial_adapt_n(ad_n_table = ad_n_table)
 
 des_ad
-#> A trial Design object, for testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
+#> A Trial Design object, for testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
 #> 
 #> There are 1 arm, 2 endpoints (E1 and E2) and 1 subgroup (G1).
 #> The first stage sample size per arm/group is:

@@ -165,7 +165,7 @@ design <- trial_design(
 )
 
 design
-#> A trial Design object, for testing the 4 hypotheses E1_A1, E1_A2, E2_A1, and E2_A2 at FWER 0.05.
+#> A Trial Design object, for testing the 4 hypotheses E1_A1, E1_A2, E2_A1, and E2_A2 at FWER 0.05.
 #> 
 #> There are 2 arms (A1 and A2), 2 endpoints (E1 and E2) and no subgroups.
 #> The first stage sample size per arm/group is:

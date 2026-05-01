@@ -137,7 +137,7 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
@@ -154,10 +154,10 @@
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>
-<span><span class="co">#&gt; A Multi-arm Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
-<span><span class="co">#&gt; ── Inital design specification ─────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Initial design specification ────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Hypotheses weights</span></span>
 <span><span class="co">#&gt; prim_high  prim_low  sec_high   sec_low </span></span>
@@ -216,7 +216,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_interim</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
@@ -249,7 +249,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_adj</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
@@ -288,7 +288,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <code class="sourceCode R"><span><span class="va">design_tested</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span><span class="va">design_adj</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.0111</span>, <span class="cn">NA</span>, <span class="fl">0.0234</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_tested</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
@@ -376,7 +376,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
@@ -396,10 +396,10 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>
-<span><span class="co">#&gt; A Multi-arm Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
-<span><span class="co">#&gt; ── Inital design specification ─────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Initial design specification ────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Hypotheses weights</span></span>
 <span><span class="co">#&gt;      prim_high       prim_low       sec_high        sec_low HPV+_prim_high </span></span>
@@ -492,7 +492,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_interim</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
@@ -531,7 +531,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; without subgroups.</span></span>
 <span></span>
 <span><span class="va">design_adj</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
@@ -561,7 +561,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_tested</span></span>
-<span><span class="co">#&gt; A trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
