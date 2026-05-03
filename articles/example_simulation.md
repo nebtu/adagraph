@@ -190,5 +190,5 @@ results.
 ``` r
 
 print(mean(data$rej_any))
-#> [1] 0.04
+#> [1] 0
 ```
