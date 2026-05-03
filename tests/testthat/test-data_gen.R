@@ -63,8 +63,9 @@ test_that("data generation for binary endpoints works", {
     bin_treat_resp = c(0.1, 0.4)
   )
 
-  set.seed(1)
-  data <- data_gen(1000, design)
+  withr::with_seed(1, {
+    data <- data_gen(1000, design)
+  })
 
   expect_equal(dim(data), c(1000, 4))
   expect_lt(mean(data[, 2]), 0.05)

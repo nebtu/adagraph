@@ -5,7 +5,6 @@ get_trial_data_gen <- function(
   corr_endpoints,
   effect_sizes,
   binary_endpoints = character(0),
-  binary_response = NULL,
   second_stage = FALSE
 ) {
   function(n, design) {
@@ -15,6 +14,12 @@ get_trial_data_gen <- function(
     } else {
       n_table <- design[["n_table"]]
     }
+
+    #use effect sizes for the normal distribution, and apply binary cutoff later
+    effect_sizes[paste0(binary_endpoints, "_bin")] <- effect_sizes[
+      binary_endpoints
+    ]
+    effect_sizes[binary_endpoints] <- 0
 
     # match with the effect sizes
     data_spec <- merge(
@@ -36,6 +41,16 @@ get_trial_data_gen <- function(
       )
       data <- aperm(data, c(2, 3, 1))
       # now the shape is (number of treated people, number of endpoints, number of runs)
+
+      for (endpoint in binary_endpoints) {
+        binary_index <- which(design[["names_endpoints"]] == endpoint)
+        data[, binary_index, ] <- as.numeric(
+          #would be coerced to numeric anyway, so make it explicit
+          data[, binary_index, ] >
+            qnorm(1 - data_spec[i, paste0(endpoint, "_bin")])
+        )
+      }
+
       data
     })
 
@@ -77,7 +92,17 @@ get_trial_data_gen <- function(
         )
 
         if (endpoint %in% binary_endpoints) {
-          p <- NULL #TODO: implement
+          cont_prop <- colMeans(data_cont)
+          treat_prop <- colMeans(data_treat)
+          overall_prop <- colMeans(rbind(data_treat, data_cont))
+
+          z <- (treat_prop - cont_prop) /
+            sqrt(
+              overall_prop *
+                (1 - overall_prop) *
+                ((1 / n_control) + (1 / n_treat))
+            )
+          p <- ifelse(is.na(z), 1, pnorm(z, lower.tail = FALSE))
         } else {
           cont_mean <- colMeans(data_cont)
           cont_var <- matrixStats::colVars(data_cont)
@@ -98,5 +123,7 @@ get_trial_data_gen <- function(
       },
       numeric(n)
     )
+
+    p_values
   }
 }
