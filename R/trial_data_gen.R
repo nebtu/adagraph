@@ -30,6 +30,10 @@ get_trial_data_gen <- function(
 
     # generate data for each group combination
     data_list <- lapply(seq_len(nrow(data_spec)), function(i) {
+      if (data_spec[i, "n"] == 0) {
+        return(NULL)
+      }
+
       means <- unlist(data_spec[i, design[["names_endpoints"]]])
       data <- array(
         mvtnorm::rmvnorm(
@@ -90,6 +94,9 @@ get_trial_data_gen <- function(
             d[, endpoint_index, ]
           })
         )
+        if (n_treat == 0 | n_control == 0) {
+          return(rep(NA, n))
+        }
 
         if (endpoint %in% binary_endpoints) {
           cont_prop <- colMeans(data_cont)

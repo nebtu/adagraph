@@ -95,3 +95,57 @@ test_that("simulation workflow in parallel", {
   local_future_plan(future::multisession)
   test_simulation_workflow()
 })
+
+test_that("simulation works with trial_design", {
+  design <- make_example_trial()
+
+  design <- make_example_trial()
+  corr_endpoints <- rbind(c(1, 0.5), c(0.5, 1))
+  #fmt: skip
+  effect_sizes <- rbind(
+    data.frame(arm = "control", `HPV+` = FALSE, prim = 0, sec = 0.2, check.names = FALSE),
+    data.frame(arm = "control", `HPV+` = TRUE, prim = 0, sec = 0.2, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = FALSE, prim = 1, sec = 0.6, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = TRUE, prim = 1, sec = 0.6, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = FALSE, prim = 0, sec = 0.2, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = TRUE, prim = 0, sec = 0.2, check.names = FALSE)
+  )
+
+  data_gen <- get_trial_data_gen(
+    corr_endpoints,
+    effect_sizes,
+    binary_endpoints = "sec"
+  )
+
+  ad_n_table <- rbind(
+    data.frame(arm = "control", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "control", `HPV+` = TRUE, n = 80, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = TRUE, n = 80, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = FALSE, n = 0, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = TRUE, n = 0, check.names = FALSE)
+  )
+  adaptation <- function(design) {
+    design |> trial_drop_arms("arm2") |> trial_adapt_n(ad_n_table = ad_n_table)
+  }
+
+  data_gen_2 <- get_trial_data_gen(
+    corr_endpoints,
+    effect_sizes,
+    binary_endpoints = "sec",
+    second_stage = TRUE
+  )
+
+  results_df <- sim_trial(
+    design,
+    10,
+    10,
+    adaptation,
+    data_gen,
+    data_gen_2, #
+    include_designs = TRUE
+  )
+
+  expect_equal(nrow(results_df), 100)
+  expect_true(all(results_df[, c("p_2", "p_4", "p_6", "p_8")] == 1))
+})

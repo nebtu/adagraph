@@ -161,6 +161,56 @@ test_that("second_stage = TRUE uses ad_n_table", {
   expect_equal(ncol(data), nrow(design[["hyp_assoc"]]))
 })
 
+test_that("empty subgroup works as expected", {
+  design <- make_example_trial()
+  corr_endpoints <- rbind(c(1, 0.5), c(0.5, 1))
+
+  #fmt: skip
+  ad_n_table <- rbind(
+    data.frame(arm = "control", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "control", `HPV+` = TRUE, n = 0, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = TRUE, n = 0, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = FALSE, n = 120, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = TRUE, n = 0, check.names = FALSE)
+  )
+
+  design <- design |>
+    cer_interim_test(c(
+      0.00045,
+      0.0952,
+      0.0225,
+      0.1104,
+      0.00045,
+      0.0952,
+      0.0225,
+      0.1104
+    )) |>
+    trial_drop_groups("HPV+") |>
+    trial_adapt_n(ad_n_table = ad_n_table)
+
+  #fmt: skip
+  effect_sizes <- rbind(
+    data.frame(arm = "control", `HPV+` = FALSE, prim = 0, sec = 0, check.names = FALSE),
+    data.frame(arm = "control", `HPV+` = TRUE, prim = 0, sec = 0, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = FALSE, prim = 0, sec = 0, check.names = FALSE),
+    data.frame(arm = "arm1", `HPV+` = TRUE, prim = 0, sec = 0, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = FALSE, prim = 0, sec = 0, check.names = FALSE),
+    data.frame(arm = "arm2", `HPV+` = TRUE, prim = 0, sec = 0, check.names = FALSE)
+  )
+  data_gen_2 <- get_trial_data_gen(
+    corr_endpoints,
+    effect_sizes,
+    second_stage = TRUE
+  )
+
+  data <- data_gen_2(50, design)
+
+  expect_equal(nrow(data), 50)
+  expect_true(all(is.na(data[, 5:8])))
+  expect_true(all(is.numeric(data[, 1:4])))
+})
+
 test_that("subgroup p-values use correct subsets", {
   design <- make_example_trial()
   corr_endpoints <- rbind(c(1, 0.5), c(0.5, 1))
