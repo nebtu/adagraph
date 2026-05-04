@@ -1,6 +1,7 @@
 # note that second stage depends on ad_n_table being set
 # TODO: remove n=0 rows in data_spec, make sure that NA is returned for not
 # calculated p-values
+#' @export
 get_trial_data_gen <- function(
   corr_endpoints,
   effect_sizes,

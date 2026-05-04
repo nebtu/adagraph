@@ -151,41 +151,47 @@ cer_drop_hypotheses <- function(
   if (is.character(drop_hyp)) {
     drop_hyp <- match(drop_hyp, names(design[["weights"]]))
   }
-  design[["keep_hyp"]][drop_hyp] <- FALSE
-  hyp_index <- which(vapply(
-    asplit(design[["hyp_matrix"]], 1),
-    function(x) {
-      all(x == as.integer(!(seq_along(design[["weights"]]) %in% drop_hyp)))
-    },
-    logical(1)
-  ))
-  if (!is.null(design[["ad_weights_matrix"]])) {
-    weights <- design[["ad_weights_matrix"]][hyp_index, ]
-  } else {
-    weights <- design[["weights_matrix"]][hyp_index, ]
-  }
 
   if (any(!is.na(design[["ad_test_m"]]))) {
     test_m <- design[["ad_test_m"]]
   } else {
     test_m <- design[["test_m"]]
   }
+  design[["keep_hyp"]][drop_hyp] <- FALSE
+  if (all(!design[["keep_hyp"]])) {
+    weights = rep(0, nrow(test_m))
+    test_m = matrix(0, nrow = nrow(test_m), ncol = ncol(test_m))
+  } else {
+    hyp_index <- which(vapply(
+      asplit(design[["hyp_matrix"]], 1),
+      function(x) {
+        all(x == as.integer(!(seq_along(design[["weights"]]) %in% drop_hyp)))
+      },
+      logical(1)
+    ))
 
-  for (hyp in drop_hyp) {
-    for (i in seq_len(dim(test_m)[1])) {
-      if (test_m[hyp, i] == 1 && test_m[i, hyp] == 1) {
-        # no transfer of weight is possible, if it is only transfered to the now obselete hypothesis
-        test_m[i, ] <- 0
-      } else {
-        feedback_loop <- test_m[i, hyp] * test_m[hyp, i]
-        # ^ amount of weight that "gets stuck", i.e. would get transfered back to the deleted hypothesis
-        test_m[i, ] <- (test_m[i, ] + test_m[i, hyp] * test_m[hyp, ]) /
-          (1 - feedback_loop)
-      }
+    if (!is.null(design[["ad_weights_matrix"]])) {
+      weights <- design[["ad_weights_matrix"]][hyp_index, ]
+    } else {
+      weights <- design[["weights_matrix"]][hyp_index, ]
     }
-    test_m[hyp, ] <- 0
-    test_m[, hyp] <- 0
-    diag(test_m) <- 0
+
+    for (hyp in drop_hyp) {
+      for (i in seq_len(dim(test_m)[1])) {
+        if (test_m[hyp, i] == 1 && test_m[i, hyp] == 1) {
+          # no transfer of weight is possible, if it is only transfered to the now obselete hypothesis
+          test_m[i, ] <- 0
+        } else {
+          feedback_loop <- test_m[i, hyp] * test_m[hyp, i]
+          # ^ amount of weight that "gets stuck", i.e. would get transfered back to the deleted hypothesis
+          test_m[i, ] <- (test_m[i, ] + test_m[i, hyp] * test_m[hyp, ]) /
+            (1 - feedback_loop)
+        }
+      }
+      test_m[hyp, ] <- 0
+      test_m[, hyp] <- 0
+      diag(test_m) <- 0
+    }
   }
   cer_adapt(
     design,
