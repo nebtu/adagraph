@@ -659,23 +659,23 @@
     
     New correlation for parametric test
                    prim_arm1 prim_arm2  sec_arm1 sec_arm2 HPV+_prim_arm1
-    prim_arm1      1.0000000       NaN        NA       NA      0.6770032
-    prim_arm2            NaN         1        NA       NA            NaN
-    sec_arm1              NA        NA 1.0000000      NaN             NA
-    sec_arm2              NA        NA       NaN        1             NA
-    HPV+_prim_arm1 0.6770032       NaN        NA       NA      1.0000000
-    HPV+_prim_arm2       NaN       NaN        NA       NA            NaN
-    HPV+_sec_arm1         NA        NA 0.6770032      NaN             NA
-    HPV+_sec_arm2         NA        NA       NaN      NaN             NA
+    prim_arm1      1.0000000        NA        NA       NA      0.6770032
+    prim_arm2             NA         1        NA       NA             NA
+    sec_arm1              NA        NA 1.0000000       NA             NA
+    sec_arm2              NA        NA        NA        1             NA
+    HPV+_prim_arm1 0.6770032        NA        NA       NA      1.0000000
+    HPV+_prim_arm2        NA        NA        NA       NA             NA
+    HPV+_sec_arm1         NA        NA 0.6770032       NA             NA
+    HPV+_sec_arm2         NA        NA        NA       NA             NA
                    HPV+_prim_arm2 HPV+_sec_arm1 HPV+_sec_arm2
-    prim_arm1                 NaN            NA            NA
-    prim_arm2                 NaN            NA            NA
-    sec_arm1                   NA     0.6770032           NaN
-    sec_arm2                   NA           NaN           NaN
-    HPV+_prim_arm1            NaN            NA            NA
+    prim_arm1                  NA            NA            NA
+    prim_arm2                  NA            NA            NA
+    sec_arm1                   NA     0.6770032            NA
+    sec_arm2                   NA            NA            NA
+    HPV+_prim_arm1             NA            NA            NA
     HPV+_prim_arm2              1            NA            NA
-    HPV+_sec_arm1              NA     1.0000000           NaN
-    HPV+_sec_arm2              NA           NaN             1
+    HPV+_sec_arm1              NA     1.0000000            NA
+    HPV+_sec_arm2              NA            NA             1
     
     New time fractions for the hypotheses
     [1] 0.4782609 1.0000000 0.4782609 1.0000000 0.4444444 1.0000000 0.4444444
@@ -801,23 +801,23 @@
     
     New correlation for parametric test
                    prim_arm1 prim_arm2  sec_arm1 sec_arm2 HPV+_prim_arm1
-    prim_arm1      1.0000000       NaN        NA       NA      0.6770032
-    prim_arm2            NaN         1        NA       NA            NaN
-    sec_arm1              NA        NA 1.0000000      NaN             NA
-    sec_arm2              NA        NA       NaN        1             NA
-    HPV+_prim_arm1 0.6770032       NaN        NA       NA      1.0000000
-    HPV+_prim_arm2       NaN       NaN        NA       NA            NaN
-    HPV+_sec_arm1         NA        NA 0.6770032      NaN             NA
-    HPV+_sec_arm2         NA        NA       NaN      NaN             NA
+    prim_arm1      1.0000000        NA        NA       NA      0.6770032
+    prim_arm2             NA         1        NA       NA             NA
+    sec_arm1              NA        NA 1.0000000       NA             NA
+    sec_arm2              NA        NA        NA        1             NA
+    HPV+_prim_arm1 0.6770032        NA        NA       NA      1.0000000
+    HPV+_prim_arm2        NA        NA        NA       NA             NA
+    HPV+_sec_arm1         NA        NA 0.6770032       NA             NA
+    HPV+_sec_arm2         NA        NA        NA       NA             NA
                    HPV+_prim_arm2 HPV+_sec_arm1 HPV+_sec_arm2
-    prim_arm1                 NaN            NA            NA
-    prim_arm2                 NaN            NA            NA
-    sec_arm1                   NA     0.6770032           NaN
-    sec_arm2                   NA           NaN           NaN
-    HPV+_prim_arm1            NaN            NA            NA
+    prim_arm1                  NA            NA            NA
+    prim_arm2                  NA            NA            NA
+    sec_arm1                   NA     0.6770032            NA
+    sec_arm2                   NA            NA            NA
+    HPV+_prim_arm1             NA            NA            NA
     HPV+_prim_arm2              1            NA            NA
-    HPV+_sec_arm1              NA     1.0000000           NaN
-    HPV+_sec_arm2              NA           NaN             1
+    HPV+_sec_arm1              NA     1.0000000            NA
+    HPV+_sec_arm2              NA            NA             1
     
     New time fractions for the hypotheses
     [1] 0.4782609 1.0000000 0.4782609 1.0000000 0.4444444 1.0000000 0.4444444

@@ -9,7 +9,7 @@ cer_drop_hypotheses(design, drop_hyp, adapt_bounds = TRUE)
 \arguments{
 \item{design}{cer_design object}
 
-\item{drop_hyp}{that should be dropped, identified either by numbers or by their names}
+\item{drop_hyp}{hypotheses that should be dropped, identified either by numbers or by their names}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
 FWER with the new adaptations. If doing multiple adaptations, it is enough to

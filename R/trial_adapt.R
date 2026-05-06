@@ -181,13 +181,13 @@ trial_adapt_n <- function(
     ad_t <- NULL
   }
 
+  design[["ad_n_table"]] <- ad_n_table
   design_ad <- cer_adapt(
     design,
     t = ad_t,
     correlation = ad_correlation,
     adapt_bounds = adapt_bounds
   )
-  design_ad[["ad_n_table"]] <- ad_n_table
 
   design_ad
 }

@@ -185,6 +185,9 @@ get_Z_correlation <- function(
   n_treatment_2,
   n_treatment_shared
 ) {
+  if (min(c(n_control_1, n_control_2, n_treatment_1, n_treatment_2)) == 0) {
+    return(NA)
+  }
   #These are the standard deviations of the differences in means, ignoring the shared
   #sigma of all groups
   sd_1 <- sqrt((1 / n_control_1) + (1 / n_treatment_1))

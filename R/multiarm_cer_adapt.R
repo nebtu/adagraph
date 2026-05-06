@@ -79,7 +79,9 @@ redistribute_n <- function(
   }
   keep <- !(seq_along(n) %in% which_drop)
   n2 <- n - n1
-  if (any(!keep)) {
+  if (all(!keep)) {
+    return(rep(0, length(n2)))
+  } else if (any(!keep)) {
     weights <- n[keep]
 
     n_reassign <- sum(n2[!keep])
