@@ -18,7 +18,8 @@ cer_drop_hypotheses(design, drop_hyp, adapt_bounds = TRUE)
 
 - drop_hyp:
 
-  that should be dropped, identified either by numbers or by their names
+  hypotheses that should be dropped, identified either by numbers or by
+  their names
 
 - adapt_bounds:
 
