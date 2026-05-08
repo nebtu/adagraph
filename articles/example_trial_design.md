@@ -100,8 +100,10 @@ design <- trial_design(
 )
 
 design
-#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER
+#> 0.025.
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
 #>      arm  n
@@ -109,9 +111,11 @@ design
 #>     high 35
 #>      low 35
 #> 
-#> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptations have been performed yet ──────────────────────────────────────
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> ── No interim test performed ──
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
 ```
 
 As we can see, the print method gives a short description of the design.
@@ -121,42 +125,42 @@ For a more detailed overview, showing all arguments used, we can use the
 ``` r
 
 summary(design)
-#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER
+#> 0.025.
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
-#> ── Initial design specification ────────────────────────────────────────────────
 #> 
-#> Hypotheses weights
+#> ── Initial design specification ──
+#> 
+#> ── Hypotheses weights 
 #> prim_high  prim_low  sec_high   sec_low 
 #>       0.5       0.5       0.0       0.0 
 #> 
-#> Graph Transition Matrix
+#> ── Graph Transition Matrix 
 #>           prim_high prim_low sec_high sec_low
 #> prim_high       0.0      0.6      0.4     0.0
 #> prim_low        0.6      0.0      0.0     0.4
 #> sec_high        0.0      1.0      0.0     0.0
 #> sec_low         1.0      0.0      0.0     0.0
 #> 
-#> Correlation for parametric test
+#> ── Correlation for parametric test 
 #>           prim_high prim_low sec_high sec_low
 #> prim_high       1.0      0.5       NA      NA
 #> prim_low        0.5      1.0       NA      NA
 #> sec_high         NA       NA      1.0     0.5
 #> sec_low          NA       NA      0.5     1.0
-#> 
 #> Association between hypotheses and arms/endpoints/subgroups:
 #>   hypothesis group endpoint  arm
 #> 1  prim_high Total     prim high
 #> 2   prim_low Total     prim  low
 #> 3   sec_high Total      sec high
 #> 4    sec_low Total      sec  low
-#> 
 #> First stage sample size per arm/group
 #>      arm  n
 #>  control 35
 #>     high 35
 #>      low 35
-#> 
 #> Interim test is planned at time fraction 0.5
 ```
 
@@ -190,8 +194,10 @@ design_interim <- cer_interim_test(
 )
 
 design_interim
-#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER
+#> 0.025.
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
 #>      arm  n
@@ -199,10 +205,13 @@ design_interim
 #>     high 35
 #>      low 35
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: prim_high
-#> ── No adaptations have been performed yet ──────────────────────────────────────
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: prim_high
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
 ```
 
 We can see that for now, only the hypothesis testing the primary
@@ -244,8 +253,10 @@ design_adj <- design_interim |>
   )
 
 design_adj
-#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER
+#> 0.025.
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
 #>      arm  n
@@ -253,9 +264,13 @@ design_adj
 #>     high 35
 #>      low 35
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: prim_high
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: prim_high
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
 #> • Correlation for parametric test
@@ -265,7 +280,8 @@ design_adj
 #>  control 53
 #>     high  0
 #>      low 52
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
 ```
 
 Note the new testing matrix resulting from those changes:
@@ -296,8 +312,10 @@ but can use `NA` as a corresponding value.
 design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
 
 design_tested
-#> A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER
+#> 0.025.
 #> There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.
 #> The first stage sample size per arm/group is:
 #>      arm  n
@@ -305,9 +323,13 @@ design_tested
 #>     high 35
 #>      low 35
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: prim_high
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: prim_high
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
 #> • Correlation for parametric test
@@ -317,7 +339,9 @@ design_tested
 #>  control 53
 #>     high  0
 #>      low 52
-#> ── Final test result ───────────────────────────────────────────────────────────
+#> 
+#> ── Final test result ──
+#> 
 #> Hypotheses rejected: prim_high, prim_low, and sec_low
 ```
 
@@ -404,9 +428,12 @@ design <- trial_design(
 )
 
 design
-#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
-#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,
+#> HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup
+#> (HPV+).
 #> The first stage sample size per arm/group is:
 #>      arm  HPV+  n
 #>  control FALSE 20
@@ -416,9 +443,11 @@ design
 #>      low FALSE 20
 #>      low  TRUE 15
 #> 
-#> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptations have been performed yet ──────────────────────────────────────
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> ── No interim test performed ──
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
 ```
 
 Again we get a detailed summary when using the
@@ -427,18 +456,22 @@ Again we get a detailed summary when using the
 ``` r
 
 summary(design)
-#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
-#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
-#> ── Initial design specification ────────────────────────────────────────────────
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,
+#> HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup
+#> (HPV+).
 #> 
-#> Hypotheses weights
+#> ── Initial design specification ──
+#> 
+#> ── Hypotheses weights 
 #>      prim_high       prim_low       sec_high        sec_low HPV+_prim_high 
 #>           0.35           0.35           0.00           0.00           0.15 
 #>  HPV+_prim_low  HPV+_sec_high   HPV+_sec_low 
 #>           0.15           0.00           0.00 
 #> 
-#> Graph Transition Matrix
+#> ── Graph Transition Matrix 
 #>                prim_high  prim_low sec_high sec_low HPV+_prim_high
 #> prim_high      0.0000000 0.2000000      0.4     0.0      0.2000000
 #> prim_low       0.2000000 0.0000000      0.0     0.4      0.2000000
@@ -458,7 +491,7 @@ summary(design)
 #> HPV+_sec_high      0.3333333           0.0          0.0
 #> HPV+_sec_low       0.0000000           0.0          0.0
 #> 
-#> Correlation for parametric test
+#> ── Correlation for parametric test 
 #>                prim_high  prim_low  sec_high   sec_low HPV+_prim_high
 #> prim_high      1.0000000 0.5000000        NA        NA      0.6546537
 #> prim_low       0.5000000 1.0000000        NA        NA      0.3273268
@@ -477,7 +510,6 @@ summary(design)
 #> HPV+_prim_low      1.0000000            NA           NA
 #> HPV+_sec_high             NA     1.0000000    0.5000000
 #> HPV+_sec_low              NA     0.5000000    1.0000000
-#> 
 #> Association between hypotheses and arms/endpoints/subgroups:
 #>       hypothesis group endpoint  arm
 #> 1      prim_high Total     prim high
@@ -488,7 +520,6 @@ summary(design)
 #> 6  HPV+_prim_low  HPV+     prim  low
 #> 7  HPV+_sec_high  HPV+      sec high
 #> 8   HPV+_sec_low  HPV+      sec  low
-#> 
 #> First stage sample size per arm/group
 #>      arm  HPV+  n
 #>  control FALSE 20
@@ -497,7 +528,6 @@ summary(design)
 #>     high  TRUE 15
 #>      low FALSE 20
 #>      low  TRUE 15
-#> 
 #> Interim test is planned at time fraction 0.5
 ```
 
@@ -530,9 +560,12 @@ design_interim <- cer_interim_test(
 )
 
 design_interim
-#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
-#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,
+#> HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup
+#> (HPV+).
 #> The first stage sample size per arm/group is:
 #>      arm  HPV+  n
 #>  control FALSE 20
@@ -542,10 +575,13 @@ design_interim
 #>      low FALSE 20
 #>      low  TRUE 15
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: prim_high
-#> ── No adaptations have been performed yet ──────────────────────────────────────
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: prim_high
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
 ```
 
 The further use of the package proceeds as above. One important
@@ -576,9 +612,12 @@ design_adj <- design_interim |>
 #> without subgroups.
 
 design_adj
-#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
-#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,
+#> HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup
+#> (HPV+).
 #> The first stage sample size per arm/group is:
 #>      arm  HPV+  n
 #>  control FALSE 20
@@ -588,14 +627,19 @@ design_adj
 #>      low FALSE 20
 #>      low  TRUE 15
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: prim_high
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: prim_high
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
 #> • Correlation for parametric test
 #> • Time fractions for the hypotheses
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
 ```
 
 This leads then to the same result as before.
@@ -608,9 +652,12 @@ design_tested <- cer_final_test(
 )
 
 design_tested
-#> A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
 #> 
-#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,
+#> HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.
+#> There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup
+#> (HPV+).
 #> The first stage sample size per arm/group is:
 #>      arm  HPV+  n
 #>  control FALSE 20
@@ -620,14 +667,20 @@ design_tested
 #>      low FALSE 20
 #>      low  TRUE 15
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: prim_high
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: prim_high
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
 #> • Correlation for parametric test
 #> • Time fractions for the hypotheses
-#> ── Final test result ───────────────────────────────────────────────────────────
+#> 
+#> ── Final test result ──
+#> 
 #> Hypotheses rejected: prim_high, prim_low, and sec_low
 ```
 

@@ -93,11 +93,15 @@ design <- multiarm_cer_design(
  t = 0.5)
 
 design
-#> A Multi-arm Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
+#> ── Multi-arm Design ────────────────────────────────────────────────────────────
+#> Testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> There are 1 control groups for a total of 2 hypotheses.
 #> 
-#> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptations have been performed yet ──────────────────────────────────────
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> ── No interim test performed ──
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
+#> 
 ```

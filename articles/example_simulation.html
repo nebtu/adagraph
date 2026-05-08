@@ -107,13 +107,16 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span></span>
-<span><span class="co">#&gt; A Multi-arm Design object, for testing the 8 hypotheses H1, H2, H3, H4, H5, H6, H7, and H8 at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Multi-arm Design ────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 8 hypotheses H1, H2, H3, H4, H5, H6, H7, and H8 at FWER 0.025.</span></span>
 <span><span class="co">#&gt; There are 2 control groups for a total of 8 hypotheses.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── No interim test has been performed yet. ─────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No adaptations have been performed yet ──────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; ── No interim test performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No adaptations performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
 <p>Next, we need to specify how we want the data used in the simulation to be specified. For this, we need a function that takes a number of trials to simulate and the design object and returns the p-values for the simulation. While it is possible to write such a function by hand, for this case we can use the provided <code><a href="../reference/get_data_gen.html">get_data_gen()</a></code> and <code><a href="../reference/get_data_gen_2.html">get_data_gen_2()</a></code> functions. We first define the correlation between the different endpoints of the same group and the effectiveness of the treatments. Here, we want assume that none of the treatments have an effect, so we can estimate the familywise error rate (FWER).</p>
 <div class="cell">
@@ -204,7 +207,7 @@
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">rej_any</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.01</span></span></code></pre></div>
 </div>
 
 

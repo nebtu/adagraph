@@ -82,9 +82,14 @@ design <- cer_design(
  t=0.5)
 
 design
-#> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
-#> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptations have been performed yet ──────────────────────────────────────
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> ── CER Design ──────────────────────────────────────────────────────────────────
+#> Testing the 2 hypotheses H1 and H2 at FWER 0.05.
+#> 
+#> ── No interim test performed ──
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
+#> 
 ```

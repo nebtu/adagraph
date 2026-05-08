@@ -51,13 +51,16 @@ design <- multiarm_cer_design(
 )
 
 design
-#> A Multi-arm Design object, for testing the 8 hypotheses H1, H2, H3, H4, H5, H6, H7, and H8 at FWER 0.025.
 #> 
+#> ── Multi-arm Design ────────────────────────────────────────────────────────────
+#> Testing the 8 hypotheses H1, H2, H3, H4, H5, H6, H7, and H8 at FWER 0.025.
 #> There are 2 control groups for a total of 8 hypotheses.
 #> 
-#> ── No interim test has been performed yet. ─────────────────────────────────────
-#> ── No adaptations have been performed yet ──────────────────────────────────────
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> ── No interim test performed ──
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
 ```
 
 Next, we need to specify how we want the data used in the simulation to
@@ -190,5 +193,5 @@ results.
 ``` r
 
 print(mean(data$rej_any))
-#> [1] 0
+#> [1] 0.01
 ```

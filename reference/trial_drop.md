@@ -76,8 +76,9 @@ des_ad <- des |>
   trial_drop_arms(c("A1", "A4"))
 
 des_ad
-#> A Trial Design object, for testing the 4 hypotheses A1, A2, A3, and A4 at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses A1, A2, A3, and A4 at FWER 0.025.
 #> There are 4 arms (A1, A2, A3, and A4), 1 endpoint and no subgroups.
 #> The first stage sample size per arm/group is:
 #>      arm  n
@@ -87,12 +88,18 @@ des_ad
 #>       A3 35
 #>       A4 35
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: A1
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: A1
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
+#> 
 des_ad[["ad_test_m"]]
 #>    A1 A2 A3 A4
 #> A1  0  0  0  0
@@ -128,8 +135,9 @@ des_ad <- des |>
   trial_drop_endpoints("E1")
 
 des_ad
-#> A Trial Design object, for testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
 #> There are 1 arm, 2 endpoints (E1 and E2) and 1 subgroup (G1).
 #> The first stage sample size per arm/group is:
 #>      arm    G1  n
@@ -138,12 +146,18 @@ des_ad
 #>       A1 FALSE 20
 #>       A1  TRUE 15
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: E1
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: E1
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
+#> 
 des_ad[["ad_test_m"]]
 #>      E1 E2 G1E1 G1E2
 #> E1    0  0    0    0

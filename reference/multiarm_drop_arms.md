@@ -75,15 +75,22 @@ design <- cer_interim_test(design, c(0.1, 0.02))
 
 design <- design |> multiarm_drop_arms(1)
 design
-#> A Multi-arm Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
+#> ── Multi-arm Design ────────────────────────────────────────────────────────────
+#> Testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> There are 1 control groups for a total of 2 hypotheses.
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
+#> ── Interim test ──
+#> 
 #> No hypotheses were rejected at the interim.
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
 #> • Correlation for parametric test
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
+#> 
 ```

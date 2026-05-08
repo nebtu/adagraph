@@ -89,8 +89,9 @@ des_ad <- des |>
   trial_adapt_n(n_control_2 = 50, n_arms = c(20, 30))
 
 des_ad
-#> A Trial Design object, for testing the 4 hypotheses E1_A1, E1_A2, E2_A1, and E2_A2 at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses E1_A1, E1_A2, E2_A1, and E2_A2 at FWER 0.025.
 #> There are 2 arms (A1 and A2), 2 endpoints (E1 and E2) and no subgroups.
 #> The first stage sample size per arm/group is:
 #>      arm  n
@@ -98,9 +99,13 @@ des_ad
 #>       A1 35
 #>       A2 35
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: E1_A1
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: E1_A1
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Correlation for parametric test
 #> • Time fractions for the hypotheses
 #> The second stage sample size per arm/group is:
@@ -108,7 +113,9 @@ des_ad
 #>  control 50
 #>       A1 20
 #>       A2 30
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
+#> 
 des_ad[["ad_correlation"]] #changed correlation structure
 #>           E1_A1     E1_A2     E2_A1     E2_A2
 #> E1_A1 1.0000000 0.3273268        NA        NA
@@ -151,8 +158,9 @@ des_ad <- des |>
   trial_adapt_n(ad_n_table = ad_n_table)
 
 des_ad
-#> A Trial Design object, for testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
 #> 
+#> ── Trial Design ────────────────────────────────────────────────────────────────
+#> Testing the 4 hypotheses E1, E2, G1E1, and G1E2 at FWER 0.025.
 #> There are 1 arm, 2 endpoints (E1 and E2) and 1 subgroup (G1).
 #> The first stage sample size per arm/group is:
 #>      arm    G1  n
@@ -161,9 +169,13 @@ des_ad
 #>       A1 FALSE 20
 #>       A1  TRUE 15
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
-#> Hypotheses rejected at the interim: E1
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: E1
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Correlation for parametric test
 #> • Time fractions for the hypotheses
 #> The second stage sample size per arm/group is:
@@ -172,7 +184,9 @@ des_ad
 #>  control  TRUE 20
 #>       A1 FALSE 10
 #>       A1  TRUE 15
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
+#> 
 
 des_ad[["ad_correlation"]] #changed correlation structure
 #>             E1        E2      G1E1      G1E2

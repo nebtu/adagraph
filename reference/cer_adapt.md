@@ -80,11 +80,19 @@ design <- cer_interim_test(design, c(0.1, 0.02))
 
 design <- cer_adapt(design, weights = c(1/3, 2/3))
 design
-#> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
+#> ── CER Design ──────────────────────────────────────────────────────────────────
+#> Testing the 2 hypotheses H1 and H2 at FWER 0.05.
+#> 
+#> ── Interim test ──
+#> 
 #> No hypotheses were rejected at the interim.
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
+#> 
 ```

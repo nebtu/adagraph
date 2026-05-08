@@ -41,12 +41,20 @@ design <- cer_drop_hypotheses(design, 1)
 design <- cer_adapt_bounds(design)
 
 design
-#> A CER Design object, for testing the 2 hypotheses H1 and H2 at FWER 0.05.
 #> 
-#> ── An interim test has been performed. ─────────────────────────────────────────
+#> ── CER Design ──────────────────────────────────────────────────────────────────
+#> Testing the 2 hypotheses H1 and H2 at FWER 0.05.
+#> 
+#> ── Interim test ──
+#> 
 #> No hypotheses were rejected at the interim.
-#> ── The following characteristics have been adapted: ────────────────────────────
+#> 
+#> ── Adaptations ──
+#> 
+#> The following characteristics have been adapted:
 #> • Hypotheses weights
 #> • Graph Transition Matrix
-#> ── No final test has been performed yet ────────────────────────────────────────
+#> 
+#> ── No final test performed ──
+#> 
 ```

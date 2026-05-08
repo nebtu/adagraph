@@ -137,8 +137,10 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER</span></span>
+<span><span class="co">#&gt; 0.025.</span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  n</span></span>
@@ -146,50 +148,52 @@
 <span><span class="co">#&gt;     high 35</span></span>
 <span><span class="co">#&gt;      low 35</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── No interim test has been performed yet. ─────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No adaptations have been performed yet ──────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; ── No interim test performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No adaptations performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
 <p>As we can see, the print method gives a short description of the design. For a more detailed overview, showing all arguments used, we can use the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER</span></span>
+<span><span class="co">#&gt; 0.025.</span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
-<span><span class="co">#&gt; ── Initial design specification ────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Hypotheses weights</span></span>
+<span><span class="co">#&gt; ── Initial design specification ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Hypotheses weights </span></span>
 <span><span class="co">#&gt; prim_high  prim_low  sec_high   sec_low </span></span>
 <span><span class="co">#&gt;       0.5       0.5       0.0       0.0 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Graph Transition Matrix</span></span>
+<span><span class="co">#&gt; ── Graph Transition Matrix </span></span>
 <span><span class="co">#&gt;           prim_high prim_low sec_high sec_low</span></span>
 <span><span class="co">#&gt; prim_high       0.0      0.6      0.4     0.0</span></span>
 <span><span class="co">#&gt; prim_low        0.6      0.0      0.0     0.4</span></span>
 <span><span class="co">#&gt; sec_high        0.0      1.0      0.0     0.0</span></span>
 <span><span class="co">#&gt; sec_low         1.0      0.0      0.0     0.0</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Correlation for parametric test</span></span>
+<span><span class="co">#&gt; ── Correlation for parametric test </span></span>
 <span><span class="co">#&gt;           prim_high prim_low sec_high sec_low</span></span>
 <span><span class="co">#&gt; prim_high       1.0      0.5       NA      NA</span></span>
 <span><span class="co">#&gt; prim_low        0.5      1.0       NA      NA</span></span>
 <span><span class="co">#&gt; sec_high         NA       NA      1.0     0.5</span></span>
 <span><span class="co">#&gt; sec_low          NA       NA      0.5     1.0</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Association between hypotheses and arms/endpoints/subgroups:</span></span>
 <span><span class="co">#&gt;   hypothesis group endpoint  arm</span></span>
 <span><span class="co">#&gt; 1  prim_high Total     prim high</span></span>
 <span><span class="co">#&gt; 2   prim_low Total     prim  low</span></span>
 <span><span class="co">#&gt; 3   sec_high Total      sec high</span></span>
 <span><span class="co">#&gt; 4    sec_low Total      sec  low</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; First stage sample size per arm/group</span></span>
 <span><span class="co">#&gt;      arm  n</span></span>
 <span><span class="co">#&gt;  control 35</span></span>
 <span><span class="co">#&gt;     high 35</span></span>
 <span><span class="co">#&gt;      low 35</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Interim test is planned at time fraction 0.5</span></span></code></pre></div>
 </div>
 <p>Additonally, we can export and print the graph with the help of the <code>graphicalMCP</code> package.</p>
@@ -216,8 +220,10 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_interim</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER</span></span>
+<span><span class="co">#&gt; 0.025.</span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  n</span></span>
@@ -225,10 +231,13 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;     high 35</span></span>
 <span><span class="co">#&gt;      low 35</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── An interim test has been performed. ─────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected at the interim: prim_high</span></span>
-<span><span class="co">#&gt; ── No adaptations have been performed yet ──────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypotheses rejected: prim_high</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No adaptations performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
 <p>We can see that for now, only the hypothesis testing the primary endpoint for the low dose is rejected. While it is possible to continue now without an adaptations to the design, <code>adagraph</code> allows for many changes to be made to the Adagraph does by itself not assume that we will change anything about our trial design, even if a hypotheses was rejected.</p>
 <p>Assume that it is decided that for the high dose, since the primary hypothesis was already rejected, it is not necessary to continue recruitment and the focus will instead be on the low dose. For dropping a specific arm, we can use the <code><a href="../reference/trial_drop.html">trial_drop_arms()</a></code> function, which is made exactly for this purpose. This change has the benefit of allowing more patients for the low dose and control to be recruited than previously planned. This results in a change to the <code>t</code> parameter and the correlation structure, which can be calculated automatically with the <code>trial_adapt_n</code> function. Additionally, the weights will be redistributed equally on the two remaining hypotheses. For adjusting the weights, we use the much more general <code><a href="../reference/cer_adapt.html">cer_adapt()</a></code> function.</p>
@@ -249,8 +258,10 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_adj</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER</span></span>
+<span><span class="co">#&gt; 0.025.</span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  n</span></span>
@@ -258,9 +269,13 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;     high 35</span></span>
 <span><span class="co">#&gt;      low 35</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── An interim test has been performed. ─────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected at the interim: prim_high</span></span>
-<span><span class="co">#&gt; ── The following characteristics have been adapted: ────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypotheses rejected: prim_high</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Adaptations ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The following characteristics have been adapted:</span></span>
 <span><span class="co">#&gt; • Hypotheses weights</span></span>
 <span><span class="co">#&gt; • Graph Transition Matrix</span></span>
 <span><span class="co">#&gt; • Correlation for parametric test</span></span>
@@ -270,7 +285,8 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;  control 53</span></span>
 <span><span class="co">#&gt;     high  0</span></span>
 <span><span class="co">#&gt;      low 52</span></span>
-<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
 <p>Note the new testing matrix resulting from those changes:</p>
 <div class="cell">
@@ -288,8 +304,10 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <code class="sourceCode R"><span><span class="va">design_tested</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span><span class="va">design_adj</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.0111</span>, <span class="cn">NA</span>, <span class="fl">0.0234</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_tested</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 4 hypotheses prim_high, prim_low, sec_high, and sec_low at FWER</span></span>
+<span><span class="co">#&gt; 0.025.</span></span>
 <span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and no subgroups.</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  n</span></span>
@@ -297,9 +315,13 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;     high 35</span></span>
 <span><span class="co">#&gt;      low 35</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── An interim test has been performed. ─────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected at the interim: prim_high</span></span>
-<span><span class="co">#&gt; ── The following characteristics have been adapted: ────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypotheses rejected: prim_high</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Adaptations ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The following characteristics have been adapted:</span></span>
 <span><span class="co">#&gt; • Hypotheses weights</span></span>
 <span><span class="co">#&gt; • Graph Transition Matrix</span></span>
 <span><span class="co">#&gt; • Correlation for parametric test</span></span>
@@ -309,7 +331,9 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;  control 53</span></span>
 <span><span class="co">#&gt;     high  0</span></span>
 <span><span class="co">#&gt;      low 52</span></span>
-<span><span class="co">#&gt; ── Final test result ───────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Final test result ──</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Hypotheses rejected: prim_high, prim_low, and sec_low</span></span></code></pre></div>
 </div>
 <p>As we can see, both the hypotheses that we are still testing for are now also being rejected.</p>
@@ -376,9 +400,12 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,</span></span>
+<span><span class="co">#&gt; HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup</span></span>
+<span><span class="co">#&gt; (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  HPV+  n</span></span>
 <span><span class="co">#&gt;  control FALSE 20</span></span>
@@ -388,26 +415,32 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;      low FALSE 20</span></span>
 <span><span class="co">#&gt;      low  TRUE 15</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── No interim test has been performed yet. ─────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No adaptations have been performed yet ──────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; ── No interim test performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No adaptations performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
 <p>Again we get a detailed summary when using the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
-<span><span class="co">#&gt; ── Initial design specification ────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,</span></span>
+<span><span class="co">#&gt; HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup</span></span>
+<span><span class="co">#&gt; (HPV+).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Hypotheses weights</span></span>
+<span><span class="co">#&gt; ── Initial design specification ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Hypotheses weights </span></span>
 <span><span class="co">#&gt;      prim_high       prim_low       sec_high        sec_low HPV+_prim_high </span></span>
 <span><span class="co">#&gt;           0.35           0.35           0.00           0.00           0.15 </span></span>
 <span><span class="co">#&gt;  HPV+_prim_low  HPV+_sec_high   HPV+_sec_low </span></span>
 <span><span class="co">#&gt;           0.15           0.00           0.00 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Graph Transition Matrix</span></span>
+<span><span class="co">#&gt; ── Graph Transition Matrix </span></span>
 <span><span class="co">#&gt;                prim_high  prim_low sec_high sec_low HPV+_prim_high</span></span>
 <span><span class="co">#&gt; prim_high      0.0000000 0.2000000      0.4     0.0      0.2000000</span></span>
 <span><span class="co">#&gt; prim_low       0.2000000 0.0000000      0.0     0.4      0.2000000</span></span>
@@ -427,7 +460,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; HPV+_sec_high      0.3333333           0.0          0.0</span></span>
 <span><span class="co">#&gt; HPV+_sec_low       0.0000000           0.0          0.0</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Correlation for parametric test</span></span>
+<span><span class="co">#&gt; ── Correlation for parametric test </span></span>
 <span><span class="co">#&gt;                prim_high  prim_low  sec_high   sec_low HPV+_prim_high</span></span>
 <span><span class="co">#&gt; prim_high      1.0000000 0.5000000        NA        NA      0.6546537</span></span>
 <span><span class="co">#&gt; prim_low       0.5000000 1.0000000        NA        NA      0.3273268</span></span>
@@ -446,7 +479,6 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; HPV+_prim_low      1.0000000            NA           NA</span></span>
 <span><span class="co">#&gt; HPV+_sec_high             NA     1.0000000    0.5000000</span></span>
 <span><span class="co">#&gt; HPV+_sec_low              NA     0.5000000    1.0000000</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Association between hypotheses and arms/endpoints/subgroups:</span></span>
 <span><span class="co">#&gt;       hypothesis group endpoint  arm</span></span>
 <span><span class="co">#&gt; 1      prim_high Total     prim high</span></span>
@@ -457,7 +489,6 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; 6  HPV+_prim_low  HPV+     prim  low</span></span>
 <span><span class="co">#&gt; 7  HPV+_sec_high  HPV+      sec high</span></span>
 <span><span class="co">#&gt; 8   HPV+_sec_low  HPV+      sec  low</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; First stage sample size per arm/group</span></span>
 <span><span class="co">#&gt;      arm  HPV+  n</span></span>
 <span><span class="co">#&gt;  control FALSE 20</span></span>
@@ -466,7 +497,6 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;     high  TRUE 15</span></span>
 <span><span class="co">#&gt;      low FALSE 20</span></span>
 <span><span class="co">#&gt;      low  TRUE 15</span></span>
-<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Interim test is planned at time fraction 0.5</span></span></code></pre></div>
 </div>
 <div class="cell">
@@ -492,9 +522,12 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_interim</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,</span></span>
+<span><span class="co">#&gt; HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup</span></span>
+<span><span class="co">#&gt; (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  HPV+  n</span></span>
 <span><span class="co">#&gt;  control FALSE 20</span></span>
@@ -504,10 +537,13 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;      low FALSE 20</span></span>
 <span><span class="co">#&gt;      low  TRUE 15</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── An interim test has been performed. ─────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected at the interim: prim_high</span></span>
-<span><span class="co">#&gt; ── No adaptations have been performed yet ──────────────────────────────────────</span></span>
-<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypotheses rejected: prim_high</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No adaptations performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
 <p>The further use of the package proceeds as above. One important difference is that we have to continue using the n_table format, since there are still subgroups present. It is however possible to emit rows that are empty. There is now of course the option to also drop a whole subgroup from the analysis. For example, to arrive at the same case as before, we use the following code.</p>
 <div class="cell">
@@ -531,9 +567,12 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; without subgroups.</span></span>
 <span></span>
 <span><span class="va">design_adj</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,</span></span>
+<span><span class="co">#&gt; HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup</span></span>
+<span><span class="co">#&gt; (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  HPV+  n</span></span>
 <span><span class="co">#&gt;  control FALSE 20</span></span>
@@ -543,14 +582,19 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;      low FALSE 20</span></span>
 <span><span class="co">#&gt;      low  TRUE 15</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── An interim test has been performed. ─────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected at the interim: prim_high</span></span>
-<span><span class="co">#&gt; ── The following characteristics have been adapted: ────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypotheses rejected: prim_high</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Adaptations ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The following characteristics have been adapted:</span></span>
 <span><span class="co">#&gt; • Hypotheses weights</span></span>
 <span><span class="co">#&gt; • Graph Transition Matrix</span></span>
 <span><span class="co">#&gt; • Correlation for parametric test</span></span>
 <span><span class="co">#&gt; • Time fractions for the hypotheses</span></span>
-<span><span class="co">#&gt; ── No final test has been performed yet ────────────────────────────────────────</span></span></code></pre></div>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
 <p>This leads then to the same result as before.</p>
 <div class="cell">
@@ -561,9 +605,12 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_tested</span></span>
-<span><span class="co">#&gt; A Trial Design object, for testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low, HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup (HPV+).</span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 8 hypotheses prim_high, prim_low, sec_high, sec_low,</span></span>
+<span><span class="co">#&gt; HPV+_prim_high, HPV+_prim_low, HPV+_sec_high, and HPV+_sec_low at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (high and low), 2 endpoints (prim and sec) and 1 subgroup</span></span>
+<span><span class="co">#&gt; (HPV+).</span></span>
 <span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
 <span><span class="co">#&gt;      arm  HPV+  n</span></span>
 <span><span class="co">#&gt;  control FALSE 20</span></span>
@@ -573,14 +620,20 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt;      low FALSE 20</span></span>
 <span><span class="co">#&gt;      low  TRUE 15</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── An interim test has been performed. ─────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected at the interim: prim_high</span></span>
-<span><span class="co">#&gt; ── The following characteristics have been adapted: ────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Hypotheses rejected: prim_high</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Adaptations ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The following characteristics have been adapted:</span></span>
 <span><span class="co">#&gt; • Hypotheses weights</span></span>
 <span><span class="co">#&gt; • Graph Transition Matrix</span></span>
 <span><span class="co">#&gt; • Correlation for parametric test</span></span>
 <span><span class="co">#&gt; • Time fractions for the hypotheses</span></span>
-<span><span class="co">#&gt; ── Final test result ───────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Final test result ──</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Hypotheses rejected: prim_high, prim_low, and sec_low</span></span></code></pre></div>
 </div>
 </section><section class="section level2"><h2 id="more-complicated-subgroup-structures">More complicated subgroup structures<a class="anchor" aria-label="anchor" href="#more-complicated-subgroup-structures"></a>
