@@ -123,200 +123,196 @@ summary.trial_design <- function(object, ...) {
   summary_list
 }
 
-#' Shared internal helper used by S3 summary print methods
+#' Shared internal helper used by S3 summary format methods
 #'
-#' @param x design to be printed
-#' @param header_label label describing the type of design being printed
-#' @param hooks list containing functions for printing additional information, should
-#'   have names out of c("after_initial_spec", "after_adaptations"). Each function
-#'   should only take x as argument
+#' @param x summary object to be formatted
+#' @param header_label label describing the type of design being formatted
+#' @param hooks list containing functions for formatting additional information, should
+#'   have names out of c("after_introduction", "after_initial_spec", "after_adaptations").
+#'   Each function should take x and ... as arguments and use cli semantic functions.
+#' @param ... additional arguments passed to print calls (e.g. digits)
 #'
 #' @noRd
-print_design_summary <- function(x, header_label, hooks = list()) {
-  cli::cat_line(
-    cli::format_inline(
-      "A {header_label} Design object, for testing the {x[[\"k\"]]} hypotheses {x[[\"names\"]]} at FWER {x[[\"alpha\"]]}."
+format_design_summary <- function(x, header_label, hooks = list(), ...) {
+  cli::cli_format_method({
+    cli::cli_h1("{header_label} Design")
+    cli::cli_text(
+      "Testing the {x[[\"k\"]]} hypotheses {x[[\"names\"]]} at FWER {x[[\"alpha\"]]}."
     )
-  )
-  cli::cat_line()
 
-  # Allow class-specific additions inside the initial spec section
-  if (is.function(hooks[["after_introduction"]])) {
-    hooks[["after_introduction"]](x)
-  }
+    # Allow class-specific additions after the introduction
+    if (is.function(hooks[["after_introduction"]])) {
+      hooks[["after_introduction"]](x, ...)
+    }
 
-  cli::cat_rule("Initial design specification")
-  cli::cat_line()
+    cli::cli_h2("Initial design specification")
 
-  cli::cat_line("Hypotheses weights")
-  cli::cat_print(x[["weights"]])
-  cli::cat_line()
+    cli::cli_h3("Hypotheses weights")
+    cli_print(x[["weights"]], ...)
 
-  cli::cat_line("Graph Transition Matrix")
-  cli::cat_print(x[["test_m"]])
-  cli::cat_line()
+    cli::cli_h3("Graph Transition Matrix")
+    cli_print(x[["test_m"]], ...)
 
-  if (!all(is.na(x[["correlation"]]))) {
-    cli::cat_line("Correlation for parametric test")
-    cli::cat_print(x[["correlation"]])
-    cli::cat_line()
-  }
+    if (!all(is.na(x[["correlation"]]))) {
+      cli::cli_h3("Correlation for parametric test")
+      cli_print(x[["correlation"]], ...)
+    }
 
-  # Allow class-specific additions inside the initial spec section
-  if (is.function(hooks[["after_initial_spec"]])) {
-    hooks[["after_initial_spec"]](x)
-  }
+    # Allow class-specific additions inside the initial spec section
+    if (is.function(hooks[["after_initial_spec"]])) {
+      hooks[["after_initial_spec"]](x, ...)
+    }
 
-  # Planned interim information fraction if available
-  if (!is.null(x[["t"]])) {
-    cli::cat_line("Interim test is planned at time fraction ", x[["t"]])
-    cli::cat_line()
-  }
+    # Planned interim information fraction if available
+    if (!is.null(x[["t"]])) {
+      cli::cli_text("Interim test is planned at time fraction {x[[\"t\"]]}")
+    }
 
-  # Interim results (only if flagged and fields available)
-  if (isTRUE(x[["interim_test"]])) {
-    cli::cat_rule("Interim test result")
-    cli::cat_line("")
+    # Interim results (only if flagged and fields available)
+    if (isTRUE(x[["interim_test"]])) {
+      cli::cli_h2("Interim test result")
 
-    cli::cat_line("P-values of interim test are:")
-    cli::cat_print(x[["p_values_interim"]])
-    if (any(x[["rej_interim"]])) {
-      rej <- x[["names"]][x[["rej_interim"]]]
-      cli::cat_line(
-        cli::format_inline(
-          "Hypotheses rejected at the interim: {rej}"
+      cli::cli_text("P-values of interim test are:")
+      cli_print(x[["p_values_interim"]], ...)
+      if (any(x[["rej_interim"]])) {
+        rej <- x[["names"]][x[["rej_interim"]]]
+        cli::cli_text(
+          "{.strong Hypotheses rejected at the interim:} {rej}"
         )
-      )
-    } else {
-      cli::cat_line("No hypotheses were rejected at the interim.")
+      } else {
+        cli::cli_text("No hypotheses were rejected at the interim.")
+      }
     }
-    cli::cat_line("")
-  }
 
-  # Adaptations section (print only available changes)
-  if (isTRUE(x[["adaptations"]])) {
-    cli::cat_rule("Adaptations from initial specification")
-    cli::cat_line()
-    if (
-      !is.null(x[["ad_weights"]]) &&
-        !identical(x[["ad_weights"]], x[["weights"]])
-    ) {
-      cli::cat_line("New hypotheses weights")
-      cli::cat_print(x[["ad_weights"]])
-      cli::cat_line()
-    }
-    if (
-      !is.null(x[["ad_test_m"]]) && !identical(x[["ad_test_m"]], x[["test_m"]])
-    ) {
-      cli::cat_line("New graph Transition Matrix")
-      cli::cat_print(x[["ad_test_m"]])
-      cli::cat_line()
-    }
-    if (
-      !is.null(x[["ad_correlation"]]) &&
-        !identical(x[["ad_correlation"]], x[["correlation"]])
-    ) {
-      cli::cat_line("New correlation for parametric test")
-      cli::cat_print(x[["ad_correlation"]])
-      cli::cat_line()
-    }
-    if (!is.null(x[["ad_t"]]) && !identical(x[["ad_t"]], x[["t"]])) {
-      cli::cat_line("New time fractions for the hypotheses")
-      cli::cat_print(x[["ad_t"]])
-      cli::cat_line()
-    }
-  }
+    # Adaptations section (print only available changes)
+    if (isTRUE(x[["adaptations"]])) {
+      cli::cli_h2("Adaptations from initial specification")
 
-  if (is.function(hooks[["after_adaptations"]])) {
-    hooks[["after_adaptations"]](x)
-  }
-
-  if (isTRUE(x[["final_test"]])) {
-    cli::cat_rule("Final test result")
-    cli::cat_line()
-    cli::cat_line("Overall p-values of the hypotheses are:")
-    cli::cat_print(x[["p_values_final"]])
-    if (any(x[["rej"]])) {
-      rej <- x[["names"]][x[["rej"]]]
-      cli::cat_line(cli::format_inline(
-        "Hypotheses rejected: {rej}"
-      ))
-    } else {
-      cli::cat_line("No hypotheses were rejected")
+      if (
+        !is.null(x[["ad_weights"]]) &&
+          !identical(x[["ad_weights"]], x[["weights"]])
+      ) {
+        cli::cli_h3("New hypotheses weights")
+        cli_print(x[["ad_weights"]], ...)
+      }
+      if (
+        !is.null(x[["ad_test_m"]]) &&
+          !identical(x[["ad_test_m"]], x[["test_m"]])
+      ) {
+        cli::cli_h3("New graph Transition Matrix")
+        cli_print(x[["ad_test_m"]], ...)
+      }
+      if (
+        !is.null(x[["ad_correlation"]]) &&
+          !identical(x[["ad_correlation"]], x[["correlation"]])
+      ) {
+        cli::cli_h3("New correlation for parametric test")
+        cli_print(x[["ad_correlation"]], ...)
+      }
+      if (!is.null(x[["ad_t"]]) && !identical(x[["ad_t"]], x[["t"]])) {
+        cli::cli_h3("New time fractions for the hypotheses")
+        cli_print(x[["ad_t"]], ...)
+      }
     }
-  }
-  invisible(x)
+
+    if (is.function(hooks[["after_adaptations"]])) {
+      hooks[["after_adaptations"]](x, ...)
+    }
+
+    if (isTRUE(x[["final_test"]])) {
+      cli::cli_h2("Final test result")
+
+      cli::cli_text("Overall p-values of the hypotheses are:")
+      cli_print(x[["p_values_final"]], ...)
+      if (any(x[["rej"]])) {
+        rej <- x[["names"]][x[["rej"]]]
+        cli::cli_text(
+          "{.strong Hypotheses rejected:} {rej}"
+        )
+      } else {
+        cli::cli_text("No hypotheses were rejected.")
+      }
+    }
+  })
+}
+
+#' @export
+format.summary.adagraph_design <- function(x, ...) {
+  format_design_summary(x, header_label = "Adagraph", ...)
 }
 
 #' @export
 print.summary.adagraph_design <- function(x, ...) {
-  print_design_summary(x, header_label = "Adagraph")
+  cat(format(x, ...), sep = "\n")
+  invisible(x)
+}
+
+#' @export
+format.summary.cer_design <- function(x, ...) {
+  format_design_summary(x, header_label = "CER", ...)
 }
 
 #' @export
 print.summary.cer_design <- function(x, ...) {
-  print_design_summary(x, header_label = "CER")
+  cat(format(x, ...), sep = "\n")
+  invisible(x)
+}
+
+#' @export
+format.summary.multiarm_cer_design <- function(x, ...) {
+  hooks <- list(
+    after_initial_spec = function(x, ...) {
+      if (!is.null(x[["controls"]])) {
+        cli::cli_text("Number of control groups:")
+        cli_print(x[["controls"]], ...)
+      }
+      if (!is.null(x[["treatment_assoc"]])) {
+        cli::cli_text("Treatment-to-control assignments (per treatment arm):")
+        cli_print(x[["treatment_assoc"]], ...)
+      }
+      if (!is.null(x[["n_controls"]])) {
+        cli::cli_text("Planned sample sizes per control group:")
+        cli_print(x[["n_controls"]], ...)
+      }
+      if (!is.null(x[["n_treatments"]])) {
+        cli::cli_text("Planned sample sizes per treatment group:")
+        cli_print(x[["n_treatments"]], ...)
+      }
+    },
+    after_adaptations = function(x, ...) {
+      if (!is.null(x[["n_cont_2"]])) {
+        cli::cli_text("Second-stage sample sizes (controls):")
+        cli_print(x[["n_cont_2"]], ...)
+      }
+      if (!is.null(x[["n_treat_2"]])) {
+        cli::cli_text("Second-stage sample sizes (treatments):")
+        cli_print(x[["n_treat_2"]], ...)
+      }
+      if (!is.null(x[["ad_n_controls"]])) {
+        cli::cli_text("Total planned sample sizes after adaptation (controls):")
+        cli_print(x[["ad_n_controls"]], ...)
+      }
+      if (!is.null(x[["ad_n_treatments"]])) {
+        cli::cli_text(
+          "Total planned sample sizes after adaptation (treatments):"
+        )
+        cli_print(x[["ad_n_treatments"]], ...)
+      }
+    }
+  )
+  format_design_summary(x, header_label = "Multi-arm", hooks = hooks, ...)
 }
 
 #' @export
 print.summary.multiarm_cer_design <- function(x, ...) {
-  hooks <- list(
-    after_initial_spec = function(x) {
-      # Multi-arm specifics within the initial specification
-      if (!is.null(x[["controls"]])) {
-        cli::cat_line("Number of control groups:")
-        cli::cat_print(x[["controls"]])
-        cli::cat_line()
-      }
-      if (!is.null(x[["treatment_assoc"]])) {
-        cli::cat_line("Treatment-to-control assignments (per treatment arm):")
-        cli::cat_print(x[["treatment_assoc"]])
-        cli::cat_line()
-      }
-      if (!is.null(x[["n_controls"]])) {
-        cli::cat_line("Planned sample sizes per control group:")
-        cli::cat_print(x[["n_controls"]])
-        cli::cat_line()
-      }
-      if (!is.null(x[["n_treatments"]])) {
-        cli::cat_line("Planned sample sizes per treatment group:")
-        cli::cat_print(x[["n_treatments"]])
-        cli::cat_line()
-      }
-    },
-    after_adaptations = function(x) {
-      # Show multi-arm sample size details introduced by adaptations, if available
-      if (!is.null(x[["n_cont_2"]])) {
-        cli::cat_line("Second-stage sample sizes (controls):")
-        cli::cat_print(x[["n_cont_2"]])
-        cli::cat_line()
-      }
-      if (!is.null(x[["n_treat_2"]])) {
-        cli::cat_line("Second-stage sample sizes (treatments):")
-        cli::cat_print(x[["n_treat_2"]])
-        cli::cat_line()
-      }
-      if (!is.null(x[["ad_n_controls"]])) {
-        cli::cat_line("Total planned sample sizes after adaptation (controls):")
-        cli::cat_print(x[["ad_n_controls"]])
-        cli::cat_line()
-      }
-      if (!is.null(x[["ad_n_treatments"]])) {
-        cli::cat_line(
-          "Total planned sample sizes after adaptation (treatments):"
-        )
-        cli::cat_print(x[["ad_n_treatments"]])
-        cli::cat_line()
-      }
-    }
-  )
-  print_design_summary(x, header_label = "Multi-arm", hooks = hooks)
+  cat(format(x, ...), sep = "\n")
+  invisible(x)
 }
 
 #' @export
-print.summary.trial_design <- function(x, ...) {
+format.summary.trial_design <- function(x, ...) {
   hooks <- list(
-    after_introduction = function(x) {
+    after_introduction = function(x, ...) {
       arms <- x[["arms"]]
       endpoints <- x[["endpoints"]]
       subgroups <- x[["subgroups"]]
@@ -335,37 +331,31 @@ print.summary.trial_design <- function(x, ...) {
       } else {
         names_sg_str <- ""
       }
-      cli::cat_line(
-        cli::format_inline(
-          "There are {arms} arm{?s}{names_arms_str}, {endpoints} endpoint{?s}{names_ep_str} and {cli::no(subgroups)} subgroup{?s}{names_sg_str}."
-        )
+      cli::cli_text(
+        "There are {arms} arm{?s}{names_arms_str}, {endpoints} endpoint{?s}{names_ep_str} and {cli::no(subgroups)} subgroup{?s}{names_sg_str}."
       )
     },
-    after_initial_spec = function(x) {
-      cli::cat_line(
+    after_initial_spec = function(x, ...) {
+      cli::cli_text(
         "Association between hypotheses and arms/endpoints/subgroups:"
       )
-      print.data.frame(x[["hyp_assoc"]])
-      cli::cat_line()
+      cli_print(x[["hyp_assoc"]], ...)
 
-      cli::cat_line(
-        cli::format_inline(
-          "First stage sample size per arm/group"
-        )
-      )
-      print.data.frame(x[["n_table"]], row.names = FALSE)
-      cli::cat_line()
+      cli::cli_text("First stage sample size per arm/group")
+      cli_print(x[["n_table"]], row.names = FALSE, ...)
     },
-    after_adaptations = function(x) {
+    after_adaptations = function(x, ...) {
       if (!is.null(x[["ad_n_table"]])) {
-        cli::cat_line(
-          cli::format_inline(
-            "The second stage sample size per arm/group is:"
-          )
-        )
-        print.data.frame(x[["ad_n_table"]], row.names = FALSE)
+        cli::cli_text("The second stage sample size per arm/group is:")
+        cli_print(x[["ad_n_table"]], row.names = FALSE, ...)
       }
     }
   )
-  print_design_summary(x, header_label = "Trial", hooks = hooks)
+  format_design_summary(x, header_label = "Trial", hooks = hooks, ...)
+}
+
+#' @export
+print.summary.trial_design <- function(x, ...) {
+  cat(format(x, ...), sep = "\n")
+  invisible(x)
 }

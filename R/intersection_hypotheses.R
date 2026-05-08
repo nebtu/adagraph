@@ -64,7 +64,7 @@ intersection_hypotheses.cer_design <- function(design, ...) {
 }
 
 #' @export
-print.intersection_hypotheses <- function(
+format.intersection_hypotheses <- function(
   x,
   digits = getOption("digits"),
   ...
@@ -92,39 +92,48 @@ print.intersection_hypotheses <- function(
     check.names = FALSE
   )
 
-  if (any(grep("^interim_rej", names(x)))) {
-    df <- cbind(df, `Rejected at Interim` = x[["interim_rej"]])
-    cli::cat_line("Initial specification and interim result")
-  } else {
-    cli::cat_line("Initial specification")
-  }
-
-  print.data.frame(df, row.names = FALSE, ...)
-  cli::cat_line("")
-
-  if (any(grep("^ad", names(x)))) {
-    ad_weights <- apply(x[, grep("^ad_weights", names(x))], 1, \(row) {
-      format_nums(row)
-    })
-    ad_bounds_2 <- apply(x[, grep("^ad_bound_final", names(x))], 1, \(row) {
-      format_nums(row)
-    })
-    ad_df <- data.frame(
-      `Hypotheses` = x[["hyp_names"]],
-      `Adapted Weights` = ad_weights,
-      `Adapted Final Bounds` = ad_bounds_2,
-      check.names = FALSE
-    )
-    if (any(grep("^rej", names(x)))) {
-      ad_df <- cbind(ad_df, `Rejected` = x[["rej"]])
-      cli::cat_line("After adaptation and final result")
+  cli::cli_format_method({
+    if (any(grep("^interim_rej", names(x)))) {
+      df <- cbind(df, `Rejected at Interim` = x[["interim_rej"]])
+      cli::cli_h2("Initial specification and interim result")
     } else {
-      cli::cat_line("After adaptation")
+      cli::cli_h2("Initial specification")
     }
 
-    print.data.frame(ad_df, row.names = FALSE, ...)
-  }
+    cli_print(df, row.names = FALSE, ...)
 
+    if (any(grep("^ad", names(x)))) {
+      ad_weights <- apply(x[, grep("^ad_weights", names(x))], 1, \(row) {
+        format_nums(row)
+      })
+      ad_bounds_2 <- apply(
+        x[, grep("^ad_bound_final", names(x))],
+        1,
+        \(row) {
+          format_nums(row)
+        }
+      )
+      ad_df <- data.frame(
+        `Hypotheses` = x[["hyp_names"]],
+        `Adapted Weights` = ad_weights,
+        `Adapted Final Bounds` = ad_bounds_2,
+        check.names = FALSE
+      )
+      if (any(grep("^rej", names(x)))) {
+        ad_df <- cbind(ad_df, `Rejected` = x[["rej"]])
+        cli::cli_h2("After adaptation and final result")
+      } else {
+        cli::cli_h2("After adaptation")
+      }
+
+      cli_print(ad_df, row.names = FALSE, ...)
+    }
+  })
+}
+
+#' @export
+print.intersection_hypotheses <- function(x, ...) {
+  cat(format(x, ...), sep = "\n")
   invisible(x)
 }
 

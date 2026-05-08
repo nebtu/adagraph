@@ -42,7 +42,9 @@
 
 ---
 
-    Initial specification
+    
+    -- Initial specification --
+    
       Hypotheses        Weights           Interim Bounds         Final Bounds
      H1∩H2∩H3∩H4 0.5, 0.5, 0, 0 0.000782, 0.000782, 0, 0 0.0132, 0.0132, 0, 0
         H1∩H2∩H3    0.5, 0.5, 0    0.000782, 0.000782, 0    0.0132, 0.0132, 0
@@ -59,7 +61,6 @@
               H2              1                  0.00153               0.0245
               H3              1                  0.00153               0.0245
               H4              1                  0.00153               0.0245
-    
 
 ---
 
@@ -121,7 +122,9 @@
 
 ---
 
-    Initial specification and interim result
+    
+    -- Initial specification and interim result --
+    
       Hypotheses        Weights           Interim Bounds         Final Bounds
      H1∩H2∩H3∩H4 0.5, 0.5, 0, 0 0.000782, 0.000782, 0, 0 0.0132, 0.0132, 0, 0
         H1∩H2∩H3    0.5, 0.5, 0    0.000782, 0.000782, 0    0.0132, 0.0132, 0
@@ -155,7 +158,8 @@
                    FALSE
                    FALSE
     
-    After adaptation and final result
+    -- After adaptation and final result --
+    
       Hypotheses  Adapted Weights Adapted Final Bounds Rejected
      H1∩H2∩H3∩H4 0, 0.75, 0.25, 0           0, 0, 0, 0     TRUE
         H1∩H2∩H3    0, 0.75, 0.25              0, 0, 0     TRUE
