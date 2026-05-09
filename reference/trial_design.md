@@ -59,12 +59,14 @@ trial_design(
 - weights:
 
   List of weights, measuring how important each hypothesis is. See
-  details for numbering of hypotheses
+  details for numbering of hypotheses. If named, automatically reordered
+  to match the canonical hypothesis order.
 
 - test_m:
 
   Transition matrix describing the graph for the closed test procedure
-  to test the hypotheses
+  to test the hypotheses. If named (via row/column names), automatically
+  reordered to match the hypothesis order.
 
 - alpha:
 
@@ -146,10 +148,10 @@ determined by t.
 as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
 
 m <- rbind(
-  H1 = c(0, 1 / 2, 1 / 2, 0),
- H2 = c(1 / 2, 0, 0, 1 / 2),
-  H3 = c(0, 1, 0, 0),
-  H4 = c(1, 0, 0, 0)
+  c(0, 1 / 2, 1 / 2, 0),
+  c(1 / 2, 0, 0, 1 / 2),
+  c(0, 1, 0, 0),
+  c(1, 0, 0, 0)
 )
 design <- trial_design(
  arms = 2,

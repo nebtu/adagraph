@@ -23,25 +23,30 @@ cer_adapt(
 
 - weights:
 
-  New weights vector Note that the length should be the same as in the
-  prespecified design For dropping hypotheses, set the according weights
-  to 0 or use
-  [`cer_drop_hypotheses()`](https://nebtu.github.io/adagraph/reference/cer_drop_hypotheses.md)
+  New weights vector. Note that the length should be the same as in the
+  prespecified design. For dropping hypotheses, set the according
+  weights to 0 or use
+  [`cer_drop_hypotheses()`](https://nebtu.github.io/adagraph/reference/cer_drop_hypotheses.md).
+  If named, automatically reordered to match the hypothesis order in the
+  design.
 
 - test_m:
 
   Adapted test matrix defining the graph for the closed test procedure
-  to test the hypotheses
+  to test the hypotheses. If named (via row/column names), automatically
+  reordered to match the hypothesis order.
 
 - t:
 
   adapted information fraction at which the first stage test occured.
   Note that this can now be a vector with a different value for
-  different hypotheses or a single value
+  different hypotheses or a single value. If a named vector,
+  automatically reordered to match the hypothesis order.
 
 - correlation:
 
-  adapted correlation matrix
+  adapted correlation matrix. If named (via row/column names),
+  automatically reordered to match the hypothesis order.
 
 - adapt_bounds:
 

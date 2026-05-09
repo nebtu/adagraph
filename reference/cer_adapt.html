@@ -62,22 +62,26 @@
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>New weights vector
-Note that the length should be the same as in the prespecified design
-For dropping hypotheses, set the according weights to 0 or use <code><a href="cer_drop_hypotheses.html">cer_drop_hypotheses()</a></code></p></dd>
+<dd><p>New weights vector.
+Note that the length should be the same as in the prespecified design.
+For dropping hypotheses, set the according weights to 0 or use <code><a href="cer_drop_hypotheses.html">cer_drop_hypotheses()</a></code>.
+If named, automatically reordered to match the hypothesis order in the design.</p></dd>
 
 
 <dt id="arg-test-m">test_m<a class="anchor" aria-label="anchor" href="#arg-test-m"></a></dt>
-<dd><p>Adapted test matrix defining the graph for the closed test procedure to test the hypotheses</p></dd>
+<dd><p>Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
+If named (via row/column names), automatically reordered to match the hypothesis order.</p></dd>
 
 
 <dt id="arg-t">t<a class="anchor" aria-label="anchor" href="#arg-t"></a></dt>
 <dd><p>adapted information fraction at which the first stage test occured.
-Note that this can now be a vector with a different value for different hypotheses or a single value</p></dd>
+Note that this can now be a vector with a different value for different hypotheses or a single value.
+If a named vector, automatically reordered to match the hypothesis order.</p></dd>
 
 
 <dt id="arg-correlation">correlation<a class="anchor" aria-label="anchor" href="#arg-correlation"></a></dt>
-<dd><p>adapted correlation matrix</p></dd>
+<dd><p>adapted correlation matrix.
+If named (via row/column names), automatically reordered to match the hypothesis order.</p></dd>
 
 
 <dt id="arg-adapt-bounds">adapt_bounds<a class="anchor" aria-label="anchor" href="#arg-adapt-bounds"></a></dt>

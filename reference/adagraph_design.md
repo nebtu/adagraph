@@ -43,6 +43,17 @@ adagraph_design(
 
 An object of class adagraph_design
 
+## Details
+
+If `weights`, `test_m`, or `correlation` are named (via
+[`names()`](https://rdrr.io/r/base/names.html) for vectors or
+[`rownames()`](https://rdrr.io/r/base/colnames.html)/[`colnames()`](https://rdrr.io/r/base/colnames.html)
+for matrices), they are automatically reordered to match the canonical
+hypothesis order. The canonical order is determined by the `names`
+argument if provided, otherwise by `names(weights)`, otherwise `H1`,
+`H2`, etc. An error is raised if the names do not match the expected
+hypothesis names.
+
 ## Examples
 
 ``` r

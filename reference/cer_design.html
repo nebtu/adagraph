@@ -98,8 +98,12 @@ between the different hypotheses, use NA for uncorrelated</p></dd>
 <dt id="arg-names">names<a class="anchor" aria-label="anchor" href="#arg-names"></a></dt>
 <dd><p>optional names for the hypotheses</p>
 <p>If no names are provided in the <code>names</code> argument, the names of the <code>weights</code>
-arguments are used. If that is also unweighted, the names <code>H1</code>, <code>H2</code>, etc. are
-used.</p></dd>
+arguments are used. If that is also unnamed, the names <code>H1</code>, <code>H2</code>, etc. are
+used.</p>
+<p>If <code>weights</code>, <code>test_m</code>, or <code>correlation</code> are named (via <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code> for vectors
+or <code><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames()</a></code>/<code><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames()</a></code> for matrices), they are automatically reordered
+to match the canonical hypothesis order determined as described above. An
+error is raised if the names do not match the expected hypothesis names.</p></dd>
 
 </dl></div>
     <div class="section level2">

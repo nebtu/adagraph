@@ -22,7 +22,8 @@ cer_alt_drop_hypotheses(design, hypotheses, adapt_bounds = TRUE)
 - hypotheses:
 
   vector of booleans indicating for each hypotheses if it should be
-  dropped
+  dropped. If named, automatically reordered to match the hypothesis
+  order in the design.
 
 - adapt_bounds:
 

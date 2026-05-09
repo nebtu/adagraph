@@ -60,8 +60,15 @@ cer_design(
   optional names for the hypotheses
 
   If no names are provided in the `names` argument, the names of the
-  `weights` arguments are used. If that is also unweighted, the names
-  `H1`, `H2`, etc. are used.
+  `weights` arguments are used. If that is also unnamed, the names `H1`,
+  `H2`, etc. are used.
+
+  If `weights`, `test_m`, or `correlation` are named (via
+  [`names()`](https://rdrr.io/r/base/names.html) for vectors or
+  [`rownames()`](https://rdrr.io/r/base/colnames.html)/[`colnames()`](https://rdrr.io/r/base/colnames.html)
+  for matrices), they are automatically reordered to match the canonical
+  hypothesis order determined as described above. An error is raised if
+  the names do not match the expected hypothesis names.
 
 ## Value
 
