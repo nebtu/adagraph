@@ -31,6 +31,14 @@ An object of class adagraph_design
 \description{
 Make a new (generic) trial design
 }
+\details{
+If \code{weights}, \code{test_m}, or \code{correlation} are named (via \code{\link[=names]{names()}} for vectors
+or \code{\link[=rownames]{rownames()}}/\code{\link[=colnames]{colnames()}} for matrices), they are automatically reordered
+to match the canonical hypothesis order. The canonical order is determined by
+the \code{names} argument if provided, otherwise by \code{names(weights)}, otherwise
+\code{H1}, \code{H2}, etc. An error is raised if the names do not match the expected
+hypothesis names.
+}
 \examples{
 design <- adagraph_design(
  correlation=rbind(H1=c(1, NA),

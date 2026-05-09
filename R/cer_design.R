@@ -170,8 +170,13 @@ validate_cer_design_params <- function(
 #' @param names optional names for the hypotheses
 #'
 #' If no names are provided in the `names` argument, the names of the `weights`
-#' arguments are used. If that is also unweighted, the names `H1`, `H2`, etc. are
+#' arguments are used. If that is also unnamed, the names `H1`, `H2`, etc. are
 #' used.
+#'
+#' If `weights`, `test_m`, or `correlation` are named (via [names()] for vectors
+#' or [rownames()]/[colnames()] for matrices), they are automatically reordered
+#' to match the canonical hypothesis order determined as described above. An
+#' error is raised if the names do not match the expected hypothesis names.
 #'
 #' @return An object of class `cer_design`
 #' @export
@@ -199,6 +204,18 @@ cer_design <- function(
   seq_bonf = TRUE,
   names = NULL
 ) {
+  k <- length(weights)
+  if (is.null(names) || is.character(names)) {
+    resolved_names <- resolve_hypothesis_names(names, weights, k)
+    weights <- standardize_named_vector(weights, resolved_names, "weights")
+    test_m <- standardize_named_matrix(test_m, resolved_names, "test_m")
+    if (!rlang::is_na(correlation)) {
+      correlation <- standardize_named_matrix(
+        correlation, resolved_names, "correlation"
+      )
+    }
+  }
+
   validate_cer_design_params(
     correlation = correlation,
     weights = weights,

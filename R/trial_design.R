@@ -215,12 +215,14 @@ validate_trial_design_params <- function(
 #' @param n_table A data.frame specifying the structure of the subgroups,
 #'   see details for more information
 #' @param weights List of weights, measuring how important each hypothesis is.
-#'   See details for numbering of hypotheses
+#'   See details for numbering of hypotheses. If named, automatically
+#'   reordered to match the canonical hypothesis order.
 #' @param t information fraction, at which fraction of assigned people will the
 #'   interim analysis happen
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param test_m Transition matrix describing the graph for
-#'   the closed test procedure to test the hypotheses
+#'   the closed test procedure to test the hypotheses. If named (via
+#'   row/column names), automatically reordered to match the hypothesis order.
 #' @param alpha_spending_f alpha spending function, taking parameters
 #'   alpha (for overall spent alpha) and t (information fraction at interim test)
 #' @param seq_bonf automatically reject hypotheses at the second stage
@@ -241,10 +243,10 @@ validate_trial_design_params <- function(
 #' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
 #'
 #' m <- rbind(
-#'   H1 = c(0, 1 / 2, 1 / 2, 0),
-#'  H2 = c(1 / 2, 0, 0, 1 / 2),
-#'   H3 = c(0, 1, 0, 0),
-#'   H4 = c(1, 0, 0, 0)
+#'   c(0, 1 / 2, 1 / 2, 0),
+#'   c(1 / 2, 0, 0, 1 / 2),
+#'   c(0, 1, 0, 0),
+#'   c(1, 0, 0, 0)
 #' )
 #' design <- trial_design(
 #'  arms = 2,
@@ -301,6 +303,42 @@ trial_design <- function(
       names_subgroups <- paste0("G", 1:subgroups)
     }
   }
+
+  # Resolve hypothesis names early so we can standardize inputs
+  if (is.null(names)) {
+    hyp_assoc_early <- data.frame(
+      group = rep(c("Total", names_subgroups), each = arms * endpoints),
+      endpoint = rep(names_endpoints, each = arms, times = subgroups + 1),
+      arm = rep(names_arms, times = (subgroups + 1) * endpoints)
+    )
+    if (endpoints == 1) {
+      name_part_endpoints <- ""
+    } else {
+      name_part_endpoints <- paste0(
+        hyp_assoc_early[["endpoint"]],
+        ifelse(arms > 1, "_", "")
+      )
+    }
+    if (arms == 1) {
+      name_part_arms <- ""
+    } else {
+      name_part_arms <- hyp_assoc_early[["arm"]]
+    }
+    names <- paste0(
+      ifelse(
+        hyp_assoc_early[["group"]] == "Total",
+        "",
+        paste0(
+          hyp_assoc_early[["group"]],
+          ifelse(arms > 1 || subgroups > 1, "_", "")
+        )
+      ),
+      name_part_endpoints,
+      name_part_arms
+    )
+  }
+  weights <- standardize_named_vector(weights, names, "weights")
+  test_m <- standardize_named_matrix(test_m, names, "test_m")
 
   validate_trial_design_params(
     arms = arms,

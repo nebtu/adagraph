@@ -217,6 +217,11 @@ multiarm_cer_design <- function(
     seq_bonf = seq_bonf
   )
 
+  k <- length(weights)
+  hyp_names <- resolve_hypothesis_names(NULL, weights, k)
+  weights <- standardize_named_vector(weights, hyp_names, "weights")
+  test_m <- standardize_named_matrix(test_m, hyp_names, "test_m")
+
   new_multiarm_cer_design(
     controls = controls,
     treatment_assoc = treatment_assoc,

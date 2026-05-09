@@ -228,6 +228,14 @@ validate_adagraph_design_params <- function(
 #' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #' @param names optional names for the hypotheses
 #'
+#' @details
+#' If `weights`, `test_m`, or `correlation` are named (via [names()] for vectors
+#' or [rownames()]/[colnames()] for matrices), they are automatically reordered
+#' to match the canonical hypothesis order. The canonical order is determined by
+#' the `names` argument if provided, otherwise by `names(weights)`, otherwise
+#' `H1`, `H2`, etc. An error is raised if the names do not match the expected
+#' hypothesis names.
+#'
 #' @return An object of class adagraph_design
 #' @export
 #'
@@ -247,6 +255,18 @@ adagraph_design <- function(
   correlation = NA,
   names = NULL
 ) {
+  k <- length(weights)
+  if (is.null(names) || is.character(names)) {
+    resolved_names <- resolve_hypothesis_names(names, weights, k)
+    weights <- standardize_named_vector(weights, resolved_names, "weights")
+    test_m <- standardize_named_matrix(test_m, resolved_names, "test_m")
+    if (!rlang::is_na(correlation)) {
+      correlation <- standardize_named_matrix(
+        correlation, resolved_names, "correlation"
+      )
+    }
+  }
+
   validate_adagraph_design_params(
     correlation = correlation,
     weights = weights,

@@ -1,13 +1,17 @@
 #' Adapt the trial design after the interim test
 #'
 #' @param design A cer_design object
-#' @param weights New weights vector
-#'  Note that the length should be the same as in the prespecified design
-#'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses()]
-#' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses
+#' @param weights New weights vector.
+#'  Note that the length should be the same as in the prespecified design.
+#'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses()].
+#'  If named, automatically reordered to match the hypothesis order in the design.
+#' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
+#'  If named (via row/column names), automatically reordered to match the hypothesis order.
 #' @param t adapted information fraction at which the first stage test occured.
-#'  Note that this can now be a vector with a different value for different hypotheses or a single value
-#' @param correlation adapted correlation matrix
+#'  Note that this can now be a vector with a different value for different hypotheses or a single value.
+#'  If a named vector, automatically reordered to match the hypothesis order.
+#' @param correlation adapted correlation matrix.
+#'  If named (via row/column names), automatically reordered to match the hypothesis order.
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
 #'   FWER with the new adaptations. If doing multiple adaptations, it is enough to
 #'   adapt bounds only for the last one, or call `adapt_bounds()` manually
@@ -58,6 +62,23 @@ cer_adapt <- function(
     cli::cli_abort(
       "No interim test has been performed yet. Adaptations can only be applied once an interim test has been done.",
       class = "adagraph_no_interim"
+    )
+  }
+  hyp_names <- design[["names"]]
+  if (!is.null(weights)) {
+    weights <- standardize_named_vector(weights, hyp_names, "weights")
+  }
+  if (!is.null(test_m)) {
+    test_m <- standardize_named_matrix(test_m, hyp_names, "test_m")
+  }
+  if (!is.null(t)) {
+    t <- standardize_named_vector(
+      t, hyp_names, "t", allow_scalar = TRUE
+    )
+  }
+  if (!is.null(correlation)) {
+    correlation <- standardize_named_matrix(
+      correlation, hyp_names, "correlation"
     )
   }
   if (!is.null(weights)) {
@@ -208,7 +229,9 @@ cer_drop_hypotheses <- function(
 #' Note that this method does not lead to an adapted graph that is coherent with the actual weight distribution, this may lead to problems down the line
 #'
 #' @param design cer_design object
-#' @param hypotheses vector of booleans indicating for each hypotheses if it should be dropped
+#' @param hypotheses vector of booleans indicating for each hypotheses if it
+#'   should be dropped. If named, automatically reordered to match the
+#'   hypothesis order in the design.
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
 #'   FWER with the new adaptations. If doing multiple adaptations, it is enough to
 #'   adapt bounds only for the last one, or call `adapt_bounds()` manually
@@ -238,6 +261,11 @@ cer_alt_drop_hypotheses <- function(
   hypotheses,
   adapt_bounds = TRUE
 ) {
+  if (!is.null(names(hypotheses))) {
+    hypotheses <- standardize_named_vector(
+      hypotheses, design[["names"]], "hypotheses"
+    )
+  }
   weights <- design[["weights"]]
   weights[hypotheses] <- 0
   weights <- weights / sum(weights)

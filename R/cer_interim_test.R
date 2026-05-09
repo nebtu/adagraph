@@ -2,7 +2,9 @@
 #' adaptations
 #'
 #' @param design A cer_design object
-#' @param p_values A list of p-values for the hypotheses
+#' @param p_values A vector of p-values for the hypotheses. If named, the
+#'   values are automatically reordered to match the hypothesis order in the
+#'   design. Names must match the hypothesis names exactly.
 #'
 #' @return a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses
 #' @export
@@ -44,6 +46,9 @@ cer_interim_test <- function(
       class = "adagraph_overwrite_interim"
     )
   }
+  p_values <- standardize_named_vector(
+    p_values, design[["names"]], "p_values"
+  )
   t <- design[["t"]]
 
   rej_matrix <- (p_values < t(design[["bounds_1"]]))

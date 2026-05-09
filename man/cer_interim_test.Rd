@@ -10,7 +10,9 @@ cer_interim_test(design, p_values)
 \arguments{
 \item{design}{A cer_design object}
 
-\item{p_values}{A list of p-values for the hypotheses}
+\item{p_values}{A vector of p-values for the hypotheses. If named, the
+values are automatically reordered to match the hypothesis order in the
+design. Names must match the hypothesis names exactly.}
 }
 \value{
 a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses

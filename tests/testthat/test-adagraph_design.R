@@ -33,7 +33,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       test_m = test_m
     ),
-    class = "adagraph_invalid_correlation"
+    class = "adagraph_standardize_length"
   )
   expect_error(
     adagraph_design(
@@ -78,7 +78,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       test_m = rbind(c(1, 0, 0), c(1, 0, 0), c(1, 0, 0))
     ),
-    class = "adagraph_invalid_test_m"
+    class = "adagraph_standardize_length"
   )
   expect_error(
     adagraph_design(

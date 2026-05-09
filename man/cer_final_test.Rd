@@ -10,7 +10,9 @@ cer_final_test(design, p_values, combined = TRUE)
 \arguments{
 \item{design}{A cer_design object}
 
-\item{p_values}{A list of p-values for the hypotheses}
+\item{p_values}{A vector of p-values for the hypotheses. If named, the
+values are automatically reordered to match the hypothesis order in the
+design. Names must match the hypothesis names exactly.}
 
 \item{combined}{Are the p-values already the combination of the p-value of
 the first and second stage or just the raw values from the second stage}

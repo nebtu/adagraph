@@ -35,8 +35,13 @@ between the different hypotheses, use NA for uncorrelated}
 \item{names}{optional names for the hypotheses
 
 If no names are provided in the \code{names} argument, the names of the \code{weights}
-arguments are used. If that is also unweighted, the names \code{H1}, \code{H2}, etc. are
-used.}
+arguments are used. If that is also unnamed, the names \code{H1}, \code{H2}, etc. are
+used.
+
+If \code{weights}, \code{test_m}, or \code{correlation} are named (via \code{\link[=names]{names()}} for vectors
+or \code{\link[=rownames]{rownames()}}/\code{\link[=colnames]{colnames()}} for matrices), they are automatically reordered
+to match the canonical hypothesis order determined as described above. An
+error is raised if the names do not match the expected hypothesis names.}
 }
 \value{
 An object of class \code{cer_design}

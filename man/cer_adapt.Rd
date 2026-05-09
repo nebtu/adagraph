@@ -16,16 +16,20 @@ cer_adapt(
 \arguments{
 \item{design}{A cer_design object}
 
-\item{weights}{New weights vector
-Note that the length should be the same as in the prespecified design
-For dropping hypotheses, set the according weights to 0 or use \code{\link[=cer_drop_hypotheses]{cer_drop_hypotheses()}}}
+\item{weights}{New weights vector.
+Note that the length should be the same as in the prespecified design.
+For dropping hypotheses, set the according weights to 0 or use \code{\link[=cer_drop_hypotheses]{cer_drop_hypotheses()}}.
+If named, automatically reordered to match the hypothesis order in the design.}
 
-\item{test_m}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses}
+\item{test_m}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
+If named (via row/column names), automatically reordered to match the hypothesis order.}
 
 \item{t}{adapted information fraction at which the first stage test occured.
-Note that this can now be a vector with a different value for different hypotheses or a single value}
+Note that this can now be a vector with a different value for different hypotheses or a single value.
+If a named vector, automatically reordered to match the hypothesis order.}
 
-\item{correlation}{adapted correlation matrix}
+\item{correlation}{adapted correlation matrix.
+If named (via row/column names), automatically reordered to match the hypothesis order.}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
 FWER with the new adaptations. If doing multiple adaptations, it is enough to
