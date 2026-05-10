@@ -54,6 +54,7 @@ new_cer_design <- function(
   design[["seq_bonf"]] <- seq_bonf
   design[["t"]] <- t
 
+  correlation <- design[["correlation"]] #use expanded correlation matrix
   prep_alpha_1 <- alpha_spending_f(alpha, t)
   if (getOption("adagraph.use_future")) {
     rlang::check_installed(
@@ -211,7 +212,9 @@ cer_design <- function(
     test_m <- standardize_named_matrix(test_m, resolved_names, "test_m")
     if (!rlang::is_na(correlation)) {
       correlation <- standardize_named_matrix(
-        correlation, resolved_names, "correlation"
+        correlation,
+        resolved_names,
+        "correlation"
       )
     }
   }

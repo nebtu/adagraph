@@ -16,6 +16,34 @@ test_that("single hypothesis works", {
   #expect_equal(unname(design$bounds_2), cbind(???))
 })
 
+test_that("correlation = NA defaults to identity-diagonal NA matrix", {
+  as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+
+  # Using correlation = NA (the default)
+  design_na <- cer_design(
+    weights = c(2 / 3, 1 / 3),
+    test_m = rbind(c(0, 1), c(1, 0)),
+    correlation = NA,
+    alpha = 0.05,
+    alpha_spending_f = as,
+    t = 0.5
+  )
+
+  # Equivalent explicit correlation matrix
+  design_explicit <- cer_design(
+    weights = c(2 / 3, 1 / 3),
+    test_m = rbind(c(0, 1), c(1, 0)),
+    correlation = rbind(c(1, NA), c(NA, 1)),
+    alpha = 0.05,
+    alpha_spending_f = as,
+    t = 0.5
+  )
+
+  expect_equal(design_na[["correlation"]], design_explicit[["correlation"]])
+  expect_equal(design_na[["bounds_1"]], design_explicit[["bounds_1"]])
+  expect_equal(design_na[["bounds_2"]], design_explicit[["bounds_2"]])
+})
+
 test_paper_example <- function() {
   design <- make_example_design()
 
