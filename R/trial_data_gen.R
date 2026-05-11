@@ -2,6 +2,11 @@
 # TODO: remove n=0 rows in data_spec, make sure that NA is returned for not
 # calculated p-values
 #' @export
+#'
+#' Note that this always returns non-combined p-values that need to be combined
+#' for the final test
+#' Use the final_combined = FALSE option in [sim_trial()] or combined = FALSE in
+#' [cer_final_test()]
 get_trial_data_gen <- function(
   corr_endpoints,
   effect_sizes,

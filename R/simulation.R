@@ -76,7 +76,8 @@ sim_trial <- function(
   adapt_rule,
   data_gen_1,
   data_gen_2,
-  include_designs = FALSE
+  include_designs = FALSE,
+  final_combined = TRUE
 ) {
   k <- attr(design, "k")
 
@@ -89,7 +90,7 @@ sim_trial <- function(
     data_2 <- data_gen_2(runs2, design_adapted)
 
     designs_final <- apply(data_2, 1, function(p_values) {
-      cer_final_test(design_adapted, p_values)
+      cer_final_test(design_adapted, p_values, combined = final_combined)
     })
 
     df <- do.call(
