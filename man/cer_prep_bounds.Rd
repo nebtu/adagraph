@@ -26,7 +26,10 @@ A list with the following elements:
 }
 }
 \description{
-Calculates the bounds and cJ values for the p-values for the interim test and the planned final test
+Calculates the preplanned bounds and cJ values for the p-values for the interim test and the planned final test
+The conventional way to get such bounds is to use the \code{cer_design()} function
+and test using \code{cer_interim_test()} and \code{cer_final_test()}, but this function
+is still provided to allow for less straightforward applications.
 }
 \examples{
 #simple non-parametric bonferroni

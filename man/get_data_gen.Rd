@@ -61,3 +61,30 @@ The test used for the enpoints is a one-sided two-proportion z-test, where
 the tested outcome is a higher response rate for the treatment group.
 }
 
+\examples{
+as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
+design <- multiarm_cer_design(
+ controls = 1,
+ treatment_assoc = c(1,1),
+ n_controls = 50,
+ n_treatments = 50,
+ weights = c(0.5, 0.5),
+ alpha = 0.05,
+ test_m = rbind(c(0, 1),
+              c(1, 0)),
+ alpha_spending_f = as,
+ t = 0.5)
+
+data_gen <- get_data_gen(
+  matrix(1),
+  rbind(
+   c(1, 0.5),
+   c(0.5, 1)
+ ),
+  c(0, 0.3),
+  100,
+  100
+)
+
+data_gen(10, design)
+}

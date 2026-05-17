@@ -15,7 +15,7 @@ values are automatically reordered to match the hypothesis order in the
 design. Names must match the hypothesis names exactly.}
 }
 \value{
-a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses
+a \code{cer_design} object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses.
 }
 \description{
 Test a cer design for early rejection of hypotheses and calculate the CER for
@@ -34,6 +34,5 @@ design <- cer_design(
  t=0.5)
 
 design <- cer_interim_test(design, c(0.001, 0.02))
-design[["rej_interim"]]
-design[["cer_vec"]]
+design
 }

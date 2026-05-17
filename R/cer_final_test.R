@@ -8,7 +8,7 @@
 #' @param combined Are the p-values already the combination of the p-value of
 #' the first and second stage or just the raw values from the second stage
 #'
-#' @return a cer_design object, which now also includes the rejection status of the hypotheses after the final test
+#' @return A `cer_design` object, which now also includes the rejection status of the hypotheses after the final test
 #' @export
 #'
 #' @examples
@@ -63,7 +63,9 @@ cer_final_test <- function(
     )
   }
   p_values <- standardize_named_vector(
-    p_values, design[["names"]], "p_values"
+    p_values,
+    design[["names"]],
+    "p_values"
   )
 
   #hypotheses which are no further tested can not be rejected

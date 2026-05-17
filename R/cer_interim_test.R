@@ -6,7 +6,7 @@
 #'   values are automatically reordered to match the hypothesis order in the
 #'   design. Names must match the hypothesis names exactly.
 #'
-#' @return a cer_design object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses
+#' @return a `cer_design` object, which now also includes the CER for each hypothesis and the rejection status of the hypotheses.
 #' @export
 #'
 #' @examples
@@ -22,8 +22,7 @@
 #'  t=0.5)
 #'
 #' design <- cer_interim_test(design, c(0.001, 0.02))
-#' design[["rej_interim"]]
-#' design[["cer_vec"]]
+#' design
 cer_interim_test <- function(
   design,
   p_values
@@ -47,7 +46,9 @@ cer_interim_test <- function(
     )
   }
   p_values <- standardize_named_vector(
-    p_values, design[["names"]], "p_values"
+    p_values,
+    design[["names"]],
+    "p_values"
   )
   t <- design[["t"]]
 

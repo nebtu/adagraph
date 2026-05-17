@@ -1,4 +1,41 @@
 url: https://nebtu.github.io/adagraph/
 template:
   bootstrap: 5
-
+reference:
+- title: "Defining designs"
+  contents: 
+  - cer_design
+  - trial_design
+  - multiarm_cer_design
+- title: "Testing designs"
+  contents:
+  - cer_interim_test
+  - cer_final_test
+- title: "Adaptation functions"
+  desc: "Adapt designs after the interim analysis"
+  contents:
+  - cer_adapt
+  - cer_drop_hypotheses
+  - cer_alt_drop_hypotheses
+  - trial_adapt_n
+  - trial_drop
+  - multiarm_drop_arms
+  - cer_adapt_bounds
+- title: "Simulation function"
+  desc: "Simulate trials with custom adaptation and data generation"
+  contents:
+  - sim_trial
+  - get_data_gen
+  - get_data_gen_2
+  - get_trial_data_gen
+- title: "Other functions"
+  contents:
+  - check_consonance
+  - export_gmcp_lite
+  - export_graphical_mcp
+  - get_cer
+  - get_subgroup_correlation
+  - get_t
+  - intersection_hypotheses
+  - redistribute_n
+  - cer_prep_bounds

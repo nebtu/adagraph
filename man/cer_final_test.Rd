@@ -18,7 +18,7 @@ design. Names must match the hypothesis names exactly.}
 the first and second stage or just the raw values from the second stage}
 }
 \value{
-a cer_design object, which now also includes the rejection status of the hypotheses after the final test
+A \code{cer_design} object, which now also includes the rejection status of the hypotheses after the final test
 }
 \description{
 Test a cer design for early rejection of hypotheses and calculate the CER for

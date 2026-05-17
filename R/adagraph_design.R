@@ -220,6 +220,12 @@ validate_adagraph_design_params <- function(
 
 #' Make a new (generic) trial design
 #'
+#' This is a generic S3 class for graph-based closed testing strategies.
+#' It does not implement any testing functions, but can serve as a basis for
+#' implementing different methods for (adaptive) testing strategies.
+#' To use graphical closed testing designs, use `cer_design()` and
+#' `trial_design()`.
+#'
 #' @param correlation Correlation matrix describing the structure of the correlations
 #'                    between the different hypotheses, use NA for uncorrelated.
 #'                    Defaults to no known correlation.
@@ -238,6 +244,8 @@ validate_adagraph_design_params <- function(
 #'
 #' @return An object of class adagraph_design
 #' @export
+#'
+#' @keywords internal
 #'
 #' @examples
 #' design <- adagraph_design(
@@ -262,7 +270,9 @@ adagraph_design <- function(
     test_m <- standardize_named_matrix(test_m, resolved_names, "test_m")
     if (!rlang::is_na(correlation)) {
       correlation <- standardize_named_matrix(
-        correlation, resolved_names, "correlation"
+        correlation,
+        resolved_names,
+        "correlation"
       )
     }
   }

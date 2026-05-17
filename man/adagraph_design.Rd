@@ -29,7 +29,11 @@ Defaults to no known correlation.}
 An object of class adagraph_design
 }
 \description{
-Make a new (generic) trial design
+This is a generic S3 class for graph-based closed testing strategies.
+It does not implement any testing functions, but can serve as a basis for
+implementing different methods for (adaptive) testing strategies.
+To use graphical closed testing designs, use \code{cer_design()} and
+\code{trial_design()}.
 }
 \details{
 If \code{weights}, \code{test_m}, or \code{correlation} are named (via \code{\link[=names]{names()}} for vectors
@@ -49,3 +53,4 @@ design <- adagraph_design(
               c(1, 0)))
 design
 }
+\keyword{internal}
