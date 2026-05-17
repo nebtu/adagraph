@@ -1,4 +1,3 @@
-# note that second stage depends on ad_n_table being set
 # TODO: remove n=0 rows in data_spec, make sure that NA is returned for not
 # calculated p-values
 
@@ -20,6 +19,11 @@
 #' approrpiate cutoff for the continuous data.
 #' The $p$-values generated are from a $t$-test for continous data and from a
 #' two-proportion $Z$-test for binary data.
+#'
+#' Note that this always returns non-combined p-values that need to be combined
+#' for the final test
+#' Use the final_combined = FALSE option in [sim_trial()] or combined = FALSE in
+#' [cer_final_test()]
 #'
 #' The argument *`effect_sizes`* should be given in the same format as the `n_table` argument for the `trial_design()`, but instead of the column `n`, there should be a column named for each endpoint, giving the effect size (either as a normal mean or a response rate, for continous or binary data) for this specific group and arm.
 #'
