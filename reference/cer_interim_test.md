@@ -23,8 +23,8 @@ cer_interim_test(design, p_values)
 
 ## Value
 
-a cer_design object, which now also includes the CER for each hypothesis
-and the rejection status of the hypotheses
+a `cer_design` object, which now also includes the CER for each
+hypothesis and the rejection status of the hypotheses.
 
 ## Examples
 
@@ -41,8 +41,17 @@ design <- cer_design(
  t=0.5)
 
 design <- cer_interim_test(design, c(0.001, 0.02))
-design[["rej_interim"]]
-#> [1]  TRUE FALSE
-design[["cer_vec"]]
-#> [1] 0.3833001 1.0000000 1.0000000
+design
+#> 
+#> ── CER Design ──────────────────────────────────────────────────────────────────
+#> Testing the 2 hypotheses H1 and H2 at FWER 0.05.
+#> 
+#> ── Interim test ──
+#> 
+#> Hypotheses rejected: H1
+#> 
+#> ── No adaptations performed ──
+#> 
+#> ── No final test performed ──
+#> 
 ```

@@ -64,3 +64,44 @@ to get a suitable data generation function each time it is called and
 immediately uses it to generate the data. Therefore, using
 [`get_data_gen()`](https://nebtu.github.io/adagraph/reference/get_data_gen.md)
 should be prefered from a performance standpoint whenever possible.
+
+## Examples
+
+``` r
+as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
+design <- multiarm_cer_design(
+ controls = 1,
+ treatment_assoc = c(1,1),
+ n_controls = 50,
+ n_treatments = 50,
+ weights = c(0.5, 0.5),
+ alpha = 0.05,
+ test_m = rbind(c(0, 1),
+              c(1, 0)),
+ alpha_spending_f = as,
+ t = 0.5) |>
+ cer_interim_test(c(0.5, 0.5)) |>
+ multiarm_drop_arms(1)
+
+data_gen_2 <- get_data_gen_2(
+  matrix(1),
+  rbind(
+   c(1, 0.5),
+   c(0.5, 1)
+  ),
+  c(0, 0)
+)
+
+data_gen_2(10, design)
+#>       [,1]      [,2]
+#>  [1,]   NA 0.4090339
+#>  [2,]   NA 0.2799574
+#>  [3,]   NA 0.8312763
+#>  [4,]   NA 0.3741147
+#>  [5,]   NA 0.8728679
+#>  [6,]   NA 0.5977241
+#>  [7,]   NA 0.6926322
+#>  [8,]   NA 0.5867602
+#>  [9,]   NA 0.6486241
+#> [10,]   NA 0.3860882
+```

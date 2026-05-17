@@ -1,4 +1,4 @@
-# Example for using the CER Method for a trial design (with subgroups) with adagraph
+# Example for implementing a clinical trial design in adagraph
 
 ``` r
 
@@ -63,12 +63,12 @@ t <- 1 / 2
 ```
 
 To be able to use the correlation structure between the endpoints, we
-also need to specify the patient numbers for each group.
+also need to specify the patient numbers for each population.
 
-Since there are no subgroups, we can alternatively also use simple
-numeric vectors for the control and arms separately. (Note that in this
-case the names in the vector entry are not necessary, only the order is
-relevant.)
+Since there are no specified subpopulations, we can alternatively also
+use simple numeric vectors for the control and arms separately. (Note
+that in this case the names in the vector entry are not necessary, only
+the order is relevant.)
 
 ``` r
 
@@ -76,11 +76,10 @@ n_control <- 35
 n_arms <- c(high = 35, low = 35)
 ```
 
-By default, we also use the fact that if $`B_J(\chi_1)\geq 1`$ for some
-intersection hypotheses, we can also reject that subhypotheses at the
-interim, as described in the beginning of section 3.2.3. If this is not
-the desired behaviour, set `seq_bonf` to `FALSE`. We now have all we
-need to define our testing design.
+By default, if the allowed bound for the rejection probability at the
+second stage is above 1, we automatically reject at the interim already.
+If this is not the desired behaviour, set `seq_bonf` to `FALSE`. We now
+have all we need to define our testing design.
 
 ``` r
 
@@ -169,7 +168,7 @@ Additonally, we can export and print the graph with the help of the
 
 ``` r
 
-gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 2)
+design |> export_graphical_mcp() |> plot(nrow = 2)
 ```
 
 ![](example_trial_design_files/figure-html/fig-graph-1.png)
@@ -179,12 +178,12 @@ the
 [`export_graphical_mcp()`](https://nebtu.github.io/adagraph/reference/export_graphical_mcp.md)
 function
 
-Assume now the we get after the unblinding for the interim analysis the
-p values are $`p_{1,1} = 0.00445`$, $`p_{2,1} = 0.0952`$,
-$`p_{3,1} = 0.0225`$, and $`p_{4,1} = 0.1104`$. We incorporate this
-information by applying the `cer_interim_test` function. The result is
-again a `trial_design` object, which now includes the interim test
-results.
+After the unblinding for the interim analysis, the resulting p values
+are $`p_{1,1} = 0.00445`$, $`p_{2,1} = 0.0952`$, $`p_{3,1} = 0.0225`$,
+and $`p_{4,1} = 0.1104`$, using as indeces the order used in the design.
+We incorporate this information by applying the `cer_interim_test`
+function. The result is again a `trial_design` object, which now
+includes the interim test results.
 
 ``` r
 
@@ -217,22 +216,21 @@ design_interim
 We can see that for now, only the hypothesis testing the primary
 endpoint for the low dose is rejected. While it is possible to continue
 now without an adaptations to the design, `adagraph` allows for many
-changes to be made to the Adagraph does by itself not assume that we
-will change anything about our trial design, even if a hypotheses was
-rejected.
+changes to be made to the design or the sample sizes. Adagraph does by
+itself not assume that we will change anything about our trial design,
+even if a hypotheses was rejected.
 
 Assume that it is decided that for the high dose, since the primary
 hypothesis was already rejected, it is not necessary to continue
 recruitment and the focus will instead be on the low dose. For dropping
 a specific arm, we can use the
 [`trial_drop_arms()`](https://nebtu.github.io/adagraph/reference/trial_drop.md)
-function, which is made exactly for this purpose. This change has the
-benefit of allowing more patients for the low dose and control to be
-recruited than previously planned. This results in a change to the `t`
-parameter and the correlation structure, which can be calculated
-automatically with the `trial_adapt_n` function. Additionally, the
-weights will be redistributed equally on the two remaining hypotheses.
-For adjusting the weights, we use the much more general
+function. This change has the benefit of allowing more patients for the
+low dose and control to be recruited than previously planned. This
+results in a change to the `t` parameter and the correlation structure,
+which can be calculated automatically with the `trial_adapt_n` function.
+Additionally, the weights will be redistributed equally on the two
+remaining hypotheses. For adjusting the weights, we use the more general
 [`cer_adapt()`](https://nebtu.github.io/adagraph/reference/cer_adapt.md)
 function.
 
@@ -297,10 +295,12 @@ design_adj$ad_test_m
 ```
 
 Now we can test for the final results, $`\tilde{p}_{2,2} = 0.0111`$, and
-$`\tilde{p}_{4,2}`$. By default `adagraph` expects the already combined
-p values, but using the `combined = FALSE` option adagraph calculates
-from the second stage p values the combined values, using the adapted
-value for `t` (which was calculated automatically by the
+$`\tilde{p}_{4,2}`$, the second stage p values for the remaining
+hypotheses `prim_low` and `sec_low`. By default `adagraph` expects the
+already combined p values, but using the `combined = FALSE` option
+adagraph calculates from the second stage p values the combined values,
+using the adapted value for `t` (which was calculated automatically by
+the
 [`trial_adapt_n()`](https://nebtu.github.io/adagraph/reference/trial_adapt_n.md)
 function). Note that the hypthoses that we no further use are still
 present in the design object, they just don’t get any weight assigned.
@@ -373,6 +373,7 @@ alpha <- 0.025
 t <- 0.5
 weights <- c(0.35, 0.35, 0, 0, 0.15, 0.15, 0, 0)
 
+#weight transfers
 s_p <- 1 / 3 #secondary to primary
 p_p <- 0.2 #primary to primary
 p_s <- 0.4 #primary to secondary
@@ -452,6 +453,8 @@ design
 
 Again we get a detailed summary when using the
 [`summary()`](https://rdrr.io/r/base/summary.html) function.
+Specifically, one should check that the initial weights and transfer
+matrix correspond correctly to the used hypotheses.
 
 ``` r
 

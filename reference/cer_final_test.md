@@ -28,8 +28,8 @@ cer_final_test(design, p_values, combined = TRUE)
 
 ## Value
 
-a cer_design object, which now also includes the rejection status of the
-hypotheses after the final test
+A `cer_design` object, which now also includes the rejection status of
+the hypotheses after the final test
 
 ## Examples
 

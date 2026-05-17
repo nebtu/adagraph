@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Example for using the CER Method for a trial design (with subgroups) with adagraph • adagraph</title>
+<title>Example for implementing a clinical trial design in adagraph • adagraph</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="example_trial_design_files/libs/quarto-html/popper.min.js"></script><script src="example_trial_design_files/libs/quarto-html/tippy.umd.min.js"></script><link href="example_trial_design_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="example_trial_design_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Example for using the CER Method for a trial design (with subgroups) with adagraph">
+<!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Example for implementing a clinical trial design in adagraph">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -37,7 +37,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/example_cer_design.html">Example for using the CER Method with adagraph</a></li>
     <li><a class="dropdown-item" href="../articles/example_simulation.html">Example for simulating a multiarm trial with adagraph</a></li>
-    <li><a class="dropdown-item" href="../articles/example_trial_design.html">Example for using the CER Method for a trial design (with subgroups) with adagraph</a></li>
+    <li><a class="dropdown-item" href="../articles/example_trial_design.html">Example for implementing a clinical trial design in adagraph</a></li>
   </ul>
 </li>
       </ul>
@@ -54,7 +54,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Example for using the CER Method for a trial design (with subgroups) with adagraph</h1>
+      <h1>Example for implementing a clinical trial design in adagraph</h1>
 
 
 
@@ -111,14 +111,15 @@
 <span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.025</span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">2</span></span></code></pre></div>
 </div>
-<p>To be able to use the correlation structure between the endpoints, we also need to specify the patient numbers for each group.</p>
-<p>Since there are no subgroups, we can alternatively also use simple numeric vectors for the control and arms separately. (Note that in this case the names in the vector entry are not necessary, only the order is relevant.)</p>
+<p>To be able to use the correlation structure between the endpoints, we also need to specify the patient numbers for each population.</p>
+<p>Since there are no specified subpopulations, we can alternatively also use simple numeric vectors for the control and arms separately. (Note that in this case the names in the vector entry are not necessary, only the order is relevant.)</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_control</span> <span class="op">&lt;-</span> <span class="fl">35</span></span>
 <span><span class="va">n_arms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>high <span class="op">=</span> <span class="fl">35</span>, low <span class="op">=</span> <span class="fl">35</span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>By default, we also use the fact that if <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>J</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>χ</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">B_J(\chi_1)\geq 1</annotation></semantics></math> for some intersection hypotheses, we can also reject that subhypotheses at the interim, as described in the beginning of section 3.2.3. If this is not the desired behaviour, set <code>seq_bonf</code> to <code>FALSE</code>. We now have all we need to define our testing design.</p>
+<!--By default, we also use the fact that if $B_J(\chi_1)\geq 1$ for some intersection hypotheses, we can also reject that subhypotheses at the interim, as described in the beginning of section 3.2.3.-->
+<p>By default, if the allowed bound for the rejection probability at the second stage is above 1, we automatically reject at the interim already. If this is not the desired behaviour, set <code>seq_bonf</code> to <code>FALSE</code>. We now have all we need to define our testing design.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trial_design.html">trial_design</a></span><span class="op">(</span></span>
@@ -199,7 +200,7 @@
 <p>Additonally, we can export and print the graph with the help of the <code>graphicalMCP</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gmcp_obj</span> <span class="op">&lt;-</span> <span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/export_graphical_mcp.html">export_graphical_mcp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/export_graphical_mcp.html">export_graphical_mcp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="fig-graph" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig"><div aria-describedby="fig-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -211,7 +212,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </div>
 </div>
 </div>
-<p>Assume now the we get after the unblinding for the interim analysis the p values are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.00445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.00445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
+<p>After the unblinding for the interim analysis, the resulting p values are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.00445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.00445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>, using as indeces the order used in the design. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_interim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span></span>
@@ -239,8 +240,8 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
-<p>We can see that for now, only the hypothesis testing the primary endpoint for the low dose is rejected. While it is possible to continue now without an adaptations to the design, <code>adagraph</code> allows for many changes to be made to the Adagraph does by itself not assume that we will change anything about our trial design, even if a hypotheses was rejected.</p>
-<p>Assume that it is decided that for the high dose, since the primary hypothesis was already rejected, it is not necessary to continue recruitment and the focus will instead be on the low dose. For dropping a specific arm, we can use the <code><a href="../reference/trial_drop.html">trial_drop_arms()</a></code> function, which is made exactly for this purpose. This change has the benefit of allowing more patients for the low dose and control to be recruited than previously planned. This results in a change to the <code>t</code> parameter and the correlation structure, which can be calculated automatically with the <code>trial_adapt_n</code> function. Additionally, the weights will be redistributed equally on the two remaining hypotheses. For adjusting the weights, we use the much more general <code><a href="../reference/cer_adapt.html">cer_adapt()</a></code> function.</p>
+<p>We can see that for now, only the hypothesis testing the primary endpoint for the low dose is rejected. While it is possible to continue now without an adaptations to the design, <code>adagraph</code> allows for many changes to be made to the design or the sample sizes. Adagraph does by itself not assume that we will change anything about our trial design, even if a hypotheses was rejected.</p>
+<p>Assume that it is decided that for the high dose, since the primary hypothesis was already rejected, it is not necessary to continue recruitment and the focus will instead be on the low dose. For dropping a specific arm, we can use the <code><a href="../reference/trial_drop.html">trial_drop_arms()</a></code> function. This change has the benefit of allowing more patients for the low dose and control to be recruited than previously planned. This results in a change to the <code>t</code> parameter and the correlation structure, which can be calculated automatically with the <code>trial_adapt_n</code> function. Additionally, the weights will be redistributed equally on the two remaining hypotheses. For adjusting the weights, we use the more general <code><a href="../reference/cer_adapt.html">cer_adapt()</a></code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_control_ad</span> <span class="op">&lt;-</span> <span class="fl">53</span></span>
@@ -298,7 +299,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; sec_high          0        0        0       0</span></span>
 <span><span class="co">#&gt; sec_low           0        1        0       0</span></span></code></pre></div>
 </div>
-<p>Now we can test for the final results, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>2</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mn>0.0111</mn></mrow><annotation encoding="application/x-tex">\tilde{p}_{2,2} = 0.0111</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>4</mn><mo>,</mo><mn>2</mn></mrow></msub><annotation encoding="application/x-tex">\tilde{p}_{4,2}</annotation></semantics></math>. By default <code>adagraph</code> expects the already combined p values, but using the <code>combined = FALSE</code> option adagraph calculates from the second stage p values the combined values, using the adapted value for <code>t</code> (which was calculated automatically by the <code><a href="../reference/trial_adapt_n.html">trial_adapt_n()</a></code> function). Note that the hypthoses that we no further use are still present in the design object, they just don’t get any weight assigned. Therefore, we still need to use a vector of length 4 for our p-values, but can use <code>NA</code> as a corresponding value.</p>
+<p>Now we can test for the final results, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>2</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mn>0.0111</mn></mrow><annotation encoding="application/x-tex">\tilde{p}_{2,2} = 0.0111</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>4</mn><mo>,</mo><mn>2</mn></mrow></msub><annotation encoding="application/x-tex">\tilde{p}_{4,2}</annotation></semantics></math>, the second stage p values for the remaining hypotheses <code>prim_low</code> and <code>sec_low</code>. By default <code>adagraph</code> expects the already combined p values, but using the <code>combined = FALSE</code> option adagraph calculates from the second stage p values the combined values, using the adapted value for <code>t</code> (which was calculated automatically by the <code><a href="../reference/trial_adapt_n.html">trial_adapt_n()</a></code> function). Note that the hypthoses that we no further use are still present in the design object, they just don’t get any weight assigned. Therefore, we still need to use a vector of length 4 for our p-values, but can use <code>NA</code> as a corresponding value.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_tested</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span><span class="va">design_adj</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.0111</span>, <span class="cn">NA</span>, <span class="fl">0.0234</span><span class="op">)</span><span class="op">)</span></span>
@@ -352,6 +353,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">0.5</span></span>
 <span><span class="va">weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.35</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.15</span>, <span class="fl">0.15</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co">#weight transfers</span></span>
 <span><span class="va">s_p</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">3</span> <span class="co">#secondary to primary</span></span>
 <span><span class="va">p_p</span> <span class="op">&lt;-</span> <span class="fl">0.2</span> <span class="co">#primary to primary</span></span>
 <span><span class="va">p_s</span> <span class="op">&lt;-</span> <span class="fl">0.4</span> <span class="co">#primary to secondary</span></span>
@@ -421,7 +423,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
-<p>Again we get a detailed summary when using the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function.</p>
+<p>Again we get a detailed summary when using the <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> function. Specifically, one should check that the initial weights and transfer matrix correspond correctly to the used hypotheses.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">design</span><span class="op">)</span></span>

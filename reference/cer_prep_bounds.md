@@ -1,7 +1,15 @@
 # Calculate bounds for preplanned test
 
-Calculates the bounds and cJ values for the p-values for the interim
-test and the planned final test
+Calculates the preplanned bounds and cJ values for the p-values for the
+interim test and the planned final test The conventional way to get such
+bounds is to use the
+[`cer_design()`](https://nebtu.github.io/adagraph/reference/cer_design.md)
+function and test using
+[`cer_interim_test()`](https://nebtu.github.io/adagraph/reference/cer_interim_test.md)
+and
+[`cer_final_test()`](https://nebtu.github.io/adagraph/reference/cer_final_test.md),
+but this function is still provided to allow for less straightforward
+applications.
 
 ## Usage
 

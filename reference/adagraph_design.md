@@ -1,6 +1,12 @@
 # Make a new (generic) trial design
 
-Make a new (generic) trial design
+This is a generic S3 class for graph-based closed testing strategies. It
+does not implement any testing functions, but can serve as a basis for
+implementing different methods for (adaptive) testing strategies. To use
+graphical closed testing designs, use
+[`cer_design()`](https://nebtu.github.io/adagraph/reference/cer_design.md)
+and
+[`trial_design()`](https://nebtu.github.io/adagraph/reference/trial_design.md).
 
 ## Usage
 

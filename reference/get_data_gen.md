@@ -81,3 +81,44 @@ correlations) is 1
 The test used for the enpoints is a one-sided two-proportion z-test,
 where the tested outcome is a higher response rate for the treatment
 group.
+
+## Examples
+
+``` r
+as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
+design <- multiarm_cer_design(
+ controls = 1,
+ treatment_assoc = c(1,1),
+ n_controls = 50,
+ n_treatments = 50,
+ weights = c(0.5, 0.5),
+ alpha = 0.05,
+ test_m = rbind(c(0, 1),
+              c(1, 0)),
+ alpha_spending_f = as,
+ t = 0.5)
+
+data_gen <- get_data_gen(
+  matrix(1),
+  rbind(
+   c(1, 0.5),
+   c(0.5, 1)
+ ),
+  c(0, 0.3),
+  100,
+  100
+)
+
+data_gen(10, design)
+#>             [,1]         [,2]
+#>  [1,] 0.64236593 5.428938e-02
+#>  [2,] 0.70135436 3.500559e-03
+#>  [3,] 0.19566742 7.687048e-03
+#>  [4,] 0.16405587 1.234261e-03
+#>  [5,] 0.84285001 8.573545e-02
+#>  [6,] 0.20723923 9.044688e-03
+#>  [7,] 0.08716298 1.618603e-05
+#>  [8,] 0.28617717 9.825729e-02
+#>  [9,] 0.97821751 4.077634e-01
+#> [10,] 0.39118802 1.589209e-02
+```

@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Design Adaptive Trials with a Graph-Based Closed Testing Procedure • adagraph</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Design Adaptive Trials with a Graph-Based Closed Testing Procedure">
 <meta name="description" content="Functions and objects to design a two-stage adaptive trial using a graph-based closed-testing sequence, while controlling the FWER using the conditional error rate method.">
@@ -37,7 +37,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/example_cer_design.html">Example for using the CER Method with adagraph</a></li>
     <li><a class="dropdown-item" href="articles/example_simulation.html">Example for simulating a multiarm trial with adagraph</a></li>
-    <li><a class="dropdown-item" href="articles/example_trial_design.html">Example for using the CER Method for a trial design (with subgroups) with adagraph</a></li>
+    <li><a class="dropdown-item" href="articles/example_trial_design.html">Example for implementing a clinical trial design in adagraph</a></li>
   </ul>
 </li>
       </ul>
@@ -57,7 +57,25 @@
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>Design a two-stage adaptive trial using a graph-based closed-testing sequence, while controlling the FWER using the conditional error rate method.</p>
+<p>Design and analysie two-stage adaptive trials using graph-based closed-testing procedures, while controlling the FWER using the conditional error rate method.</p>
+<div class="section level2">
+<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
+</h2>
+<ul>
+<li>Graph-based multiple testing strategies</li>
+<li>Designs with multiple arms, endpoints and subpopulations</li>
+<li>Semi-parametric testing strategies, taking correlations from shared patients into account where sensible and falling back to Bonferronni-like correction else</li>
+<li>Interim analysis with early stopping</li>
+<li>Adaptations based on the partial conditional error rate, allowing:
+<ul>
+<li>Dropping of arms, endpoints and subpopulations</li>
+<li>Sample size reassesment</li>
+<li>Changing of the test graph used</li>
+</ul>
+</li>
+<li>Simulations of many trials</li>
+</ul>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -69,34 +87,110 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
+<p>We define a simple two-arm trial using the <code><a href="reference/trial_design.html">trial_design()</a></code> function.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nebtu.github.io/adagraph/">adagraph</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">alpha_spending_f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">t</span><span class="op">)</span> <span class="fl">2</span> <span class="op">-</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">pnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">x</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">t</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cer_design.html">cer_design</a></span><span class="op">(</span></span>
-<span>  correlation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span>H1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="cn">NA</span><span class="op">)</span>, H2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">/</span> <span class="fl">3</span>, <span class="fl">1</span> <span class="op">/</span> <span class="fl">3</span><span class="op">)</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span></span>
+<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/trial_design.html">trial_design</a></span><span class="op">(</span></span>
+<span>  arms <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  n_control <span class="op">=</span> <span class="fl">50</span>,</span>
+<span>  n_arms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>arm1 <span class="op">=</span> <span class="fl">50</span>, arm2 <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>,</span>
+<span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>  test_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  alpha_spending_f <span class="op">=</span> <span class="va">alpha_spending_f</span>,</span>
-<span>  t <span class="op">=</span> <span class="fl">0.5</span></span>
+<span>  t <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">2</span>,</span>
+<span>  names_arms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"arm1"</span>, <span class="st">"arm2"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span></span>
-<span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span><span class="va">design</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.02</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/cer_drop_hypotheses.html">cer_drop_hypotheses</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">design</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 2 hypotheses arm1 and arm2 at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (arm1 and arm2), 1 endpoint and no subgroups.</span></span>
+<span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
+<span><span class="co">#&gt;      arm  n</span></span>
+<span><span class="co">#&gt;  control 50</span></span>
+<span><span class="co">#&gt;     arm1 50</span></span>
+<span><span class="co">#&gt;     arm2 50</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No interim test performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No adaptations performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
+<p>The interim analysis can be performed with <code>cer_interim_test</code>. The bounds for rejection are precalculated and take into account the correlation thanks to the shared control group.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span><span class="va">design</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.02</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span></span>
-<span><span class="co">#&gt; A CER Design object, for testing 2 hypotheses at FWER 0.05.</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── An interim test has been performed. ─────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected at the interim: H1</span></span>
-<span><span class="co">#&gt; ── The following characteristics have been adapted: ────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 2 hypotheses arm1 and arm2 at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (arm1 and arm2), 1 endpoint and no subgroups.</span></span>
+<span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
+<span><span class="co">#&gt;      arm  n</span></span>
+<span><span class="co">#&gt;  control 50</span></span>
+<span><span class="co">#&gt;     arm1 50</span></span>
+<span><span class="co">#&gt;     arm2 50</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; No hypotheses were rejected at the interim.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No adaptations performed ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
+<p>We can adapt by dropping the secondary arm and reallocating the smaple size. The bounds are adapted automatically and we can perform the final test immediately.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">design</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/trial_drop.html">trial_drop_arms</a></span><span class="op">(</span><span class="st">"arm2"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/trial_adapt_n.html">trial_adapt_n</a></span><span class="op">(</span>n_control_2 <span class="op">=</span> <span class="fl">75</span>, n_arms_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">75</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Trial Design ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Testing the 2 hypotheses arm1 and arm2 at FWER 0.025.</span></span>
+<span><span class="co">#&gt; There are 2 arms (arm1 and arm2), 1 endpoint and no subgroups.</span></span>
+<span><span class="co">#&gt; The first stage sample size per arm/group is:</span></span>
+<span><span class="co">#&gt;      arm  n</span></span>
+<span><span class="co">#&gt;  control 50</span></span>
+<span><span class="co">#&gt;     arm1 50</span></span>
+<span><span class="co">#&gt;     arm2 50</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Interim test ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; No hypotheses were rejected at the interim.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Adaptations ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; The following characteristics have been adapted:</span></span>
 <span><span class="co">#&gt; • Hypotheses weights</span></span>
 <span><span class="co">#&gt; • Graph Transition Matrix</span></span>
-<span><span class="co">#&gt; ── Final test result ───────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Hypotheses rejected: H1 and H2</span></span></code></pre></div>
+<span><span class="co">#&gt; • Correlation for parametric test</span></span>
+<span><span class="co">#&gt; • Time fractions for the hypotheses</span></span>
+<span><span class="co">#&gt; The second stage sample size per arm/group is:</span></span>
+<span><span class="co">#&gt;      arm  n</span></span>
+<span><span class="co">#&gt;  control 75</span></span>
+<span><span class="co">#&gt;     arm1  0</span></span>
+<span><span class="co">#&gt;     arm2 75</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Final test result ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; No hypotheses were rejected.</span></span></code></pre></div>
+<p>A more thorough walkthrough of a more complicated example is at <code><a href="articles/example_trial_design.html">vignette("example_trial_design")</a></code>.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>The package implements methods explained in:</p>
+<p>Mehta, Cyrus, Ajoy Mukhopadhyay, and Martin Posch (2025). “Graph Based, Adaptive, Multiarm, Multiple Endpoint, Two-Stage Designs”. In: Statistics in Medicine 44, e70237.</p>
+<p>Other references:</p>
+<p>Bretz, Frank et al. (2009). “A Graphical Approach to Sequentially Rejective Multiple Test Procedures”. In: Statistics in Medicine 28, pp. 586–604.</p>
+<p>Bretz, Frank et al. (2011). “Graphical Approaches for Multiple Comparison Procedures Using Weighted Bonferroni, Simes, or Parametric Tests”. In: Biometrical Journal. Biometrische Zeitschrift 53, pp. 894–913.</p>
+<p>Klinglmueller, Florian, Martin Posch, and Franz Koenig (2014). “Adaptive Graph-Based Multiple Testing Procedures”. In: Pharmaceutical Statistics 13, pp. 345–356.</p>
+<p>Xi, Dong et al. (2017). “A Unified Framework for Weighted Parametric Multiple Test Procedures”. In: Biometrical Journal. Biometrische Zeitschrift 59, pp. 918–931.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
