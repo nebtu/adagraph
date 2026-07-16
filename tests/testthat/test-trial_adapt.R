@@ -99,6 +99,10 @@ test_that("basic example dropping groups", {
 
   expect_equal(unname(des_ad$ad_weights), c(0.5, 0.5, 0, 0, 0, 0, 0, 0))
   expect_equal(unname(des_ad$ad_test_m), ad_m)
+
+  #test that using index instead works
+  des_ad_alt <- des |> trial_drop_groups(2)
+  expect_equal(des_ad_alt, des_ad)
 })
 
 
@@ -130,6 +134,10 @@ test_that("basic example dropping arms", {
 
   expect_equal(unname(des_ad$ad_weights), c(0.6, 0, 0, 0, 0.4, 0, 0, 0))
   expect_equal(unname(des_ad$ad_test_m), ad_m)
+
+  #test that using index instead works
+  des_ad_alt <- des |> trial_drop_arms(2)
+  expect_equal(des_ad_alt, des_ad)
 })
 
 test_that("basic example dropping endpoints", {
@@ -159,4 +167,9 @@ test_that("basic example dropping endpoints", {
 
   expect_equal(unname(des_ad$ad_weights), c(0.35, 0.35, 0, 0, 0.15, 0.15, 0, 0))
   expect_equal(unname(des_ad$ad_test_m), ad_m)
+
+  #test that using index instead works
+  des_ad_alt <- des |>
+    trial_drop_endpoints(2)
+  expect_equal(des_ad_alt, des_ad)
 })

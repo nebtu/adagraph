@@ -202,7 +202,8 @@ trial_adapt_n <- function(
 #' @name trial_drop
 #'
 #' @param design The `trial_design` of which to drop the
-#' @param groups The subgroups to be dropped, by their name or integer indices
+#' @param groups The subgroups to be dropped, by their name or integer indices.
+#'   (index 1 is always "Total", actual subgroups start at 2)
 #' @param arms The arms to be dropped, by their name or integer indices
 #' @param endpoints The endpoints to be dropped, by their name or integer indices
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
@@ -275,6 +276,43 @@ trial_adapt_n <- function(
 #' des_ad
 #' des_ad[["ad_test_m"]]
 
+resolve_elements <- function(
+  x,
+  valid,
+  arg = rlang::caller_arg(x),
+  call = rlang::caller_env()
+) {
+  # if given indices
+  if (is.numeric(x)) {
+    ok <- !is.na(x) & round(x) == x & x >= 1 & x <= length(valid)
+    if (!all(ok)) {
+      cli::cli_abort(
+        c(
+          "Invalid {.arg {arg}} {cli::qty(x[!ok])}ind{?ex/ices}: {.val {x[!ok]}}.",
+          i = "Expected whole numbers between 1 and {length(valid)}."
+        ),
+        class = "adagraph_invalid_index",
+        call = call
+      )
+    }
+    return(valid[x])
+  }
+
+  #if given names
+  missing <- setdiff(x, valid)
+  if (length(missing) > 0) {
+    cli::cli_abort(
+      c(
+        "Unknown {.arg {arg}}: {.val {missing}}.",
+        i = "Valid values are {.val {valid}}."
+      ),
+      class = "adagraph_invalid_name",
+      call = call
+    )
+  }
+  x
+}
+
 #' @rdname trial_drop
 #' @export
 trial_drop_groups <- function(
@@ -282,6 +320,7 @@ trial_drop_groups <- function(
   groups,
   adapt_bounds = TRUE
 ) {
+  groups <- resolve_elements(groups, c("Total", design[["names_subgroups"]]))
   drop_hyp <- which(design[["hyp_assoc"]][, "group"] %in% groups)
   cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
 }
@@ -293,6 +332,7 @@ trial_drop_arms <- function(
   arms,
   adapt_bounds = TRUE
 ) {
+  arms <- resolve_elements(arms, design[["names_arms"]])
   drop_hyp <- which(design[["hyp_assoc"]][, "arm"] %in% arms)
   cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
 }
@@ -304,6 +344,7 @@ trial_drop_endpoints <- function(
   endpoints,
   adapt_bounds = TRUE
 ) {
+  endpoints <- resolve_elements(endpoints, design[["names_endpoints"]])
   drop_hyp <- which(design[["hyp_assoc"]][, "endpoint"] %in% endpoints)
   cer_drop_hypotheses(design, drop_hyp, adapt_bounds = adapt_bounds)
 }
