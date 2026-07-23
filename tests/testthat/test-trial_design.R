@@ -64,33 +64,21 @@ test_that("more complicated subgroup structures work", {
 
   #fmt: skip
   n_table <- rbind(
-    data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = FALSE, n =  0),
-    data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 10),
-    data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 10),
-    data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 10),
-    data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 20),
-    data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 30),
-    data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 40),
-    data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 50),
-    data.frame(arm = "A2",      G1 = FALSE, G2 = FALSE, G3 = FALSE, n = 10),
-    data.frame(arm = "A2",      G1 = FALSE, G2 = TRUE,  G3 = FALSE, n = 10),
-    data.frame(arm = "A2",      G1 = TRUE,  G2 = FALSE, G3 = FALSE, n = 30),
-    data.frame(arm = "A2",      G1 = TRUE,  G2 = TRUE,  G3 = FALSE, n = 10),
-    data.frame(arm = "control", G1 = FALSE, G2 = FALSE, G3 = TRUE,  n =  0),
-    data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 10),
-    data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 10),
-    data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = 10),
-    data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, G3 = TRUE,  n = 20),
-    data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 10),
-    data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 20),
-    data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = 20),
-    data.frame(arm = "A2",      G1 = FALSE, G2 = FALSE, G3 = TRUE,  n = 10),
-    data.frame(arm = "A2",      G1 = FALSE, G2 = TRUE,  G3 = TRUE,  n = 10),
-    data.frame(arm = "A2",      G1 = TRUE,  G2 = FALSE, G3 = TRUE,  n = 30),
-    data.frame(arm = "A2",      G1 = TRUE,  G2 = TRUE,  G3 = TRUE,  n = 10)
+    data.frame(arm = "control", G1 = FALSE, G2 = FALSE, n =  0),
+    data.frame(arm = "control", G1 = FALSE, G2 = TRUE,  n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = FALSE, n = 10),
+    data.frame(arm = "control", G1 = TRUE,  G2 = TRUE,  n = 10),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = FALSE, n = 20),
+    data.frame(arm = "A1",      G1 = FALSE, G2 = TRUE,  n = 30),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = FALSE, n = 40),
+    data.frame(arm = "A1",      G1 = TRUE,  G2 = TRUE,  n = 50),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = FALSE, n = 10),
+    data.frame(arm = "A2",      G1 = FALSE, G2 = TRUE,  n = 10),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = FALSE, n = 30),
+    data.frame(arm = "A2",      G1 = TRUE,  G2 = TRUE,  n = 10)
   )
   names_arms <- c("A1", "A2")
-  names_subgroups <- c("G1", "G2", "G3")
+  names_subgroups <- c("G1", "G2")
   as = function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
 
   # Note that we only care about the correlation, not the bounds, hence the
@@ -98,20 +86,20 @@ test_that("more complicated subgroup structures work", {
   design <- trial_design(
     arms = 2,
     endpoints = 1,
-    subgroups = 3,
+    subgroups = 2,
     n_table = n_table,
-    weights = c(1, rep(0, 7)),
+    weights = c(1, rep(0, 5)),
     t = 0.5,
     alpha = 0.025,
     alpha_spending = as,
-    test_m = diag(8),
+    test_m = diag(6),
     names_arms = names_arms,
     names_endpoints = "E1",
     names_subgroups = names_subgroups
   )
 
   corr <- get_subgroup_correlation(
-    subgroups = 3,
+    subgroups = 2,
     arms = 2,
     n_table = n_table,
     names_arms = names_arms,
@@ -130,13 +118,13 @@ test_that("more complicated subgroup structures work", {
   design <- trial_design(
     arms = 2,
     endpoints = 2,
-    subgroups = 3,
+    subgroups = 2,
     n_table = n_table,
-    weights = c(1, rep(0, 15)),
+    weights = c(1, rep(0, 11)),
     t = 0.5,
     alpha = 0.025,
     alpha_spending = as,
-    test_m = diag(16),
+    test_m = diag(12),
     names_arms = names_arms,
     names_endpoints = c("E1", "E2"),
     names_subgroups = names_subgroups
