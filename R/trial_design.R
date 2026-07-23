@@ -6,8 +6,10 @@
 #' possible. Additionally, only n_table is allowed for giving the
 #' correlation structure for arms and subgroups
 #'
-#' @param arms,endpoints,weights,t,alpha,test_m,alpha_spending_f,seq_bonf,names
+#' @param arms,endpoints,weights,t,alpha,test_m,alpha_spending,seq_bonf,names
 #'   Same as for [trial_design()]
+#' @param alpha_interim the amount of alpha to be spent, calculated from (or
+#'   same as) alpha_spending
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
@@ -21,7 +23,8 @@ new_trial_design <- function(
   weights = double(),
   test_m = matrix(),
   alpha = double(),
-  alpha_spending_f = function() {},
+  alpha_interim = double(),
+  alpha_spending = function() {},
   t = double(),
   seq_bonf = TRUE,
   names_arms = NULL,
@@ -77,7 +80,7 @@ new_trial_design <- function(
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_interim = alpha_interim,
     t = t,
     names = names,
     class = c(class, "trial_design")
@@ -161,7 +164,7 @@ validate_trial_design_params <- function(
   t = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {},
+  alpha_spending = function() {},
   seq_bonf = TRUE,
   names_arms = NULL,
   names_endpoints = NULL,
@@ -223,8 +226,9 @@ validate_trial_design_params <- function(
 #' @param test_m Transition matrix describing the graph for
 #'   the closed test procedure to test the hypotheses. If named (via
 #'   row/column names), automatically reordered to match the hypothesis order.
-#' @param alpha_spending_f alpha spending function, taking parameters
-#'   alpha (for overall spent alpha) and t (information fraction at interim test)
+#' @param alpha_spending either alpha spending function, taking parameters alpha
+#'   (for overall spent alpha) and t (information fraction at interim test), or
+#'   the amount of alpha to spend at interim as a double
 #' @param seq_bonf automatically reject hypotheses at the second stage
 #'   if the sum of their PCER is greater 1
 #' @param names_arms names for the different arms. If not provided, they will be
@@ -257,7 +261,7 @@ validate_trial_design_params <- function(
 #'                                #on both arms equally
 #'  alpha = 0.05,
 #'  test_m = m,
-#'  alpha_spending_f = as,
+#'  alpha_spending = as,
 #'  t = 0.5
 #' )
 #'
@@ -272,7 +276,7 @@ trial_design <- function(
   weights = double(),
   test_m = matrix(),
   alpha = double(),
-  alpha_spending_f = function() {},
+  alpha_spending = function() {},
   t = 1 / 2,
   seq_bonf = TRUE,
   names_arms = NULL,
@@ -351,13 +355,14 @@ trial_design <- function(
     t = t,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     seq_bonf = seq_bonf,
     names_arms = names_arms,
     names_endpoints = names_endpoints,
     names_subgroups = names_subgroups,
     names = names
   )
+  alpha_interim <- resolve_alpha_spending(alpha_spending, alpha, t)
 
   if (!is.null(n_control) || !is.null(n_arms)) {
     if (subgroups != 0) {
@@ -387,7 +392,8 @@ trial_design <- function(
     t = t,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_interim = alpha_interim,
+    alpha_spending = alpha_spending,
     seq_bonf = seq_bonf,
     names_arms = names_arms,
     names_endpoints = names_endpoints,

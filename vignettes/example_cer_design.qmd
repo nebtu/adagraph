@@ -27,7 +27,7 @@ These are:
  * `weights`, the corresponding weights for the closed testing procedure
  * `correlation`, a matrix specifing the different correlations between the hypotheses. Note that to make it clear we dont know anything about the correlation between to hypotheses we need to use the value `NA`, since giving 0 would still use parametric tests, only with know correlation 0.
  * `alpha`, the overall FWER we want to control for
- * `alpha_spending_function`, for specifing how much of the FWER should be spent at the interim test
+ * `alpha_spending`, for specifing how much of the FWER should be spent at the interim test
  * `t`, the time information fraction at which the interim test is planned. Since for our trial, it is planned that the interim look is performed after 50% of the participants have enrolled, t is 1/2.
 
 By default, we also use the fact that if $B_J(\chi_1)\geq 1$ for some intersection hypotheses, we can also reject that subhypotheses at the interim, as described in the beginning of section 3.2.3.
@@ -55,7 +55,7 @@ design <- cer_design(
   weights = c(1 / 2, 1 / 2, 0, 0),
   alpha = 0.025,
   test_m = test_m,
-  alpha_spending_f = as,
+  alpha_spending = as,
   t = 1 / 2
 )
 ```

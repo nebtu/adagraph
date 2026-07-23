@@ -33,7 +33,7 @@ design <- cer_design(
  alpha=0.05,
  test_m=rbind(c(0, 1),
               c(1, 0)),
- alpha_spending_f=as,
+ alpha_spending=as,
  t=0.5)
 
 design <- cer_interim_test(design, c(0.001, 0.02))

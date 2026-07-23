@@ -9,7 +9,7 @@ test_that("Uncorrelated multiarm design works (different controls)", {
   weights <- c(0.5, 0.5)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
 
   design <- multiarm_cer_design(
@@ -20,7 +20,7 @@ test_that("Uncorrelated multiarm design works (different controls)", {
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t
   )
 
@@ -59,7 +59,7 @@ test_that("Correlated multiarm design works (same control)", {
   weights <- c(0.5, 0.5)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
 
   design <- multiarm_cer_design(
@@ -70,7 +70,7 @@ test_that("Correlated multiarm design works (same control)", {
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t
   )
 
@@ -102,7 +102,7 @@ test_that("Different sample sizes work correctly", {
   weights <- c(0.6, 0.4)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
 
   design <- multiarm_cer_design(
@@ -113,7 +113,7 @@ test_that("Different sample sizes work correctly", {
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t
   )
 
@@ -139,7 +139,7 @@ test_that("Complex correlated design with multiple treatments per control", {
     c(0.5, 0.5, 0)
   )
   alpha <- 0.05
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
 
   design <- multiarm_cer_design(
@@ -150,7 +150,7 @@ test_that("Complex correlated design with multiple treatments per control", {
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t
   )
 
@@ -187,7 +187,7 @@ test_that("Parameter validation works correctly", {
   weights <- c(0.5, 0.5)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
 
   # Test invalid controls
@@ -200,7 +200,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_controls"
@@ -215,7 +215,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_controls"
@@ -231,7 +231,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_treatment_assoc"
@@ -246,7 +246,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_treatment_assoc"
@@ -262,7 +262,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_n_controls"
@@ -277,7 +277,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_n_treatments"
@@ -293,7 +293,7 @@ test_that("Parameter validation works correctly", {
       weights = c(0.5), # Wrong length
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_weights"
@@ -309,7 +309,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = 1.5,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_alpha"
@@ -325,7 +325,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = 1.5
     ),
     class = "adagraph_invalid_t"
@@ -341,7 +341,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = rbind(c(0, 1, 0), c(1, 0, 0), c(0, 0, 1)), # 3x3 matrix for 2 treatments
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_test_m"
@@ -357,7 +357,7 @@ test_that("Parameter validation works correctly", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t,
       seq_bonf = "TRUE"
     ),
@@ -374,7 +374,7 @@ test_that("Single treatment works", {
   weights <- c(1)
   test_m <- matrix(1)
   alpha <- 0.05
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
 
   design <- multiarm_cer_design(
@@ -385,7 +385,7 @@ test_that("Single treatment works", {
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t
   )
 

@@ -7,14 +7,18 @@ test_that("standardize_named_vector passes unnamed vectors of correct length", {
 
 test_that("standardize_named_vector reorders named vectors", {
   result <- standardize_named_vector(
-    c(H2 = 0.3, H1 = 0.7), c("H1", "H2"), "weights"
+    c(H2 = 0.3, H1 = 0.7),
+    c("H1", "H2"),
+    "weights"
   )
   expect_equal(result, c(H1 = 0.7, H2 = 0.3))
 })
 
 test_that("standardize_named_vector passes correctly ordered named vectors", {
   result <- standardize_named_vector(
-    c(H1 = 0.7, H2 = 0.3), c("H1", "H2"), "weights"
+    c(H1 = 0.7, H2 = 0.3),
+    c("H1", "H2"),
+    "weights"
   )
   expect_equal(result, c(H1 = 0.7, H2 = 0.3))
 })
@@ -48,20 +52,30 @@ test_that("standardize_named_vector errors on partial naming", {
 })
 
 test_that("standardize_named_vector allow_scalar passes scalar through", {
-  result <- standardize_named_vector(0.5, c("H1", "H2"), "t", allow_scalar = TRUE)
+  result <- standardize_named_vector(
+    0.5,
+    c("H1", "H2"),
+    "t",
+    allow_scalar = TRUE
+  )
   expect_equal(result, 0.5)
 })
 
 test_that("standardize_named_vector allow_scalar still reorders vectors", {
   result <- standardize_named_vector(
-    c(H2 = 0.6, H1 = 0.4), c("H1", "H2"), "t", allow_scalar = TRUE
+    c(H2 = 0.6, H1 = 0.4),
+    c("H1", "H2"),
+    "t",
+    allow_scalar = TRUE
   )
   expect_equal(result, c(H1 = 0.4, H2 = 0.6))
 })
 
 test_that("standardize_named_vector works with logical vectors", {
   result <- standardize_named_vector(
-    c(H2 = FALSE, H1 = TRUE), c("H1", "H2"), "hypotheses"
+    c(H2 = FALSE, H1 = TRUE),
+    c("H1", "H2"),
+    "hypotheses"
   )
   expect_equal(result, c(H1 = TRUE, H2 = FALSE))
 })
@@ -140,7 +154,7 @@ test_that("cer_design accepts shuffled named weights and test_m", {
     test_m = rbind(c(0, 1), c(1, 0)),
     correlation = corr,
     alpha = 0.05,
-    alpha_spending_f = as,
+    alpha_spending = as,
     t = 0.5,
     names = c("H1", "H2")
   )
@@ -151,7 +165,7 @@ test_that("cer_design accepts shuffled named weights and test_m", {
     test_m = rbind(H2 = c(0, 1), H1 = c(1, 0)),
     correlation = rbind(H2 = c(1, NA), H1 = c(NA, 1)),
     alpha = 0.05,
-    alpha_spending_f = as,
+    alpha_spending = as,
     t = 0.5,
     names = c("H1", "H2")
   )

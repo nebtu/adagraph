@@ -43,7 +43,7 @@
 #' @export
 #'
 #' @examples
-#' alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+#' alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
 #'
 #' design <- trial_design(
 #'   endpoints = 2,
@@ -51,7 +51,7 @@
 #'   weights = c(0.5, 0.5),
 #'   test_m = rbind(c(0, 1), c(1, 0)),
 #'   alpha = 0.025,
-#'   alpha_spending_f = alpha_spending_f,
+#'   alpha_spending = alpha_spending,
 #'   t = 1 / 2,
 #'   names_arms = "arm1",
 #'   names_endpoints = c("cont", "bin")

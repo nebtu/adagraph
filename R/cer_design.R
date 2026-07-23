@@ -2,8 +2,10 @@
 #'
 #' For documentation on how to generate cer_designs, see `cer_design()`.
 #'
-#' @param correlation,weights,alpha,test_m,alpha_spending_f,t,seq_bonf,names Same as
+#' @param correlation,weights,alpha,test_m,alpha_spending,t,seq_bonf,names Same as
 #' for `cer_design()`
+#' @param alpha_interim the amount of alpha to be spent, calculated from (or
+#'   same as) alpha_spending
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
@@ -20,7 +22,7 @@
 #'  * closed_matrix: each of the #hypothesis columns specifies which
 #'      intersection hypotheses need to be tested to reject the given hypothesis
 #'  * test_m: transition matrix of the graph, as given
-#'  * alpha_spending_f: alpha spending function, as given
+#'  * alpha_interim: alpha to be spent as interim (already converted to double)
 #'  * seq_bonf: as given
 #'  * t: as given
 #'  * bounds_1: matrix of same format as hyp_matrix, where each row gives the bounds for rejection of the intersection hypothesis at the first stage
@@ -34,7 +36,8 @@ new_cer_design <- function(
   test_m = matrix(),
   alpha = double(),
   correlation = matrix(),
-  alpha_spending_f = function() {},
+  alpha_interim = double(),
+  alpha_spending = double(), #or function
   t = double(),
   seq_bonf = TRUE,
   names = NULL,
@@ -49,13 +52,15 @@ new_cer_design <- function(
     class = c(class, "cer_design"),
     names = names
   )
+
   names <- design[["names"]] #use default from adagraph_design
-  design[["alpha_spending_f"]] <- alpha_spending_f
+  design[["alpha_interim"]] <- alpha_interim
+  design[["alpha_spending"]] <- alpha_spending
   design[["seq_bonf"]] <- seq_bonf
   design[["t"]] <- t
 
   correlation <- design[["correlation"]] #use expanded correlation matrix
-  prep_alpha_1 <- alpha_spending_f(alpha, t)
+
   if (getOption("adagraph.use_future")) {
     rlang::check_installed(
       "future.apply",
@@ -65,12 +70,12 @@ new_cer_design <- function(
       design[["weights_matrix"]],
       1,
       function(weights) {
-        cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
+        cer_prep_bounds(correlation, weights, c(alpha_interim, alpha), t)
       },
       future.seed = TRUE,
       future.globals = c(
         "correlation",
-        "prep_alpha_1",
+        "alpha_interim",
         "alpha",
         "t"
       ),
@@ -81,7 +86,7 @@ new_cer_design <- function(
       design[["weights_matrix"]],
       1,
       function(weights) {
-        cer_prep_bounds(correlation, weights, c(prep_alpha_1, alpha), t)
+        cer_prep_bounds(correlation, weights, c(alpha_interim, alpha), t)
       }
     )
   }
@@ -97,12 +102,45 @@ new_cer_design <- function(
   design
 }
 
+#validate alpha_spending depending depending on outcome
+#evaluation of function should only happen after validation of alpha and t
+#therefore the validation of the outcome is separated
+resolve_alpha_spending <- function(
+  alpha_spending,
+  alpha,
+  t,
+  call = rlang::caller_env()
+) {
+  if (rlang::is_function(alpha_spending)) {
+    alpha_interim <- alpha_spending(alpha, t)
+  } else {
+    alpha_interim <- alpha_spending
+  }
+
+  if (
+    !rlang::is_scalar_double(alpha_interim) ||
+      alpha_interim <= 0 ||
+      alpha_interim >= alpha
+  ) {
+    cli::cli_abort(
+      c(
+        "The alpha spent at the interim has to be a single number strictly between 0 and {.var alpha} ({alpha}).",
+        "x" = "It resolved to {alpha_interim}.",
+        "i" = "A number is interpreted as the absolute alpha spent at the interim (not a fraction of {.var alpha})."
+      ),
+      class = "adagraph_invalid_alpha_spending"
+    )
+  }
+
+  alpha_interim
+}
+
 validate_cer_design_params <- function(
   correlation = matrix(),
   weights = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {},
+  alpha_spending = double(),
   t = double(),
   seq_bonf = TRUE,
   names = NULL,
@@ -144,11 +182,16 @@ validate_cer_design_params <- function(
       class = "adagraph_invalid_seq_bonf",
       call = call
     )
-  } else if (!rlang::is_function(alpha_spending_f)) {
+  } else if (
+    !(rlang::is_function(alpha_spending) ||
+      rlang::is_scalar_double(alpha_spending))
+  ) {
     cli::cli_abort(
-      "{.var alpha_spending_f} has to be a function",
-      "x" = "{.var alpha_spending_f} is {.obj_type_friendly {alpha_spending_f}}.",
-      class = "adagraph_invalid_alpha_spending_f",
+      c(
+        "{.var alpha_spending} has to be a function or a single number.",
+        "x" = "{.var alpha_spending} is {.obj_type_friendly {alpha_spending}}."
+      ),
+      class = "adagraph_invalid_alpha_spending",
       call = call
     )
   }
@@ -165,7 +208,9 @@ validate_cer_design_params <- function(
 #' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
-#' @param alpha_spending_f alpha spending function, taking parameters alpha (for overall spent alpha) and t (information fraction at interim test)
+#' @param alpha_spending either alpha spending function, taking parameters alpha
+#'   (for overall spent alpha) and t (information fraction at interim test), or
+#'   the amount of alpha to spend at interim as a double
 #' @param t numeric between 0 and 1 specifing the planned time fraction for the interim test
 #' @param seq_bonf to automatically reject hypotheses at the second stage if the sum of their PCER is greater 1
 #' @param names optional names for the hypotheses
@@ -191,7 +236,7 @@ validate_cer_design_params <- function(
 #'  alpha=0.05,
 #'  test_m=rbind(c(0, 1),
 #'               c(1, 0)),
-#'  alpha_spending_f=as,
+#'  alpha_spending=as,
 #'  t=0.5)
 #'
 #' design
@@ -201,7 +246,7 @@ cer_design <- function(
   alpha = double(),
   correlation = NA,
   t = 1 / 2,
-  alpha_spending_f = function() {},
+  alpha_spending = function() {},
   seq_bonf = TRUE,
   names = NULL
 ) {
@@ -224,18 +269,20 @@ cer_design <- function(
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t,
     seq_bonf = seq_bonf,
     names = names
   )
+  alpha_interim <- resolve_alpha_spending(alpha_spending, alpha, t)
 
   new_cer_design(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_interim = alpha_interim,
+    alpha_spending = alpha_spending,
     t = t,
     seq_bonf = seq_bonf,
     names = names

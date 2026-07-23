@@ -11,7 +11,8 @@ sim_trial(
   adapt_rule,
   data_gen_1,
   data_gen_2,
-  include_designs = FALSE
+  include_designs = FALSE,
+  final_combined = TRUE
 )
 }
 \arguments{
@@ -57,7 +58,7 @@ design <- multiarm_cer_design(
  alpha = 0.05,
  test_m = rbind(c(0, 1),
               c(1, 0)),
- alpha_spending_f = as,
+ alpha_spending = as,
  t = 0.5)
 
 adaptation <- function(design) {

@@ -14,13 +14,15 @@ trial_drop_arms(design, arms, adapt_bounds = TRUE)
 trial_drop_endpoints(design, endpoints, adapt_bounds = TRUE)
 }
 \arguments{
-\item{design}{The \code{trial_design} of which to drop the}
+\item{design}{The \code{trial_design} of which to drop the given
+subgroups/endpoints/arms}
 
-\item{groups}{The subgroups to be dropped, by their name or integer indices}
+\item{groups}{The subgroups to be dropped, by their name or integer indices.
+(index 1 is always "Total", actual subgroups start at 2)}
 
 \item{adapt_bounds}{Adapt the bounds for rejecting a hypotheses to keep the
 FWER with the new adaptations. If doing multiple adaptations, it is enough to
-adapt bounds only for the last one, or call \code{adapt_bounds()} manually
+adapt bounds only for the last one, or call \code{\link[=cer_adapt_bounds]{cer_adapt_bounds()}} manually
 after.}
 
 \item{arms}{The arms to be dropped, by their name or integer indices}
@@ -54,7 +56,7 @@ des <- trial_design(
   t = 0.5,
   alpha = 0.025,
   test_m = m,
-  alpha_spending_f = as
+  alpha_spending = as
 ) |>
  cer_interim_test(c(
    0.00045,
@@ -83,7 +85,7 @@ des <- trial_design(
  t = 0.5,
  alpha = 0.025,
  test_m = m,
- alpha_spending_f = as
+ alpha_spending = as
 ) |>
   cer_interim_test(c(
     0.00045,

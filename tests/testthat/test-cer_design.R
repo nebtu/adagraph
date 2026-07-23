@@ -8,7 +8,7 @@ test_that("single hypothesis works", {
     weights = 1,
     alpha = 0.05,
     test_m = diag(1),
-    alpha_spending_f = function(x, t) x * t,
+    alpha_spending = function(x, t) x * t,
     t = 0.5
   )
 
@@ -25,7 +25,7 @@ test_that("correlation = NA defaults to identity-diagonal NA matrix", {
     test_m = rbind(c(0, 1), c(1, 0)),
     correlation = NA,
     alpha = 0.05,
-    alpha_spending_f = as,
+    alpha_spending = as,
     t = 0.5
   )
 
@@ -35,7 +35,7 @@ test_that("correlation = NA defaults to identity-diagonal NA matrix", {
     test_m = rbind(c(0, 1), c(1, 0)),
     correlation = rbind(c(1, NA), c(NA, 1)),
     alpha = 0.05,
-    alpha_spending_f = as,
+    alpha_spending = as,
     t = 0.5
   )
 
@@ -126,14 +126,14 @@ test_that("Simple CER design works", {
   weights <- c(2 / 3, 1 / 3)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
   design <- cer_design(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t
   )
   expect_s3_class(design, c("cer_design", "adagraph_design"))
@@ -141,7 +141,7 @@ test_that("Simple CER design works", {
   expect_equal(unname(design$weights), weights)
   expect_equal(unname(design$test_m), test_m)
   expect_equal(design$alpha, alpha)
-  expect_equal(design$alpha_spending_f, alpha_spending_f)
+  expect_equal(design$alpha_interim, alpha_spending(alpha, t))
   expect_equal(design$t, t)
 })
 
@@ -150,7 +150,7 @@ test_that("Correct validation of cer_design", {
   weights <- c(2 / 3, 1 / 3)
   test_m <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025
-  alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
   expect_error(
     cer_design(
@@ -158,7 +158,7 @@ test_that("Correct validation of cer_design", {
       correlation = rbind(c(1, NA)),
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_standardize_length"
@@ -169,7 +169,7 @@ test_that("Correct validation of cer_design", {
       correlation = "correlation",
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_correlation"
@@ -180,7 +180,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = "0.05",
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_alpha"
@@ -191,7 +191,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = 1.05,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_alpha"
@@ -202,7 +202,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = alpha,
       test_m = "test_m",
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_invalid_test_m"
@@ -213,7 +213,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = alpha,
       test_m = rbind(c(1, 0, 0), c(1, 0, 0), c(1, 0, 0)),
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t
     ),
     class = "adagraph_standardize_length"
@@ -224,7 +224,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = "0.5"
     ),
     class = "adagraph_invalid_t"
@@ -235,7 +235,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = c(0.5, 0.5)
     ),
     class = "adagraph_invalid_t"
@@ -246,7 +246,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = 1.5
     ),
     class = "adagraph_invalid_t"
@@ -257,22 +257,44 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       alpha = alpha,
       test_m = test_m,
-      alpha_spending_f = alpha_spending_f,
+      alpha_spending = alpha_spending,
       t = t,
       seq_bonf = "TRUE"
     ),
     class = "adagraph_invalid_seq_bonf"
   )
-  expect_error(
-    cer_design(
-      correlation = correlation,
-      weights = weights,
-      alpha = alpha,
-      test_m = test_m,
-      alpha_spending_f = "test_strin",
-      t = t,
-      seq_bonf = TRUE
-    ),
-    class = "adagraph_invalid_alpha_spending_f"
+  for (bad in list(0, -0.001, 0.025, 0.1, c(0.001, 0.002), "test_string")) {
+    expect_error(
+      cer_design(
+        correlation = correlation,
+        weights = weights,
+        alpha = alpha,
+        test_m = test_m,
+        alpha_spending = bad,
+        t = t,
+        seq_bonf = TRUE
+      ),
+      class = "adagraph_invalid_alpha_spending"
+    )
+  }
+})
+
+test_that("scalar alpha_1 is equivalent to a constant spending function", {
+  args <- list(
+    correlation = rbind(c(1, NA), c(NA, 1)),
+    weights = c(2 / 3, 1 / 3),
+    test_m = rbind(c(0, 1), c(1, 0)),
+    alpha = 0.025,
+    t = 0.5
   )
+  as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+  a1 <- as(0.025, 0.5)
+
+  d_fun <- do.call(cer_design, c(args, alpha_spending = as))
+  d_num <- do.call(cer_design, c(args, alpha_spending = a1))
+
+  expect_equal(d_num$bounds_1, d_fun$bounds_1)
+  expect_equal(d_num$bounds_2, d_fun$bounds_2)
+  expect_equal(d_num$cJ1, d_fun$cJ1)
+  expect_equal(d_num$cJ2, d_fun$cJ2)
 })

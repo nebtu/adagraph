@@ -13,7 +13,7 @@ multiarm_cer_design(
   t = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {
+  alpha_spending = function() {
  },
   seq_bonf = TRUE
 )
@@ -41,8 +41,9 @@ interim analysis happen}
 \item{test_m}{Transition matrix describing the graph for
 the closed test procedure to test the hypotheses}
 
-\item{alpha_spending_f}{alpha spending function, taking parameters
-alpha (for overall spent alpha) and t (information fraction at interim test)}
+\item{alpha_spending}{either alpha spending function, taking parameters alpha
+(for overall spent alpha) and t (information fraction at interim test), or
+the amount of alpha to spend at interim as a double}
 
 \item{seq_bonf}{automatically reject hypotheses at the second stage
 if the sum of their PCER is greater 1}
@@ -66,7 +67,7 @@ design <- multiarm_cer_design(
  alpha = 0.05,
  test_m = rbind(c(0, 1),
               c(1, 0)),
- alpha_spending_f = as,
+ alpha_spending = as,
  t = 0.5)
 
 design

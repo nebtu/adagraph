@@ -1,6 +1,6 @@
 test_that("example stays constant", {
   des <- make_example_trial()
-  des[["alpha_spending_f"]] <- NULL
+  des[["alpha_spending"]] <- NULL
   expect_snapshot_value(des, style = "json2", tolerance = 1e-5)
 })
 
@@ -26,15 +26,15 @@ test_that("same as multiarm design", {
     t = t,
     alpha = alpha,
     test_m = m,
-    alpha_spending_f = as,
+    alpha_spending = as,
     names = c("H1", "H2", "H3", "H4")
   )
   des_multiarm <- make_example_multiarm()
 
   #elements that are supposed to be different
-  # and alpha_spending_f, because it's environment can be different
+  # and alpha_spending, because it's environment can be different
   ignore_trial <- c(
-    "alpha_spending_f",
+    "alpha_spending",
     "n_table",
     "names_arms",
     "names_endpoints",
@@ -45,7 +45,7 @@ test_that("same as multiarm design", {
     "endpoints"
   )
   ignore_multiarm <- c(
-    "alpha_spending_f",
+    "alpha_spending",
     "controls",
     "treatment_assoc",
     "n_controls",
@@ -103,7 +103,7 @@ test_that("more complicated subgroup structures work", {
     weights = c(1, rep(0, 7)),
     t = 0.5,
     alpha = 0.025,
-    alpha_spending_f = as,
+    alpha_spending = as,
     test_m = diag(8),
     names_arms = names_arms,
     names_endpoints = "E1",
@@ -120,7 +120,7 @@ test_that("more complicated subgroup structures work", {
 
   expect_equal(unname(design[["correlation"]]), corr)
 
-  design[["alpha_spending_f"]] <- NULL
+  design[["alpha_spending"]] <- NULL
   expect_snapshot_value(design, style = "json2", tolerance = 1e-5)
 
   # Note that we only care about the correlation, not the bounds, hence the
@@ -135,13 +135,13 @@ test_that("more complicated subgroup structures work", {
     weights = c(1, rep(0, 15)),
     t = 0.5,
     alpha = 0.025,
-    alpha_spending_f = as,
+    alpha_spending = as,
     test_m = diag(16),
     names_arms = names_arms,
     names_endpoints = c("E1", "E2"),
     names_subgroups = names_subgroups
   )
 
-  design[["alpha_spending_f"]] <- NULL
+  design[["alpha_spending"]] <- NULL
   expect_snapshot_value(design, style = "json2", tolerance = 1e-5)
 })

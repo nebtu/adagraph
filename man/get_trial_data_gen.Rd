@@ -47,10 +47,15 @@ approrpiate cutoff for the continuous data.
 The $p$-values generated are from a $t$-test for continous data and from a
 two-proportion $Z$-test for binary data.
 
+Note that this always returns non-combined p-values that need to be combined
+for the final test
+Use the final_combined = FALSE option in \code{\link[=sim_trial]{sim_trial()}} or combined = FALSE in
+\code{\link[=cer_final_test]{cer_final_test()}}
+
 The argument \emph{\code{effect_sizes}} should be given in the same format as the \code{n_table} argument for the \code{trial_design()}, but instead of the column \code{n}, there should be a column named for each endpoint, giving the effect size (either as a normal mean or a response rate, for continous or binary data) for this specific group and arm.
 }
 \examples{
-alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
 
 design <- trial_design(
   endpoints = 2,
@@ -58,7 +63,7 @@ design <- trial_design(
   weights = c(0.5, 0.5),
   test_m = rbind(c(0, 1), c(1, 0)),
   alpha = 0.025,
-  alpha_spending_f = alpha_spending_f,
+  alpha_spending = alpha_spending,
   t = 1 / 2,
   names_arms = "arm1",
   names_endpoints = c("cont", "bin")

@@ -41,7 +41,7 @@
 #'   t = 0.5,
 #'   alpha = 0.025,
 #'   test_m = m,
-#'   alpha_spending_f = as
+#'   alpha_spending = as
 #' ) |>
 #'   cer_interim_test(c(
 #'    0.00045,
@@ -71,7 +71,7 @@
 #'   t = 0.5,
 #'  alpha = 0.025,
 #'  test_m = m,
-#'  alpha_spending_f = as
+#'  alpha_spending = as
 #' ) |>
 #'   cer_interim_test(c(
 #'     0.00045,
@@ -199,17 +199,18 @@ trial_adapt_n <- function(
 #' according to the prespecified graph. The graph is also adapted such that
 #' weights are never assigned to the dropped hypotheses.
 #'
-#' @name trial_drop
-#'
-#' @param design The `trial_design` of which to drop the
+#' @param design The `trial_design` of which to drop the given
+#'   subgroups/endpoints/arms
 #' @param groups The subgroups to be dropped, by their name or integer indices.
 #'   (index 1 is always "Total", actual subgroups start at 2)
 #' @param arms The arms to be dropped, by their name or integer indices
 #' @param endpoints The endpoints to be dropped, by their name or integer indices
 #' @param adapt_bounds Adapt the bounds for rejecting a hypotheses to keep the
 #'   FWER with the new adaptations. If doing multiple adaptations, it is enough to
-#'   adapt bounds only for the last one, or call `adapt_bounds()` manually
+#'   adapt bounds only for the last one, or call [cer_adapt_bounds()] manually
 #'   after.
+#'
+#' @name trial_drop
 #'
 #' @return design with the specified hypotheses (according to groups, arms or
 #'   endpoints) dropped
@@ -231,7 +232,7 @@ trial_adapt_n <- function(
 #'   t = 0.5,
 #'   alpha = 0.025,
 #'   test_m = m,
-#'   alpha_spending_f = as
+#'   alpha_spending = as
 #' ) |>
 #'  cer_interim_test(c(
 #'    0.00045,
@@ -260,7 +261,7 @@ trial_adapt_n <- function(
 #'  t = 0.5,
 #'  alpha = 0.025,
 #'  test_m = m,
-#'  alpha_spending_f = as
+#'  alpha_spending = as
 #' ) |>
 #'   cer_interim_test(c(
 #'     0.00045,
@@ -275,7 +276,9 @@ trial_adapt_n <- function(
 #'
 #' des_ad
 #' des_ad[["ad_test_m"]]
+NULL
 
+#' @noRd
 resolve_elements <- function(
   x,
   valid,

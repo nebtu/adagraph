@@ -14,7 +14,7 @@ trial_design(
   weights = double(),
   test_m = matrix(),
   alpha = double(),
-  alpha_spending_f = function() {
+  alpha_spending = function() {
  },
   t = 1/2,
   seq_bonf = TRUE,
@@ -50,8 +50,9 @@ row/column names), automatically reordered to match the hypothesis order.}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 
-\item{alpha_spending_f}{alpha spending function, taking parameters
-alpha (for overall spent alpha) and t (information fraction at interim test)}
+\item{alpha_spending}{either alpha spending function, taking parameters alpha
+(for overall spent alpha) and t (information fraction at interim test), or
+the amount of alpha to spend at interim as a double}
 
 \item{t}{information fraction, at which fraction of assigned people will the
 interim analysis happen}
@@ -127,7 +128,7 @@ design <- trial_design(
                                #on both arms equally
  alpha = 0.05,
  test_m = m,
- alpha_spending_f = as,
+ alpha_spending = as,
  t = 0.5
 )
 

@@ -37,7 +37,7 @@ make_example_design <- function() {
     weights = weights,
     alpha = alpha,
     test_m = m,
-    alpha_spending_f = as,
+    alpha_spending = as,
     t = t
   )
 
@@ -68,7 +68,7 @@ make_example_multiarm <- function() {
     t = t,
     alpha = alpha,
     test_m = m,
-    alpha_spending_f = as
+    alpha_spending = as
   )
 
   design
@@ -119,7 +119,7 @@ make_example_trial <- function() {
     t = t,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = function(x, t) {
+    alpha_spending = function(x, t) {
       2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
     },
     names_arms = names_arms,

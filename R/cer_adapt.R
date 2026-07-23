@@ -34,7 +34,7 @@
 #'  alpha=0.05,
 #'  test_m=rbind(c(0, 1),
 #'               c(1, 0)),
-#'  alpha_spending_f=as,
+#'  alpha_spending=as,
 #'  t=0.5
 #' )
 #'
@@ -73,12 +73,17 @@ cer_adapt <- function(
   }
   if (!is.null(t)) {
     t <- standardize_named_vector(
-      t, hyp_names, "t", allow_scalar = TRUE
+      t,
+      hyp_names,
+      "t",
+      allow_scalar = TRUE
     )
   }
   if (!is.null(correlation)) {
     correlation <- standardize_named_matrix(
-      correlation, hyp_names, "correlation"
+      correlation,
+      hyp_names,
+      "correlation"
     )
   }
   if (!is.null(weights)) {
@@ -153,7 +158,7 @@ cer_adapt <- function(
 #'  alpha=0.05,
 #'  test_m=rbind(c(0, 1),
 #'               c(1, 0)),
-#'  alpha_spending_f=as,
+#'  alpha_spending=as,
 #'  t=0.5)
 #'
 #' design <- cer_interim_test(design, c(0.1, 0.02))
@@ -249,7 +254,7 @@ cer_drop_hypotheses <- function(
 #'  alpha=0.05,
 #'  test_m=rbind(c(0, 1),
 #'               c(1, 0)),
-#'  alpha_spending_f=as,
+#'  alpha_spending=as,
 #'  t=0.5)
 #'
 #' design <- cer_interim_test(design, c(0.1, 0.02))
@@ -263,7 +268,9 @@ cer_alt_drop_hypotheses <- function(
 ) {
   if (!is.null(names(hypotheses))) {
     hypotheses <- standardize_named_vector(
-      hypotheses, design[["names"]], "hypotheses"
+      hypotheses,
+      design[["names"]],
+      "hypotheses"
     )
   }
   weights <- design[["weights"]]

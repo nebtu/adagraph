@@ -270,7 +270,7 @@ test_that("no subgroups design works", {
     t = 0.5,
     alpha = 0.025,
     test_m = m,
-    alpha_spending_f = as
+    alpha_spending = as
   )
 
   corr_endpoints <- rbind(c(1, 0.5), c(0.5, 1))

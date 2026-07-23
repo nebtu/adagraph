@@ -29,7 +29,7 @@ get_paper_sim_design <- function() {
     weights = weights,
     alpha = alpha,
     test_m = m,
-    alpha_spending_f = as,
+    alpha_spending = as,
     t = t
   )
 
@@ -68,7 +68,7 @@ get_paper_sim_design_multiarm <- function() {
     t = t,
     alpha = alpha,
     test_m = m,
-    alpha_spending_f = as
+    alpha_spending = as
   )
 
   design

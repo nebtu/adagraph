@@ -41,7 +41,7 @@ test_that("paper_example works", {
     t = t,
     alpha = alpha,
     test_m = m,
-    alpha_spending_f = as,
+    alpha_spending = as,
     names = c("H1", "H2", "H3", "H4")
   ) |>
     cer_interim_test(c(

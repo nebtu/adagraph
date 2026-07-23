@@ -66,7 +66,7 @@ export_gmcp_lite <- function(
 #'   weights = weights,
 #'   alpha = 0.05,
 #'   test_m = m,
-#'   alpha_spending_f = as,
+#'   alpha_spending = as,
 #'   t = 0.5,
 #'   correlation = diag(4)
 #' )

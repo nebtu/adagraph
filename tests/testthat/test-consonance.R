@@ -64,7 +64,7 @@ test_that("non-consonant design", {
     t = t,
     alpha = alpha,
     test_m = m,
-    alpha_spending_f = as
+    alpha_spending = as
   )
 
   expect_equal(check_consonance(design), FALSE)

@@ -5,7 +5,10 @@
 #' Note however that all parameters have to already expanded to vectors if
 #' possible
 #'
-#' @param controls,treatment_assoc,n_controls,n_treatments,weights,t,alpha,test_m,alpha_spending_f,seq_bonf Same as for [multiarm_cer_design()]
+#' @param
+#' controls,treatment_assoc,n_controls,n_treatments,weights,t,alpha,test_m,alpha_spending,seq_bonf Same as for [multiarm_cer_design()]
+#' @param alpha_interim the amount of alpha to be spent, calculated from (or
+#'   same as) alpha_spending
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
@@ -20,7 +23,8 @@ new_multiarm_cer_design <- function(
   t = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {},
+  alpha_interim = double(),
+  alpha_spending = double(), #or function
   seq_bonf = TRUE,
   ...,
   class = character()
@@ -37,7 +41,7 @@ new_multiarm_cer_design <- function(
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_interim = alpha_interim,
     t = t,
     class = c(class, "multiarm_cer_design")
   )
@@ -59,7 +63,7 @@ validate_multiarm_cer_design_params <- function(
   t = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {},
+  alpha_spending = function() {},
   seq_bonf = TRUE,
   call = rlang::caller_env()
 ) {
@@ -136,7 +140,7 @@ validate_multiarm_cer_design_params <- function(
     weights = weights,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     t = t,
     seq_bonf = seq_bonf,
     call = call
@@ -163,8 +167,9 @@ validate_multiarm_cer_design_params <- function(
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param test_m Transition matrix describing the graph for
 #'   the closed test procedure to test the hypotheses
-#' @param alpha_spending_f alpha spending function, taking parameters
-#'   alpha (for overall spent alpha) and t (information fraction at interim test)
+#' @param alpha_spending either alpha spending function, taking parameters alpha
+#'   (for overall spent alpha) and t (information fraction at interim test), or
+#'   the amount of alpha to spend at interim as a double
 #' @param seq_bonf automatically reject hypotheses at the second stage
 #'   if the sum of their PCER is greater 1
 #'
@@ -182,7 +187,7 @@ validate_multiarm_cer_design_params <- function(
 #'  alpha = 0.05,
 #'  test_m = rbind(c(0, 1),
 #'               c(1, 0)),
-#'  alpha_spending_f = as,
+#'  alpha_spending = as,
 #'  t = 0.5)
 #'
 #' design
@@ -195,7 +200,7 @@ multiarm_cer_design <- function(
   t = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {},
+  alpha_spending = function() {},
   seq_bonf = TRUE
 ) {
   if (length(n_controls) == 1) {
@@ -213,10 +218,11 @@ multiarm_cer_design <- function(
     t = t,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_spending = alpha_spending,
     seq_bonf = seq_bonf
   )
 
+  alpha_interim <- resolve_alpha_spending(alpha_spending, alpha, t)
   k <- length(weights)
   hyp_names <- resolve_hypothesis_names(NULL, weights, k)
   weights <- standardize_named_vector(weights, hyp_names, "weights")
@@ -231,7 +237,8 @@ multiarm_cer_design <- function(
     t = t,
     alpha = alpha,
     test_m = test_m,
-    alpha_spending_f = alpha_spending_f,
+    alpha_interim = alpha_interim,
+    alpha_spending = alpha_spending,
     seq_bonf = seq_bonf
   )
 }

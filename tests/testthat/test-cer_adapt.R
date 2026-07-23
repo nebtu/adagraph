@@ -50,7 +50,7 @@ test_that("dropping hypotheses works", {
     weights = c(0, 0.5, 0, 0.5),
     alpha = design$alpha,
     test_m = design_adj$ad_test_m,
-    alpha_spending_f = design$alpha_spending_f,
+    alpha_spending = design$alpha_interim,
     t = 0.4
   )
 

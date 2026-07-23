@@ -43,7 +43,7 @@ We define a simple two-arm trial using the `trial_design()` function.
 ``` r
 library(adagraph)
 
-alpha_spending_f <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
+alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
 
 design <- trial_design(
   arms = 2,
@@ -52,7 +52,7 @@ design <- trial_design(
   weights = c(0.5, 0.5),
   test_m = rbind(c(0, 1), c(1, 0)),
   alpha = 0.025,
-  alpha_spending_f = alpha_spending_f,
+  alpha_spending = alpha_spending,
   t = 1 / 2,
   names_arms = c("arm1", "arm2")
 )
