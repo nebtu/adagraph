@@ -28,8 +28,8 @@ specifications. These are:
   since giving 0 would still use parametric tests, only with know
   correlation 0.
 - `alpha`, the overall FWER we want to control for
-- `alpha_spending_function`, for specifing how much of the FWER should
-  be spent at the interim test
+- `alpha_spending`, for specifing how much of the FWER should be spent
+  at the interim test
 - `t`, the time information fraction at which the interim test is
   planned. Since for our trial, it is planned that the interim look is
   performed after 50% of the participants have enrolled, t is 1/2.
@@ -62,7 +62,7 @@ design <- cer_design(
   weights = c(1 / 2, 1 / 2, 0, 0),
   alpha = 0.025,
   test_m = test_m,
-  alpha_spending_f = as,
+  alpha_spending = as,
   t = 1 / 2
 )
 ```

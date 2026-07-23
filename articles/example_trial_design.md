@@ -41,8 +41,8 @@ Then, we specify the parameters for a testing strategy:
 - `weights`, the corresponding initial weights for the closed testing
   procedure
 - `alpha`, the overall FWER we want to control for
-- `alpha_spending_function`, for specifing how much of the FWER should
-  be spent at the interim test
+- `alpha_spending`, for specifing how much of the FWER should be spent
+  at the interim test
 - `t`, the time information fraction at which the interim test is
   planned. Since for our trial, it is planned that the interim look is
   performed after 50% of the participants have enrolled, t is 1/2.
@@ -94,7 +94,7 @@ design <- trial_design(
   test_m = test_m,
   names_arms = names_arms,
   names_endpoints = names_endpoints,
-  alpha_spending_f = as,
+  alpha_spending = as,
   seq_bonf = TRUE
 )
 
@@ -424,7 +424,7 @@ design <- trial_design(
   names_arms = names_arms,
   names_endpoints = names_endpoints,
   names_subgroups = names_subgroups,
-  alpha_spending_f = as,
+  alpha_spending = as,
   seq_bonf = TRUE
 )
 

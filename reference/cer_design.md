@@ -13,7 +13,7 @@ cer_design(
   alpha = double(),
   correlation = NA,
   t = 1/2,
-  alpha_spending_f = function() {
+  alpha_spending = function() {
  },
   seq_bonf = TRUE,
   names = NULL
@@ -45,10 +45,11 @@ cer_design(
   numeric between 0 and 1 specifing the planned time fraction for the
   interim test
 
-- alpha_spending_f:
+- alpha_spending:
 
-  alpha spending function, taking parameters alpha (for overall spent
-  alpha) and t (information fraction at interim test)
+  either alpha spending function, taking parameters alpha (for overall
+  spent alpha) and t (information fraction at interim test), or the
+  amount of alpha to spend at interim as a double
 
 - seq_bonf:
 
@@ -85,7 +86,7 @@ design <- cer_design(
  alpha=0.05,
  test_m=rbind(c(0, 1),
               c(1, 0)),
- alpha_spending_f=as,
+ alpha_spending=as,
  t=0.5)
 
 design

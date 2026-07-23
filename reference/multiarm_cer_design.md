@@ -16,7 +16,7 @@ multiarm_cer_design(
   t = double(),
   alpha = double(),
   test_m = matrix(),
-  alpha_spending_f = function() {
+  alpha_spending = function() {
  },
   seq_bonf = TRUE
 )
@@ -62,10 +62,11 @@ multiarm_cer_design(
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
 
-- alpha_spending_f:
+- alpha_spending:
 
-  alpha spending function, taking parameters alpha (for overall spent
-  alpha) and t (information fraction at interim test)
+  either alpha spending function, taking parameters alpha (for overall
+  spent alpha) and t (information fraction at interim test), or the
+  amount of alpha to spend at interim as a double
 
 - seq_bonf:
 
@@ -89,7 +90,7 @@ design <- multiarm_cer_design(
  alpha = 0.05,
  test_m = rbind(c(0, 1),
               c(1, 0)),
- alpha_spending_f = as,
+ alpha_spending = as,
  t = 0.5)
 
 design

@@ -76,7 +76,7 @@ des <- trial_design(
   t = 0.5,
   alpha = 0.025,
   test_m = m,
-  alpha_spending_f = as
+  alpha_spending = as
 ) |>
   cer_interim_test(c(
    0.00045,
@@ -139,7 +139,7 @@ des <- trial_design(
   t = 0.5,
  alpha = 0.025,
  test_m = m,
- alpha_spending_f = as
+ alpha_spending = as
 ) |>
   cer_interim_test(c(
     0.00045,

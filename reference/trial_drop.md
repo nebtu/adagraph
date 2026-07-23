@@ -19,17 +19,20 @@ trial_drop_endpoints(design, endpoints, adapt_bounds = TRUE)
 
 - design:
 
-  The `trial_design` of which to drop the
+  The `trial_design` of which to drop the given subgroups/endpoints/arms
 
 - groups:
 
-  The subgroups to be dropped, by their name or integer indices
+  The subgroups to be dropped, by their name or integer indices. (index
+  1 is always "Total", actual subgroups start at 2)
 
 - adapt_bounds:
 
   Adapt the bounds for rejecting a hypotheses to keep the FWER with the
   new adaptations. If doing multiple adaptations, it is enough to adapt
-  bounds only for the last one, or call `adapt_bounds()` manually after.
+  bounds only for the last one, or call
+  [`cer_adapt_bounds()`](https://nebtu.github.io/adagraph/reference/cer_adapt_bounds.md)
+  manually after.
 
 - arms:
 
@@ -63,7 +66,7 @@ des <- trial_design(
   t = 0.5,
   alpha = 0.025,
   test_m = m,
-  alpha_spending_f = as
+  alpha_spending = as
 ) |>
  cer_interim_test(c(
    0.00045,
@@ -121,7 +124,7 @@ des <- trial_design(
  t = 0.5,
  alpha = 0.025,
  test_m = m,
- alpha_spending_f = as
+ alpha_spending = as
 ) |>
   cer_interim_test(c(
     0.00045,

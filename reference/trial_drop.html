@@ -64,17 +64,19 @@ weights are never assigned to the dropped hypotheses.</p>
 
 
 <dl><dt id="arg-design">design<a class="anchor" aria-label="anchor" href="#arg-design"></a></dt>
-<dd><p>The <code>trial_design</code> of which to drop the</p></dd>
+<dd><p>The <code>trial_design</code> of which to drop the given
+subgroups/endpoints/arms</p></dd>
 
 
 <dt id="arg-groups">groups<a class="anchor" aria-label="anchor" href="#arg-groups"></a></dt>
-<dd><p>The subgroups to be dropped, by their name or integer indices</p></dd>
+<dd><p>The subgroups to be dropped, by their name or integer indices.
+(index 1 is always "Total", actual subgroups start at 2)</p></dd>
 
 
 <dt id="arg-adapt-bounds">adapt_bounds<a class="anchor" aria-label="anchor" href="#arg-adapt-bounds"></a></dt>
 <dd><p>Adapt the bounds for rejecting a hypotheses to keep the
 FWER with the new adaptations. If doing multiple adaptations, it is enough to
-adapt bounds only for the last one, or call <code>adapt_bounds()</code> manually
+adapt bounds only for the last one, or call <code><a href="cer_adapt_bounds.html">cer_adapt_bounds()</a></code> manually
 after.</p></dd>
 
 
@@ -110,7 +112,7 @@ endpoints) dropped</p>
 <span class="r-in"><span>  t <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span></span>
 <span class="r-in"><span>  test_m <span class="op">=</span> <span class="va">m</span>,</span></span>
-<span class="r-in"><span>  alpha_spending_f <span class="op">=</span> <span class="va">as</span></span></span>
+<span class="r-in"><span>  alpha_spending <span class="op">=</span> <span class="va">as</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>   <span class="fl">0.00045</span>,</span></span>
@@ -168,7 +170,7 @@ endpoints) dropped</p>
 <span class="r-in"><span> t <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span> alpha <span class="op">=</span> <span class="fl">0.025</span>,</span></span>
 <span class="r-in"><span> test_m <span class="op">=</span> <span class="va">m</span>,</span></span>
-<span class="r-in"><span> alpha_spending_f <span class="op">=</span> <span class="va">as</span></span></span>
+<span class="r-in"><span> alpha_spending <span class="op">=</span> <span class="va">as</span></span></span>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fl">0.00045</span>,</span></span>

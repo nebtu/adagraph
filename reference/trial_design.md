@@ -16,7 +16,7 @@ trial_design(
   weights = double(),
   test_m = matrix(),
   alpha = double(),
-  alpha_spending_f = function() {
+  alpha_spending = function() {
  },
   t = 1/2,
   seq_bonf = TRUE,
@@ -72,10 +72,11 @@ trial_design(
 
   Single number, measuring what total alpha should be spent on the FWER
 
-- alpha_spending_f:
+- alpha_spending:
 
-  alpha spending function, taking parameters alpha (for overall spent
-  alpha) and t (information fraction at interim test)
+  either alpha spending function, taking parameters alpha (for overall
+  spent alpha) and t (information fraction at interim test), or the
+  amount of alpha to spend at interim as a double
 
 - t:
 
@@ -162,7 +163,7 @@ design <- trial_design(
                                #on both arms equally
  alpha = 0.05,
  test_m = m,
- alpha_spending_f = as,
+ alpha_spending = as,
  t = 0.5
 )
 

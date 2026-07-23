@@ -58,7 +58,7 @@ that might have adaptations controlled for using the conditional error method.</
 <span>  t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  test_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  alpha_spending_f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  alpha_spending <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span> <span class="op">}</span>,</span>
 <span>  seq_bonf <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -106,9 +106,10 @@ interim analysis happen</p></dd>
 the closed test procedure to test the hypotheses</p></dd>
 
 
-<dt id="arg-alpha-spending-f">alpha_spending_f<a class="anchor" aria-label="anchor" href="#arg-alpha-spending-f"></a></dt>
-<dd><p>alpha spending function, taking parameters
-alpha (for overall spent alpha) and t (information fraction at interim test)</p></dd>
+<dt id="arg-alpha-spending">alpha_spending<a class="anchor" aria-label="anchor" href="#arg-alpha-spending"></a></dt>
+<dd><p>either alpha spending function, taking parameters alpha
+(for overall spent alpha) and t (information fraction at interim test), or
+the amount of alpha to spend at interim as a double</p></dd>
 
 
 <dt id="arg-seq-bonf">seq_bonf<a class="anchor" aria-label="anchor" href="#arg-seq-bonf"></a></dt>
@@ -133,7 +134,7 @@ if the sum of their PCER is greater 1</p></dd>
 <span class="r-in"><span> alpha <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
 <span class="r-in"><span> test_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> alpha_spending_f <span class="op">=</span> <span class="va">as</span>,</span></span>
+<span class="r-in"><span> alpha_spending <span class="op">=</span> <span class="va">as</span>,</span></span>
 <span class="r-in"><span> t <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">design</span></span></span>

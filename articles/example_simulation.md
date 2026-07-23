@@ -47,7 +47,7 @@ design <- multiarm_cer_design(
   t = 1 / 2,
   alpha = 0.025,
   test_m = m,
-  alpha_spending_f = as
+  alpha_spending = as
 )
 
 design
@@ -193,5 +193,5 @@ results.
 ``` r
 
 print(mean(data$rej_any))
-#> [1] 0.03
+#> [1] 0.02
 ```
