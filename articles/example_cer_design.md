@@ -19,8 +19,8 @@ To work with the trial in `adagraph`, we first need to make a
 `cer_design` object with which we save all our prespecified trial
 specifications. These are:
 
-- `test_m`, the matrix specifing the graph used for the closed testing
-  procedure
+- `transitions`, the matrix specifing the graph used for the closed
+  testing procedure
 - `weights`, the corresponding weights for the closed testing procedure
 - `correlation`, a matrix specifing the different correlations between
   the hypotheses. Note that to make it clear we dont know anything about
@@ -41,7 +41,7 @@ the desired behaviour, set `seq_bonf` to `FALSE`.
 
 ``` r
 
-test_m <- rbind(
+transitions <- rbind(
   H1 = c(0, 1 / 2, 1 / 2, 0),
   H2 = c(1 / 2, 0, 0, 1 / 2),
   H3 = c(0, 1, 0, 0),
@@ -61,7 +61,7 @@ design <- cer_design(
   correlation = correlation,
   weights = c(1 / 2, 1 / 2, 0, 0),
   alpha = 0.025,
-  test_m = test_m,
+  transitions = transitions,
   alpha_spending = as,
   t = 1 / 2
 )
@@ -121,7 +121,7 @@ Note the new testing matrix resulting from those changes:
 
 ``` r
 
-design_adj$ad_test_m
+design_adj$ad_transitions
 #>    H1 H2 H3 H4
 #> H1  0  0  0  0
 #> H2  0  0  0  1

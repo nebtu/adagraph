@@ -15,7 +15,7 @@ multiarm_cer_design(
   weights = double(),
   t = double(),
   alpha = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha_spending = function() {
  },
   seq_bonf = TRUE
@@ -57,7 +57,7 @@ multiarm_cer_design(
 
   Single number, measuring what total alpha should be spent on the FWER
 
-- test_m:
+- transitions:
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
@@ -88,7 +88,7 @@ design <- multiarm_cer_design(
  n_treatments = 50,
  weights = c(0.5, 0.5),
  alpha = 0.05,
- test_m = rbind(c(0, 1),
+ transitions = rbind(c(0, 1),
               c(1, 0)),
  alpha_spending = as,
  t = 0.5)

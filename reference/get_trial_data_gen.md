@@ -82,7 +82,7 @@ design <- trial_design(
   endpoints = 2,
   n_table = data.frame(arm = c("control", "arm1"), n = c(10, 10)),
   weights = c(0.5, 0.5),
-  test_m = rbind(c(0, 1), c(1, 0)),
+  transitions = rbind(c(0, 1), c(1, 0)),
   alpha = 0.025,
   alpha_spending = alpha_spending,
   t = 1 / 2,

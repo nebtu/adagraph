@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,14 @@
 </ul>
 </div>
 <div class="section level2">
+<h2 id="recent-breaking-changes">Recent breaking changes<a class="anchor" aria-label="anchor" href="#recent-breaking-changes"></a>
+</h2>
+<ul>
+<li>The matrix parameter <code>test_m</code> is now called <code>transitions</code> (similar to <code>graphicalMCP</code>)</li>
+<li>The argument for the spending function <code>alpha_spending_f</code> is now called <code>alpha_spending</code>, and allows also to supply directly the amount of alpha to be spent at the interim.</li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the development version of adagraph from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
@@ -98,7 +106,7 @@
 <span>  n_control <span class="op">=</span> <span class="fl">50</span>,</span>
 <span>  n_arms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>arm1 <span class="op">=</span> <span class="fl">50</span>, arm2 <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>,</span>
 <span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span>  test_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
 <span>  alpha_spending <span class="op">=</span> <span class="va">alpha_spending</span>,</span>
 <span>  t <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">2</span>,</span>

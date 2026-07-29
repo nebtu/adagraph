@@ -35,8 +35,8 @@ names_endpoints <- c("prim", "sec")
 
 Then, we specify the parameters for a testing strategy:
 
-- `test_m`, the matrix specifing the graph used for the closed testing
-  procedure. The matrix we want to use is depicted in
+- `transitions`, the matrix specifing the graph used for the closed
+  testing procedure. The matrix we want to use is depicted in
   [Figure 1](#fig-graph)
 - `weights`, the corresponding initial weights for the closed testing
   procedure
@@ -49,7 +49,7 @@ Then, we specify the parameters for a testing strategy:
 
 ``` r
 
-test_m <- rbind(
+transitions <- rbind(
   c(0, 0.6, 0.4, 0),
   c(0.6, 0, 0, 0.4),
   c(0, 1, 0, 0),
@@ -91,7 +91,7 @@ design <- trial_design(
   weights = weights,
   t = t,
   alpha = alpha,
-  test_m = test_m,
+  transitions = transitions,
   names_arms = names_arms,
   names_endpoints = names_endpoints,
   alpha_spending = as,
@@ -286,7 +286,7 @@ Note the new testing matrix resulting from those changes:
 
 ``` r
 
-design_adj$ad_test_m
+design_adj$ad_transitions
 #>           prim_high prim_low sec_high sec_low
 #> prim_high         0        0        0       0
 #> prim_low          0        0        0       1
@@ -379,7 +379,7 @@ p_p <- 0.2 #primary to primary
 p_s <- 0.4 #primary to secondary
 
 #fmt: skip
-test_m <- matrix(
+transitions <- matrix(
     byrow = TRUE,
     ncol = 8,
     data = c(
@@ -420,7 +420,7 @@ design <- trial_design(
   weights = weights,
   t = t,
   alpha = alpha,
-  test_m = test_m,
+  transitions = transitions,
   names_arms = names_arms,
   names_endpoints = names_endpoints,
   names_subgroups = names_subgroups,

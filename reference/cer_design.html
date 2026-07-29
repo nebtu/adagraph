@@ -11,7 +11,7 @@ for using the conditional error method."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ for using the conditional error method.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cer_design</span><span class="op">(</span></span>
 <span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  test_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  correlation <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  t <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>,</span>
@@ -70,7 +70,7 @@ for using the conditional error method.</p>
 <dd><p>List of weights, measuring how important each hypothesis is</p></dd>
 
 
-<dt id="arg-test-m">test_m<a class="anchor" aria-label="anchor" href="#arg-test-m"></a></dt>
+<dt id="arg-transitions">transitions<a class="anchor" aria-label="anchor" href="#arg-transitions"></a></dt>
 <dd><p>Transition matrix describing the graph for the closed test procedure to test the hypotheses</p></dd>
 
 
@@ -102,7 +102,7 @@ the amount of alpha to spend at interim as a double</p></dd>
 <p>If no names are provided in the <code>names</code> argument, the names of the <code>weights</code>
 arguments are used. If that is also unnamed, the names <code>H1</code>, <code>H2</code>, etc. are
 used.</p>
-<p>If <code>weights</code>, <code>test_m</code>, or <code>correlation</code> are named (via <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code> for vectors
+<p>If <code>weights</code>, <code>transitions</code>, or <code>correlation</code> are named (via <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code> for vectors
 or <code><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames()</a></code>/<code><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames()</a></code> for matrices), they are automatically reordered
 to match the canonical hypothesis order determined as described above. An
 error is raised if the names do not match the expected hypothesis names.</p></dd>
@@ -121,7 +121,7 @@ error is raised if the names do not match the expected hypothesis names.</p></dd
 <span class="r-in"><span>                   H2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> weights<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> alpha<span class="op">=</span><span class="fl">0.05</span>,</span></span>
-<span class="r-in"><span> test_m<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> transitions<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> alpha_spending<span class="op">=</span><span class="va">as</span>,</span></span>
 <span class="r-in"><span> t<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span></span></span>

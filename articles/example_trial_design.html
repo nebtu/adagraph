@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@
 <p>Then, we specify the parameters for a testing strategy:</p>
 <ul>
 <li>
-<code>test_m</code>, the matrix specifing the graph used for the closed testing procedure. The matrix we want to use is depicted in <a href="#fig-graph" class="quarto-xref">Figure 1</a>
+<code>transitions</code>, the matrix specifing the graph used for the closed testing procedure. The matrix we want to use is depicted in <a href="#fig-graph" class="quarto-xref">Figure 1</a>
 </li>
 <li>
 <code>weights</code>, the corresponding initial weights for the closed testing procedure</li>
@@ -99,7 +99,7 @@
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">test_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0.4</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
@@ -130,7 +130,7 @@
 <span>  weights <span class="op">=</span> <span class="va">weights</span>,</span>
 <span>  t <span class="op">=</span> <span class="va">t</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
-<span>  test_m <span class="op">=</span> <span class="va">test_m</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="va">transitions</span>,</span>
 <span>  names_arms <span class="op">=</span> <span class="va">names_arms</span>,</span>
 <span>  names_endpoints <span class="op">=</span> <span class="va">names_endpoints</span>,</span>
 <span>  alpha_spending <span class="op">=</span> <span class="va">as</span>,</span>
@@ -292,7 +292,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <p>Note the new testing matrix resulting from those changes:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">design_adj</span><span class="op">$</span><span class="va">ad_test_m</span></span>
+<code class="sourceCode R"><span><span class="va">design_adj</span><span class="op">$</span><span class="va">ad_transitions</span></span>
 <span><span class="co">#&gt;           prim_high prim_low sec_high sec_low</span></span>
 <span><span class="co">#&gt; prim_high         0        0        0       0</span></span>
 <span><span class="co">#&gt; prim_low          0        0        0       1</span></span>
@@ -359,7 +359,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="va">p_s</span> <span class="op">&lt;-</span> <span class="fl">0.4</span> <span class="co">#primary to secondary</span></span>
 <span></span>
 <span><span class="co">#fmt: skip</span></span>
-<span><span class="va">test_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span><span class="va">transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>    byrow <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>    ncol <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
@@ -393,7 +393,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span>  weights <span class="op">=</span> <span class="va">weights</span>,</span>
 <span>  t <span class="op">=</span> <span class="va">t</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="va">alpha</span>,</span>
-<span>  test_m <span class="op">=</span> <span class="va">test_m</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="va">transitions</span>,</span>
 <span>  names_arms <span class="op">=</span> <span class="va">names_arms</span>,</span>
 <span>  names_endpoints <span class="op">=</span> <span class="va">names_endpoints</span>,</span>
 <span>  names_subgroups <span class="op">=</span> <span class="va">names_subgroups</span>,</span>

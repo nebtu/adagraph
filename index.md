@@ -18,6 +18,14 @@ conditional error rate method.
   - Changing of the test graph used
 - Simulations of many trials
 
+## Recent breaking changes
+
+- The matrix parameter `test_m` is now called `transitions` (similar to
+  `graphicalMCP`)
+- The argument for the spending function `alpha_spending_f` is now
+  called `alpha_spending`, and allows also to supply directly the amount
+  of alpha to be spent at the interim.
+
 ## Installation
 
 You can install the development version of adagraph from
@@ -46,7 +54,7 @@ design <- trial_design(
   n_control = 50,
   n_arms = c(arm1 = 50, arm2 = 50),
   weights = c(0.5, 0.5),
-  test_m = rbind(c(0, 1), c(1, 0)),
+  transitions = rbind(c(0, 1), c(1, 0)),
   alpha = 0.025,
   alpha_spending = alpha_spending,
   t = 1 / 2,

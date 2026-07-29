@@ -9,7 +9,7 @@ clinical trial design, allowing adaptation using the CER method"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@ clinical trial design, allowing adaptation using the CER method</p>
 <span>  n_arms <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_table <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  test_m <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alpha_spending <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span> <span class="op">}</span>,</span>
@@ -104,7 +104,7 @@ See details for numbering of hypotheses. If named, automatically
 reordered to match the canonical hypothesis order.</p></dd>
 
 
-<dt id="arg-test-m">test_m<a class="anchor" aria-label="anchor" href="#arg-test-m"></a></dt>
+<dt id="arg-transitions">transitions<a class="anchor" aria-label="anchor" href="#arg-transitions"></a></dt>
 <dd><p>Transition matrix describing the graph for
 the closed test procedure to test the hypotheses. If named (via
 row/column names), automatically reordered to match the hypothesis order.</p></dd>
@@ -203,7 +203,7 @@ The size of the second trial in comparison to the first is determined by t.</p>
 <span class="r-in"><span> weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="co">#all weight is at first on the first endpoint,</span></span></span>
 <span class="r-in"><span>                               <span class="co">#on both arms equally</span></span></span>
 <span class="r-in"><span> alpha <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
-<span class="r-in"><span> test_m <span class="op">=</span> <span class="va">m</span>,</span></span>
+<span class="r-in"><span> transitions <span class="op">=</span> <span class="va">m</span>,</span></span>
 <span class="r-in"><span> alpha_spending <span class="op">=</span> <span class="va">as</span>,</span></span>
 <span class="r-in"><span> t <span class="op">=</span> <span class="fl">0.5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>

@@ -14,7 +14,7 @@ trial_design(
   n_arms = NULL,
   n_table = NULL,
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   alpha_spending = function() {
  },
@@ -62,7 +62,7 @@ trial_design(
   details for numbering of hypotheses. If named, automatically reordered
   to match the canonical hypothesis order.
 
-- test_m:
+- transitions:
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses. If named (via row/column names), automatically
@@ -162,7 +162,7 @@ design <- trial_design(
  weights = c(0.5, 0.5, 0, 0), #all weight is at first on the first endpoint,
                                #on both arms equally
  alpha = 0.05,
- test_m = m,
+ transitions = m,
  alpha_spending = as,
  t = 0.5
 )

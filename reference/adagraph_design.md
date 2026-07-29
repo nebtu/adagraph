@@ -13,7 +13,7 @@ and
 ``` r
 adagraph_design(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = NA,
   names = NULL
@@ -26,7 +26,7 @@ adagraph_design(
 
   List of weights, measuring how important each hypothesis is
 
-- test_m:
+- transitions:
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
@@ -51,7 +51,7 @@ An object of class adagraph_design
 
 ## Details
 
-If `weights`, `test_m`, or `correlation` are named (via
+If `weights`, `transitions`, or `correlation` are named (via
 [`names()`](https://rdrr.io/r/base/names.html) for vectors or
 [`rownames()`](https://rdrr.io/r/base/colnames.html)/[`colnames()`](https://rdrr.io/r/base/colnames.html)
 for matrices), they are automatically reordered to match the canonical
@@ -68,7 +68,7 @@ design <- adagraph_design(
                    H2=c(NA, 1)),
  weights=c(2/3, 1/3),
  alpha=0.05,
- test_m=rbind(c(0, 1),
+ transitions=rbind(c(0, 1),
               c(1, 0)))
 design
 #> 

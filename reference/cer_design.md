@@ -9,7 +9,7 @@ conditional error method.
 ``` r
 cer_design(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = NA,
   t = 1/2,
@@ -26,7 +26,7 @@ cer_design(
 
   List of weights, measuring how important each hypothesis is
 
-- test_m:
+- transitions:
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
@@ -64,7 +64,7 @@ cer_design(
   `weights` arguments are used. If that is also unnamed, the names `H1`,
   `H2`, etc. are used.
 
-  If `weights`, `test_m`, or `correlation` are named (via
+  If `weights`, `transitions`, or `correlation` are named (via
   [`names()`](https://rdrr.io/r/base/names.html) for vectors or
   [`rownames()`](https://rdrr.io/r/base/colnames.html)/[`colnames()`](https://rdrr.io/r/base/colnames.html)
   for matrices), they are automatically reordered to match the canonical
@@ -84,7 +84,7 @@ design <- cer_design(
                    H2=c(NA, 1)),
  weights=c(2/3, 1/3),
  alpha=0.05,
- test_m=rbind(c(0, 1),
+ transitions=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending=as,
  t=0.5)

@@ -8,7 +8,7 @@ Adapt the trial design after the interim test
 cer_adapt(
   design,
   weights = NULL,
-  test_m = NULL,
+  transitions = NULL,
   t = NULL,
   correlation = NULL,
   adapt_bounds = TRUE
@@ -30,7 +30,7 @@ cer_adapt(
   If named, automatically reordered to match the hypothesis order in the
   design.
 
-- test_m:
+- transitions:
 
   Adapted test matrix defining the graph for the closed test procedure
   to test the hypotheses. If named (via row/column names), automatically
@@ -73,7 +73,7 @@ design <- cer_design(
                    H2=c(NA, 1)),
  weights=c(2/3, 1/3),
  alpha=0.05,
- test_m=rbind(c(0, 1),
+ transitions=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending=as,
  t=0.5

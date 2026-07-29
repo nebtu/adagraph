@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">adagraph</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cer_adapt</span><span class="op">(</span></span>
 <span>  <span class="va">design</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  test_m <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  t <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  correlation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  adapt_bounds <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -68,7 +68,7 @@ For dropping hypotheses, set the according weights to 0 or use <code><a href="ce
 If named, automatically reordered to match the hypothesis order in the design.</p></dd>
 
 
-<dt id="arg-test-m">test_m<a class="anchor" aria-label="anchor" href="#arg-test-m"></a></dt>
+<dt id="arg-transitions">transitions<a class="anchor" aria-label="anchor" href="#arg-transitions"></a></dt>
 <dd><p>Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
 If named (via row/column names), automatically reordered to match the hypothesis order.</p></dd>
 
@@ -110,7 +110,7 @@ the <code>adapt_bounds()</code> function manually</p>
 <span class="r-in"><span>                   H2<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> weights<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> alpha<span class="op">=</span><span class="fl">0.05</span>,</span></span>
-<span class="r-in"><span> test_m<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> transitions<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>              <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> alpha_spending<span class="op">=</span><span class="va">as</span>,</span></span>
 <span class="r-in"><span> t<span class="op">=</span><span class="fl">0.5</span></span></span>
