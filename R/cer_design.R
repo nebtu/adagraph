@@ -119,7 +119,7 @@ resolve_alpha_spending <- function(
 
   if (
     !rlang::is_scalar_double(alpha_interim) ||
-      alpha_interim <= 0 ||
+      alpha_interim < 0 ||
       alpha_interim >= alpha
   ) {
     cli::cli_abort(
@@ -254,7 +254,11 @@ cer_design <- function(
   if (is.null(names) || is.character(names)) {
     resolved_names <- resolve_hypothesis_names(names, weights, k)
     weights <- standardize_named_vector(weights, resolved_names, "weights")
-    transitions <- standardize_named_matrix(transitions, resolved_names, "transitions")
+    transitions <- standardize_named_matrix(
+      transitions,
+      resolved_names,
+      "transitions"
+    )
     if (!rlang::is_na(correlation)) {
       correlation <- standardize_named_matrix(
         correlation,

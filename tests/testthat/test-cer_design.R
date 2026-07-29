@@ -263,7 +263,7 @@ test_that("Correct validation of cer_design", {
     ),
     class = "adagraph_invalid_seq_bonf"
   )
-  for (bad in list(0, -0.001, 0.025, 0.1, c(0.001, 0.002), "test_string")) {
+  for (bad in list(-0.001, 0.025, 0.1, c(0.001, 0.002), "test_string")) {
     expect_error(
       cer_design(
         correlation = correlation,
@@ -297,4 +297,86 @@ test_that("scalar alpha_1 is equivalent to a constant spending function", {
   expect_equal(d_num$bounds_2, d_fun$bounds_2)
   expect_equal(d_num$cJ1, d_fun$cJ1)
   expect_equal(d_num$cJ2, d_fun$cJ2)
+})
+
+test_that("alpha_1 = 0 gives the single-stage test", {
+  # uncorrelated (NA) => all singleton components => err_1(c) = c
+  # => cJ2 = alpha exactly, bounds_2 = weighted Bonferroni at full alpha
+  design <- cer_design(
+    weights = c(2 / 3, 1 / 3),
+    transitions = rbind(c(0, 1), c(1, 0)),
+    alpha = 0.025,
+    alpha_spending = 0,
+    t = 0.5
+  )
+  expect_equal(unname(design$bounds_1), matrix(0, 3, 2))
+  expect_equal(design$cJ1, rep(0, 3))
+  expect_equal(design$cJ2, rep(0.025, 3))
+
+  # scalar 0 behaves equally constant-zero spending function
+  design_f <- cer_design(
+    weights = c(2 / 3, 1 / 3),
+    transitions = rbind(c(0, 1), c(1, 0)),
+    alpha = 0.025,
+    alpha_spending = function(a, t) 0,
+    t = 0.5
+  )
+  expect_equal(design_f$bounds_2, design$bounds_2)
+})
+
+test_that("full workflow without interim alpha spending (alpha_1 = 0)", {
+  # two arms x two endpoints: known correlation within arm, unknown across,
+  # so components of both kinds (bivariate {1,3}, {2,4} and singletons) are hit
+  m <- rbind(
+    H1 = c(0, 1 / 2, 1 / 2, 0),
+    H2 = c(1 / 2, 0, 0, 1 / 2),
+    H3 = c(0, 1, 0, 0),
+    H4 = c(1, 0, 0, 0)
+  )
+  correlation <- rbind(
+    c(1, NA, 0.5, NA),
+    c(NA, 1, NA, 0.5),
+    c(0.5, NA, 1, NA),
+    c(NA, 0.5, NA, 1)
+  )
+  design <- cer_design(
+    correlation = correlation,
+    weights = c(1 / 2, 1 / 2, 0, 0),
+    transitions = m,
+    alpha = 0.025,
+    alpha_spending = 0,
+    t = 0.5
+  )
+
+  # no alpha at the interim, for any intersection
+  expect_equal(unname(design$cJ1), rep(0, 15))
+  expect_true(all(design$bounds_1 == 0))
+
+  # the interim can never reject, even at p = 0
+  expect_equal(
+    cer_interim_test(design, rep(0, 4))$rej_interim,
+    rep(FALSE, 4)
+  )
+
+  # edge cases that would reject with more interim alpha
+  p_1 <- c(0.00045, 0.0952, 0.0225, 0.1104)
+  design <- cer_interim_test(design, p_1)
+  expect_equal(design$rej_interim, rep(FALSE, 4))
+  # basic conditions on cer
+  expect_true(all(design$cer_vec > 0 & design$cer_vec < 1))
+
+  # real adaptation: drop arm 1 (H1, H3), reweight, reallocate information
+  design_adj <- cer_drop_hypotheses(design, c(1, 3)) |>
+    cer_adapt(weights = c(0, 1 / 2, 0, 1 / 2), t = c(1, 0.7, 1, 0.7))
+
+  # dropped hypotheses carry no weight in any intersection => bound 0
+  expect_true(all(design_adj$ad_bounds_2[, c(1, 3)] == 0))
+  # kept hypotheses still testable
+  expect_true(all(
+    design_adj$ad_bounds_2[, c(2, 4)] > 0 |
+      design_adj$weights_matrix[, c(2, 4)] == 0
+  ))
+
+  design_final <- cer_final_test(design_adj, c(NA, 1e-6, NA, 0.9))
+  expect_equal(design_final$rej, c(FALSE, TRUE, FALSE, FALSE))
 })

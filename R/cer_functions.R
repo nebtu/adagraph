@@ -83,13 +83,17 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
     sum(vapply(conn, comp_err_1, numeric(1), cJ1 = cJ1))
   }
 
-  cJ1 <- stats::uniroot(
-    function(cJ1) {
-      err_1(cJ1) - alpha[1]
-    },
-    c(alpha[1] * 0.999, alpha[1] / max(pos_weights)),
-    tol = getOption("adagraph.precision")
-  )[["root"]]
+  cJ1 <- if (alpha[1] == 0) {
+    0
+  } else {
+    stats::uniroot(
+      function(cJ1) {
+        err_1(cJ1) - alpha[1]
+      },
+      c(alpha[1] * 0.999, alpha[1] / max(pos_weights)),
+      tol = getOption("adagraph.precision")
+    )[["root"]]
+  }
 
   comp_err_2 <- function(conn_indices, cJ1, cJ2) {
     comp_weights <- pos_weights[conn_indices]
