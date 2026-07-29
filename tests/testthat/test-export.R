@@ -15,7 +15,7 @@ test_that("export to gMCPLite", {
 
   design <- adagraph_design(
     weights = weights,
-    test_m = m,
+    transitions = m,
     alpha = 0.05,
     names = rownames(m)
   )
@@ -29,14 +29,14 @@ test_that("export to gMCPLite on example design", {
 
   graph <- export_gmcp_lite(design)
 
-  expect_equal(gMCPLite::getMatrix(graph), design[["test_m"]])
+  expect_equal(gMCPLite::getMatrix(graph), design[["transitions"]])
   expect_equal(gMCPLite::getWeights(graph), design[["weights"]])
 
   design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
 
   design_adj <- cer_drop_hypotheses(design, 1)
   graph_adj <- export_gmcp_lite(design_adj, adapted = TRUE)
-  expect_equal(gMCPLite::getMatrix(graph_adj), design_adj[["ad_test_m"]])
+  expect_equal(gMCPLite::getMatrix(graph_adj), design_adj[["ad_transitions"]])
   expect_equal(gMCPLite::getWeights(graph_adj), design_adj[["ad_weights"]])
 })
 
@@ -53,7 +53,7 @@ test_that("export to graphicalMCP", {
 
   design <- adagraph_design(
     weights = hypotheses,
-    test_m = transitions,
+    transitions = transitions,
     names = hyp_names,
     alpha = 0.05
   )
@@ -68,13 +68,13 @@ test_that("export to graphicalMCP on example design", {
 
   graph <- export_graphical_mcp(design)
 
-  expect_equal(graph[["transitions"]], design[["test_m"]])
+  expect_equal(graph[["transitions"]], design[["transitions"]])
   expect_equal(graph[["hypotheses"]], design[["weights"]])
 
   design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
 
   design_adj <- cer_drop_hypotheses(design, 1)
   graph_adj <- export_graphical_mcp(design_adj, adapted = TRUE)
-  expect_equal(graph_adj[["transitions"]], design_adj[["ad_test_m"]])
+  expect_equal(graph_adj[["transitions"]], design_adj[["ad_transitions"]])
   expect_equal(graph_adj[["hypotheses"]], design_adj[["ad_weights"]])
 })

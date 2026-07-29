@@ -9,7 +9,7 @@ test_that("dropping hypotheses works", {
   expect_equal(design_adj, cer_drop_hypotheses(design, "H1"))
 
   expect_equal(
-    unname(design_adj$ad_test_m),
+    unname(design_adj$ad_transitions),
     rbind(
       c(0, 0, 0, 0),
       c(0, 0, 1 / 3, 2 / 3),
@@ -22,7 +22,7 @@ test_that("dropping hypotheses works", {
 
   expect_equal(unname(design_adj$ad_weights), c(0, 1, 0, 0))
   expect_equal(
-    unname(design_adj$ad_test_m),
+    unname(design_adj$ad_transitions),
     rbind(c(0, 0, 0, 0), c(0, 0, 0, 1), c(0, 0, 0, 0), c(0, 1, 0, 0))
   )
   expect_equal(design_adj, cer_drop_hypotheses(design, c("H1", "H3")))
@@ -49,7 +49,7 @@ test_that("dropping hypotheses works", {
     correlation = design$correlation,
     weights = c(0, 0.5, 0, 0.5),
     alpha = design$alpha,
-    test_m = design_adj$ad_test_m,
+    transitions = design_adj$ad_transitions,
     alpha_spending = design$alpha_interim,
     t = 0.4
   )
@@ -72,7 +72,7 @@ test_that("multiple adaptations work the same as one adaptation", {
     cer_drop_hypotheses(design, c(1, 2))
   )
 
-  new_test_m <- rbind(
+  new_transitions <- rbind(
     H1 = c(0, 1 / 3, 2 / 3, 0),
     H2 = c(1 / 3, 0, 0, 2 / 3),
     H3 = c(0, 1 / 2, 0, 1 / 2),
@@ -81,7 +81,7 @@ test_that("multiple adaptations work the same as one adaptation", {
   expect_equal(
     cer_adapt(
       cer_adapt(
-        cer_adapt(design, test_m = new_test_m),
+        cer_adapt(design, transitions = new_transitions),
         weights = c(0, 0.5, 0, 0.5)
       ),
       t = 0.4
@@ -89,7 +89,7 @@ test_that("multiple adaptations work the same as one adaptation", {
     cer_adapt(
       design,
       weights = c(0, 0.5, 0, 0.5),
-      test_m = new_test_m,
+      transitions = new_transitions,
       t = 0.4
     ),
     list_as_map = TRUE
@@ -156,7 +156,7 @@ test_that("no adaptations works as expected", {
 
   expect_equal(design_adj$ad_t, design$t)
   expect_equal(design_adj$ad_weights, design$weights)
-  expect_equal(design_adj$ad_test_m, design$test_m)
+  expect_equal(design_adj$ad_transitions, design$transitions)
   expect_equal(design_adj$ad_correlation, design$correlation)
   expect_equal(design_adj$ad_weights_matrix, design$weights_matrix)
   expect_equal(design_adj$adaptations, TRUE)

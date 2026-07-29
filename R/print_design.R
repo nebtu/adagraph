@@ -61,8 +61,8 @@ format_design_common <- function(x, header_label = "CER", hooks = list(), ...) {
         items <- c(items, "Hypotheses weights")
       }
       if (
-        !is.null(x[["ad_test_m"]]) &&
-          !identical(x[["ad_test_m"]], x[["test_m"]])
+        !is.null(x[["ad_transitions"]]) &&
+          !identical(x[["ad_transitions"]], x[["transitions"]])
       ) {
         items <- c(items, "Graph Transition Matrix")
       }

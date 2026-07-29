@@ -5,7 +5,7 @@
 #'  Note that the length should be the same as in the prespecified design.
 #'  For dropping hypotheses, set the according weights to 0 or use [cer_drop_hypotheses()].
 #'  If named, automatically reordered to match the hypothesis order in the design.
-#' @param test_m Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
+#' @param transitions Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
 #'  If named (via row/column names), automatically reordered to match the hypothesis order.
 #' @param t adapted information fraction at which the first stage test occured.
 #'  Note that this can now be a vector with a different value for different hypotheses or a single value.
@@ -32,7 +32,7 @@
 #'                    H2=c(NA, 1)),
 #'  weights=c(2/3, 1/3),
 #'  alpha=0.05,
-#'  test_m=rbind(c(0, 1),
+#'  transitions=rbind(c(0, 1),
 #'               c(1, 0)),
 #'  alpha_spending=as,
 #'  t=0.5
@@ -47,7 +47,7 @@
 cer_adapt <- function(
   design,
   weights = NULL,
-  test_m = NULL,
+  transitions = NULL,
   t = NULL,
   correlation = NULL,
   adapt_bounds = TRUE
@@ -68,8 +68,8 @@ cer_adapt <- function(
   if (!is.null(weights)) {
     weights <- standardize_named_vector(weights, hyp_names, "weights")
   }
-  if (!is.null(test_m)) {
-    test_m <- standardize_named_matrix(test_m, hyp_names, "test_m")
+  if (!is.null(transitions)) {
+    transitions <- standardize_named_matrix(transitions, hyp_names, "transitions")
   }
   if (!is.null(t)) {
     t <- standardize_named_vector(
@@ -92,16 +92,16 @@ cer_adapt <- function(
   } else if (all(is.null(design[["ad_weights"]]))) {
     design[["ad_weights"]] <- design[["weights"]]
   }
-  if (!is.null(test_m)) {
-    design[["ad_test_m"]] <- test_m
-    colnames(design[["ad_test_m"]]) <- colnames(design[["test_m"]])
-  } else if (is.null(design[["ad_test_m"]])) {
-    design[["ad_test_m"]] <- design[["test_m"]]
+  if (!is.null(transitions)) {
+    design[["ad_transitions"]] <- transitions
+    colnames(design[["ad_transitions"]]) <- colnames(design[["transitions"]])
+  } else if (is.null(design[["ad_transitions"]])) {
+    design[["ad_transitions"]] <- design[["transitions"]]
   }
   if (!is.null(t)) {
     design[["ad_t"]] <- t
   } else if (is.null(design[["ad_t"]])) {
-    #matches ad_test_matrix else
+    #matches ad_transitionsatrix else
     design[["ad_t"]] <- design[["t"]]
   }
   if (!is.null(correlation)) {
@@ -111,10 +111,10 @@ cer_adapt <- function(
     design[["ad_correlation"]] <- design[["correlation"]]
   }
 
-  if (!is.null(weights) || !is.null(test_m)) {
+  if (!is.null(weights) || !is.null(transitions)) {
     int_hyp <- get_intersection_hypotheses(
       design[["ad_weights"]],
-      design[["ad_test_m"]]
+      design[["ad_transitions"]]
     )
     design[["ad_weights_matrix"]] <- int_hyp[["weights_matrix"]]
     colnames(design[["ad_weights_matrix"]]) <- colnames(design[[
@@ -156,7 +156,7 @@ cer_adapt <- function(
 #'                    H2=c(NA, 1)),
 #'  weights=c(2/3, 1/3),
 #'  alpha=0.05,
-#'  test_m=rbind(c(0, 1),
+#'  transitions=rbind(c(0, 1),
 #'               c(1, 0)),
 #'  alpha_spending=as,
 #'  t=0.5)
@@ -178,15 +178,15 @@ cer_drop_hypotheses <- function(
     drop_hyp <- match(drop_hyp, names(design[["weights"]]))
   }
 
-  if (any(!is.na(design[["ad_test_m"]]))) {
-    test_m <- design[["ad_test_m"]]
+  if (any(!is.na(design[["ad_transitions"]]))) {
+    transitions <- design[["ad_transitions"]]
   } else {
-    test_m <- design[["test_m"]]
+    transitions <- design[["transitions"]]
   }
   design[["keep_hyp"]][drop_hyp] <- FALSE
   if (all(!design[["keep_hyp"]])) {
-    weights = rep(0, nrow(test_m))
-    test_m = matrix(0, nrow = nrow(test_m), ncol = ncol(test_m))
+    weights = rep(0, nrow(transitions))
+    transitions = matrix(0, nrow = nrow(transitions), ncol = ncol(transitions))
   } else {
     hyp_index <- which(vapply(
       asplit(design[["hyp_matrix"]], 1),
@@ -203,26 +203,26 @@ cer_drop_hypotheses <- function(
     }
 
     for (hyp in drop_hyp) {
-      for (i in seq_len(dim(test_m)[1])) {
-        if (test_m[hyp, i] == 1 && test_m[i, hyp] == 1) {
+      for (i in seq_len(dim(transitions)[1])) {
+        if (transitions[hyp, i] == 1 && transitions[i, hyp] == 1) {
           # no transfer of weight is possible, if it is only transfered to the now obselete hypothesis
-          test_m[i, ] <- 0
+          transitions[i, ] <- 0
         } else {
-          feedback_loop <- test_m[i, hyp] * test_m[hyp, i]
+          feedback_loop <- transitions[i, hyp] * transitions[hyp, i]
           # ^ amount of weight that "gets stuck", i.e. would get transfered back to the deleted hypothesis
-          test_m[i, ] <- (test_m[i, ] + test_m[i, hyp] * test_m[hyp, ]) /
+          transitions[i, ] <- (transitions[i, ] + transitions[i, hyp] * transitions[hyp, ]) /
             (1 - feedback_loop)
         }
       }
-      test_m[hyp, ] <- 0
-      test_m[, hyp] <- 0
-      diag(test_m) <- 0
+      transitions[hyp, ] <- 0
+      transitions[, hyp] <- 0
+      diag(transitions) <- 0
     }
   }
   cer_adapt(
     design,
     weights = weights,
-    test_m = test_m,
+    transitions = transitions,
     adapt_bounds = adapt_bounds
   )
 }
@@ -252,7 +252,7 @@ cer_drop_hypotheses <- function(
 #'                    H2=c(NA, 1)),
 #'  weights=c(2/3, 1/3),
 #'  alpha=0.05,
-#'  test_m=rbind(c(0, 1),
+#'  transitions=rbind(c(0, 1),
 #'               c(1, 0)),
 #'  alpha_spending=as,
 #'  t=0.5)

@@ -3,7 +3,7 @@ summary.adagraph_design <- function(object, ...) {
   summary_list <- list(
     alpha = object[["alpha"]],
     weights = object[["weights"]],
-    test_m = object[["test_m"]],
+    transitions = object[["transitions"]],
     correlation = object[["correlation"]],
     t = object[["t"]],
     interim_test = object[["interim_test"]],
@@ -28,7 +28,7 @@ summary.adagraph_design <- function(object, ...) {
       summary_list,
       list(
         ad_weights = object[["ad_weights"]],
-        ad_test_m = object[["ad_test_m"]],
+        ad_transitions = object[["ad_transitions"]],
         ad_correlation = object[["ad_correlation"]],
         ad_t = object[["ad_t"]]
       )
@@ -151,7 +151,7 @@ format_design_summary <- function(x, header_label, hooks = list(), ...) {
     cli_print(x[["weights"]], ...)
 
     cli::cli_h3("Graph Transition Matrix")
-    cli_print(x[["test_m"]], ...)
+    cli_print(x[["transitions"]], ...)
 
     if (!all(is.na(x[["correlation"]]))) {
       cli::cli_h3("Correlation for parametric test")
@@ -196,11 +196,11 @@ format_design_summary <- function(x, header_label, hooks = list(), ...) {
         cli_print(x[["ad_weights"]], ...)
       }
       if (
-        !is.null(x[["ad_test_m"]]) &&
-          !identical(x[["ad_test_m"]], x[["test_m"]])
+        !is.null(x[["ad_transitions"]]) &&
+          !identical(x[["ad_transitions"]], x[["transitions"]])
       ) {
         cli::cli_h3("New graph Transition Matrix")
-        cli_print(x[["ad_test_m"]], ...)
+        cli_print(x[["ad_transitions"]], ...)
       }
       if (
         !is.null(x[["ad_correlation"]]) &&

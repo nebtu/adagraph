@@ -6,7 +6,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["correlation", "correlation_components", "weights", "alpha", "hyp_matrix", "weights_matrix", "closed_matrix", "test_m", "interim_test", "adaptations", "final_test", "names", "alpha_interim", "seq_bonf", "t", "bounds_1", "bounds_2", "cJ1", "cJ2", "subgroups", "arms", "endpoints", "n_table", "names_arms", "names_endpoints", "names_subgroups", "hyp_assoc"]
+          "value": ["correlation", "correlation_components", "weights", "alpha", "hyp_matrix", "weights_matrix", "closed_matrix", "transitions", "interim_test", "adaptations", "final_test", "names", "alpha_interim", "seq_bonf", "t", "bounds_1", "bounds_2", "cJ1", "cJ2", "subgroups", "arms", "endpoints", "n_table", "names_arms", "names_endpoints", "names_subgroups", "hyp_assoc"]
         },
         "k": {
           "type": "integer",
@@ -391,7 +391,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["correlation", "correlation_components", "weights", "alpha", "hyp_matrix", "weights_matrix", "closed_matrix", "test_m", "interim_test", "adaptations", "final_test", "names", "alpha_interim", "seq_bonf", "t", "bounds_1", "bounds_2", "cJ1", "cJ2", "subgroups", "arms", "endpoints", "n_table", "names_arms", "names_endpoints", "names_subgroups", "hyp_assoc"]
+          "value": ["correlation", "correlation_components", "weights", "alpha", "hyp_matrix", "weights_matrix", "closed_matrix", "transitions", "interim_test", "adaptations", "final_test", "names", "alpha_interim", "seq_bonf", "t", "bounds_1", "bounds_2", "cJ1", "cJ2", "subgroups", "arms", "endpoints", "n_table", "names_arms", "names_endpoints", "names_subgroups", "hyp_assoc"]
         },
         "k": {
           "type": "integer",
@@ -776,7 +776,7 @@
         "names": {
           "type": "character",
           "attributes": {},
-          "value": ["correlation", "correlation_components", "weights", "alpha", "hyp_matrix", "weights_matrix", "closed_matrix", "test_m", "interim_test", "adaptations", "final_test", "names", "alpha_interim", "seq_bonf", "t", "bounds_1", "bounds_2", "cJ1", "cJ2", "subgroups", "arms", "endpoints", "n_table", "names_arms", "names_endpoints", "names_subgroups", "hyp_assoc"]
+          "value": ["correlation", "correlation_components", "weights", "alpha", "hyp_matrix", "weights_matrix", "closed_matrix", "transitions", "interim_test", "adaptations", "final_test", "names", "alpha_interim", "seq_bonf", "t", "bounds_1", "bounds_2", "cJ1", "cJ2", "subgroups", "arms", "endpoints", "n_table", "names_arms", "names_endpoints", "names_subgroups", "hyp_assoc"]
         },
         "k": {
           "type": "integer",

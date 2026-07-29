@@ -6,7 +6,7 @@
 \usage{
 adagraph_design(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = NA,
   names = NULL
@@ -15,7 +15,7 @@ adagraph_design(
 \arguments{
 \item{weights}{List of weights, measuring how important each hypothesis is}
 
-\item{test_m}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
+\item{transitions}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 
@@ -36,7 +36,7 @@ To use graphical closed testing designs, use \code{cer_design()} and
 \code{trial_design()}.
 }
 \details{
-If \code{weights}, \code{test_m}, or \code{correlation} are named (via \code{\link[=names]{names()}} for vectors
+If \code{weights}, \code{transitions}, or \code{correlation} are named (via \code{\link[=names]{names()}} for vectors
 or \code{\link[=rownames]{rownames()}}/\code{\link[=colnames]{colnames()}} for matrices), they are automatically reordered
 to match the canonical hypothesis order. The canonical order is determined by
 the \code{names} argument if provided, otherwise by \code{names(weights)}, otherwise
@@ -49,7 +49,7 @@ design <- adagraph_design(
                    H2=c(NA, 1)),
  weights=c(2/3, 1/3),
  alpha=0.05,
- test_m=rbind(c(0, 1),
+ transitions=rbind(c(0, 1),
               c(1, 0)))
 design
 }

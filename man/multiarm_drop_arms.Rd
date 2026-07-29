@@ -50,7 +50,7 @@ design <- multiarm_cer_design(
  n_treatments = 50,
  weights = c(0.5, 0.5),
  alpha = 0.05,
- test_m = rbind(c(0, 1),
+ transitions = rbind(c(0, 1),
               c(1, 0)),
  alpha_spending = as,
  t = 0.5)

@@ -63,7 +63,7 @@ test_that("non-consonant design", {
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = m,
+    transitions = m,
     alpha_spending = as
   )
 

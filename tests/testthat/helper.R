@@ -14,6 +14,7 @@ local_future_plan <- function(strategy, ..., .local_envir = parent.frame()) {
 
 make_example_design <- function() {
   #=======
+
   m <- rbind(
     H1 = c(0, 1 / 2, 1 / 2, 0),
     H2 = c(1 / 2, 0, 0, 1 / 2),
@@ -36,7 +37,7 @@ make_example_design <- function() {
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = m,
+    transitions = m,
     alpha_spending = as,
     t = t
   )
@@ -67,7 +68,7 @@ make_example_multiarm <- function() {
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = m,
+    transitions = m,
     alpha_spending = as
   )
 
@@ -96,7 +97,7 @@ make_example_trial <- function() {
   prim_to_sec <- 0.4
 
   #fmt: skip
-  test_m <- matrix(
+  transitions <- matrix(
     byrow = TRUE,
     ncol = 8,
     data = c(
@@ -118,7 +119,7 @@ make_example_trial <- function() {
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = function(x, t) {
       2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
     },

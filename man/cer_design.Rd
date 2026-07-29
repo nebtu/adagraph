@@ -6,7 +6,7 @@
 \usage{
 cer_design(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = NA,
   t = 1/2,
@@ -19,7 +19,7 @@ cer_design(
 \arguments{
 \item{weights}{List of weights, measuring how important each hypothesis is}
 
-\item{test_m}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
+\item{transitions}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 
@@ -40,7 +40,7 @@ If no names are provided in the \code{names} argument, the names of the \code{we
 arguments are used. If that is also unnamed, the names \code{H1}, \code{H2}, etc. are
 used.
 
-If \code{weights}, \code{test_m}, or \code{correlation} are named (via \code{\link[=names]{names()}} for vectors
+If \code{weights}, \code{transitions}, or \code{correlation} are named (via \code{\link[=names]{names()}} for vectors
 or \code{\link[=rownames]{rownames()}}/\code{\link[=colnames]{colnames()}} for matrices), they are automatically reordered
 to match the canonical hypothesis order determined as described above. An
 error is raised if the names do not match the expected hypothesis names.}
@@ -60,7 +60,7 @@ design <- cer_design(
                    H2=c(NA, 1)),
  weights=c(2/3, 1/3),
  alpha=0.05,
- test_m=rbind(c(0, 1),
+ transitions=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending=as,
  t=0.5)

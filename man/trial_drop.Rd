@@ -55,7 +55,7 @@ des <- trial_design(
   weights = c(1/2, 1/2, 0, 0),
   t = 0.5,
   alpha = 0.025,
-  test_m = m,
+  transitions = m,
   alpha_spending = as
 ) |>
  cer_interim_test(c(
@@ -69,7 +69,7 @@ des_ad <- des |>
   trial_drop_arms(c("A1", "A4"))
 
 des_ad
-des_ad[["ad_test_m"]]
+des_ad[["ad_transitions"]]
 
 n_table <- rbind(
   data.frame(arm = "control", `G1` = FALSE, n = 20),
@@ -84,7 +84,7 @@ des <- trial_design(
   weights = c(1/2, 1/2, 0, 0),
  t = 0.5,
  alpha = 0.025,
- test_m = m,
+ transitions = m,
  alpha_spending = as
 ) |>
   cer_interim_test(c(
@@ -99,5 +99,5 @@ des_ad <- des |>
   trial_drop_endpoints("E1")
 
 des_ad
-des_ad[["ad_test_m"]]
+des_ad[["ad_transitions"]]
 }

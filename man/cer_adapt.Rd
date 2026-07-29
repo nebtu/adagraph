@@ -7,7 +7,7 @@
 cer_adapt(
   design,
   weights = NULL,
-  test_m = NULL,
+  transitions = NULL,
   t = NULL,
   correlation = NULL,
   adapt_bounds = TRUE
@@ -21,7 +21,7 @@ Note that the length should be the same as in the prespecified design.
 For dropping hypotheses, set the according weights to 0 or use \code{\link[=cer_drop_hypotheses]{cer_drop_hypotheses()}}.
 If named, automatically reordered to match the hypothesis order in the design.}
 
-\item{test_m}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
+\item{transitions}{Adapted test matrix defining the graph for the closed test procedure to test the hypotheses.
 If named (via row/column names), automatically reordered to match the hypothesis order.}
 
 \item{t}{adapted information fraction at which the first stage test occured.
@@ -54,7 +54,7 @@ design <- cer_design(
                    H2=c(NA, 1)),
  weights=c(2/3, 1/3),
  alpha=0.05,
- test_m=rbind(c(0, 1),
+ transitions=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending=as,
  t=0.5

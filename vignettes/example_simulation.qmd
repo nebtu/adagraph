@@ -55,7 +55,7 @@ design <- multiarm_cer_design(
   weights = c(1 / 4, 1 / 4, 1 / 4, 1 / 4, 0, 0, 0, 0),
   t = 1 / 2,
   alpha = 0.025,
-  test_m = m,
+  transitions = m,
   alpha_spending = as
 )
 

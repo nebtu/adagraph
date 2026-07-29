@@ -84,14 +84,14 @@ test_that("standardize_named_vector works with logical vectors", {
 
 test_that("standardize_named_matrix passes unnamed matrix of correct size", {
   m <- matrix(c(0, 1, 1, 0), nrow = 2)
-  result <- standardize_named_matrix(m, c("H1", "H2"), "test_m")
+  result <- standardize_named_matrix(m, c("H1", "H2"), "transitions")
   expect_equal(result, m)
 })
 
 test_that("standardize_named_matrix reorders named matrix", {
   m <- rbind(H2 = c(0, 1), H1 = c(1, 0))
   colnames(m) <- c("H2", "H1")
-  result <- standardize_named_matrix(m, c("H1", "H2"), "test_m")
+  result <- standardize_named_matrix(m, c("H1", "H2"), "transitions")
   expected <- rbind(H1 = c(0, 1), H2 = c(1, 0))
   colnames(expected) <- c("H1", "H2")
   expect_equal(result, expected)
@@ -100,14 +100,14 @@ test_that("standardize_named_matrix reorders named matrix", {
 test_that("standardize_named_matrix uses rownames when colnames absent", {
   m <- rbind(H2 = c(0, 1), H1 = c(1, 0))
   # rownames are set, colnames are not
-  result <- standardize_named_matrix(m, c("H1", "H2"), "test_m")
+  result <- standardize_named_matrix(m, c("H1", "H2"), "transitions")
   expect_equal(rownames(result), c("H1", "H2"))
 })
 
 test_that("standardize_named_matrix errors on wrong dimensions", {
   m <- matrix(0, nrow = 3, ncol = 3)
   expect_error(
-    standardize_named_matrix(m, c("H1", "H2"), "test_m"),
+    standardize_named_matrix(m, c("H1", "H2"), "transitions"),
     class = "adagraph_standardize_length"
   )
 })
@@ -115,13 +115,13 @@ test_that("standardize_named_matrix errors on wrong dimensions", {
 test_that("standardize_named_matrix errors on mismatched names", {
   m <- rbind(H1 = c(0, 1), H3 = c(1, 0))
   expect_error(
-    standardize_named_matrix(m, c("H1", "H2"), "test_m"),
+    standardize_named_matrix(m, c("H1", "H2"), "transitions"),
     class = "adagraph_standardize_names"
   )
 })
 
 test_that("standardize_named_matrix returns non-matrix as-is", {
-  result <- standardize_named_matrix("not a matrix", c("H1", "H2"), "test_m")
+  result <- standardize_named_matrix("not a matrix", c("H1", "H2"), "transitions")
   expect_equal(result, "not a matrix")
 })
 
@@ -144,14 +144,14 @@ test_that("resolve_hypothesis_names generates default names", {
 
 # Integration tests: named inputs in design creation ====
 
-test_that("cer_design accepts shuffled named weights and test_m", {
+test_that("cer_design accepts shuffled named weights and transitions", {
   as <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   corr <- rbind(c(1, NA), c(NA, 1))
 
   # Correct order
   design1 <- cer_design(
     weights = c(2 / 3, 1 / 3),
-    test_m = rbind(c(0, 1), c(1, 0)),
+    transitions = rbind(c(0, 1), c(1, 0)),
     correlation = corr,
     alpha = 0.05,
     alpha_spending = as,
@@ -162,7 +162,7 @@ test_that("cer_design accepts shuffled named weights and test_m", {
   # Shuffled named inputs with explicit names to force reordering
   design2 <- cer_design(
     weights = c(H2 = 1 / 3, H1 = 2 / 3),
-    test_m = rbind(H2 = c(0, 1), H1 = c(1, 0)),
+    transitions = rbind(H2 = c(0, 1), H1 = c(1, 0)),
     correlation = rbind(H2 = c(1, NA), H1 = c(NA, 1)),
     alpha = 0.05,
     alpha_spending = as,
@@ -171,7 +171,7 @@ test_that("cer_design accepts shuffled named weights and test_m", {
   )
 
   expect_equal(design1[["weights"]], design2[["weights"]])
-  expect_equal(design1[["test_m"]], design2[["test_m"]])
+  expect_equal(design1[["transitions"]], design2[["transitions"]])
   expect_equal(design1[["bounds_1"]], design2[["bounds_1"]])
   expect_equal(design1[["bounds_2"]], design2[["bounds_2"]])
 })
@@ -215,7 +215,7 @@ test_that("cer_final_test reorders named p_values", {
 
 # Integration tests: named inputs in cer_adapt ====
 
-test_that("cer_adapt reorders named weights and test_m", {
+test_that("cer_adapt reorders named weights and transitions", {
   design <- make_example_design()
   design <- cer_interim_test(design, c(0.001, 0.02, 0.5, 0.5))
 

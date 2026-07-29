@@ -1,17 +1,17 @@
 test_that("Simple design works", {
   correlation <- rbind(c(1, NA), c(NA, 1))
   weights <- c(2 / 3, 1 / 3)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025
   design <- adagraph_design(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m
+    transitions = transitions
   )
   expect_equal(unname(design$correlation), correlation)
   expect_equal(unname(design$weights), weights)
-  expect_equal(unname(design$test_m), test_m)
+  expect_equal(unname(design$transitions), transitions)
   expect_equal(design$alpha, alpha)
   expect_equal(unname(design$hyp_matrix), rbind(c(0, 1), c(1, 0), c(1, 1)))
   expect_equal(
@@ -24,14 +24,14 @@ test_that("Simple design works", {
 test_that("Correct validation of adagraph_design", {
   correlation <- rbind(H1 = c(1, NA), H2 = c(NA, 1))
   weights <- c(2 / 3, 1 / 3)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025
   expect_error(
     adagraph_design(
       correlation = rbind(c(1, NA)),
       weights = weights,
       alpha = alpha,
-      test_m = test_m
+      transitions = transitions
     ),
     class = "adagraph_standardize_length"
   )
@@ -40,7 +40,7 @@ test_that("Correct validation of adagraph_design", {
       correlation = "correlation",
       weights = weights,
       alpha = alpha,
-      test_m = test_m
+      transitions = transitions
     ),
     class = "adagraph_invalid_correlation"
   )
@@ -49,7 +49,7 @@ test_that("Correct validation of adagraph_design", {
       correlation = correlation,
       weights = weights,
       alpha = "0.0025",
-      test_m = test_m
+      transitions = transitions
     ),
     class = "adagraph_invalid_alpha"
   )
@@ -58,7 +58,7 @@ test_that("Correct validation of adagraph_design", {
       correlation = correlation,
       weights = weights,
       alpha = 1.0025,
-      test_m = test_m
+      transitions = transitions
     ),
     class = "adagraph_invalid_alpha"
   )
@@ -67,16 +67,16 @@ test_that("Correct validation of adagraph_design", {
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = "test_m"
+      transitions = "transitions"
     ),
-    class = "adagraph_invalid_test_m"
+    class = "adagraph_invalid_transitions"
   )
   expect_error(
     adagraph_design(
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = rbind(c(1, 0, 0), c(1, 0, 0), c(1, 0, 0))
+      transitions = rbind(c(1, 0, 0), c(1, 0, 0), c(1, 0, 0))
     ),
     class = "adagraph_standardize_length"
   )
@@ -85,7 +85,7 @@ test_that("Correct validation of adagraph_design", {
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       names = 1
     ),
     class = "adagraph_invalid_names"

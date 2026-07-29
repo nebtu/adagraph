@@ -22,10 +22,10 @@ export_gmcp_lite <- function(
   )
   if (adapted) {
     weights <- design[["ad_weights"]]
-    m <- design[["ad_test_m"]]
+    m <- design[["ad_transitions"]]
   } else {
     weights <- design[["weights"]]
-    m <- design[["test_m"]]
+    m <- design[["transitions"]]
   }
 
   #should not be necessary, but ensures correct behaviour if names was changed manually
@@ -65,7 +65,7 @@ export_gmcp_lite <- function(
 #' design <- cer_design(
 #'   weights = weights,
 #'   alpha = 0.05,
-#'   test_m = m,
+#'   transitions = m,
 #'   alpha_spending = as,
 #'   t = 0.5,
 #'   correlation = diag(4)
@@ -82,10 +82,10 @@ export_graphical_mcp <- function(
   )
   if (adapted) {
     weights <- design[["ad_weights"]]
-    m <- design[["ad_test_m"]]
+    m <- design[["ad_transitions"]]
   } else {
     weights <- design[["weights"]]
-    m <- design[["test_m"]]
+    m <- design[["transitions"]]
   }
 
   graphicalMCP::graph_create(unname(weights), unname(m), design[["names"]])

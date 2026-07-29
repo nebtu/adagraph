@@ -78,7 +78,7 @@ test_that("dropping arms works", {
 
   expect_equal(unname(design_adj$ad_weights), c(0, 0.75, 0.25, 0))
   expect_equal(
-    unname(design_adj$ad_test_m),
+    unname(design_adj$ad_transitions),
     rbind(
       c(0, 0, 0, 0),
       c(0, 0, 1 / 3, 2 / 3),

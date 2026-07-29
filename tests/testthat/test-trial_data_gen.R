@@ -269,7 +269,7 @@ test_that("no subgroups design works", {
     weights = c(1 / 2, 1 / 2, 0, 0),
     t = 0.5,
     alpha = 0.025,
-    test_m = m,
+    transitions = m,
     alpha_spending = as
   )
 

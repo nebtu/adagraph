@@ -2,7 +2,7 @@
 #'
 #' For documentation on how to generate adagraph_designs, see `adagraph_design()`
 #'
-#' @param correlation,weights,alpha,test_m Same as for `adagraph_design()`
+#' @param correlation,weights,alpha,transitions Same as for `adagraph_design()`
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
@@ -10,7 +10,7 @@
 #'  * correlation: correlation matrix of the hypotheses, as given
 #'  * weights: list of weights of the hypotheses, as given
 #'  * alpha: overall FWER, as given
-#'  * test_m: transition matrix of the graph, as given
+#'  * transitions: transition matrix of the graph, as given
 #'  * hyp_matrix: matrix of format #intersection-hypotheses x #hypotheses where
 #'      each row specifies which hypothesis is part of the given intersection hypotheses
 #'  * weights_matrix: same format as hyp_matrix, but each row specifies
@@ -20,7 +20,7 @@
 #' @noRd
 new_adagraph_design <- function(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = matrix(),
   names = NULL,
@@ -33,7 +33,7 @@ new_adagraph_design <- function(
     diag(correlation) <- 1
   }
 
-  int_hyp <- get_intersection_hypotheses(weights, test_m)
+  int_hyp <- get_intersection_hypotheses(weights, transitions)
   correlation_components <- gMCPLite:::conn.comp(correlation)
 
   if (is.null(names)) {
@@ -49,7 +49,7 @@ new_adagraph_design <- function(
   colnames(int_hyp[["hyp_matrix"]]) <- names
   colnames(int_hyp[["weights_matrix"]]) <- names
   colnames(int_hyp[["closed_matrix"]]) <- names
-  dimnames(test_m) <- list(names, names)
+  dimnames(transitions) <- list(names, names)
 
   design <- list(
     correlation = correlation,
@@ -59,7 +59,7 @@ new_adagraph_design <- function(
     hyp_matrix = int_hyp[["hyp_matrix"]],
     weights_matrix = int_hyp[["weights_matrix"]],
     closed_matrix = int_hyp[["closed_matrix"]],
-    test_m = test_m,
+    transitions = transitions,
     interim_test = FALSE,
     adaptations = FALSE,
     final_test = FALSE,
@@ -84,7 +84,7 @@ new_adagraph_design <- function(
 #' Uses `gMCPLite::generateWeights()` internally
 #'
 #' @param weights starting weights of the different hypothesis
-#' @param test_m transition matrix of the graph used to determine the weights
+#' @param transitions transition matrix of the graph used to determine the weights
 #'   for the intersection hypothesis
 #'
 #' @return a list with the following components:
@@ -100,7 +100,7 @@ new_adagraph_design <- function(
 #'   rejected (whith numbers to be used for subsetting the previous matrices) to
 #'   reject the overall hypothesis
 #' @noRd
-get_intersection_hypotheses <- function(weights, test_m) {
+get_intersection_hypotheses <- function(weights, transitions) {
   k <- length(weights)
   if (k == 1) {
     hyp_matrix <- cbind(1)
@@ -109,7 +109,7 @@ get_intersection_hypotheses <- function(weights, test_m) {
     #generate weights for all sub-hypotheses
     #NOTE: this function is quite slow for moderately large amounts (16) of
     #hypotheses
-    temp <- gMCPLite::generateWeights(test_m, weights)
+    temp <- gMCPLite::generateWeights(transitions, weights)
     hyp_matrix <- temp[, 1:k]
     weights_matrix <- temp[, (k + 1):(2 * k)]
   }
@@ -130,7 +130,7 @@ validate_adagraph_design_params <- function(
   correlation = matrix(),
   weights = double(),
   alpha = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   names = NULL,
   call = rlang::caller_env()
 ) {
@@ -184,23 +184,23 @@ validate_adagraph_design_params <- function(
       class = "adagraph_invalid_alpha",
       call = call
     )
-  } else if (!is.matrix(test_m)) {
+  } else if (!is.matrix(transitions)) {
     cli::cli_abort(
       c(
-        "{.var test_m} has to be a matrix.",
-        "x" = "{.var test_m} is {.obj_type_friendly {test_m}}"
+        "{.var transitions} has to be a matrix.",
+        "x" = "{.var transitions} is {.obj_type_friendly {transitions}}"
       ),
-      class = "adagraph_invalid_test_m",
+      class = "adagraph_invalid_transitions",
       call = call
     )
-  } else if (dim(test_m)[1] != dim(test_m)[2] || dim(test_m)[1] != k) {
+  } else if (dim(transitions)[1] != dim(transitions)[2] || dim(transitions)[1] != k) {
     cli::cli_abort(
       c(
-        "{.var test_m} must be a {k}x{k} matrix matching the number of hypotheses",
+        "{.var transitions} must be a {k}x{k} matrix matching the number of hypotheses",
         "i" = "There are {k} hypotheses",
-        "x" = "{.var test_m} has dimension {nrow(test_m)} x {ncol(test_m)}."
+        "x" = "{.var transitions} has dimension {nrow(transitions)} x {ncol(transitions)}."
       ),
-      class = "adagraph_invalid_test_m",
+      class = "adagraph_invalid_transitions",
       call = call
     )
   }
@@ -231,11 +231,11 @@ validate_adagraph_design_params <- function(
 #'                    Defaults to no known correlation.
 #' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
-#' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
+#' @param transitions Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #' @param names optional names for the hypotheses
 #'
 #' @details
-#' If `weights`, `test_m`, or `correlation` are named (via [names()] for vectors
+#' If `weights`, `transitions`, or `correlation` are named (via [names()] for vectors
 #' or [rownames()]/[colnames()] for matrices), they are automatically reordered
 #' to match the canonical hypothesis order. The canonical order is determined by
 #' the `names` argument if provided, otherwise by `names(weights)`, otherwise
@@ -253,12 +253,12 @@ validate_adagraph_design_params <- function(
 #'                    H2=c(NA, 1)),
 #'  weights=c(2/3, 1/3),
 #'  alpha=0.05,
-#'  test_m=rbind(c(0, 1),
+#'  transitions=rbind(c(0, 1),
 #'               c(1, 0)))
 #' design
 adagraph_design <- function(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = NA,
   names = NULL
@@ -267,7 +267,7 @@ adagraph_design <- function(
   if (is.null(names) || is.character(names)) {
     resolved_names <- resolve_hypothesis_names(names, weights, k)
     weights <- standardize_named_vector(weights, resolved_names, "weights")
-    test_m <- standardize_named_matrix(test_m, resolved_names, "test_m")
+    transitions <- standardize_named_matrix(transitions, resolved_names, "transitions")
     if (!rlang::is_na(correlation)) {
       correlation <- standardize_named_matrix(
         correlation,
@@ -281,14 +281,14 @@ adagraph_design <- function(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     names = names
   )
   new_adagraph_design(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     names = names
   )
 }

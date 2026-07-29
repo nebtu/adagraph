@@ -2,7 +2,7 @@
 #'
 #' For documentation on how to generate cer_designs, see `cer_design()`.
 #'
-#' @param correlation,weights,alpha,test_m,alpha_spending,t,seq_bonf,names Same as
+#' @param correlation,weights,alpha,transitions,alpha_spending,t,seq_bonf,names Same as
 #' for `cer_design()`
 #' @param alpha_interim the amount of alpha to be spent, calculated from (or
 #'   same as) alpha_spending
@@ -21,7 +21,7 @@
 #'      the weights of the hypotheses for the given intersection hypothesis
 #'  * closed_matrix: each of the #hypothesis columns specifies which
 #'      intersection hypotheses need to be tested to reject the given hypothesis
-#'  * test_m: transition matrix of the graph, as given
+#'  * transitions: transition matrix of the graph, as given
 #'  * alpha_interim: alpha to be spent as interim (already converted to double)
 #'  * seq_bonf: as given
 #'  * t: as given
@@ -33,7 +33,7 @@
 #' @noRd
 new_cer_design <- function(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = matrix(),
   alpha_interim = double(),
@@ -48,7 +48,7 @@ new_cer_design <- function(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     class = c(class, "cer_design"),
     names = names
   )
@@ -139,7 +139,7 @@ validate_cer_design_params <- function(
   correlation = matrix(),
   weights = double(),
   alpha = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha_spending = double(),
   t = double(),
   seq_bonf = TRUE,
@@ -150,7 +150,7 @@ validate_cer_design_params <- function(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     call = call,
     names = names
   )
@@ -207,7 +207,7 @@ validate_cer_design_params <- function(
 #'                    between the different hypotheses, use NA for uncorrelated
 #' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
-#' @param test_m Transition matrix describing the graph for the closed test procedure to test the hypotheses
+#' @param transitions Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #' @param alpha_spending either alpha spending function, taking parameters alpha
 #'   (for overall spent alpha) and t (information fraction at interim test), or
 #'   the amount of alpha to spend at interim as a double
@@ -219,7 +219,7 @@ validate_cer_design_params <- function(
 #' arguments are used. If that is also unnamed, the names `H1`, `H2`, etc. are
 #' used.
 #'
-#' If `weights`, `test_m`, or `correlation` are named (via [names()] for vectors
+#' If `weights`, `transitions`, or `correlation` are named (via [names()] for vectors
 #' or [rownames()]/[colnames()] for matrices), they are automatically reordered
 #' to match the canonical hypothesis order determined as described above. An
 #' error is raised if the names do not match the expected hypothesis names.
@@ -234,7 +234,7 @@ validate_cer_design_params <- function(
 #'                    H2=c(NA, 1)),
 #'  weights=c(2/3, 1/3),
 #'  alpha=0.05,
-#'  test_m=rbind(c(0, 1),
+#'  transitions=rbind(c(0, 1),
 #'               c(1, 0)),
 #'  alpha_spending=as,
 #'  t=0.5)
@@ -242,7 +242,7 @@ validate_cer_design_params <- function(
 #' design
 cer_design <- function(
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   correlation = NA,
   t = 1 / 2,
@@ -254,7 +254,7 @@ cer_design <- function(
   if (is.null(names) || is.character(names)) {
     resolved_names <- resolve_hypothesis_names(names, weights, k)
     weights <- standardize_named_vector(weights, resolved_names, "weights")
-    test_m <- standardize_named_matrix(test_m, resolved_names, "test_m")
+    transitions <- standardize_named_matrix(transitions, resolved_names, "transitions")
     if (!rlang::is_na(correlation)) {
       correlation <- standardize_named_matrix(
         correlation,
@@ -268,7 +268,7 @@ cer_design <- function(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     t = t,
     seq_bonf = seq_bonf,
@@ -280,7 +280,7 @@ cer_design <- function(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_interim = alpha_interim,
     alpha_spending = alpha_spending,
     t = t,

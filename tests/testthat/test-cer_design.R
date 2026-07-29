@@ -7,7 +7,7 @@ test_that("single hypothesis works", {
     correlation = diag(1),
     weights = 1,
     alpha = 0.05,
-    test_m = diag(1),
+    transitions = diag(1),
     alpha_spending = function(x, t) x * t,
     t = 0.5
   )
@@ -22,7 +22,7 @@ test_that("correlation = NA defaults to identity-diagonal NA matrix", {
   # Using correlation = NA (the default)
   design_na <- cer_design(
     weights = c(2 / 3, 1 / 3),
-    test_m = rbind(c(0, 1), c(1, 0)),
+    transitions = rbind(c(0, 1), c(1, 0)),
     correlation = NA,
     alpha = 0.05,
     alpha_spending = as,
@@ -32,7 +32,7 @@ test_that("correlation = NA defaults to identity-diagonal NA matrix", {
   # Equivalent explicit correlation matrix
   design_explicit <- cer_design(
     weights = c(2 / 3, 1 / 3),
-    test_m = rbind(c(0, 1), c(1, 0)),
+    transitions = rbind(c(0, 1), c(1, 0)),
     correlation = rbind(c(1, NA), c(NA, 1)),
     alpha = 0.05,
     alpha_spending = as,
@@ -124,7 +124,7 @@ test_that("Using future in parallel for cer design", {
 test_that("Simple CER design works", {
   correlation <- rbind(c(1, NA), c(NA, 1))
   weights <- c(2 / 3, 1 / 3)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025
   alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
@@ -132,14 +132,14 @@ test_that("Simple CER design works", {
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     t = t
   )
   expect_s3_class(design, c("cer_design", "adagraph_design"))
   expect_equal(unname(design$correlation), correlation)
   expect_equal(unname(design$weights), weights)
-  expect_equal(unname(design$test_m), test_m)
+  expect_equal(unname(design$transitions), transitions)
   expect_equal(design$alpha, alpha)
   expect_equal(design$alpha_interim, alpha_spending(alpha, t))
   expect_equal(design$t, t)
@@ -148,7 +148,7 @@ test_that("Simple CER design works", {
 test_that("Correct validation of cer_design", {
   correlation <- rbind(c(1, NA), c(NA, 1))
   weights <- c(2 / 3, 1 / 3)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.025
   alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
@@ -157,7 +157,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       correlation = rbind(c(1, NA)),
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -168,7 +168,7 @@ test_that("Correct validation of cer_design", {
       weights = weights,
       correlation = "correlation",
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -179,7 +179,7 @@ test_that("Correct validation of cer_design", {
       correlation = correlation,
       weights = weights,
       alpha = "0.05",
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -190,7 +190,7 @@ test_that("Correct validation of cer_design", {
       correlation = correlation,
       weights = weights,
       alpha = 1.05,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -201,18 +201,18 @@ test_that("Correct validation of cer_design", {
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = "test_m",
+      transitions = "transitions",
       alpha_spending = alpha_spending,
       t = t
     ),
-    class = "adagraph_invalid_test_m"
+    class = "adagraph_invalid_transitions"
   )
   expect_error(
     cer_design(
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = rbind(c(1, 0, 0), c(1, 0, 0), c(1, 0, 0)),
+      transitions = rbind(c(1, 0, 0), c(1, 0, 0), c(1, 0, 0)),
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -223,7 +223,7 @@ test_that("Correct validation of cer_design", {
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = "0.5"
     ),
@@ -234,7 +234,7 @@ test_that("Correct validation of cer_design", {
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = c(0.5, 0.5)
     ),
@@ -245,7 +245,7 @@ test_that("Correct validation of cer_design", {
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = 1.5
     ),
@@ -256,7 +256,7 @@ test_that("Correct validation of cer_design", {
       correlation = correlation,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t,
       seq_bonf = "TRUE"
@@ -269,7 +269,7 @@ test_that("Correct validation of cer_design", {
         correlation = correlation,
         weights = weights,
         alpha = alpha,
-        test_m = test_m,
+        transitions = transitions,
         alpha_spending = bad,
         t = t,
         seq_bonf = TRUE
@@ -283,7 +283,7 @@ test_that("scalar alpha_1 is equivalent to a constant spending function", {
   args <- list(
     correlation = rbind(c(1, NA), c(NA, 1)),
     weights = c(2 / 3, 1 / 3),
-    test_m = rbind(c(0, 1), c(1, 0)),
+    transitions = rbind(c(0, 1), c(1, 0)),
     alpha = 0.025,
     t = 0.5
   )

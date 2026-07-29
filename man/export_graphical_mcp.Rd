@@ -34,7 +34,7 @@ as = function(x, t) 2 - 2 * stats::pnorm(stats::qnorm(1 - x / 2) / sqrt(t))
 design <- cer_design(
   weights = weights,
   alpha = 0.05,
-  test_m = m,
+  transitions = m,
   alpha_spending = as,
   t = 0.5,
   correlation = diag(4)

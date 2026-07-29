@@ -25,7 +25,7 @@ test_that("same as multiarm design", {
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = m,
+    transitions = m,
     alpha_spending = as,
     names = c("H1", "H2", "H3", "H4")
   )
@@ -92,7 +92,7 @@ test_that("more complicated subgroup structures work", {
     t = 0.5,
     alpha = 0.025,
     alpha_spending = as,
-    test_m = diag(6),
+    transitions = diag(6),
     names_arms = names_arms,
     names_endpoints = "E1",
     names_subgroups = names_subgroups
@@ -124,7 +124,7 @@ test_that("more complicated subgroup structures work", {
     t = 0.5,
     alpha = 0.025,
     alpha_spending = as,
-    test_m = diag(12),
+    transitions = diag(12),
     names_arms = names_arms,
     names_endpoints = c("E1", "E2"),
     names_subgroups = names_subgroups

@@ -61,7 +61,7 @@ des <- trial_design(
   weights = c(1 / 2, 1 / 2, 0, 0),
   t = 0.5,
   alpha = 0.025,
-  test_m = m,
+  transitions = m,
   alpha_spending = as
 ) |>
   cer_interim_test(c(
@@ -91,7 +91,7 @@ des <- trial_design(
   weights = c(1 / 2, 1 / 2, 0, 0),
   t = 0.5,
  alpha = 0.025,
- test_m = m,
+ transitions = m,
  alpha_spending = as
 ) |>
   cer_interim_test(c(

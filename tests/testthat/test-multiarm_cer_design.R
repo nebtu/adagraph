@@ -7,7 +7,7 @@ test_that("Uncorrelated multiarm design works (different controls)", {
   n_controls <- 50
   n_treatments <- 40
   weights <- c(0.5, 0.5)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
   alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
@@ -19,7 +19,7 @@ test_that("Uncorrelated multiarm design works (different controls)", {
     n_treatments = n_treatments,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     t = t
   )
@@ -35,7 +35,7 @@ test_that("Uncorrelated multiarm design works (different controls)", {
   expect_equal(design$n_treatments, rep(n_treatments, length(treatment_assoc)))
   expect_equal(unname(design$weights), weights)
   expect_equal(design$alpha, alpha)
-  expect_equal(unname(design$test_m), test_m)
+  expect_equal(unname(design$transitions), transitions)
   expect_equal(design$t, t)
 
   # Check correlation matrix - should be uncorrelated (NA off-diagonal)
@@ -57,7 +57,7 @@ test_that("Correlated multiarm design works (same control)", {
   n_controls <- 50
   n_treatments <- 50 # Equal to n_controls to get correlation = 1/2
   weights <- c(0.5, 0.5)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
   alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
@@ -69,7 +69,7 @@ test_that("Correlated multiarm design works (same control)", {
     n_treatments = n_treatments,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     t = t
   )
@@ -100,7 +100,7 @@ test_that("Different sample sizes work correctly", {
   n_controls <- c(60, 70) # Different control group sizes
   n_treatments <- c(30, 40) # Different treatment group sizes
   weights <- c(0.6, 0.4)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
   alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
@@ -112,7 +112,7 @@ test_that("Different sample sizes work correctly", {
     n_treatments = n_treatments,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     t = t
   )
@@ -133,7 +133,7 @@ test_that("Complex correlated design with multiple treatments per control", {
   n_controls <- 50
   n_treatments <- 40
   weights <- c(1 / 3, 1 / 3, 1 / 3)
-  test_m <- rbind(
+  transitions <- rbind(
     c(0, 0.5, 0.5),
     c(0.5, 0, 0.5),
     c(0.5, 0.5, 0)
@@ -149,7 +149,7 @@ test_that("Complex correlated design with multiple treatments per control", {
     n_treatments = n_treatments,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     t = t
   )
@@ -185,7 +185,7 @@ test_that("Parameter validation works correctly", {
   n_controls <- 50
   n_treatments <- 40
   weights <- c(0.5, 0.5)
-  test_m <- rbind(c(0, 1), c(1, 0))
+  transitions <- rbind(c(0, 1), c(1, 0))
   alpha <- 0.05
   alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
@@ -199,7 +199,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -214,7 +214,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -230,7 +230,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -245,7 +245,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -261,7 +261,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -276,7 +276,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = 0,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -292,7 +292,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = c(0.5), # Wrong length
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -308,7 +308,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = 1.5,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t
     ),
@@ -324,14 +324,14 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = 1.5
     ),
     class = "adagraph_invalid_t"
   )
 
-  # Test invalid test_m dimensions
+  # Test invalid transitions dimensions
   expect_error(
     multiarm_cer_design(
       controls = controls,
@@ -340,11 +340,11 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = rbind(c(0, 1, 0), c(1, 0, 0), c(0, 0, 1)), # 3x3 matrix for 2 treatments
+      transitions = rbind(c(0, 1, 0), c(1, 0, 0), c(0, 0, 1)), # 3x3 matrix for 2 treatments
       alpha_spending = alpha_spending,
       t = t
     ),
-    class = "adagraph_invalid_test_m"
+    class = "adagraph_invalid_transitions"
   )
 
   # Test invalid seq_bonf
@@ -356,7 +356,7 @@ test_that("Parameter validation works correctly", {
       n_treatments = n_treatments,
       weights = weights,
       alpha = alpha,
-      test_m = test_m,
+      transitions = transitions,
       alpha_spending = alpha_spending,
       t = t,
       seq_bonf = "TRUE"
@@ -372,7 +372,7 @@ test_that("Single treatment works", {
   n_controls <- 50
   n_treatments <- 40
   weights <- c(1)
-  test_m <- matrix(1)
+  transitions <- matrix(1)
   alpha <- 0.05
   alpha_spending <- function(x, t) 2 - 2 * pnorm(qnorm(1 - x / 2) / sqrt(t))
   t <- 0.5
@@ -384,7 +384,7 @@ test_that("Single treatment works", {
     n_treatments = n_treatments,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     t = t
   )

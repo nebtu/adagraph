@@ -6,7 +6,7 @@
 #' possible. Additionally, only n_table is allowed for giving the
 #' correlation structure for arms and subgroups
 #'
-#' @param arms,endpoints,weights,t,alpha,test_m,alpha_spending,seq_bonf,names
+#' @param arms,endpoints,weights,t,alpha,transitions,alpha_spending,seq_bonf,names
 #'   Same as for [trial_design()]
 #' @param alpha_interim the amount of alpha to be spent, calculated from (or
 #'   same as) alpha_spending
@@ -21,7 +21,7 @@ new_trial_design <- function(
   subgroups = integer(),
   n_table = data.frame(),
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   alpha_interim = double(),
   alpha_spending = function() {},
@@ -79,7 +79,7 @@ new_trial_design <- function(
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_interim = alpha_interim,
     t = t,
     names = names,
@@ -163,7 +163,7 @@ validate_trial_design_params <- function(
   weights = double(),
   t = double(),
   alpha = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha_spending = function() {},
   seq_bonf = TRUE,
   names_arms = NULL,
@@ -223,7 +223,7 @@ validate_trial_design_params <- function(
 #' @param t information fraction, at which fraction of assigned people will the
 #'   interim analysis happen
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
-#' @param test_m Transition matrix describing the graph for
+#' @param transitions Transition matrix describing the graph for
 #'   the closed test procedure to test the hypotheses. If named (via
 #'   row/column names), automatically reordered to match the hypothesis order.
 #' @param alpha_spending either alpha spending function, taking parameters alpha
@@ -260,7 +260,7 @@ validate_trial_design_params <- function(
 #'  weights = c(0.5, 0.5, 0, 0), #all weight is at first on the first endpoint,
 #'                                #on both arms equally
 #'  alpha = 0.05,
-#'  test_m = m,
+#'  transitions = m,
 #'  alpha_spending = as,
 #'  t = 0.5
 #' )
@@ -274,7 +274,7 @@ trial_design <- function(
   n_arms = NULL,
   n_table = NULL,
   weights = double(),
-  test_m = matrix(),
+  transitions = matrix(),
   alpha = double(),
   alpha_spending = function() {},
   t = 1 / 2,
@@ -342,7 +342,7 @@ trial_design <- function(
     )
   }
   weights <- standardize_named_vector(weights, names, "weights")
-  test_m <- standardize_named_matrix(test_m, names, "test_m")
+  transitions <- standardize_named_matrix(transitions, names, "transitions")
 
   validate_trial_design_params(
     arms = arms,
@@ -354,7 +354,7 @@ trial_design <- function(
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_spending = alpha_spending,
     seq_bonf = seq_bonf,
     names_arms = names_arms,
@@ -391,7 +391,7 @@ trial_design <- function(
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = test_m,
+    transitions = transitions,
     alpha_interim = alpha_interim,
     alpha_spending = alpha_spending,
     seq_bonf = seq_bonf,

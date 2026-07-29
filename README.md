@@ -50,7 +50,7 @@ design <- trial_design(
   n_control = 50,
   n_arms = c(arm1 = 50, arm2 = 50),
   weights = c(0.5, 0.5),
-  test_m = rbind(c(0, 1), c(1, 0)),
+  transitions = rbind(c(0, 1), c(1, 0)),
   alpha = 0.025,
   alpha_spending = alpha_spending,
   t = 1 / 2,

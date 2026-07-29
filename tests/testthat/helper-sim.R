@@ -28,7 +28,7 @@ get_paper_sim_design <- function() {
     correlation = correlation,
     weights = weights,
     alpha = alpha,
-    test_m = m,
+    transitions = m,
     alpha_spending = as,
     t = t
   )
@@ -67,7 +67,7 @@ get_paper_sim_design_multiarm <- function() {
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = m,
+    transitions = m,
     alpha_spending = as
   )
 

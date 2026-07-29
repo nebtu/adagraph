@@ -49,7 +49,7 @@ design <- cer_design(
                    H2=c(NA, 1)),
  weights=c(2/3, 1/3),
  alpha=0.05,
- test_m=rbind(c(0, 1),
+ transitions=rbind(c(0, 1),
               c(1, 0)),
  alpha_spending=as,
  t=0.5)

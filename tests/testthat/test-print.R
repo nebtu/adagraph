@@ -3,7 +3,7 @@ test_that("print.adagraph_design produces stable output", {
     correlation = rbind(c(1, NA), c(NA, 1)),
     weights = c(0.5, 0.5),
     alpha = 0.05,
-    test_m = rbind(c(0, 1), c(1, 0))
+    transitions = rbind(c(0, 1), c(1, 0))
   )
 
   expect_snapshot_output(print(design))

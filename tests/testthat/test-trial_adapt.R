@@ -40,7 +40,7 @@ test_that("paper_example works", {
     weights = weights,
     t = t,
     alpha = alpha,
-    test_m = m,
+    transitions = m,
     alpha_spending = as,
     names = c("H1", "H2", "H3", "H4")
   ) |>
@@ -69,7 +69,7 @@ test_that("paper_example works", {
   )
   reallocated_t <- (1 / (2 / 35)) / (1 / (2 / 35) + 1 / (1 / 52 + 1 / 53))
   expect_equal(unname(des_ad$ad_t), c(1, reallocated_t, 1, reallocated_t))
-  expect_equal(unname(des_ad$ad_test_m), ad_m)
+  expect_equal(unname(des_ad$ad_transitions), ad_m)
 })
 
 test_that("basic example dropping groups", {
@@ -98,7 +98,7 @@ test_that("basic example dropping groups", {
   )
 
   expect_equal(unname(des_ad$ad_weights), c(0.5, 0.5, 0, 0, 0, 0, 0, 0))
-  expect_equal(unname(des_ad$ad_test_m), ad_m)
+  expect_equal(unname(des_ad$ad_transitions), ad_m)
 
   #test that using index instead works
   des_ad_alt <- des |> trial_drop_groups(2)
@@ -133,7 +133,7 @@ test_that("basic example dropping arms", {
   )
 
   expect_equal(unname(des_ad$ad_weights), c(0.6, 0, 0, 0, 0.4, 0, 0, 0))
-  expect_equal(unname(des_ad$ad_test_m), ad_m)
+  expect_equal(unname(des_ad$ad_transitions), ad_m)
 
   #test that using index instead works
   des_ad_alt <- des |> trial_drop_arms(2)
@@ -166,7 +166,7 @@ test_that("basic example dropping endpoints", {
   )
 
   expect_equal(unname(des_ad$ad_weights), c(0.35, 0.35, 0, 0, 0.15, 0.15, 0, 0))
-  expect_equal(unname(des_ad$ad_test_m), ad_m)
+  expect_equal(unname(des_ad$ad_transitions), ad_m)
 
   #test that using index instead works
   des_ad_alt <- des |>
