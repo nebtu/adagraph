@@ -182,10 +182,11 @@ multiarm_drop_arms <- function(
   design[["ad_n_treatments"]] <- n_treat_1 + n_treat_2
   design[["ad_n_controls"]] <- n_cont_1 + n_cont_2
 
+  k <- attr(design, "k")
   if (alt_adj) {
     design <- cer_alt_drop_hypotheses(
       design,
-      arms,
+      1:k %in% arms,
       adapt_bounds = FALSE
     )
   } else {
