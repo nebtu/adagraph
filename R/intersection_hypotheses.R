@@ -2,7 +2,7 @@
 #'
 #' For given design, this returns for each intersection hypothesis the weights
 #' and boundaries for rejecting. After adaptations, it also includes
-#' the updated weights and boundaries.
+#' the updated weights and boundaries, if they are updated.
 #'
 #' @param design A cer_design object
 #' @param ... additional parameters, not used
@@ -43,11 +43,14 @@ intersection_hypotheses.cer_design <- function(design, ...) {
     ad_weights <- data.frame(design[["ad_weights_matrix"]])
     ad_weights[!active_hyp] <- NA
     colnames(ad_weights) <- paste0("ad_weights_", colnames(ad_weights))
-    ad_bounds_2 <- data.frame(design[["ad_bounds_2"]])
-    ad_bounds_2[!active_hyp] <- NA
-    colnames(ad_bounds_2) <- paste0("ad_bound_final_", colnames(ad_bounds_2))
-
-    df <- cbind(df, ad_weights, ad_bounds_2)
+    df <- cbind(df, ad_weights)
+    if (!rlang::is_true(design[["ad_bounds_outdated"]])) {
+      #don't show new bounds if they are not up to date,
+      ad_bounds_2 <- data.frame(design[["ad_bounds_2"]])
+      ad_bounds_2[!active_hyp] <- NA
+      colnames(ad_bounds_2) <- paste0("ad_bound_final_", colnames(ad_bounds_2))
+      df <- cbind(df, ad_bounds_2)
+    }
   }
   if (isTRUE(design[["final_test"]])) {
     final_rej <- data.frame(design[["intersection_rej"]] == 1)
@@ -106,19 +109,22 @@ format.intersection_hypotheses <- function(
       ad_weights <- apply(x[, grep("^ad_weights", names(x))], 1, \(row) {
         format_nums(row)
       })
-      ad_bounds_2 <- apply(
-        x[, grep("^ad_bound_final", names(x))],
-        1,
-        \(row) {
-          format_nums(row)
-        }
-      )
       ad_df <- data.frame(
         `Hypotheses` = x[["hyp_names"]],
         `Adapted Weights` = ad_weights,
-        `Adapted Final Bounds` = ad_bounds_2,
         check.names = FALSE
       )
+      if (any(grep("^ad_bound_final", names(x)))) {
+        ad_bounds_2 <- apply(
+          x[, grep("^ad_bound_final", names(x))],
+          1,
+          \(row) {
+            format_nums(row)
+          }
+        )
+
+        ad_df <- cbind(ad_df, `Adapted Final Bounds` = ad_bounds_2)
+      }
       if (any(grep("^rej", names(x)))) {
         ad_df <- cbind(ad_df, `Rejected` = x[["rej"]])
         cli::cli_h2("After adaptation and final result")

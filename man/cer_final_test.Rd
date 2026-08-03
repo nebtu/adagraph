@@ -12,7 +12,8 @@ cer_final_test(design, p_values, combined = TRUE)
 
 \item{p_values}{A vector of p-values for the hypotheses. If named, the
 values are automatically reordered to match the hypothesis order in the
-design. Names must match the hypothesis names exactly.}
+design. Names must match the hypothesis names exactly. NAs are allowed and
+never lead to rejection}
 
 \item{combined}{Are the p-values already the combination of the p-value of
 the first and second stage or just the raw values from the second stage}

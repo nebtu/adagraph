@@ -10,8 +10,7 @@ cer_design(
   alpha = double(),
   correlation = NA,
   t = 1/2,
-  alpha_spending = function() {
- },
+  alpha_spending = 0,
   seq_bonf = TRUE,
   names = NULL
 )

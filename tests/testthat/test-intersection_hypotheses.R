@@ -16,3 +16,12 @@ test_that("intersection_hypotheses works as expected", {
 
   expect_snapshot_output(print(intersection_hypotheses(design_tested)))
 })
+
+test_that("works with not yet updated bounds", {
+  design <- make_example_design()
+  design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
+  design_adj <- cer_drop_hypotheses(design, 1, adapt_bounds = FALSE)
+  int_hyp <- intersection_hypotheses(design_adj)
+  expect_false(any(grep("ad_bound_final", int_hyp)))
+  expect_snapshot_output(print(int_hyp))
+})

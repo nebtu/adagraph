@@ -13,8 +13,7 @@ multiarm_cer_design(
   t = double(),
   alpha = double(),
   transitions = matrix(),
-  alpha_spending = function() {
- },
+  alpha_spending = 0,
   seq_bonf = TRUE
 )
 }

@@ -60,8 +60,6 @@ design <- cer_design(
  t=0.5
 )
 
-#note that it is not necessary to do an interim test before,
-#but that an interim test will only be done with the prespecified parameters
 design <- cer_interim_test(design, c(0.1, 0.02))
 
 design <- cer_adapt(design, weights = c(1/3, 2/3))

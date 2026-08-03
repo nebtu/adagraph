@@ -39,7 +39,6 @@
 #' @export
 #'
 #' @examples
-#' as <- function(x,t) 2-2*pnorm(qnorm(1-x/2)/sqrt(t))
 #' design <- multiarm_cer_design(
 #'  controls = 1,
 #'  treatment_assoc = c(1,1),
@@ -49,7 +48,7 @@
 #'  alpha = 0.05,
 #'  transitions = rbind(c(0, 1),
 #'               c(1, 0)),
-#'  alpha_spending = as,
+#'  alpha_spending = 0.005574597,
 #'  t = 0.5)
 #'
 #' data_gen <- get_data_gen(

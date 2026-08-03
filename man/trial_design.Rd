@@ -14,8 +14,7 @@ trial_design(
   weights = double(),
   transitions = matrix(),
   alpha = double(),
-  alpha_spending = function() {
- },
+  alpha_spending = 0,
   t = 1/2,
   seq_bonf = TRUE,
   names_arms = NULL,
