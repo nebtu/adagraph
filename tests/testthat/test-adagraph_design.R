@@ -42,7 +42,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       transitions = transitions
     ),
-    class = "adagraph_invalid_correlation"
+    class = "adagraph_standardize_length"
   )
   expect_error(
     adagraph_design(
@@ -69,7 +69,7 @@ test_that("Correct validation of adagraph_design", {
       alpha = alpha,
       transitions = "transitions"
     ),
-    class = "adagraph_invalid_transitions"
+    class = "adagraph_standardize_length"
   )
   expect_error(
     adagraph_design(

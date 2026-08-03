@@ -38,8 +38,6 @@
 #'  t=0.5
 #' )
 #'
-#' #note that it is not necessary to do an interim test before,
-#' #but that an interim test will only be done with the prespecified parameters
 #' design <- cer_interim_test(design, c(0.1, 0.02))
 #'
 #' design <- cer_adapt(design, weights = c(1/3, 2/3))
@@ -69,14 +67,24 @@ cer_adapt <- function(
     weights <- standardize_named_vector(weights, hyp_names, "weights")
   }
   if (!is.null(transitions)) {
-    transitions <- standardize_named_matrix(transitions, hyp_names, "transitions")
+    transitions <- standardize_named_matrix(
+      transitions,
+      hyp_names,
+      "transitions"
+    )
   }
   if (!is.null(t)) {
+    allow_na <- if (!is.null(design[["keep_hyp"]])) {
+      !design[["keep_hyp"]]
+    } else {
+      FALSE
+    }
     t <- standardize_named_vector(
       t,
       hyp_names,
       "t",
-      allow_scalar = TRUE
+      allow_scalar = TRUE,
+      allow_na = allow_na
     )
   }
   if (!is.null(correlation)) {
@@ -210,7 +218,8 @@ cer_drop_hypotheses <- function(
         } else {
           feedback_loop <- transitions[i, hyp] * transitions[hyp, i]
           # ^ amount of weight that "gets stuck", i.e. would get transfered back to the deleted hypothesis
-          transitions[i, ] <- (transitions[i, ] + transitions[i, hyp] * transitions[hyp, ]) /
+          transitions[i, ] <- (transitions[i, ] +
+            transitions[i, hyp] * transitions[hyp, ]) /
             (1 - feedback_loop)
         }
       }

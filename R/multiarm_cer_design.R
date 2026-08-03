@@ -63,7 +63,7 @@ validate_multiarm_cer_design_params <- function(
   t = double(),
   alpha = double(),
   transitions = matrix(),
-  alpha_spending = function() {},
+  alpha_spending = double(),
   seq_bonf = TRUE,
   call = rlang::caller_env()
 ) {
@@ -200,7 +200,7 @@ multiarm_cer_design <- function(
   t = double(),
   alpha = double(),
   transitions = matrix(),
-  alpha_spending = function() {},
+  alpha_spending = 0,
   seq_bonf = TRUE
 ) {
   if (length(n_controls) == 1) {
@@ -209,6 +209,12 @@ multiarm_cer_design <- function(
   if (length(n_treatments) == 1) {
     n_treatments <- rep(n_treatments, length(treatment_assoc))
   }
+
+  k <- length(weights)
+  hyp_names <- resolve_hypothesis_names(NULL, weights, k)
+  weights <- standardize_named_vector(weights, hyp_names, "weights")
+  transitions <- standardize_named_matrix(transitions, hyp_names, "transitions")
+
   validate_multiarm_cer_design_params(
     controls = controls,
     treatment_assoc = treatment_assoc,
@@ -221,12 +227,7 @@ multiarm_cer_design <- function(
     alpha_spending = alpha_spending,
     seq_bonf = seq_bonf
   )
-
   alpha_interim <- resolve_alpha_spending(alpha_spending, alpha, t)
-  k <- length(weights)
-  hyp_names <- resolve_hypothesis_names(NULL, weights, k)
-  weights <- standardize_named_vector(weights, hyp_names, "weights")
-  transitions <- standardize_named_matrix(transitions, hyp_names, "transitions")
 
   new_multiarm_cer_design(
     controls = controls,

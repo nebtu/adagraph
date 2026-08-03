@@ -296,7 +296,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending = alpha_spending,
       t = t
     ),
-    class = "adagraph_invalid_weights"
+    class = "adagraph_standardize_length"
   )
 
   # Test invalid alpha
@@ -344,7 +344,7 @@ test_that("Parameter validation works correctly", {
       alpha_spending = alpha_spending,
       t = t
     ),
-    class = "adagraph_invalid_transitions"
+    class = "adagraph_standardize_length"
   )
 
   # Test invalid seq_bonf

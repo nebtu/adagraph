@@ -145,27 +145,6 @@ validate_adagraph_design_params <- function(
     )
   }
   k <- length(weights)
-  if (!rlang::is_na(correlation)) {
-    if (!(is.matrix(correlation))) {
-      cli::cli_abort(
-        "correlation has to be a matrix (or {NA}).",
-        class = "adagraph_invalid_correlation",
-        call = call
-      )
-    } else if (
-      dim(correlation)[1] != dim(correlation)[2] || dim(correlation)[1] != k
-    ) {
-      cli::cli_abort(
-        c(
-          "correlation has to be a quadratic matrix with one row/column per hypothesis.",
-          "x" = "correlation has dimension {dim(correlation)[1]} x {dim(correlation)[2]}.",
-          "i" = "There are {k} hypotheses."
-        ),
-        class = "adagraph_invalid_correlation",
-        call = call
-      )
-    }
-  }
   if (!rlang::is_scalar_double(alpha)) {
     cli::cli_abort(
       c(
@@ -182,25 +161,6 @@ validate_adagraph_design_params <- function(
         "x" = "{.var alpha} is {alpha}."
       ),
       class = "adagraph_invalid_alpha",
-      call = call
-    )
-  } else if (!is.matrix(transitions)) {
-    cli::cli_abort(
-      c(
-        "{.var transitions} has to be a matrix.",
-        "x" = "{.var transitions} is {.obj_type_friendly {transitions}}"
-      ),
-      class = "adagraph_invalid_transitions",
-      call = call
-    )
-  } else if (dim(transitions)[1] != dim(transitions)[2] || dim(transitions)[1] != k) {
-    cli::cli_abort(
-      c(
-        "{.var transitions} must be a {k}x{k} matrix matching the number of hypotheses",
-        "i" = "There are {k} hypotheses",
-        "x" = "{.var transitions} has dimension {nrow(transitions)} x {ncol(transitions)}."
-      ),
-      class = "adagraph_invalid_transitions",
       call = call
     )
   }
@@ -267,7 +227,11 @@ adagraph_design <- function(
   if (is.null(names) || is.character(names)) {
     resolved_names <- resolve_hypothesis_names(names, weights, k)
     weights <- standardize_named_vector(weights, resolved_names, "weights")
-    transitions <- standardize_named_matrix(transitions, resolved_names, "transitions")
+    transitions <- standardize_named_matrix(
+      transitions,
+      resolved_names,
+      "transitions"
+    )
     if (!rlang::is_na(correlation)) {
       correlation <- standardize_named_matrix(
         correlation,

@@ -30,6 +30,8 @@ resolve_hypothesis_names <- function(names, weights, k) {
 #' @param expected_names Character vector of canonical hypothesis names
 #' @param arg_name Name of the argument, for error messages
 #' @param allow_scalar If TRUE, a scalar value passes through without name checking
+#' @param allow_na Wether NAs are allowed in the vector, can also be a boolean
+#'   vector of length `length(expected_names)`
 #' @param call Caller environment for error reporting
 #'
 #' @return The vector, potentially reordered
@@ -39,75 +41,91 @@ standardize_named_vector <- function(
   expected_names,
   arg_name,
   allow_scalar = FALSE,
+  allow_na = FALSE,
   call = rlang::caller_env()
 ) {
   k <- length(expected_names)
 
-  if (allow_scalar && length(x) == 1 && is.null(names(x))) {
-    return(x)
-  }
+  if (!(allow_scalar && length(x) == 1)) {
+    if (is.null(names(x))) {
+      if (length(x) != k) {
+        cli::cli_abort(
+          c(
+            "{.arg {arg_name}} must have length {k} (one per hypothesis).",
+            "x" = "{.arg {arg_name}} has length {length(x)}.",
+            "i" = "Hypotheses are: {.val {expected_names}}."
+          ),
+          class = "adagraph_standardize_length",
+          call = call
+        )
+      }
+    } else {
+      # Named vector: validate names match expected set
+      x_names <- names(x)
 
-  if (is.null(names(x))) {
-    if (length(x) != k) {
-      cli::cli_abort(
-        c(
-          "{.arg {arg_name}} must have length {k} (one per hypothesis).",
-          "x" = "{.arg {arg_name}} has length {length(x)}.",
-          "i" = "Hypotheses are: {.val {expected_names}}."
-        ),
-        class = "adagraph_standardize_length",
-        call = call
-      )
+      if (anyDuplicated(x_names)) {
+        cli::cli_abort(
+          c(
+            "{.arg {arg_name}} has duplicate names.",
+            "x" = "Duplicated: {.val {x_names[duplicated(x_names)]}}."
+          ),
+          class = "adagraph_standardize_names",
+          call = call
+        )
+      }
+
+      if (any(x_names == "")) {
+        cli::cli_abort(
+          c(
+            "{.arg {arg_name}} has a mix of named and unnamed elements.",
+            "i" = "Either name all elements or none."
+          ),
+          class = "adagraph_standardize_names",
+          call = call
+        )
+      }
+
+      missing_names <- setdiff(expected_names, x_names)
+      extra_names <- setdiff(x_names, expected_names)
+
+      if (length(missing_names) > 0 || length(extra_names) > 0) {
+        msg <- "{.arg {arg_name}} names do not match hypothesis names."
+        details <- character()
+        if (length(extra_names) > 0) {
+          details <- c(details, "x" = "Unexpected: {.val {extra_names}}.")
+        }
+        if (length(missing_names) > 0) {
+          details <- c(details, "x" = "Missing: {.val {missing_names}}.")
+        }
+        details <- c(details, "i" = "Expected: {.val {expected_names}}.")
+        cli::cli_abort(
+          c(msg, details),
+          class = "adagraph_standardize_names",
+          call = call
+        )
+      }
+
+      x <- x[expected_names]
     }
-    return(x)
   }
 
-  # Named vector: validate names match expected set
-  x_names <- names(x)
-
-  if (anyDuplicated(x_names)) {
+  if (any(is.na(x) & !allow_na)) {
     cli::cli_abort(
       c(
-        "{.arg {arg_name}} has duplicate names.",
-        "x" = "Duplicated: {.val {x_names[duplicated(x_names)]}}."
+        "{.arg {arg_name}} includes {NA}s.",
+        "i" = if (any(allow_na)) {
+          "Only indices {.val {which(allow_na)}} can be {NA}s."
+          #some indices are not allowed, else wouldn't throw error
+        } else {
+          "No {NA}s are allowed"
+        }
       ),
       class = "adagraph_standardize_names",
       call = call
     )
   }
 
-  if (any(x_names == "")) {
-    cli::cli_abort(
-      c(
-        "{.arg {arg_name}} has a mix of named and unnamed elements.",
-        "i" = "Either name all elements or none."
-      ),
-      class = "adagraph_standardize_names",
-      call = call
-    )
-  }
-
-  missing_names <- setdiff(expected_names, x_names)
-  extra_names <- setdiff(x_names, expected_names)
-
-  if (length(missing_names) > 0 || length(extra_names) > 0) {
-    msg <- "{.arg {arg_name}} names do not match hypothesis names."
-    details <- character()
-    if (length(extra_names) > 0) {
-      details <- c(details, "x" = "Unexpected: {.val {extra_names}}.")
-    }
-    if (length(missing_names) > 0) {
-      details <- c(details, "x" = "Missing: {.val {missing_names}}.")
-    }
-    details <- c(details, "i" = "Expected: {.val {expected_names}}.")
-    cli::cli_abort(
-      c(msg, details),
-      class = "adagraph_standardize_names",
-      call = call
-    )
-  }
-
-  x[expected_names]
+  x
 }
 
 #' Standardize a named matrix to match canonical hypothesis order
@@ -119,6 +137,8 @@ standardize_named_vector <- function(
 #' @param expected_names Character vector of canonical hypothesis names
 #' @param arg_name Name of the argument, for error messages
 #' @param call Caller environment for error reporting
+#' @param allow NAs to be part of the matrix (only single boolean allowed, not
+#'   chekcing per entry)
 #'
 #' @return The matrix, potentially reordered
 #' @noRd
@@ -126,27 +146,24 @@ standardize_named_matrix <- function(
   m,
   expected_names,
   arg_name,
+  allow_na = FALSE,
   call = rlang::caller_env()
 ) {
-  if (!is.matrix(m)) {
-    return(m) # let downstream validator catch non-matrix
+  k <- length(expected_names)
+  if (!is.matrix(m) || nrow(m) != k || ncol(m) != k) {
+    cli::cli_abort(
+      c(
+        "{.arg {arg_name}} must be a {k} x {k} matrix (one row/column per hypothesis).",
+        "x" = "{.arg {arg_name}} has dimensions {nrow(m)} x {ncol(m)}."
+      ),
+      class = "adagraph_standardize_length",
+      call = call
+    )
   }
 
-  k <- length(expected_names)
   m_names <- rownames(m) %||% colnames(m)
 
   if (is.null(m_names)) {
-    if (nrow(m) != k || ncol(m) != k) {
-      cli::cli_abort(
-        c(
-          "{.arg {arg_name}} must be a {k} x {k} matrix (one row/column per hypothesis).",
-          "x" = "{.arg {arg_name}} has dimensions {nrow(m)} x {ncol(m)}.",
-          "i" = "Hypotheses are: {.val {expected_names}}."
-        ),
-        class = "adagraph_standardize_length",
-        call = call
-      )
-    }
     return(m)
   }
 

@@ -120,11 +120,6 @@ test_that("standardize_named_matrix errors on mismatched names", {
   )
 })
 
-test_that("standardize_named_matrix returns non-matrix as-is", {
-  result <- standardize_named_matrix("not a matrix", c("H1", "H2"), "transitions")
-  expect_equal(result, "not a matrix")
-})
-
 # Unit tests for resolve_hypothesis_names ====
 
 test_that("resolve_hypothesis_names uses explicit names", {

@@ -172,7 +172,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending = alpha_spending,
       t = t
     ),
-    class = "adagraph_invalid_correlation"
+    class = "adagraph_standardize_length"
   )
   expect_error(
     cer_design(
@@ -205,7 +205,7 @@ test_that("Correct validation of cer_design", {
       alpha_spending = alpha_spending,
       t = t
     ),
-    class = "adagraph_invalid_transitions"
+    class = "adagraph_standardize_length"
   )
   expect_error(
     cer_design(
