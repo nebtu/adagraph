@@ -19,7 +19,8 @@ cer_final_test(design, p_values, combined = TRUE)
 
   A vector of p-values for the hypotheses. If named, the values are
   automatically reordered to match the hypothesis order in the design.
-  Names must match the hypothesis names exactly.
+  Names must match the hypothesis names exactly. NAs are allowed and
+  never lead to rejection
 
 - combined:
 

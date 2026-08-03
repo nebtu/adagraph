@@ -14,7 +14,7 @@ applications.
 ## Usage
 
 ``` r
-cer_prep_bounds(correlation, weights, alpha, t)
+cer_prep_bounds(correlation, weights, alpha, t, conn = NULL)
 ```
 
 ## Arguments
@@ -36,6 +36,11 @@ cer_prep_bounds(correlation, weights, alpha, t)
 - t:
 
   information fraction at which the first stage test is planned
+
+- conn:
+
+  connected components of the correlation matrix, optional argument to
+  avoid recomputing every time
 
 ## Value
 
