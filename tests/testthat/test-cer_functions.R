@@ -112,3 +112,36 @@ test_that("cer_prep_bounds works", {
     )
   )
 })
+
+test_that("cer is correctly calculated", {
+  #calculate cer using a manual MC approach
+  mc_cer <- function(p, bounds, corr, t, n = 1e6) {
+    k <- length(p)
+    z1 <- qnorm(p, lower.tail = FALSE)
+    crit <- qnorm(pmin(bounds, 1), lower.tail = FALSE)
+    if (length(t) == 1) {
+      t <- rep(t, k)
+    }
+    z2 <- mvtnorm::rmvnorm(n, mean = c(0, 0), sigma = corr)
+    p <- 1 - pnorm(sqrt(t) * z1 + sqrt(1 - t) * z2)
+    mean(matrixStats::colAnys(t(p) < bounds))
+  }
+
+  withr::with_seed(1, {
+    correlation <- matrix(c(1, 0.5, 0.5, 1), nrow = 2, ncol = 2)
+    for (i in 1:10 / 10) {
+      bounds <- c(i, 1 - i) * 0.025
+      for (p in 1:10 / 50) {
+        cer <- .get_cer(
+          c(p, p),
+          bounds,
+          correlation = correlation,
+          t = c(0.5, 0.5),
+          conn = list(c(1, 2))
+        )
+        cer_emp <- mc_cer(c(p, p), bounds, correlation, 0.5)
+        expect_equal(cer_emp, cer, tolerance = 1e4)
+      }
+    }
+  })
+})
