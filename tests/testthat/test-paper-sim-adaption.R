@@ -1,6 +1,6 @@
-test_that("simulation works as in paper", {
+test_that("simulation works as in paper with own adaptation", {
   skip_on_cran()
-  design <- get_paper_sim_design()
+  design <- get_paper_sim_design_multiarm()
 
   eff1 <- c(0, 0, 0, 0, 0)
   eff2 <- c(0, 0, 0, 0, 0.4)
@@ -16,7 +16,8 @@ test_that("simulation works as in paper", {
           design = design,
           runs1 = runs1,
           runs2 = 100,
-          futility = futility
+          futility = futility,
+          new_adaptation = TRUE
         )$fwer
       })
 
@@ -26,7 +27,8 @@ test_that("simulation works as in paper", {
           design = design,
           runs1 = runs1,
           runs2 = 100,
-          futility = futility
+          futility = futility,
+          new_adaptation = TRUE
         )$rej2_4
       })
 
