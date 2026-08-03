@@ -43,6 +43,8 @@ cer_adapt_bounds <- function(design) {
       # new bound computationally, and reject always
       Inf
     } else {
+      #note that we completely switch to the subset I, and all further indices
+      #are relative to I
       I <- which(design[["ad_weights_matrix"]][index, ] > 0)
       weights <- design[["ad_weights_matrix"]][index, ]
       correlation <- design[["ad_correlation"]][I, I, drop = FALSE]
@@ -55,24 +57,7 @@ cer_adapt_bounds <- function(design) {
       weights <- weights[I]
       t <- t[I]
 
-      #### Connected components for the reduced correlation matrix
-      # Create mapping from old indices to new indices
-      old_to_new <- stats::setNames(seq_along(I), I)
-
-      # Filter and remap components
-      components <- lapply(design[["correlation_components"]], function(comp) {
-        comp_in_subgraph <- comp[comp %in% I]
-
-        # If this component has vertices in the subgraph, remap them
-        if (length(comp_in_subgraph) > 0) {
-          unname(old_to_new[as.character(comp_in_subgraph)])
-        } else {
-          NULL
-        }
-      })
-
-      # Remove empty components (those with no vertices in subgraph)
-      components <- Filter(Negate(is.null), components)
+      components <- connected_comp_subset(design[["correlation_components"]], I)
 
       stats::uniroot(
         function(ad_cJ2) {

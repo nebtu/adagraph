@@ -4,7 +4,7 @@
 \alias{cer_prep_bounds}
 \title{Calculate bounds for preplanned test}
 \usage{
-cer_prep_bounds(correlation, weights, alpha, t)
+cer_prep_bounds(correlation, weights, alpha, t, conn = NULL)
 }
 \arguments{
 \item{correlation}{matrix describing the correlation structure of the hypotheses}
@@ -15,6 +15,8 @@ cer_prep_bounds(correlation, weights, alpha, t)
 should adhere to in the first and second stage respectively}
 
 \item{t}{information fraction at which the first stage test is planned}
+
+\item{conn}{connected components of the correlation matrix, optional argument to avoid recomputing every time}
 }
 \value{
 A list with the following elements:

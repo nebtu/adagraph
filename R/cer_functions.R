@@ -15,6 +15,7 @@
 #' @param alpha list of length 2 describing the amount of alpha spent that the test of the hypotheses
 #'              should adhere to in the first and second stage respectively
 #' @param t information fraction at which the first stage test is planned
+#' @param conn connected components of the correlation matrix, optional argument to avoid recomputing every time
 #'
 #' @return A list with the following elements:
 #'  * bounds_1: vector of same length as weights with bounds for the first interim test
@@ -38,7 +39,7 @@
 #'     weights = c(2/3,1/3),
 #'     alpha = c(0.001525323, 0.025),
 #'     t = 0.5)
-cer_prep_bounds <- function(correlation, weights, alpha, t) {
+cer_prep_bounds <- function(correlation, weights, alpha, t, conn = NULL) {
   I <- which(weights > 0)
 
   if (length(I) == 0) {
@@ -53,7 +54,11 @@ cer_prep_bounds <- function(correlation, weights, alpha, t) {
   pos_weights <- weights[I]
   correlation <- correlation[I, I, drop = FALSE]
 
-  conn <- gMCPLite:::conn.comp(correlation)
+  if (is.null(conn)) {
+    conn <- gMCPLite:::conn.comp(correlation)
+  } else {
+    conn <- connected_comp_subset(conn, I)
+  }
 
   algorithm <- mvtnorm::Miwa(
     steps = getOption("adagraph.miwa_steps"),
@@ -260,4 +265,24 @@ get_cer <- function(
   }
 
   sum(vapply(conn, comp_cer, numeric(1)))
+}
+
+#### Connected components for the reduced correlation matrix
+connected_comp_subset <- function(components, I) {
+  # Create mapping from old indices to new indices
+  old_to_new <- stats::setNames(seq_along(I), I)
+  # Filter and remap components
+  components <- lapply(components, function(comp) {
+    comp_in_subgraph <- comp[comp %in% I]
+
+    # If this component has vertices in the subgraph, remap them
+    if (length(comp_in_subgraph) > 0) {
+      unname(old_to_new[as.character(comp_in_subgraph)])
+    } else {
+      NULL
+    }
+  })
+
+  # Remove empty components (those with no vertices in subgraph)
+  components <- Filter(Negate(is.null), components)
 }

@@ -61,6 +61,7 @@ new_cer_design <- function(
 
   correlation <- design[["correlation"]] #use expanded correlation matrix
 
+  correlation_components <- design[["correlation_components"]]
   if (getOption("adagraph.use_future")) {
     rlang::check_installed(
       "future.apply",
@@ -70,7 +71,13 @@ new_cer_design <- function(
       design[["weights_matrix"]],
       1,
       function(weights) {
-        cer_prep_bounds(correlation, weights, c(alpha_interim, alpha), t)
+        cer_prep_bounds(
+          correlation,
+          weights,
+          c(alpha_interim, alpha),
+          t,
+          conn = correlation_components
+        )
       },
       future.seed = TRUE,
       future.globals = c(
@@ -86,7 +93,13 @@ new_cer_design <- function(
       design[["weights_matrix"]],
       1,
       function(weights) {
-        cer_prep_bounds(correlation, weights, c(alpha_interim, alpha), t)
+        cer_prep_bounds(
+          correlation,
+          weights,
+          c(alpha_interim, alpha),
+          t,
+          conn = correlation_components
+        )
       }
     )
   }
