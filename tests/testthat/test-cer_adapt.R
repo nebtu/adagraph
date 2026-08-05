@@ -161,3 +161,15 @@ test_that("no adaptations works as expected", {
   expect_equal(design_adj$ad_weights_matrix, design$weights_matrix)
   expect_equal(design_adj$adaptations, TRUE)
 })
+
+test_that("drop all hypotheses works", {
+  design <- make_example_design()
+  design <- cer_interim_test(design, c(0.00045, 0.0952, 0.0225, 0.1104))
+
+  design_adj <- design |> cer_drop_hypotheses(c("H1", "H2", "H3", "H4"))
+  expect_equal(design_adj$ad_cJ2, rep(0, 15))
+
+  design_final <- design_adj |> cer_final_test(c(NA, NA, NA, NA))
+
+  expect_equal(design_final$rej, c(TRUE, FALSE, FALSE, FALSE))
+})

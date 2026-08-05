@@ -80,6 +80,18 @@ test_simulation_workflow <- function() {
 
   expect_equal(nrow(results_df), 100)
   #expect_equal(results_df$p_1, results_df$interim_p_1)
+
+  #works also with n = 1
+  results_df <- sim_trial(
+    design,
+    1,
+    1,
+    adaptation,
+    data_gen,
+    data_gen_2,
+    include_designs = TRUE
+  )
+  expect_equal(nrow(results_df), 1)
 }
 
 test_that("simulation workflow works", {
