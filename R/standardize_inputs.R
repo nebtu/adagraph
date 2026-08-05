@@ -11,14 +11,24 @@
 #'
 #' @return Character vector of hypothesis names
 #' @noRd
-resolve_hypothesis_names <- function(names, weights, k) {
+resolve_hypothesis_names <- function(
+  names,
+  weights,
+  transitions,
+  k,
+  default = NULL
+) {
   if (!is.null(names)) {
     return(names)
   }
   if (!is.null(names(weights))) {
     return(names(weights))
   }
-  paste0("H", as.character(1:k))
+  if (is.matrix(transitions)) {
+    m_names <- rownames(transitions) %||% colnames(transitions)
+    if (!is.null(m_names)) return(m_names)
+  }
+  default %||% paste0("H", seq_len(k))
 }
 
 #' Standardize a named vector to match canonical hypothesis order

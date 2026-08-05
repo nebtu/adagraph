@@ -133,3 +133,61 @@ test_that("more complicated subgroup structures work", {
   design[["alpha_spending"]] <- NULL
   expect_snapshot_value(design, style = "json2", tolerance = 1e-5)
 })
+
+test_that("naming works as it should", {
+  design <- trial_design(
+    arms = 2,
+    n_control = 50,
+    n_arms = c(50, 50),
+    weights = c(0.5, 0.5),
+    transitions = matrix(c(0, 1, 1, 0), nrow = 2),
+    alpha = 0.025
+  )
+  expect_equal(design$names, c("A1", "A2"))
+
+  design <- trial_design(
+    arms = 2,
+    n_control = 50,
+    n_arms = c(50, 50),
+    weights = c(0.5, 0.5),
+    transitions = matrix(c(0, 1, 1, 0), nrow = 2),
+    alpha = 0.025,
+    names = c("B1", "B2")
+  )
+  expect_equal(design$names, c("B1", "B2"))
+
+  design <- trial_design(
+    arms = 2,
+    n_control = 50,
+    n_arms = c(50, 50),
+    weights = c(B1 = 0.5, B2 = 0.5),
+    transitions = matrix(c(0, 1, 1, 0), nrow = 2),
+    alpha = 0.025,
+  )
+  expect_equal(design$names, c("B1", "B2"))
+
+  design <- trial_design(
+    arms = 2,
+    n_control = 50,
+    n_arms = c(50, 50),
+    weights = c(0.5, 0.5),
+    transitions = matrix(
+      c(0, 1, 1, 0),
+      nrow = 2,
+      dimnames = list(c("B1", "B2"))
+    ),
+    alpha = 0.025,
+  )
+  expect_equal(design$names, c("B1", "B2"))
+
+  design <- trial_design(
+    arms = 2,
+    n_control = 50,
+    n_arms = c(50, 50),
+    weights = c(0.5, 0.5),
+    transitions = matrix(c(0, 1, 1, 0), nrow = 2),
+    alpha = 0.025,
+    names_arms = c("B1", "B2")
+  )
+  expect_equal(design$names, c("B1", "B2"))
+})

@@ -211,7 +211,7 @@ multiarm_cer_design <- function(
   }
 
   k <- length(weights)
-  hyp_names <- resolve_hypothesis_names(NULL, weights, k)
+  hyp_names <- resolve_hypothesis_names(NULL, weights, transitions, k)
   weights <- standardize_named_vector(weights, hyp_names, "weights")
   transitions <- standardize_named_matrix(transitions, hyp_names, "transitions")
 

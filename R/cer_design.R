@@ -265,7 +265,7 @@ cer_design <- function(
 ) {
   k <- length(weights)
   if (is.null(names) || is.character(names)) {
-    resolved_names <- resolve_hypothesis_names(names, weights, k)
+    resolved_names <- resolve_hypothesis_names(names, weights, transitions, k)
     weights <- standardize_named_vector(weights, resolved_names, "weights")
     transitions <- standardize_named_matrix(
       transitions,

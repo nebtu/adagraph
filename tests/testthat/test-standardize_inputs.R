@@ -123,17 +123,39 @@ test_that("standardize_named_matrix errors on mismatched names", {
 # Unit tests for resolve_hypothesis_names ====
 
 test_that("resolve_hypothesis_names uses explicit names", {
-  result <- resolve_hypothesis_names(c("A", "B"), c(x = 0.5, y = 0.5), 2)
+  result <- resolve_hypothesis_names(
+    c("A", "B"),
+    c(x = 0.5, y = 0.5),
+    matrix(0, 1, 1, 0, nrow = 2),
+    2
+  )
   expect_equal(result, c("A", "B"))
 })
 
 test_that("resolve_hypothesis_names uses weights names", {
-  result <- resolve_hypothesis_names(NULL, c(x = 0.5, y = 0.5), 2)
+  result <- resolve_hypothesis_names(
+    NULL,
+    c(x = 0.5, y = 0.5),
+    matrix(c(0, 1, 1, 0), nrow = 2),
+    2
+  )
+  expect_equal(result, c("x", "y"))
+  result <- resolve_hypothesis_names(
+    NULL,
+    c(0.5, 0.5),
+    matrix(c(0, 1, 1, 0), nrow = 2, dimnames = list(c("x", "y"))),
+    2
+  )
   expect_equal(result, c("x", "y"))
 })
 
 test_that("resolve_hypothesis_names generates default names", {
-  result <- resolve_hypothesis_names(NULL, c(0.5, 0.5), 2)
+  result <- resolve_hypothesis_names(
+    NULL,
+    c(0.5, 0.5),
+    matrix(c(0, 1, 1, 0), nrow = 2),
+    2
+  )
   expect_equal(result, c("H1", "H2"))
 })
 

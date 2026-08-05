@@ -49,32 +49,6 @@ new_trial_design <- function(
     arm = rep(names_arms, times = (subgroups + 1) * endpoints)
   )
 
-  if (is.null(names)) {
-    if (endpoints == 1) {
-      name_part_endpoints <- ""
-    } else {
-      name_part_endpoints <- paste0(
-        hyp_assoc[["endpoint"]],
-        ifelse(arms > 1, "_", "")
-      )
-    }
-    if (arms == 1) {
-      name_part_arms <- ""
-    } else {
-      name_part_arms <-
-        hyp_assoc[["arm"]]
-    }
-    names <- paste0(
-      ifelse(
-        hyp_assoc[["group"]] == "Total",
-        "",
-        paste0(hyp_assoc[["group"]], ifelse(arms > 1 || subgroups > 1, "_", ""))
-      ),
-      name_part_endpoints,
-      name_part_arms
-    )
-  }
-
   design <- new_cer_design(
     correlation = correlation,
     weights = weights,
@@ -309,38 +283,44 @@ trial_design <- function(
   }
 
   # Resolve hypothesis names early so we can standardize inputs
-  if (is.null(names)) {
-    hyp_assoc_early <- data.frame(
-      group = rep(c("Total", names_subgroups), each = arms * endpoints),
-      endpoint = rep(names_endpoints, each = arms, times = subgroups + 1),
-      arm = rep(names_arms, times = (subgroups + 1) * endpoints)
-    )
-    if (endpoints == 1) {
-      name_part_endpoints <- ""
-    } else {
-      name_part_endpoints <- paste0(
-        hyp_assoc_early[["endpoint"]],
-        ifelse(arms > 1, "_", "")
-      )
-    }
-    if (arms == 1) {
-      name_part_arms <- ""
-    } else {
-      name_part_arms <- hyp_assoc_early[["arm"]]
-    }
-    names <- paste0(
-      ifelse(
-        hyp_assoc_early[["group"]] == "Total",
-        "",
-        paste0(
-          hyp_assoc_early[["group"]],
-          ifelse(arms > 1 || subgroups > 1, "_", "")
-        )
-      ),
-      name_part_endpoints,
-      name_part_arms
+  hyp_assoc_early <- data.frame(
+    group = rep(c("Total", names_subgroups), each = arms * endpoints),
+    endpoint = rep(names_endpoints, each = arms, times = subgroups + 1),
+    arm = rep(names_arms, times = (subgroups + 1) * endpoints)
+  )
+  if (endpoints == 1) {
+    name_part_endpoints <- ""
+  } else {
+    name_part_endpoints <- paste0(
+      hyp_assoc_early[["endpoint"]],
+      ifelse(arms > 1, "_", "")
     )
   }
+  if (arms == 1) {
+    name_part_arms <- ""
+  } else {
+    name_part_arms <- hyp_assoc_early[["arm"]]
+  }
+  default_names <- paste0(
+    ifelse(
+      hyp_assoc_early[["group"]] == "Total",
+      "",
+      paste0(
+        hyp_assoc_early[["group"]],
+        ifelse(arms > 1 || subgroups > 1, "_", "")
+      )
+    ),
+    name_part_endpoints,
+    name_part_arms
+  )
+  names <- resolve_hypothesis_names(
+    names,
+    weights,
+    transitions,
+    k = length(weights),
+    default = default_names
+  )
+
   weights <- standardize_named_vector(weights, names, "weights")
   transitions <- standardize_named_matrix(transitions, names, "transitions")
 
