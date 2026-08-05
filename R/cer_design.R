@@ -53,13 +53,10 @@ new_cer_design <- function(
     names = names
   )
 
-  names <- design[["names"]] #use default from adagraph_design
   design[["alpha_interim"]] <- alpha_interim
   design[["alpha_spending"]] <- alpha_spending
   design[["seq_bonf"]] <- seq_bonf
   design[["t"]] <- t
-
-  correlation <- design[["correlation"]] #use expanded correlation matrix
 
   correlation_components <- design[["correlation_components"]]
   if (getOption("adagraph.use_future")) {
@@ -263,23 +260,16 @@ cer_design <- function(
   seq_bonf = TRUE,
   names = NULL
 ) {
-  k <- length(weights)
-  if (is.null(names) || is.character(names)) {
-    resolved_names <- resolve_hypothesis_names(names, weights, transitions, k)
-    weights <- standardize_named_vector(weights, resolved_names, "weights")
-    transitions <- standardize_named_matrix(
-      transitions,
-      resolved_names,
-      "transitions"
-    )
-    if (!rlang::is_na(correlation)) {
-      correlation <- standardize_named_matrix(
-        correlation,
-        resolved_names,
-        "correlation"
-      )
-    }
-  }
+  std <- standardize_design_inputs(
+    weights,
+    transitions,
+    correlation,
+    names
+  )
+  weights <- std[["weights"]]
+  transitions <- std[["transitions"]]
+  correlation <- std[["correlation"]]
+  names <- std[["names"]]
 
   validate_cer_design_params(
     correlation = correlation,

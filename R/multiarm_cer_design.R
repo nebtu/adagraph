@@ -26,6 +26,7 @@ new_multiarm_cer_design <- function(
   alpha_interim = double(),
   alpha_spending = double(), #or function
   seq_bonf = TRUE,
+  names = character(),
   ...,
   class = character()
 ) {
@@ -42,7 +43,10 @@ new_multiarm_cer_design <- function(
     alpha = alpha,
     transitions = transitions,
     alpha_interim = alpha_interim,
+    alpha_spending = alpha_spending,
     t = t,
+    seq_bonf = seq_bonf,
+    names = names,
     class = c(class, "multiarm_cer_design")
   )
 
@@ -65,6 +69,7 @@ validate_multiarm_cer_design_params <- function(
   transitions = matrix(),
   alpha_spending = double(),
   seq_bonf = TRUE,
+  names = names,
   call = rlang::caller_env()
 ) {
   # Ensure sample sizes are expanded to vectors for correlation calculation
@@ -143,7 +148,8 @@ validate_multiarm_cer_design_params <- function(
     alpha_spending = alpha_spending,
     t = t,
     seq_bonf = seq_bonf,
-    call = call
+    call = call,
+    names = names
   )
 }
 
@@ -201,7 +207,8 @@ multiarm_cer_design <- function(
   alpha = double(),
   transitions = matrix(),
   alpha_spending = 0,
-  seq_bonf = TRUE
+  seq_bonf = TRUE,
+  names = NULL
 ) {
   if (length(n_controls) == 1) {
     n_controls <- rep(n_controls, controls)
@@ -210,10 +217,14 @@ multiarm_cer_design <- function(
     n_treatments <- rep(n_treatments, length(treatment_assoc))
   }
 
-  k <- length(weights)
-  hyp_names <- resolve_hypothesis_names(NULL, weights, transitions, k)
-  weights <- standardize_named_vector(weights, hyp_names, "weights")
-  transitions <- standardize_named_matrix(transitions, hyp_names, "transitions")
+  std <- standardize_design_inputs(
+    weights,
+    transitions,
+    names = names
+  )
+  weights <- std[["weights"]]
+  transitions <- std[["transitions"]]
+  names <- std[["names"]]
 
   validate_multiarm_cer_design_params(
     controls = controls,
@@ -225,7 +236,8 @@ multiarm_cer_design <- function(
     alpha = alpha,
     transitions = transitions,
     alpha_spending = alpha_spending,
-    seq_bonf = seq_bonf
+    seq_bonf = seq_bonf,
+    names = names
   )
   alpha_interim <- resolve_alpha_spending(alpha_spending, alpha, t)
 
@@ -240,6 +252,7 @@ multiarm_cer_design <- function(
     transitions = transitions,
     alpha_interim = alpha_interim,
     alpha_spending = alpha_spending,
-    seq_bonf = seq_bonf
+    seq_bonf = seq_bonf,
+    names = names
   )
 }

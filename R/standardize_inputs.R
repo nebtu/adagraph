@@ -1,3 +1,60 @@
+standardize_design_inputs <- function(
+  weights,
+  transitions,
+  correlation = NULL,
+  names,
+  default_names = NULL,
+  call = rlang::caller_env()
+) {
+  k <- length(weights)
+  if (!is.null(names) && !rlang::is_character(names, n = k)) {
+    cli::cli_abort(
+      c(
+        "{.var names} needs to be a character vector with exactly one name per hypothesis.",
+        "x" = "{.var names} is {.obj_type_friendly {names}} of length {length(names)}.",
+        "i" = "There are {k} hypotheses."
+      ),
+      class = "adagraph_invalid_names",
+      call = call
+    )
+  }
+  names <- resolve_hypothesis_names(
+    names,
+    weights,
+    transitions,
+    k = k,
+    default = default_names
+  )
+
+  if (!is.null(correlation)) {
+    if (rlang::is_na(correlation)) {
+      correlation <- matrix(NA, nrow = k, ncol = k)
+      diag(correlation) <- 1
+    }
+    correlation <- standardize_named_matrix(
+      correlation,
+      names,
+      "correlation",
+      call = call
+    )
+  }
+
+  weights <- standardize_named_vector(weights, names, "weights", call = call)
+  transitions <- standardize_named_matrix(
+    transitions,
+    names,
+    "transitions",
+    call = call
+  )
+
+  list(
+    weights = weights,
+    transitions = transitions,
+    correlation = correlation,
+    names = names
+  )
+}
+
 #' Resolve hypothesis names from available sources
 #'
 #' Determines hypothesis names using the following priority:

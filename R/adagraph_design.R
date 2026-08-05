@@ -28,10 +28,6 @@ new_adagraph_design <- function(
   class = character()
 ) {
   k <- length(weights)
-  if (rlang::is_na(correlation)) {
-    correlation <- matrix(NA, nrow = k, ncol = k)
-    diag(correlation) <- 1
-  }
 
   int_hyp <- get_intersection_hypotheses(weights, transitions)
   correlation_components <- gMCPLite:::conn.comp(correlation)
@@ -164,17 +160,6 @@ validate_adagraph_design_params <- function(
       call = call
     )
   }
-  if (!is.null(names) && !rlang::is_character(names, n = k)) {
-    cli::cli_abort(
-      c(
-        "{.var names} needs to be a character vector with exactly one name per hypothesis.",
-        "x" = "{.var names} is {.obj_type_friendly {names}} of length {length(names)}.",
-        "i" = "There are {k} hypotheses."
-      ),
-      class = "adagraph_invalid_names",
-      call = call
-    )
-  }
 }
 #TODO: test that weights sum to 1 (or less than one?)
 
@@ -223,23 +208,16 @@ adagraph_design <- function(
   correlation = NA,
   names = NULL
 ) {
-  k <- length(weights)
-  if (is.null(names) || is.character(names)) {
-    resolved_names <- resolve_hypothesis_names(names, weights, transitions, k)
-    weights <- standardize_named_vector(weights, resolved_names, "weights")
-    transitions <- standardize_named_matrix(
-      transitions,
-      resolved_names,
-      "transitions"
-    )
-    if (!rlang::is_na(correlation)) {
-      correlation <- standardize_named_matrix(
-        correlation,
-        resolved_names,
-        "correlation"
-      )
-    }
-  }
+  std <- standardize_design_inputs(
+    weights,
+    transitions,
+    correlation,
+    names
+  )
+  weights <- std[["weights"]]
+  transitions <- std[["transitions"]]
+  correlation <- std[["correlation"]]
+  names <- std[["names"]]
 
   validate_adagraph_design_params(
     correlation = correlation,

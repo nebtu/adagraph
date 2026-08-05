@@ -43,10 +43,13 @@ new_trial_design <- function(
     names_subgroups
   )
 
-  hyp_assoc <- data.frame(
-    group = rep(c("Total", names_subgroups), each = arms * endpoints),
-    endpoint = rep(names_endpoints, each = arms, times = subgroups + 1),
-    arm = rep(names_arms, times = (subgroups + 1) * endpoints)
+  hyp_assoc <- make_hyp_assoc(
+    arms,
+    endpoints,
+    subgroups,
+    names_arms,
+    names_endpoints,
+    names_subgroups
   )
 
   design <- new_cer_design(
@@ -55,8 +58,10 @@ new_trial_design <- function(
     alpha = alpha,
     transitions = transitions,
     alpha_interim = alpha_interim,
+    alpha_spending = alpha_spending,
     t = t,
     names = names,
+    seq_bonf = seq_bonf,
     class = c(class, "trial_design")
   )
 
@@ -70,6 +75,21 @@ new_trial_design <- function(
   design[["hyp_assoc"]] <- hyp_assoc
 
   design
+}
+
+make_hyp_assoc <- function(
+  arms,
+  endpoints,
+  subgroups,
+  names_arms,
+  names_endpoints,
+  names_subgroups
+) {
+  data.frame(
+    group = rep(c("Total", names_subgroups), each = arms * endpoints),
+    endpoint = rep(names_endpoints, each = arms, times = subgroups + 1),
+    arm = rep(names_arms, times = (subgroups + 1) * endpoints)
+  )
 }
 
 get_trial_correlation <- function(
@@ -282,12 +302,15 @@ trial_design <- function(
     }
   }
 
-  # Resolve hypothesis names early so we can standardize inputs
-  hyp_assoc_early <- data.frame(
-    group = rep(c("Total", names_subgroups), each = arms * endpoints),
-    endpoint = rep(names_endpoints, each = arms, times = subgroups + 1),
-    arm = rep(names_arms, times = (subgroups + 1) * endpoints)
+  hyp_assoc_early <- make_hyp_assoc(
+    arms,
+    endpoints,
+    subgroups,
+    names_arms,
+    names_endpoints,
+    names_subgroups
   )
+
   if (endpoints == 1) {
     name_part_endpoints <- ""
   } else {
@@ -313,16 +336,16 @@ trial_design <- function(
     name_part_endpoints,
     name_part_arms
   )
-  names <- resolve_hypothesis_names(
-    names,
+
+  std <- standardize_design_inputs(
     weights,
     transitions,
-    k = length(weights),
-    default = default_names
+    names = names,
+    default_names = default_names
   )
-
-  weights <- standardize_named_vector(weights, names, "weights")
-  transitions <- standardize_named_matrix(transitions, names, "transitions")
+  weights <- std[["weights"]]
+  transitions <- std[["transitions"]]
+  names <- std[["names"]]
 
   validate_trial_design_params(
     arms = arms,
