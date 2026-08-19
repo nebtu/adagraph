@@ -12,12 +12,14 @@ multiarm_cer_design(
   treatment_assoc = integer(),
   n_controls = integer(),
   n_treatments = integer(),
-  weights = double(),
+  weights = NULL,
+  transitions = NULL,
   t = double(),
   alpha = double(),
-  transitions = matrix(),
+  graph = NULL,
   alpha_spending = 0,
-  seq_bonf = TRUE
+  seq_bonf = TRUE,
+  names = NULL
 )
 ```
 
@@ -47,6 +49,11 @@ multiarm_cer_design(
 
   List of weights, measuring how important each hypothesis is
 
+- transitions:
+
+  Transition matrix describing the graph for the closed test procedure
+  to test the hypotheses
+
 - t:
 
   information fraction, at which fraction of assigned people will the
@@ -56,10 +63,13 @@ multiarm_cer_design(
 
   Single number, measuring what total alpha should be spent on the FWER
 
-- transitions:
+- graph:
 
-  Transition matrix describing the graph for the closed test procedure
-  to test the hypotheses
+  Instead of weights and transitions, provide a
+  [gMCPLite](https://merck.github.io/gMCPLite/reference/gMCPLite-package.html)
+  or
+  [graphicalMCP](https://rdrr.io/pkg/graphicalMCP/man/graphicalMCP-package.html)
+  graph object to define the testing procedure
 
 - alpha_spending:
 
@@ -71,6 +81,10 @@ multiarm_cer_design(
 
   automatically reject hypotheses at the second stage if the sum of
   their PCER is greater 1
+
+- names:
+
+  optional names for the hypotheses
 
 ## Value
 

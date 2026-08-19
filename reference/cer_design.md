@@ -8,8 +8,9 @@ conditional error method.
 
 ``` r
 cer_design(
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   correlation = NA,
   t = 1/2,
@@ -29,6 +30,14 @@ cer_design(
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
+
+- graph:
+
+  Instead of weights and transitions, provide a
+  [gMCPLite](https://merck.github.io/gMCPLite/reference/gMCPLite-package.html)
+  or
+  [graphicalMCP](https://rdrr.io/pkg/graphicalMCP/man/graphicalMCP-package.html)
+  graph object to define the testing procedure
 
 - alpha:
 

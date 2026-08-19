@@ -12,8 +12,9 @@ and
 
 ``` r
 adagraph_design(
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   correlation = NA,
   names = NULL
@@ -30,6 +31,14 @@ adagraph_design(
 
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses
+
+- graph:
+
+  Instead of weights and transitions, provide a
+  [gMCPLite](https://merck.github.io/gMCPLite/reference/gMCPLite-package.html)
+  or
+  [graphicalMCP](https://rdrr.io/pkg/graphicalMCP/man/graphicalMCP-package.html)
+  graph object to define the testing procedure
 
 - alpha:
 

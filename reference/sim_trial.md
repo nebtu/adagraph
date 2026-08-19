@@ -49,6 +49,11 @@ sim_trial(
   boolean indicating whether to include the designs objects in the
   output
 
+- final_combined:
+
+  Are the final p-values the combination of the p-value of the first and
+  second stage or just the raw values from the second stage
+
 ## Value
 
 A dataframe containing the various results

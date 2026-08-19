@@ -13,8 +13,9 @@ trial_design(
   n_control = NULL,
   n_arms = NULL,
   n_table = NULL,
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   alpha_spending = 0,
   t = 1/2,
@@ -66,6 +67,14 @@ trial_design(
   Transition matrix describing the graph for the closed test procedure
   to test the hypotheses. If named (via row/column names), automatically
   reordered to match the hypothesis order.
+
+- graph:
+
+  Instead of weights and transitions, provide a
+  [gMCPLite](https://merck.github.io/gMCPLite/reference/gMCPLite-package.html)
+  or
+  [graphicalMCP](https://rdrr.io/pkg/graphicalMCP/man/graphicalMCP-package.html)
+  graph object to define the testing procedure
 
 - alpha:
 

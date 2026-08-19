@@ -53,8 +53,9 @@ clinical trial design, allowing adaptation using the CER method</p>
 <span>  n_control <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_arms <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_table <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  transitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  graph <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alpha_spending <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  t <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>,</span>
@@ -107,6 +108,10 @@ reordered to match the canonical hypothesis order.</p></dd>
 <dd><p>Transition matrix describing the graph for
 the closed test procedure to test the hypotheses. If named (via
 row/column names), automatically reordered to match the hypothesis order.</p></dd>
+
+
+<dt id="arg-graph">graph<a class="anchor" aria-label="anchor" href="#arg-graph"></a></dt>
+<dd><p>Instead of weights and transitions, provide a <a href="https://merck.github.io/gMCPLite/reference/gMCPLite-package.html" class="external-link">gMCPLite</a> or <a href="https://rdrr.io/pkg/graphicalMCP/man/graphicalMCP-package.html" class="external-link">graphicalMCP</a> graph object to define the testing procedure</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>

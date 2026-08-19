@@ -50,8 +50,9 @@ for using the conditional error method.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cer_design</span><span class="op">(</span></span>
-<span>  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  transitions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transitions <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  graph <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  correlation <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  t <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span>,</span>
@@ -71,6 +72,10 @@ for using the conditional error method.</p>
 
 <dt id="arg-transitions">transitions<a class="anchor" aria-label="anchor" href="#arg-transitions"></a></dt>
 <dd><p>Transition matrix describing the graph for the closed test procedure to test the hypotheses</p></dd>
+
+
+<dt id="arg-graph">graph<a class="anchor" aria-label="anchor" href="#arg-graph"></a></dt>
+<dd><p>Instead of weights and transitions, provide a <a href="https://merck.github.io/gMCPLite/reference/gMCPLite-package.html" class="external-link">gMCPLite</a> or <a href="https://rdrr.io/pkg/graphicalMCP/man/graphicalMCP-package.html" class="external-link">graphicalMCP</a> graph object to define the testing procedure</p></dd>
 
 
 <dt id="arg-alpha">alpha<a class="anchor" aria-label="anchor" href="#arg-alpha"></a></dt>
