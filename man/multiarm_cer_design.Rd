@@ -9,12 +9,14 @@ multiarm_cer_design(
   treatment_assoc = integer(),
   n_controls = integer(),
   n_treatments = integer(),
-  weights = double(),
+  weights = NULL,
+  transitions = NULL,
   t = double(),
   alpha = double(),
-  transitions = matrix(),
+  graph = NULL,
   alpha_spending = 0,
-  seq_bonf = TRUE
+  seq_bonf = TRUE,
+  names = NULL
 )
 }
 \arguments{
@@ -32,13 +34,15 @@ patients in each treatment group}
 
 \item{weights}{List of weights, measuring how important each hypothesis is}
 
+\item{transitions}{Transition matrix describing the graph for
+the closed test procedure to test the hypotheses}
+
 \item{t}{information fraction, at which fraction of assigned people will the
 interim analysis happen}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 
-\item{transitions}{Transition matrix describing the graph for
-the closed test procedure to test the hypotheses}
+\item{graph}{Instead of weights and transitions, provide a \link[gMCPLite:gMCPLite]{gMCPLite} or \link[graphicalMCP:graphicalMCP]{graphicalMCP} graph object to define the testing procedure}
 
 \item{alpha_spending}{either alpha spending function, taking parameters alpha
 (for overall spent alpha) and t (information fraction at interim test), or
@@ -46,6 +50,8 @@ the amount of alpha to spend at interim as a double}
 
 \item{seq_bonf}{automatically reject hypotheses at the second stage
 if the sum of their PCER is greater 1}
+
+\item{names}{optional names for the hypotheses}
 }
 \value{
 An object of class \code{multiarm_cer_design}

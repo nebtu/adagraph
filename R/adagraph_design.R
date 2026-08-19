@@ -2,7 +2,7 @@
 #'
 #' For documentation on how to generate adagraph_designs, see `adagraph_design()`
 #'
-#' @param correlation,weights,alpha,transitions Same as for `adagraph_design()`
+#' @param correlation,weights,alpha,transitions,graph Same as for `adagraph_design()`
 #' @param class character, makes it possible to add subclasses
 #' @param ... additional parameters, not used
 #'
@@ -171,12 +171,13 @@ validate_adagraph_design_params <- function(
 #' To use graphical closed testing designs, use `cer_design()` and
 #' `trial_design()`.
 #'
+#' @param weights List of weights, measuring how important each hypothesis is
+#' @param transitions Transition matrix describing the graph for the closed test procedure to test the hypotheses
+#' @param graph Instead of weights and transitions, provide a [gMCPLite] or [graphicalMCP] graph object to define the testing procedure
 #' @param correlation Correlation matrix describing the structure of the correlations
 #'                    between the different hypotheses, use NA for uncorrelated.
 #'                    Defaults to no known correlation.
-#' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
-#' @param transitions Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #' @param names optional names for the hypotheses
 #'
 #' @details
@@ -202,8 +203,9 @@ validate_adagraph_design_params <- function(
 #'               c(1, 0)))
 #' design
 adagraph_design <- function(
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   correlation = NA,
   names = NULL
@@ -211,6 +213,7 @@ adagraph_design <- function(
   std <- standardize_design_inputs(
     weights,
     transitions,
+    graph,
     correlation,
     names
   )

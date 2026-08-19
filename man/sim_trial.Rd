@@ -31,6 +31,9 @@ first interim test and returns the same object with appropiate adaptations}
 
 \item{include_designs}{boolean indicating whether to include
 the designs objects in the output}
+
+\item{final_combined}{Are the final p-values the combination of the p-value of
+the first and second stage or just the raw values from the second stage}
 }
 \value{
 A dataframe containing the various results

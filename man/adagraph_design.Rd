@@ -5,8 +5,9 @@
 \title{Make a new (generic) trial design}
 \usage{
 adagraph_design(
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   correlation = NA,
   names = NULL
@@ -16,6 +17,8 @@ adagraph_design(
 \item{weights}{List of weights, measuring how important each hypothesis is}
 
 \item{transitions}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
+
+\item{graph}{Instead of weights and transitions, provide a \link[gMCPLite:gMCPLite]{gMCPLite} or \link[graphicalMCP:graphicalMCP]{graphicalMCP} graph object to define the testing procedure}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 

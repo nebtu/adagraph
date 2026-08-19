@@ -306,3 +306,50 @@ test_that("standardize errors include hypothesis names in message", {
     "H2" # missing name should appear
   )
 })
+
+# Graph implemenation ====
+
+test_that("graph input error works correctly", {
+  expect_warning(
+    standardize_design_inputs(
+      weights = c(0.5, 0.5),
+      transitions = NULL,
+      graph = graphicalMCP::graph_create(
+        c(0.5, 0.5),
+        matrix(c(0, 1, 1, 0), 2, 2)
+      ),
+      names = NULL
+    ),
+    class = "adagraph_invalid_design_spec"
+  )
+
+  expect_error(
+    standardize_design_inputs(
+      weights = NULL,
+      transitions = NULL,
+      graph = "text",
+      names = NULL
+    ),
+    class = "adagraph_invalid_graph"
+  )
+
+  expect_error(
+    standardize_design_inputs(
+      weights = c(0.5, 0.5),
+      transitions = matrix(c(0, 1, 1, 0), 2, 2),
+      graph = "text",
+      names = NULL
+    ),
+    class = "adagraph_invalid_graph"
+  )
+
+  expect_error(
+    standardize_design_inputs(
+      weights = c(0.5, 0.5),
+      transitions = NULL,
+      graph = NULL,
+      names = NULL
+    ),
+    class = "adagraph_invalid_design_spec"
+  )
+})

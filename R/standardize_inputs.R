@@ -1,11 +1,64 @@
 standardize_design_inputs <- function(
   weights,
   transitions,
+  graph,
   correlation = NULL,
   names,
   default_names = NULL,
   call = rlang::caller_env()
 ) {
+  if (is.null(graph) && (is.null(weights) || is.null(transitions))) {
+    cli::cli_abort(
+      c(
+        "Either {.arg graph} or {.arg weights} and {.arg transitions} must be given as not {.code NULL}."
+      ),
+      class = "adagraph_invalid_design_spec",
+      call = call
+    )
+  } else if (!is.null(graph)) {
+    weights_old <- weights
+    transitions_old <- transitions
+    if (inherits(graph, "initial_graph")) {
+      weights <- graph[["hypotheses"]]
+      transitions <- graph[["transitions"]]
+    } else if (inherits(graph, "graphMCP")) {
+      rlang::check_installed(
+        "gMCPLite",
+        reason = "Use `options(\"adagraph.use_future\" = FALSE)` if you don't want to use the future.apply package."
+      )
+      weights <- gMCPLite::getWeights(graph)
+      transitions <- gMCPLite::getMatrix(graph)
+    } else {
+      cli::cli_abort(
+        c(
+          "{.arg graph} must be a graph object by {.pkg gMCPLite}, {.pkg gMCP} (class {.cls graphMCP}) or {.pkg graphicalMCP} (class {.cls initial_graph}.)",
+          "x" = "{.arg graph} has class {.cls {class(graph)}}."
+        ),
+        class = "adagraph_invalid_graph",
+        call = call
+      )
+    }
+    if (!is.null(weights_old) || !is.null(transitions_old)) {
+      cli::cli_warn(
+        c(
+          "Argument {.arg graph} was given, overriding {.arg weights} and {.arg transitions}.",
+          if (!is.null(weights_old)) {
+            c("i" = "{.arg weights} given as {weights_old}")
+          } else {
+            NULL
+          },
+          if (!is.null(transitions_old)) {
+            c("i" = "{.arg transition} given as {transitions_old}. ")
+          } else {
+            NULL
+          }
+        ),
+        class = "adagraph_invalid_design_spec",
+        call = call
+      )
+    }
+  }
+
   k <- length(weights)
   if (!is.null(names) && !rlang::is_character(names, n = k)) {
     cli::cli_abort(
@@ -282,3 +335,10 @@ standardize_named_matrix <- function(
   colnames(m) <- m_names
   m[expected_names, expected_names]
 }
+
+resolve_graph <- function(
+  weights,
+  transitions,
+  graph,
+  call = rlang::caller_env()
+) {}

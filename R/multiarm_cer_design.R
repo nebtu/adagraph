@@ -168,16 +168,18 @@ validate_multiarm_cer_design_params <- function(
 #' @param n_treatments Integer (or vector of integers) determining the number of
 #'   patients in each treatment group
 #' @param weights List of weights, measuring how important each hypothesis is
+#' @param transitions Transition matrix describing the graph for
+#'   the closed test procedure to test the hypotheses
+#' @param graph Instead of weights and transitions, provide a [gMCPLite] or [graphicalMCP] graph object to define the testing procedure
 #' @param t information fraction, at which fraction of assigned people will the
 #'   interim analysis happen
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
-#' @param transitions Transition matrix describing the graph for
-#'   the closed test procedure to test the hypotheses
 #' @param alpha_spending either alpha spending function, taking parameters alpha
 #'   (for overall spent alpha) and t (information fraction at interim test), or
 #'   the amount of alpha to spend at interim as a double
 #' @param seq_bonf automatically reject hypotheses at the second stage
 #'   if the sum of their PCER is greater 1
+#' @param names optional names for the hypotheses
 #'
 #' @return An object of class `multiarm_cer_design`
 #' @export
@@ -202,10 +204,11 @@ multiarm_cer_design <- function(
   treatment_assoc = integer(),
   n_controls = integer(),
   n_treatments = integer(),
-  weights = double(),
+  weights = NULL,
+  transitions = NULL,
   t = double(),
   alpha = double(),
-  transitions = matrix(),
+  graph = NULL,
   alpha_spending = 0,
   seq_bonf = TRUE,
   names = NULL
@@ -220,6 +223,7 @@ multiarm_cer_design <- function(
   std <- standardize_design_inputs(
     weights,
     transitions,
+    graph,
     names = names
   )
   weights <- std[["weights"]]

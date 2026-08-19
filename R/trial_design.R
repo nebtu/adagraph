@@ -214,12 +214,13 @@ validate_trial_design_params <- function(
 #' @param weights List of weights, measuring how important each hypothesis is.
 #'   See details for numbering of hypotheses. If named, automatically
 #'   reordered to match the canonical hypothesis order.
-#' @param t information fraction, at which fraction of assigned people will the
-#'   interim analysis happen
-#' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param transitions Transition matrix describing the graph for
 #'   the closed test procedure to test the hypotheses. If named (via
 #'   row/column names), automatically reordered to match the hypothesis order.
+#' @param graph Instead of weights and transitions, provide a [gMCPLite] or [graphicalMCP] graph object to define the testing procedure
+#' @param t information fraction, at which fraction of assigned people will the
+#'   interim analysis happen
+#' @param alpha Single number, measuring what total alpha should be spent on the FWER
 #' @param alpha_spending either alpha spending function, taking parameters alpha
 #'   (for overall spent alpha) and t (information fraction at interim test), or
 #'   the amount of alpha to spend at interim as a double
@@ -267,8 +268,9 @@ trial_design <- function(
   n_control = NULL,
   n_arms = NULL,
   n_table = NULL,
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   alpha_spending = 0,
   t = 1 / 2,
@@ -340,6 +342,7 @@ trial_design <- function(
   std <- standardize_design_inputs(
     weights,
     transitions,
+    graph,
     names = names,
     default_names = default_names
   )

@@ -5,8 +5,9 @@
 \title{Make a new CER trial design}
 \usage{
 cer_design(
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   correlation = NA,
   t = 1/2,
@@ -19,6 +20,8 @@ cer_design(
 \item{weights}{List of weights, measuring how important each hypothesis is}
 
 \item{transitions}{Transition matrix describing the graph for the closed test procedure to test the hypotheses}
+
+\item{graph}{Instead of weights and transitions, provide a \link[gMCPLite:gMCPLite]{gMCPLite} or \link[graphicalMCP:graphicalMCP]{graphicalMCP} graph object to define the testing procedure}
 
 \item{alpha}{Single number, measuring what total alpha should be spent on the FWER}
 

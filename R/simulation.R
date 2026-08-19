@@ -9,6 +9,8 @@
 #' @param data_gen_2 function for generating second stage data, see details
 #' @param include_designs boolean indicating whether to include
 #'   the designs objects in the output
+#' @param final_combined Are the final p-values the combination of the p-value of
+#' the first and second stage or just the raw values from the second stage
 #'
 #' @details
 #' data_gen_1 and data_gen_2 should take two arguments,

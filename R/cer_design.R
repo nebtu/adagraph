@@ -213,11 +213,12 @@ validate_cer_design_params <- function(
 #' This can be used for clinical trials with potential adaptations that are controlled
 #' for using the conditional error method.
 #'
+#' @param weights List of weights, measuring how important each hypothesis is
+#' @param transitions Transition matrix describing the graph for the closed test procedure to test the hypotheses
+#' @param graph Instead of weights and transitions, provide a [gMCPLite] or [graphicalMCP] graph object to define the testing procedure
 #' @param correlation Correlation matrix describing the structure of the correlations
 #'                    between the different hypotheses, use NA for uncorrelated
-#' @param weights List of weights, measuring how important each hypothesis is
 #' @param alpha Single number, measuring what total alpha should be spent on the FWER
-#' @param transitions Transition matrix describing the graph for the closed test procedure to test the hypotheses
 #' @param alpha_spending either alpha spending function, taking parameters alpha
 #'   (for overall spent alpha) and t (information fraction at interim test), or
 #'   the amount of alpha to spend at interim as a double
@@ -251,8 +252,9 @@ validate_cer_design_params <- function(
 #'
 #' design
 cer_design <- function(
-  weights = double(),
-  transitions = matrix(),
+  weights = NULL,
+  transitions = NULL,
+  graph = NULL,
   alpha = double(),
   correlation = NA,
   t = 1 / 2,
@@ -263,6 +265,7 @@ cer_design <- function(
   std <- standardize_design_inputs(
     weights,
     transitions,
+    graph,
     correlation,
     names
   )
