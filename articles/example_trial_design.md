@@ -6,17 +6,17 @@ library(adagraph)
 library(graphicalMCP)
 ```
 
-We want to to explain how to design and test a two-stage, multi-arm,
+We want to explain how to design and test a two-stage, multi-arm,
 multi-endpoint clinical trial with adaptations after the interim
 analysis using the CER method. We consider the design of a phase-3
 clinical trial comparing two doses (high and low) of a new compound for
 the treatment of severe oral mucositis (SOM) in patients undergoing
 postoperative radiotherapy for head and neck cancer. There are two
-endpoints being tested, the primary endpoint is to reduce the incidence
-of SOM and the secondary endpoint is to reduce the duration of SOM.
-Additionally, we will later want to test the effect of the treatment on
-the subgroup of HPV postive patients, since it is clinically plausible
-that the treatment might be more effective for this group.
+endpoints being tested, the primary endpoint is the incidence of SOM and
+the secondary endpoint is the duration of SOM. Additionally, we will
+later want to test the effect of the treatment on the subgroup of HPV
+positive patients, since it is clinically plausible that the treatment
+might be more effective for this group.
 
 ## Trial without subgroup analysis
 
@@ -35,17 +35,17 @@ names_endpoints <- c("prim", "sec")
 
 Then, we specify the parameters for a testing strategy:
 
-- `transitions`, the matrix specifing the graph used for the closed
+- `transitions`, the matrix specifyng the graph used for the closed
   testing procedure. The matrix we want to use is depicted in
   [Figure 1](#fig-graph)
 - `weights`, the corresponding initial weights for the closed testing
   procedure
 - `alpha`, the overall FWER we want to control for
-- `alpha_spending`, for specifing how much of the FWER should be spent
+- `alpha_spending`, for specifyng how much of the FWER should be spent
   at the interim test
-- `t`, the time information fraction at which the interim test is
-  planned. Since for our trial, it is planned that the interim look is
-  performed after 50% of the participants have enrolled, t is 1/2.
+- `t`, the information fraction at which the interim test is planned.
+  Since for our trial, it is planned that the interim look is performed
+  after 50% of the participants have enrolled, t is 1/2.
 
 ``` r
 
@@ -84,7 +84,7 @@ have all we need to define our testing design.
 ``` r
 
 design <- trial_design(
-  arm = 2,
+  arms = 2,
   endpoints = 2,
   n_control = n_control,
   n_arms = n_arms,
@@ -163,7 +163,7 @@ summary(design)
 #> Interim test is planned at time fraction 0.5
 ```
 
-Additonally, we can export and print the graph with the help of the
+Additionally, we can export and print the graph with the help of the
 `graphicalMCP` package.
 
 ``` r
@@ -179,8 +179,8 @@ the
 function
 
 After the unblinding for the interim analysis, the resulting p values
-are $`p_{1,1} = 0.00445`$, $`p_{2,1} = 0.0952`$, $`p_{3,1} = 0.0225`$,
-and $`p_{4,1} = 0.1104`$, using as indeces the order used in the design.
+are $`p_{1,1} = 0.000445`$, $`p_{2,1} = 0.0952`$, $`p_{3,1} = 0.0225`$,
+and $`p_{4,1} = 0.1104`$, using as indices the order used in the design.
 We incorporate this information by applying the `cer_interim_test`
 function. The result is again a `trial_design` object, which now
 includes the interim test results.
@@ -214,11 +214,9 @@ design_interim
 ```
 
 We can see that for now, only the hypothesis testing the primary
-endpoint for the low dose is rejected. While it is possible to continue
-now without an adaptations to the design, `adagraph` allows for many
-changes to be made to the design or the sample sizes. Adagraph does by
-itself not assume that we will change anything about our trial design,
-even if a hypotheses was rejected.
+endpoint for the high dose is rejected. `adagraph` allows now for many
+changes to be made to the design or the sample sizes. Note that
+adaptation is optional, and the design could also proceed unchanged.
 
 Assume that it is decided that for the high dose, since the primary
 hypothesis was already rejected, it is not necessary to continue
@@ -237,8 +235,8 @@ function.
 ``` r
 
 n_control_ad <- 53
-n_arms_ad <- c(0, 52) #even tho it is being dropped, we still need to give
-#n for the low dose arm
+n_arms_ad <- c(0, 52) #even thoough it is being dropped, we still need to give
+#n for the high dose arm
 
 design_adj <- design_interim |>
   trial_drop_arms("high") |>
@@ -302,14 +300,18 @@ adagraph calculates from the second stage p values the combined values,
 using the adapted value for `t` (which was calculated automatically by
 the
 [`trial_adapt_n()`](https://nebtu.github.io/adagraph/reference/trial_adapt_n.md)
-function). Note that the hypthoses that we no further use are still
+function). Note that the hypotheses that we no longer use are still
 present in the design object, they just don’t get any weight assigned.
 Therefore, we still need to use a vector of length 4 for our p-values,
 but can use `NA` as a corresponding value.
 
 ``` r
 
-design_tested <- cer_final_test(design_adj, c(NA, 0.0111, NA, 0.0234))
+design_tested <- cer_final_test(
+  design_adj,
+  c(NA, 0.0111, NA, 0.0234),
+  combined = FALSE
+)
 
 design_tested
 #> 
@@ -348,7 +350,7 @@ design_tested
 As we can see, both the hypotheses that we are still testing for are now
 also being rejected.
 
-## Enrichtment design
+## Enrichment design
 
 Take now the same trial as before, but assuming a bigger sample size of
 150 people per arm. Thanks to the resulting higher power, it is decided
@@ -413,7 +415,7 @@ n_table <- rbind(
 )
 
 design <- trial_design(
-  arm = 2,
+  arms = 2,
   endpoints = 2,
   subgroups = 1,
   n_table = n_table,
@@ -536,7 +538,7 @@ summary(design)
 
 ``` r
 
-gmcp_obj <- design |> export_graphical_mcp() |> plot(nrow = 4)
+design |> export_graphical_mcp() |> plot(nrow = 4)
 ```
 
 ![](example_trial_design_files/figure-html/fig-graph-subgroup-1.png)
@@ -547,9 +549,9 @@ the
 function
 
 For the example, we assume that for the total group, we get
-$`p_{1,1} = 0.00445`$, $`p_{2,1} = 0.0952`$, $`p_{3,1} = 0.0225`$, and
+$`p_{1,1} = 0.000445`$, $`p_{2,1} = 0.0952`$, $`p_{3,1} = 0.0225`$, and
 $`p_{4,1} = 0.1104`$. Additionally, there are p values for only the
-subgroup of the HPV positive popultaion, where we have
+subgroup of the HPV positive population, where we have
 $`p_{5,1} = 0.0532`$, $`p_{6,1} = 0.2152`$, $`p_{7,1} = 0.0352`$, and
 $`p_{8,1} = 0.1728`$. We incorporate this information by applying the
 `cer_interim_test` function. The result is again a `trial_design`
@@ -589,9 +591,9 @@ design_interim
 
 The further use of the package proceeds as above. One important
 difference is that we have to continue using the n_table format, since
-there are still subgroups present. It is however possible to emit rows
-that are empty. There is now of course the option to also drop a whole
-subgroup from the analysis. For example, to arrive at the same case as
+there are still subgroups present. Rows with `n=0` can however be
+omitted. There is now of course the option to also drop a whole subgroup
+from the analysis. For example, to arrive at a similar same case as
 before, we use the following code.
 
 ``` r
@@ -605,14 +607,11 @@ design_adj <- design_interim |>
   trial_drop_arms("high") |>
   trial_drop_groups("HPV+") |>
   trial_adapt_n(
-    n_control_2 = n_control_ad,
-    n_arms_2 = n_arms_ad
+    ad_n_table = n_table
   ) |>
   cer_adapt(
     weights = c(0, 0.5, 0, 0.5, 0, 0, 0, 0),
   )
-#> Warning: The `n_control_2` and `n_arms_2` arguments are only supported for designs
-#> without subgroups.
 
 design_adj
 #> 
@@ -641,6 +640,10 @@ design_adj
 #> • Graph Transition Matrix
 #> • Correlation for parametric test
 #> • Time fractions for the hypotheses
+#> The second stage sample size per arm/group is:
+#>      arm  HPV+  n
+#>  control FALSE 53
+#>      low FALSE 52
 #> 
 #> ── No final test performed ──
 ```
@@ -681,10 +684,14 @@ design_tested
 #> • Graph Transition Matrix
 #> • Correlation for parametric test
 #> • Time fractions for the hypotheses
+#> The second stage sample size per arm/group is:
+#>      arm  HPV+  n
+#>  control FALSE 53
+#>      low FALSE 52
 #> 
 #> ── Final test result ──
 #> 
-#> Hypotheses rejected: prim_high, prim_low, and sec_low
+#> Hypotheses rejected: prim_high
 ```
 
 ## More complicated subgroup structures
@@ -692,7 +699,7 @@ design_tested
 Here, we explain how to specify tables for testing strategies with more
 than one group. We take the same example as before, but assume now that
 additionally to the “HPV+” group, we also want to test the hypothesis
-that specifically the HPV negative population “HPV-” is tested. Event
+that specifically the HPV negative population “HPV-” is tested. Even
 though this is only the converse of the “HPV+” population, we need to
 still introduce it as its own subgroup to generate it as it’s own
 hypothesis. However, we do not need to specify the rows with the
@@ -737,3 +744,6 @@ n_table <- rbind(
   data.frame(arm = "low", `HPV+` = TRUE, `HPV-` = FALSE, `female` = FALSE, n = 8, check.names = FALSE)
 )
 ```
+
+The rest of the workflow works as before, only with of course a higher
+number of hypotheses etc.

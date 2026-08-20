@@ -73,7 +73,7 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nebtu.github.io/adagraph/">adagraph</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/openpharma/graphicalMCP" class="external-link">graphicalMCP</a></span><span class="op">)</span></span></code></pre></div>
 </div>
-<p>We want to to explain how to design and test a two-stage, multi-arm, multi-endpoint clinical trial with adaptations after the interim analysis using the CER method. We consider the design of a phase-3 clinical trial comparing two doses (high and low) of a new compound for the treatment of severe oral mucositis (SOM) in patients undergoing postoperative radiotherapy for head and neck cancer. There are two endpoints being tested, the primary endpoint is to reduce the incidence of SOM and the secondary endpoint is to reduce the duration of SOM. Additionally, we will later want to test the effect of the treatment on the subgroup of HPV postive patients, since it is clinically plausible that the treatment might be more effective for this group.</p>
+<p>We want to explain how to design and test a two-stage, multi-arm, multi-endpoint clinical trial with adaptations after the interim analysis using the CER method. We consider the design of a phase-3 clinical trial comparing two doses (high and low) of a new compound for the treatment of severe oral mucositis (SOM) in patients undergoing postoperative radiotherapy for head and neck cancer. There are two endpoints being tested, the primary endpoint is the incidence of SOM and the secondary endpoint is the duration of SOM. Additionally, we will later want to test the effect of the treatment on the subgroup of HPV positive patients, since it is clinically plausible that the treatment might be more effective for this group.</p>
 <section class="section level2"><h2 id="trial-without-subgroup-analysis">Trial without subgroup analysis<a class="anchor" aria-label="anchor" href="#trial-without-subgroup-analysis"></a>
 </h2>
 <p>To work with the trial in <code>adagraph</code>, we first need to make a <code>trial_design</code> object with which we save all our prespecified trial specifications.</p>
@@ -86,16 +86,16 @@
 <p>Then, we specify the parameters for a testing strategy:</p>
 <ul>
 <li>
-<code>transitions</code>, the matrix specifing the graph used for the closed testing procedure. The matrix we want to use is depicted in <a href="#fig-graph" class="quarto-xref">Figure 1</a>
+<code>transitions</code>, the matrix specifyng the graph used for the closed testing procedure. The matrix we want to use is depicted in <a href="#fig-graph" class="quarto-xref">Figure 1</a>
 </li>
 <li>
 <code>weights</code>, the corresponding initial weights for the closed testing procedure</li>
 <li>
 <code>alpha</code>, the overall FWER we want to control for</li>
 <li>
-<code>alpha_spending</code>, for specifing how much of the FWER should be spent at the interim test</li>
+<code>alpha_spending</code>, for specifyng how much of the FWER should be spent at the interim test</li>
 <li>
-<code>t</code>, the time information fraction at which the interim test is planned. Since for our trial, it is planned that the interim look is performed after 50% of the participants have enrolled, t is 1/2.</li>
+<code>t</code>, the information fraction at which the interim test is planned. Since for our trial, it is planned that the interim look is performed after 50% of the participants have enrolled, t is 1/2.</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="downlit sourceCode r">
@@ -123,7 +123,7 @@
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trial_design.html">trial_design</a></span><span class="op">(</span></span>
-<span>  arm <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  arms <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  endpoints <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  n_control <span class="op">=</span> <span class="va">n_control</span>,</span>
 <span>  n_arms <span class="op">=</span> <span class="va">n_arms</span>,</span>
@@ -197,7 +197,7 @@
 <span><span class="co">#&gt;      low 35</span></span>
 <span><span class="co">#&gt; Interim test is planned at time fraction 0.5</span></span></code></pre></div>
 </div>
-<p>Additonally, we can export and print the graph with the help of the <code>graphicalMCP</code> package.</p>
+<p>Additionally, we can export and print the graph with the help of the <code>graphicalMCP</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/export_graphical_mcp.html">export_graphical_mcp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
@@ -212,7 +212,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </div>
 </div>
 </div>
-<p>After the unblinding for the interim analysis, the resulting p values are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.00445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.00445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>, using as indeces the order used in the design. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
+<p>After the unblinding for the interim analysis, the resulting p values are <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.000445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.000445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>, using as indices the order used in the design. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_interim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span></span>
@@ -240,13 +240,13 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
-<p>We can see that for now, only the hypothesis testing the primary endpoint for the low dose is rejected. While it is possible to continue now without an adaptations to the design, <code>adagraph</code> allows for many changes to be made to the design or the sample sizes. Adagraph does by itself not assume that we will change anything about our trial design, even if a hypotheses was rejected.</p>
+<p>We can see that for now, only the hypothesis testing the primary endpoint for the high dose is rejected. <code>adagraph</code> allows now for many changes to be made to the design or the sample sizes. Note that adaptation is optional, and the design could also proceed unchanged.</p>
 <p>Assume that it is decided that for the high dose, since the primary hypothesis was already rejected, it is not necessary to continue recruitment and the focus will instead be on the low dose. For dropping a specific arm, we can use the <code><a href="../reference/trial_drop.html">trial_drop_arms()</a></code> function. This change has the benefit of allowing more patients for the low dose and control to be recruited than previously planned. This results in a change to the <code>t</code> parameter and the correlation structure, which can be calculated automatically with the <code>trial_adapt_n</code> function. Additionally, the weights will be redistributed equally on the two remaining hypotheses. For adjusting the weights, we use the more general <code><a href="../reference/cer_adapt.html">cer_adapt()</a></code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_control_ad</span> <span class="op">&lt;-</span> <span class="fl">53</span></span>
-<span><span class="va">n_arms_ad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">52</span><span class="op">)</span> <span class="co">#even tho it is being dropped, we still need to give</span></span>
-<span><span class="co">#n for the low dose arm</span></span>
+<span><span class="va">n_arms_ad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">52</span><span class="op">)</span> <span class="co">#even thoough it is being dropped, we still need to give</span></span>
+<span><span class="co">#n for the high dose arm</span></span>
 <span></span>
 <span><span class="va">design_adj</span> <span class="op">&lt;-</span> <span class="va">design_interim</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/trial_drop.html">trial_drop_arms</a></span><span class="op">(</span><span class="st">"high"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -299,10 +299,14 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; sec_high          0        0        0       0</span></span>
 <span><span class="co">#&gt; sec_low           0        1        0       0</span></span></code></pre></div>
 </div>
-<p>Now we can test for the final results, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>2</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mn>0.0111</mn></mrow><annotation encoding="application/x-tex">\tilde{p}_{2,2} = 0.0111</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>4</mn><mo>,</mo><mn>2</mn></mrow></msub><annotation encoding="application/x-tex">\tilde{p}_{4,2}</annotation></semantics></math>, the second stage p values for the remaining hypotheses <code>prim_low</code> and <code>sec_low</code>. By default <code>adagraph</code> expects the already combined p values, but using the <code>combined = FALSE</code> option adagraph calculates from the second stage p values the combined values, using the adapted value for <code>t</code> (which was calculated automatically by the <code><a href="../reference/trial_adapt_n.html">trial_adapt_n()</a></code> function). Note that the hypthoses that we no further use are still present in the design object, they just don’t get any weight assigned. Therefore, we still need to use a vector of length 4 for our p-values, but can use <code>NA</code> as a corresponding value.</p>
+<p>Now we can test for the final results, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>2</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mn>0.0111</mn></mrow><annotation encoding="application/x-tex">\tilde{p}_{2,2} = 0.0111</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>p</mi><mo accent="true">̃</mo></mover><mrow><mn>4</mn><mo>,</mo><mn>2</mn></mrow></msub><annotation encoding="application/x-tex">\tilde{p}_{4,2}</annotation></semantics></math>, the second stage p values for the remaining hypotheses <code>prim_low</code> and <code>sec_low</code>. By default <code>adagraph</code> expects the already combined p values, but using the <code>combined = FALSE</code> option adagraph calculates from the second stage p values the combined values, using the adapted value for <code>t</code> (which was calculated automatically by the <code><a href="../reference/trial_adapt_n.html">trial_adapt_n()</a></code> function). Note that the hypotheses that we no longer use are still present in the design object, they just don’t get any weight assigned. Therefore, we still need to use a vector of length 4 for our p-values, but can use <code>NA</code> as a corresponding value.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">design_tested</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span><span class="va">design_adj</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.0111</span>, <span class="cn">NA</span>, <span class="fl">0.0234</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">design_tested</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_final_test.html">cer_final_test</a></span><span class="op">(</span></span>
+<span>  <span class="va">design_adj</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0.0111</span>, <span class="cn">NA</span>, <span class="fl">0.0234</span><span class="op">)</span>,</span>
+<span>  combined <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design_tested</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -338,7 +342,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; Hypotheses rejected: prim_high, prim_low, and sec_low</span></span></code></pre></div>
 </div>
 <p>As we can see, both the hypotheses that we are still testing for are now also being rejected.</p>
-</section><section class="section level2"><h2 id="enrichtment-design">Enrichtment design<a class="anchor" aria-label="anchor" href="#enrichtment-design"></a>
+</section><section class="section level2"><h2 id="enrichment-design">Enrichment design<a class="anchor" aria-label="anchor" href="#enrichment-design"></a>
 </h2>
 <p>Take now the same trial as before, but assuming a bigger sample size of 150 people per arm. Thanks to the resulting higher power, it is decided to also check for effects specifically in the subgroup of patients testing positive for the human papilloma virus (HPV+). Doing this is also possible with <code>adagraph</code>, using again the <code>trial_design</code> class.</p>
 <p>Again, we define the names of our arms, endpoints and subgroups, as well as the characteristics of the design. Note that for the subgroups, we don’t need to specify the full population, which is always included. (If this is not desired, the corresponding initial weights and transition weights can simply be set to 0.)</p>
@@ -386,7 +390,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">design</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trial_design.html">trial_design</a></span><span class="op">(</span></span>
-<span>  arm <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  arms <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  endpoints <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  subgroups <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  n_table <span class="op">=</span> <span class="va">n_table</span>,</span>
@@ -503,7 +507,7 @@ Figure 1: Graph for the testing procedure we are using, generated using the <co
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gmcp_obj</span> <span class="op">&lt;-</span> <span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/export_graphical_mcp.html">export_graphical_mcp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">design</span> <span class="op">|&gt;</span> <span class="fu"><a href="../reference/export_graphical_mcp.html">export_graphical_mcp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <div class="cell-output-display">
 <div id="fig-graph-subgroup" class="quarto-float quarto-figure quarto-figure-center">
 <figure class="quarto-float quarto-float-fig"><div aria-describedby="fig-graph-subgroup-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -515,7 +519,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 </div>
 </div>
 </div>
-<p>For the example, we assume that for the total group, we get <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.00445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.00445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>. Additionally, there are p values for only the subgroup of the HPV positive popultaion, where we have <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>5</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0532</mn></mrow><annotation encoding="application/x-tex">p_{5,1} = 0.0532</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>6</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.2152</mn></mrow><annotation encoding="application/x-tex">p_{6,1} = 0.2152</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>7</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0352</mn></mrow><annotation encoding="application/x-tex">p_{7,1} = 0.0352</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>8</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1728</mn></mrow><annotation encoding="application/x-tex">p_{8,1} = 0.1728</annotation></semantics></math>. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
+<p>For the example, we assume that for the total group, we get <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>1</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.000445</mn></mrow><annotation encoding="application/x-tex">p_{1,1} = 0.000445</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0952</mn></mrow><annotation encoding="application/x-tex">p_{2,1} = 0.0952</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>3</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0225</mn></mrow><annotation encoding="application/x-tex">p_{3,1} = 0.0225</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>4</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1104</mn></mrow><annotation encoding="application/x-tex">p_{4,1} = 0.1104</annotation></semantics></math>. Additionally, there are p values for only the subgroup of the HPV positive population, where we have <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>5</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0532</mn></mrow><annotation encoding="application/x-tex">p_{5,1} = 0.0532</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>6</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.2152</mn></mrow><annotation encoding="application/x-tex">p_{6,1} = 0.2152</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>7</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.0352</mn></mrow><annotation encoding="application/x-tex">p_{7,1} = 0.0352</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mn>8</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.1728</mn></mrow><annotation encoding="application/x-tex">p_{8,1} = 0.1728</annotation></semantics></math>. We incorporate this information by applying the <code>cer_interim_test</code> function. The result is again a <code>trial_design</code> object, which now includes the interim test results.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">design_interim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cer_interim_test.html">cer_interim_test</a></span><span class="op">(</span></span>
@@ -547,7 +551,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
-<p>The further use of the package proceeds as above. One important difference is that we have to continue using the n_table format, since there are still subgroups present. It is however possible to emit rows that are empty. There is now of course the option to also drop a whole subgroup from the analysis. For example, to arrive at the same case as before, we use the following code.</p>
+<p>The further use of the package proceeds as above. One important difference is that we have to continue using the n_table format, since there are still subgroups present. Rows with <code>n=0</code> can however be omitted. There is now of course the option to also drop a whole subgroup from the analysis. For example, to arrive at a similar same case as before, we use the following code.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
@@ -559,14 +563,11 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span>  <span class="fu"><a href="../reference/trial_drop.html">trial_drop_arms</a></span><span class="op">(</span><span class="st">"high"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/trial_drop.html">trial_drop_groups</a></span><span class="op">(</span><span class="st">"HPV+"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/trial_adapt_n.html">trial_adapt_n</a></span><span class="op">(</span></span>
-<span>    n_control_2 <span class="op">=</span> <span class="va">n_control_ad</span>,</span>
-<span>    n_arms_2 <span class="op">=</span> <span class="va">n_arms_ad</span></span>
+<span>    ad_n_table <span class="op">=</span> <span class="va">n_table</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/cer_adapt.html">cer_adapt</a></span><span class="op">(</span></span>
 <span>    weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  <span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: The `n_control_2` and `n_arms_2` arguments are only supported for designs</span></span>
-<span><span class="co">#&gt; without subgroups.</span></span>
 <span></span>
 <span><span class="va">design_adj</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -595,6 +596,10 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; • Graph Transition Matrix</span></span>
 <span><span class="co">#&gt; • Correlation for parametric test</span></span>
 <span><span class="co">#&gt; • Time fractions for the hypotheses</span></span>
+<span><span class="co">#&gt; The second stage sample size per arm/group is:</span></span>
+<span><span class="co">#&gt;      arm  HPV+  n</span></span>
+<span><span class="co">#&gt;  control FALSE 53</span></span>
+<span><span class="co">#&gt;      low FALSE 52</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── No final test performed ──</span></span></code></pre></div>
 </div>
@@ -633,14 +638,18 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span><span class="co">#&gt; • Graph Transition Matrix</span></span>
 <span><span class="co">#&gt; • Correlation for parametric test</span></span>
 <span><span class="co">#&gt; • Time fractions for the hypotheses</span></span>
+<span><span class="co">#&gt; The second stage sample size per arm/group is:</span></span>
+<span><span class="co">#&gt;      arm  HPV+  n</span></span>
+<span><span class="co">#&gt;  control FALSE 53</span></span>
+<span><span class="co">#&gt;      low FALSE 52</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Final test result ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Hypotheses rejected: prim_high, prim_low, and sec_low</span></span></code></pre></div>
+<span><span class="co">#&gt; Hypotheses rejected: prim_high</span></span></code></pre></div>
 </div>
 </section><section class="section level2"><h2 id="more-complicated-subgroup-structures">More complicated subgroup structures<a class="anchor" aria-label="anchor" href="#more-complicated-subgroup-structures"></a>
 </h2>
-<p>Here, we explain how to specify tables for testing strategies with more than one group. We take the same example as before, but assume now that additionally to the “HPV+” group, we also want to test the hypothesis that specifically the HPV negative population “HPV-” is tested. Event though this is only the converse of the “HPV+” population, we need to still introduce it as its own subgroup to generate it as it’s own hypothesis. However, we do not need to specify the rows with the combination of “HPV+” and “HPV-” being true, since they are empty anyway.</p>
+<p>Here, we explain how to specify tables for testing strategies with more than one group. We take the same example as before, but assume now that additionally to the “HPV+” group, we also want to test the hypothesis that specifically the HPV negative population “HPV-” is tested. Even though this is only the converse of the “HPV+” population, we need to still introduce it as its own subgroup to generate it as it’s own hypothesis. However, we do not need to specify the rows with the combination of “HPV+” and “HPV-” being true, since they are empty anyway.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">subgroups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HPV+"</span>, <span class="st">"HPV-"</span><span class="op">)</span></span>
@@ -674,6 +683,7 @@ Figure 2: Graph for the testing procedure we are using, generated using the <co
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>arm <span class="op">=</span> <span class="st">"low"</span>, `HPV+` <span class="op">=</span> <span class="cn">TRUE</span>, `HPV-` <span class="op">=</span> <span class="cn">FALSE</span>, `female` <span class="op">=</span> <span class="cn">FALSE</span>, n <span class="op">=</span> <span class="fl">8</span>, check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
+<p>The rest of the workflow works as before, only with of course a higher number of hypotheses etc.</p>
 </section><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
